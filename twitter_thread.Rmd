@@ -120,20 +120,25 @@ historic.average_less <- round(sum(less_deaths$excess_death) - age_corrected_les
 cbs.ondersterfte <- subset(cbs.df, Week > 19)
 cbs.method_less <- sum(cbs.ondersterfte$excess_death)
 
+
+data.currentweek <- subset(mortality_wide, Week > (weeknumber -1))
+excess_thisweek <- aggregate(excess_death ~ LeeftijdOp31December, data = data.currentweek, FUN = sum)
+deaths_thisweek <- sum(excess_thisweek$excess_death) - round(excess_thisweek[excess_deaths$LeeftijdOp31December == "Totaal","excess_death"],0)
+
 ```
 
-Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (1) `r historic.average.excess`, (2) `r age_corrected.excess`, en (3) `r cbs.method.excess`. Grafiek is op basis van methode 1.
+Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (1) `r historic.average.excess`, (2) `r age_corrected.excess`, en (3) `r cbs.method.excess`. Ik houd de oversterfte in de 'heftige' periode dus op `r age_corrected.excess`-`r historic.average.excess`.
 
-Ondersterfte vanaf week 20 t/m `r weeknumber `: (1) `r historic.average_less`, (2) `r age_corrected_less`, en (3) `r cbs.method_less`. Hier is ook duidelijk zichtbaar dat corrigeren voor leeftijd een effect heeft: de ondersterfte wordt veel groter geschat met deze correctie.
+Op basis van methode (2) is in week 23 de ondersterfte `r round(deaths_thisweek,0)`. Ondersterfte vanaf week 20 t/m `r weeknumber `: (1) `r historic.average_less`, (2) `r age_corrected_less`, en (3) `r cbs.method_less`. Ik houd de totale sterfte (week 12 t/m `r weeknumber`) op dit moment tussen de `r age_corrected.excess + age_corrected_less`-`r historic.average.excess + historic.average_less`.
 
-De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056 Ik houd de totale sterfte (week 12 t/m `r weeknumber`) op dit moment tussen de `r age_corrected.excess + age_corrected_less`-`r historic.average.excess + historic.average_less`.
+De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056 
 
-Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was (cumulatieve sterfte zakte met 1500). De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden en het VK. Totale oversterfte week 12 t/m `r weeknumber` = 168000.
+Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was (cumulatieve sterfte zakte met 1500). De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden + VK. Totale oversterfte week 12 t/m `r weeknumber` = 168000.
 
 Conclusie na week `r weeknumber`: we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.
 
 Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data 
 
-Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden: de R code is hier te vinden: 
+Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden, de R code is hier te vinden: https://github.com/mzelst/covid-19. Ik maak de code een andere keer iets eleganter :)
 
-Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor ik deze analyses compleet geautomatiseerd kan doen. Maakt mijn leven een stuk makkelijker :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer tijd.
+Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd.
