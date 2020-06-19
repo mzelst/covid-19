@@ -1,0 +1,139 @@
+---
+title: "CBS Update"
+author: "Marino van Zelst"
+date: "19-6-2020"
+output: word_document
+---
+
+```{r analyses, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
+require(stringr)
+require(tidyr)
+require(cbsodataR)
+require(reshape2)
+require(lubridate)
+require(rvest)
+
+table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
+table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
+
+table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
+
+table_mortality$LeeftijdOp31December <- factor(table_mortality$LeeftijdOp31December, levels = c(10000, 41700, 53950, 21700),
+                                               labels = c("Totaal","0 tot 65", "65 tot 80", "80+"))
+
+bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
+bevolking <- bevolking[,c("Perioden","TotaleBevolking_1", "JongerDan20Jaar_10","k_20Tot40Jaar_11","k_40Tot65Jaar_12","k_65Tot80Jaar_13","k_80JaarOfOuder_14")]
+
+colnames(bevolking) <- c("Jaar","Totaal","Jonger20","20tot40","40tot65","65tot80","80ouder")
+
+bevolking$jonger65 <- bevolking$Jonger20 + bevolking$`20tot40` + bevolking$`40tot65`
+bevolking <- bevolking[,c("Jaar","Totaal","jonger65","65tot80","80ouder")]
+colnames(bevolking) <- c("Year","Totaal","0 tot 65","65 tot 80","80+")
+bevolking$Year <- substr(bevolking$Year, 1, 4)
+
+bevolking2020 <- data.frame(c("2020","17414600","14015030", "2570467", "822088"))
+
+bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
+
+
+
+bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
+
+bevolking$Bevolking <- as.numeric(bevolking$Bevolking)
+
+
+## Select weeks 1-23
+table_mortality <- subset(table_mortality, Week > 00 & Week < 24)
+table_mortality <- table_mortality[!table_mortality$Week == '00',]
+
+
+
+mortality_full <- merge(table_mortality, bevolking, by=c("Year","LeeftijdOp31December"), all.x=TRUE)
+
+bevolking2020 <- data.frame(Bevolking2020=c(14015030, 2570467, 822088, 17414600),
+                            LeeftijdOp31December=c("0 tot 65","65 tot 80","80+","Totaal"))
+
+mortality_full <- merge(mortality_full, bevolking2020, by=c("LeeftijdOp31December"))
+mortality_full$Overledenen_1 <- mortality_full$Overledenen_1/mortality_full$Bevolking*mortality_full$Bevolking2020
+
+mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, value.var = "Overledenen_1", sum)
+
+mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
+
+mortality_wide$excess_death <- mortality_wide$`2020` - mortality_wide$Average20152019
+
+
+```
+
+```{r data prep, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
+weeknumber <- isoweek(ymd(Sys.Date()))-2
+
+week.benchmark <- round(mortality_wide[which(mortality_wide$Week == weeknumber & mortality_wide$LeeftijdOp31December == "Totaal"),"Average20152019"],0)
+
+week.2020 <- round(mortality_wide[which(mortality_wide$Week == weeknumber & mortality_wide$LeeftijdOp31December == "Totaal"),"2020"],0)
+
+## Calculate official death numbers
+rivm_dat <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/RIVM_deaths.csv")
+deaths_week <- aggregate(totaal ~ Week, data = rivm_dat, FUN=sum)
+deaths_thisweek <- deaths_week[which(deaths_week$Week == weeknumber),"totaal"]
+  
+```
+
+CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week `r weeknumber` van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).
+
+De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4 
+
+Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemiddelde (1), de oversterfte per leeftijdsgroep omdat je daarmee beter corrigeert voor vergrijzing (2) en methode CBS (3). Groeifactor model publiceer ik niet meer, uitleg hier: https://twitter.com/mzelst/status/1266333188386848768
+
+Deze week splits ik de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). Hierdoor kunnen we over tijd zien of we weer 'terugzakken' naar een gemiddelde sterfte.
+
+Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week `r weeknumber` (2015-2019) is `r week.benchmark`, 2020 = `r week.2020`. RIVM zegt nu `r deaths_thisweek` in week `r weeknumber`. Er is dus ondersterfte in week `r weeknumber`, zelfs met `r deaths_thisweek` officiële corona-overledenen (wat waarschijnlijk niet eens alles is).
+
+```{r excess deaths, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
+alleen_oversterfte <- subset(mortality_wide, Week > 11 & Week < 20)
+excess_deaths <- aggregate(excess_death ~ LeeftijdOp31December, data = alleen_oversterfte, FUN = sum)
+age_corrected.excess <- round((sum(excess_deaths$excess_death) - excess_deaths[excess_deaths$LeeftijdOp31December == "Totaal","excess_death"]),0)
+historic.average.excess <- round(sum(excess_deaths$excess_death) - age_corrected.excess,0)
+
+## Pull CBS data
+u <- "https://www.cbs.nl/nl-nl/faq/corona/medisch/hoeveel-sterfgevallen-zijn-er-per-week"
+webpage <- read_html(u)
+cbs.tables <- html_table(webpage, fill=TRUE)
+cbs.df <- as.data.frame(cbs.tables[2])
+cbs.df <- cbs.df %>%
+  dplyr::filter(Week > 11 & Week < (weeknumber + 1) & Week != 2)
+
+cbs.df$verwacht.aantal.overledenen.2020 <- as.numeric(cbs.df$verwacht.aantal.overledenen.2020)
+cbs.df$X2020. <- as.numeric(cbs.df$X2020.)
+
+cbs.df$excess_death <- cbs.df$X2020. - cbs.df$verwacht.aantal.overledenen.2020
+cbs.oversterfte <- subset(cbs.df, Week > 11 & Week < 20)
+cbs.method.excess <- sum(cbs.oversterfte$excess_death)
+```
+
+```{r ondersterfte, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
+alleen_ondersterfte <- subset(mortality_wide, Week > 19)
+less_deaths <- aggregate(excess_death ~ LeeftijdOp31December, data = alleen_ondersterfte, FUN = sum)
+age_corrected_less <- round((sum(less_deaths$excess_death) - less_deaths[less_deaths$LeeftijdOp31December == "Totaal","excess_death"]),0)
+historic.average_less <- round(sum(less_deaths$excess_death) - age_corrected_less,0)
+
+cbs.ondersterfte <- subset(cbs.df, Week > 19)
+cbs.method_less <- sum(cbs.ondersterfte$excess_death)
+
+```
+
+Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (1) `r historic.average.excess`, (2) `r age_corrected.excess`, en (3) `r cbs.method.excess`. Grafiek is op basis van methode 1.
+
+Ondersterfte vanaf week 20 t/m `r weeknumber `: (1) `r historic.average_less`, (2) `r age_corrected_less`, en (3) `r cbs.method_less`. Hier is ook duidelijk zichtbaar dat corrigeren voor leeftijd een effect heeft: de ondersterfte wordt veel groter geschat met deze correctie.
+
+De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056 Ik houd de totale sterfte (week 12 t/m `r weeknumber`) op dit moment tussen de `r age_corrected.excess + age_corrected_less`-`r historic.average.excess + historic.average_less`.
+
+Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was (cumulatieve sterfte zakte met 1500). De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden en het VK. Totale oversterfte week 12 t/m `r weeknumber` = 168000.
+
+Conclusie na week `r weeknumber`: we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.
+
+Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data 
+
+Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden: de R code is hier te vinden: 
+
+Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor ik deze analyses compleet geautomatiseerd kan doen. Maakt mijn leven een stuk makkelijker :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer tijd.
