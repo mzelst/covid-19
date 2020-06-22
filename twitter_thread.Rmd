@@ -12,6 +12,7 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 require(rvest)
+require(twitteR)
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
@@ -73,10 +74,14 @@ week.benchmark <- round(mortality_wide[which(mortality_wide$Week == weeknumber &
 week.2020 <- round(mortality_wide[which(mortality_wide$Week == weeknumber & mortality_wide$LeeftijdOp31December == "Totaal"),"2020"],0)
 
 ## Calculate official death numbers
-rivm_dat <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/RIVM_deaths.csv")
-deaths_week <- aggregate(totaal ~ Week, data = rivm_dat, FUN=sum)
-deaths_thisweek <- deaths_week[which(deaths_week$Week == weeknumber),"totaal"]
-  
+rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";")
+rivm.data <- rivm.data %>%
+  dplyr::filter(Deceased == "Yes")
+rivm.data$Week <- substr(rivm.data$Week_of_death, 5, 6)
+rivm.data$deaths_rivm <- 1
+
+rivm_deaths <- aggregate(deaths_rivm ~ Week, data = rivm.data, FUN = sum)
+rivm_thisweek <- rivm_deaths[which(rivm_deaths$Week == weeknumber),"deaths_rivm"]
 ```
 
 CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week `r weeknumber` van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).
@@ -87,7 +92,7 @@ Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemid
 
 Deze week splits ik de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). Hierdoor kunnen we over tijd zien of we weer 'terugzakken' naar een gemiddelde sterfte.
 
-Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week `r weeknumber` (2015-2019) is `r week.benchmark`, 2020 = `r week.2020`. RIVM zegt nu `r deaths_thisweek` in week `r weeknumber`. Er is dus ondersterfte in week `r weeknumber`, zelfs met `r deaths_thisweek` officiële corona-overledenen (wat waarschijnlijk niet eens alles is).
+Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week `r weeknumber` (2015-2019) is `r week.benchmark`, 2020 = `r week.2020`. RIVM zegt nu `r rivm_thisweek` in week `r weeknumber`. Er is dus ondersterfte in week `r weeknumber`, zelfs met `r rivm_thisweek` officiële corona-overledenen (wat waarschijnlijk niet eens alles is).
 
 ```{r excess deaths, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
 alleen_oversterfte <- subset(mortality_wide, Week > 11 & Week < 20)
@@ -132,7 +137,6 @@ Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (
 Op basis van methode (2) is in week 23 de ondersterfte `r round(deaths_thisweek,0)`. Ondersterfte vanaf week 20 t/m `r weeknumber `: (1) `r historic.average_less`, (2) `r age_corrected_less`, en (3) `r cbs.method_less`. Ik houd de totale sterfte (week 12 t/m `r weeknumber`) op dit moment tussen de `r age_corrected.excess + age_corrected_less`-`r historic.average.excess + historic.average_less`.
 
 De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056 
-
 Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was (cumulatieve sterfte zakte met 1500). De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden + VK. Totale oversterfte week 12 t/m `r weeknumber` = 168000.
 
 Conclusie na week `r weeknumber`: we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.
@@ -142,3 +146,67 @@ Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit m
 Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden, de R code is hier te vinden: https://github.com/mzelst/covid-19. Ik maak de code een andere keer iets eleganter :)
 
 Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd.
+
+
+```{r tweets, echo=FALSE}
+tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).")
+
+tweet2 <- "De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4"
+
+tweet3 <- "Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemiddelde (1), de oversterfte per leeftijdsgroep omdat je daarmee beter corrigeert voor vergrijzing (2) en methode CBS (3). Groeifactor model publiceer ik niet meer, uitleg hier: https://twitter.com/mzelst/status/1266333188386848768"
+
+tweet4 <- "Deze week splits ik de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). Hierdoor kunnen we over tijd zien of we weer 'terugzakken' naar een gemiddelde sterfte."
+
+tweet5 <- paste0("Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week ", weeknumber," (2015-2019) is ",week.benchmark,", 2020 = ",week.2020,". RIVM zegt nu ",rivm_thisweek," in week ",weeknumber,". Er is dus ondersterfte in week ",weeknumber,", zelfs met ",rivm_thisweek," officiële corona-overledenen (wat waarschijnlijk niet eens alles is).")
+
+tweet6 <- paste0("Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (1) ",historic.average.excess, ", (2) ",age_corrected.excess,
+                 ", en (3) ",cbs.method.excess,
+                 ". Ik houd de oversterfte in de 'heftige' periode dus op ",age_corrected.excess, 
+                 "-",historic.average.excess,".")
+
+tweet7 <- paste0("Op basis van methode (2) is in week 23 de ondersterfte ",round(deaths_thisweek,0),
+                 ". Ondersterfte vanaf week 20 t/m ",weeknumber,": (1) ", historic.average_less,
+                 ", (2) ",age_corrected_less," en (3) ",cbs.method_less,". Ik houd de totale sterfte (week 12 t/m ",
+                 weeknumber,") op dit moment tussen de ",age_corrected.excess + age_corrected_less,"-",
+                 historic.average.excess + historic.average_less,".")
+
+tweet8 <- "De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056" 
+
+tweet9 <- paste0("Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was (cumulatieve sterfte zakte met 1500). De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden + VK. Totale oversterfte week 12 t/m ",weeknumber," = 168000.")
+
+tweet10 <- paste0("Conclusie na week ",weeknumber,": we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.")
+
+tweet11 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
+
+tweet12 <- "Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden, de R code is hier te vinden: https://github.com/mzelst/covid-19. Ik maak de code een andere keer iets eleganter :)"
+
+tweet13 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
+
+tweet1
+
+tweet2
+
+tweet3
+
+tweet4
+
+tweet5
+
+tweet6
+
+tweet7
+
+tweet8
+
+tweet9
+
+tweet10
+
+tweet11
+
+tweet12
+
+tweet13
+
+
+```
