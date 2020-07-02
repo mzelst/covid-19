@@ -150,7 +150,7 @@ Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven
 Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd.
 
 
-```{r tweets, echo=FALSE}
+```{r tweets, echo=FALSE, eval=FALSE}
 tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).")
 
 tweet2 <- "De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4"
