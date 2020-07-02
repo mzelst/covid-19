@@ -1,7 +1,6 @@
 require(dplyr)
-require(tidyr)
-require(rtweet)
 require(rjson)
+require(rtweet)
 get_token()
 
 
@@ -45,13 +44,13 @@ json_data <- fromJSON(file=json_file)
 
 tweet <- paste0("RIVM publiceert de dagelijkse update niet meer, dus dan doen we het zelf: 
 
-",cases.yesterday," patiënten positief getest 
+",cases.yesterday," patienten positief getest 
 (totaal: ",nrow(rivm.data),") 
 ",
-hospital.yesterday," patiënten opgenomen 
+hospital.yesterday," patienten opgenomen 
 (totaal: ",nrow(rivm.hospital),") 
 ",
-deaths.yesterday," patiënten overleden 
+deaths.yesterday," patienten overleden 
 (totaal: ",nrow(rivm.death),")")
 
 tweet
@@ -64,4 +63,10 @@ post_tweet("Voor een veel uitgebreidere update verwijs ik graag naar de dagelijk
            in_reply_to_status_id = reply_id) ## Post reply
 
 
-test <- as.data.frame(matrix(unlist(json_data[[1]]), nrow=length(json_data[[1]]), byrow=T))
+## Data for municipalities
+
+rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
+filename.municipality <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_municipality_cumulative/rivm_municipality_",Sys.Date(),".csv") ## Filename for daily data municipalities
+
+write.csv(rivm.municipalities, file=filename.municipality)
+
