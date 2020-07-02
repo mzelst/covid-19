@@ -22,7 +22,7 @@ rivm.hospital <- rivm.data %>%
 rivm.dailydata <- data.frame(Sys.Date(),nrow(rivm.data),nrow(rivm.hospital),nrow(rivm.death)) ## Calculate totals for cases, hospitalizations, deaths
 names(rivm.dailydata) <- c("date","cases","hospitalization","deaths")
 
-filename.daily <- paste0("rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+filename.daily <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 
 write.csv(rivm.dailydata, file = filename.daily) ## Write file with daily data
 
@@ -30,7 +30,7 @@ rivm.daily_aggregate <- read.csv("rivm.daily_aggregate.csv") ## Read in aggregat
 rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
 
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
-write.csv(rivm.daily_aggregate, file = "rivm.daily_aggregate.csv") ## Write file with aggregate data per day
+write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
 
 cases.yesterday <- tail(diff(rivm.daily_aggregate$cases),n=1)*-1 ## Calculate new cases
 hospital.yesterday <- tail(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ## Calculate new hospitalizations
