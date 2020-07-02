@@ -5,9 +5,9 @@ require(rjson)
 get_token()
 
 
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/daily_data")
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
-filename <- paste0("COVID-19_casus_landelijk_",Sys.Date(),".csv")
+filename <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative/COVID-19_casus_landelijk_",Sys.Date(),".csv")
 
 write.csv(rivm.data, file=filename) ## Write file with all cases until today
 
