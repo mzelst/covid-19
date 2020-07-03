@@ -31,9 +31,9 @@ rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
 write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
 
-cases.yesterday <- tail(diff(rivm.daily_aggregate$cases),n=1)*-1 ## Calculate new cases
-hospital.yesterday <- tail(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ## Calculate new hospitalizations
-deaths.yesterday <- tail(diff(rivm.daily_aggregate$deaths),n=1)*-1 ## Calculate new deaths
+cases.yesterday <- head(diff(rivm.daily_aggregate$cases),n=1)*-1 ## Calculate new cases
+hospital.yesterday <- head(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ## Calculate new hospitalizations
+deaths.yesterday <- head(diff(rivm.daily_aggregate$deaths),n=1)*-1 ## Calculate new deaths
 
 
 ## Read in data for intensive care intakes 
