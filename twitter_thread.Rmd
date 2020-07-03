@@ -16,7 +16,7 @@ require(rtweet)
 
 weeknumber <- isoweek(ymd(Sys.Date()))-2
 
-table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
+table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
 
 table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
@@ -24,7 +24,7 @@ table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
 table_mortality$LeeftijdOp31December <- factor(table_mortality$LeeftijdOp31December, levels = c(10000, 41700, 53950, 21700),
                                                labels = c("Totaal","0 tot 65", "65 tot 80", "80+"))
 
-bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
+bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2013JJ00","2014JJ00","2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
 bevolking <- bevolking[,c("Perioden","TotaleBevolking_1", "JongerDan20Jaar_10","k_20Tot40Jaar_11","k_40Tot65Jaar_12","k_65Tot80Jaar_13","k_80JaarOfOuder_14")]
 
 colnames(bevolking) <- c("Jaar","Totaal","Jonger20","20tot40","40tot65","65tot80","80ouder")
@@ -45,7 +45,7 @@ bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
 bevolking$Bevolking <- as.numeric(bevolking$Bevolking)
 
 
-## Select weeks 1-23
+## Select weeks
 table_mortality <- subset(table_mortality, Week > 00 & Week < weeknumber+1)
 table_mortality <- table_mortality[!table_mortality$Week == '00',]
 
@@ -62,8 +62,11 @@ mortality_full$Overledenen_1 <- mortality_full$Overledenen_1/mortality_full$Bevo
 mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, value.var = "Overledenen_1", sum)
 
 mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
+mortality_wide$Average20132017 <- rowMeans(mortality_wide[,c("2013","2014","2015","2016","2017")])
 
 mortality_wide$excess_death <- mortality_wide$`2020` - mortality_wide$Average20152019
+
+mortality_wide$excess_flu <- mortality_wide$`2018` - mortality_wide$Average20132017
 
 
 ```
@@ -86,15 +89,7 @@ rivm_deaths <- aggregate(deaths_rivm ~ Week, data = rivm.data, FUN = sum)
 rivm_thisweek <- rivm_deaths[which(rivm_deaths$Week == weeknumber),"deaths_rivm"]
 ```
 
-CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week `r weeknumber` van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).
 
-De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4 
-
-Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemiddelde (1), de oversterfte per leeftijdsgroep omdat je daarmee beter corrigeert voor vergrijzing (2) en methode CBS (3). Groeifactor model publiceer ik niet meer, uitleg hier: https://twitter.com/mzelst/status/1266333188386848768
-
-Deze week splits ik de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). Hierdoor kunnen we over tijd zien of we weer 'terugzakken' naar een gemiddelde sterfte.
-
-Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week `r weeknumber` (2015-2019) is `r week.benchmark`, 2020 = `r week.2020`. RIVM zegt nu `r rivm_thisweek` in week `r weeknumber`. Er is dus ondersterfte in week `r weeknumber`, zelfs met `r rivm_thisweek` officiële corona-overledenen (wat waarschijnlijk niet eens alles is).
 
 ```{r excess deaths, echo=FALSE, message=FALSE, error=FALSE, tidy=TRUE,warning=FALSE,eval=TRUE}
 alleen_oversterfte <- subset(mortality_wide, Week > 11 & Week < 20)
@@ -132,32 +127,27 @@ data.currentweek <- subset(mortality_wide, Week > (weeknumber -1))
 excess_thisweek <- aggregate(excess_death ~ LeeftijdOp31December, data = data.currentweek, FUN = sum)
 deaths_thisweek <- sum(excess_thisweek$excess_death) - round(excess_thisweek[excess_deaths$LeeftijdOp31December == "Totaal","excess_death"],0)
 
+griep <- subset(mortality_wide, Week > 13)
+excess_flu <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep, FUN = sum)
+age_corrected.flu <- round((sum(excess_flu$excess_flu) - excess_flu[excess_flu$LeeftijdOp31December == "Totaal","excess_flu"]),0)
+
+griep.sameweeks <- subset(mortality_wide, Week > 13 & Week < 20)
+excess_flu.sameweeks <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep.sameweeks, FUN = sum)
+age_corrected.flu.samenweeks <- round((sum(excess_flu.sameweeks$excess_flu) - excess_flu.sameweeks[excess_flu.sameweeks$LeeftijdOp31December == "Totaal","excess_flu"]),0)
+
+
+
 ```
 
-Oversterfte NL: Voor week 12 t/m 19 voorspelden de verschillende methodes dit: (1) `r historic.average.excess`, (2) `r age_corrected.excess`, en (3) `r cbs.method.excess`. Ik houd de oversterfte in de 'heftige' periode dus op `r age_corrected.excess`-`r historic.average.excess`.
 
-Op basis van methode (2) is in week `r weeknumber` de ondersterfte `r round(deaths_thisweek,0)`. Ondersterfte vanaf week 20 t/m `r weeknumber `: (1) `r historic.average_less`, (2) `r age_corrected_less`, en (3) `r cbs.method_less`. Ik houd de totale sterfte (week 12 t/m `r weeknumber`) op dit moment tussen de `r age_corrected.excess + age_corrected_less`-`r historic.average.excess + historic.average_less`.
-
-De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056 
-Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was. De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden + België. Totale oversterfte week 12 t/m `r weeknumber` = 166000.
-
-Conclusie na week `r weeknumber`: we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.
-
-Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data 
-
-Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden, de R code is hier te vinden: https://github.com/mzelst/covid-19. Ik maak de code een andere keer iets eleganter :)
-
-Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd.
-
-
-```{r tweets, echo=FALSE, eval=FALSE}
-tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. In dit draadje combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreidere analyse van de oversterfte. Ik kijk ook naar Europa (data van EuroMOMO).")
+```{r tweets, echo=FALSE, eval=TRUE}
+tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. Deze week combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreide ondersterfte vergelijking tussen 2018 en 2020. Ik kijk ook naar Europa en de VS: er is veel te bespreken!")
 
 tweet2 <- "De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4"
 
 tweet3 <- "Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemiddelde (1), de oversterfte per leeftijdsgroep omdat je daarmee beter corrigeert voor vergrijzing (2) en methode CBS (3). Groeifactor model publiceer ik niet meer, uitleg hier: https://twitter.com/mzelst/status/1266333188386848768"
 
-tweet4 <- "Deze week splits ik de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). Hierdoor kunnen we over tijd zien of we weer 'terugzakken' naar een gemiddelde sterfte."
+tweet4 <- "Ik splits de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). De grafiek hieronder loopt op de verticale as nu van 2000-5000, zodat je de verschillen tussen de weken beter kunt zien."
 
 tweet5 <- paste0("Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week ", weeknumber," (2015-2019) is ",week.benchmark,", 2020 = ",week.2020,". RIVM zegt nu ",rivm_thisweek," in week ",weeknumber,". Er is dus ondersterfte in week ",weeknumber,", zelfs met ",rivm_thisweek," officiële corona-overledenen (wat waarschijnlijk niet eens alles is).")
 
@@ -172,17 +162,23 @@ tweet7 <- paste0("Op basis van methode (2) is in week ",weeknumber," de onderste
                  weeknumber,") op dit moment tussen de ",age_corrected.excess + age_corrected_less,"-",
                  historic.average.excess + historic.average_less,".")
 
-tweet8 <- "De methodes op basis van historische gemiddeldes (methode 1 en 2) zijn dus op basis van de periode 2015-2019. Daar kun je over discussieren en @De_Bezige_Bij doet dat hier mooi: https://twitter.com/De_Bezige_Bij/status/1269358758989357056" 
+tweet8 <- "In 2018 was er een zware griepepidemie waarna er ook een periode was van langdurige ondersterfte. Om die periode te vergelijken met de huidige weken, heb ik de ondersterfte in 2018 berekend op basis van 2013-2017 (uiteraard met correctie per leeftijdsgroep)."
 
-tweet9 <- paste0("Oversterfte Europa (analyses EuroMOMO): oversterfte in Europa is ook voorbij, aangezien er deze week ondersterfte was. De enige landen waar afgelopen week nog enige oversterfte was zijn Zweden + België. Totale oversterfte week 12 t/m ",weeknumber," = 166000.")
+tweet9 <- paste0("De ondersterfte begon in 2018 vanaf week 14 voor alle leeftijdsgroepen. De ondersterfte van week 14 t/m ",weeknumber," was ",age_corrected.flu," (flink hoger dan in 2020). Maar dat is uiteraard ondersterfte over meer weken, namelijk ",weeknumber-14,". Dus wat als we net als in 2020 de eerste ",weeknumber-19," weken van 2018 pakken?")
 
-tweet10 <- paste0("Conclusie na week ",weeknumber,": we zitten nu in een periode van ondersterfte (dat is normaal na een heftige epidemie). Een kanttekening: zonder maatregelen was dit waarschijnlijk veel hoger geweest. RIVM becijferde voorkomen IC-opnames op 37000-43000 t/m 20 mei.")
+tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), was de ondersterfte in ",weeknumber-19," weken ",age_corrected.flu.samenweeks,". De ondersterfte in 2018 nam dus sneller toe dan nu, maar het verschil is klein (ook geen lockdown in 2018.")
 
-tweet11 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
+tweet11 <- paste0("Oversterfte Europa (analyses EuroMOMO): De totale sterfte in Europa blijft stabiel (geen duidelijke ondersterfte). Het enige land waar afgelopen week nog enige oversterfte was, u raadt het al, Zweden. Totale oversterfte week 12 t/m ",weeknumber," = 166000.")
 
-tweet12 <- "Eindnoot 2: Ik heb wat tijd gehad om de code voor deze analyses uit te schrijven zodat ik mijn draadjes hierover elke week automatisch kan draaien. Voor de geinteresseerden, de R code is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R."
+tweet12 <- paste0("Er is een artikel verschenen over oversterfte in de VS (periode 1 maart - 25 april). De auteurs berekenen een oversterfte van 87000 (21% meer dan normaal), waarvan 65% aan covid-19 wordt toegeschreven. Artikel hier: https://jamanetwork.com/journals/jama/fullarticle/2768086 (via @Jopinie)")
 
-tweet13 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
+tweet13 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien). In de VS woedt het coronavirus nog stevig waardoor we op een bepaald moment de verschillende ondersterfte trends kunnen vergelijken.")
+
+tweet14 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
+
+tweet15 <- "Eindnoot 2: Voor de geinteresseerden, de R code die ik hiervoor gebruik is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R. Ik publiceer hier ook dagelijkse updates en zet deze data ook online."
+
+tweet16 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
 
 tweet1
 
@@ -210,6 +206,14 @@ tweet12
 
 tweet13
 
+tweet14
+
+tweet15
+
+tweet16
+```
+
+```{r post tweets, eval=FALSE}
 post_tweet(status=tweet1)
 
 ## lookup status_id
@@ -238,7 +242,7 @@ my_timeline <- get_timeline(rtweet:::home_user())
 ## ID for reply
 reply_id <- my_timeline$status_id[1]
 ## post reply
-post_tweet(tweet5,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week24/overledenen_week24.png",in_reply_to_status_id = reply_id)
+post_tweet(tweet5,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week25/overledenen_week25.png",in_reply_to_status_id = reply_id)
 
 ## lookup status_id
 my_timeline <- get_timeline(rtweet:::home_user())
@@ -266,7 +270,7 @@ my_timeline <- get_timeline(rtweet:::home_user())
 ## ID for reply
 reply_id <- my_timeline$status_id[1]
 ## post reply
-post_tweet(tweet9,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week24/EuroMOMO.png",in_reply_to_status_id = reply_id)
+post_tweet(tweet9,in_reply_to_status_id = reply_id)
 
 ## lookup status_id
 my_timeline <- get_timeline(rtweet:::home_user())
@@ -280,7 +284,7 @@ my_timeline <- get_timeline(rtweet:::home_user())
 ## ID for reply
 reply_id <- my_timeline$status_id[1]
 ## post reply
-post_tweet(tweet11,in_reply_to_status_id = reply_id)
+post_tweet(tweet11,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week25/EuroMOMO.png",in_reply_to_status_id = reply_id)
 
 ## lookup status_id
 my_timeline <- get_timeline(rtweet:::home_user())
@@ -296,6 +300,26 @@ reply_id <- my_timeline$status_id[1]
 ## post reply
 post_tweet(tweet13,in_reply_to_status_id = reply_id)
 
+## lookup status_id
+my_timeline <- get_timeline(rtweet:::home_user())
+## ID for reply
+reply_id <- my_timeline$status_id[1]
+## post reply
+post_tweet(tweet14,in_reply_to_status_id = reply_id)
 
+## lookup status_id
+my_timeline <- get_timeline(rtweet:::home_user())
+## ID for reply
+reply_id <- my_timeline$status_id[1]
+## post reply
+post_tweet(tweet15,in_reply_to_status_id = reply_id)
+
+## lookup status_id
+my_timeline <- get_timeline(rtweet:::home_user())
+## ID for reply
+reply_id <- my_timeline$status_id[1]
+## post reply
+post_tweet(tweet16,in_reply_to_status_id = reply_id)
 
 ```
+
