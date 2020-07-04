@@ -1,10 +1,12 @@
+require(taskscheduleR)
 require(dplyr)
 require(rjson)
 require(rtweet)
 get_token()
 
-
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+
+
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 filename <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative/COVID-19_casus_landelijk_",Sys.Date(),".csv")
 
@@ -36,9 +38,6 @@ hospital.yesterday <- head(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ##
 deaths.yesterday <- head(diff(rivm.daily_aggregate$deaths),n=1)*-1 ## Calculate new deaths
 
 
-## Read in data for intensive care intakes 
-json_file <- "https://stichting-nice.nl/covid-19/public/new-intake/"
-json_data <- fromJSON(file=json_file)
 
 ## Build tweets
 
