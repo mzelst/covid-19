@@ -57,9 +57,15 @@ tweet
 post_tweet(status = tweet) ## Post tweet
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
+reply_id <- my_timeline$status_id[4] ## Status ID for reply
 post_tweet("Voor een veel uitgebreidere update verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen die dit ook per gemeente doet.",
            in_reply_to_status_id = reply_id) ## Post reply
+
+
+post_tweet(status = "Het aantal positief geteste per provincie sinds 1 juni. Zuid-Holland stijgt nog steeds door terwijl de rest afvlakt/afgevlakt is.",media="C:/Users/s379011/surfdrive/projects/CoronaWatchNL/plots/province_count_time.png",in_reply_to_status_id = reply_id)
+
+post_tweet(status ="Laatste voor vandaag: het aantal besmettingen per leeftijdsgroep vanaf 1 juni. Meeste besmettingen in groep 0-59 en laatste drie weken minimaal aantal in groep 60+.",media="C:/Users/s379011/surfdrive/projects/CoronaWatchNL/plots/overview_plot_leeftijd.png",
+           in_reply_to_status_id = reply_id)
 
 
 ## Data for municipalities
@@ -68,4 +74,8 @@ rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantalle
 filename.municipality <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_municipality_cumulative/rivm_municipality_",Sys.Date(),".csv") ## Filename for daily data municipalities
 
 write.csv(rivm.municipalities, file=filename.municipality)
+
+gemeentes <- c("Rotterdam","'s-Gravenhage")
+
+gemeente <- filter(rivm.municipalities,Municipality_name %in% gemeentes)
 
