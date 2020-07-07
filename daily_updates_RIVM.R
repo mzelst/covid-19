@@ -5,7 +5,6 @@ get_token()
 
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
 
-
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 filename <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative/COVID-19_casus_landelijk_",Sys.Date(),".csv")
 
@@ -34,23 +33,36 @@ write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020
 
 rivm.daily_aggregate <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv")
 
+
+## Pull cumulative IC data
+json_file <- "https://www.stichting-nice.nl/covid-19/public/intake-cumulative"
+json_data <- fromJSON(file=json_file, simplify = TRUE)
+ic.cumulative <- data.frame(matrix(unlist(json_data), nrow=length(json_data), byrow=T))
+ic.cumulative$X2 <- as.numeric(ic.cumulative$X2)
+
+
 cases.yesterday <- head(diff(rivm.daily_aggregate$cases),n=1)*-1 ## Calculate new cases
 hospital.yesterday <- head(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ## Calculate new hospitalizations
 deaths.yesterday <- head(diff(rivm.daily_aggregate$deaths),n=1)*-1 ## Calculate new deaths
+ic.yesterday <- tail(diff(ic.cumulative$X2),n=1) ## Calculate new IC intakes
 
 cases.patient <- ifelse(cases.yesterday == 1, "patiënt","patiënten")
 hospital.patient <- ifelse(hospital.yesterday == 1, "patiënt","patiënten")
 deaths.patient <- ifelse(deaths.yesterday == 1, "patiënt","patiënten")
+ic.patient <- ifelse(ic.yesterday == 1, "patiënt","patiënten")
 
 
 ## Build tweets
-tweet <- paste0("RIVM publiceert de dagelijkse update niet meer, dus dan doen we het zelf: 
+tweet <- paste0("Dagelijkse corona-cijfers update: 
 
 ",cases.yesterday," ",cases.patient," positief getest 
 (totaal: ",nrow(rivm.data),") 
 ",
 hospital.yesterday," ",hospital.patient," opgenomen 
 (totaal: ",nrow(rivm.hospital),") 
+",
+ic.yesterday," ",ic.patient," opgenomen op de IC 
+(totaal: ",tail(ic.cumulative$X2,n=1),") 
 ",
 deaths.yesterday," ",deaths.patient," overleden 
 (totaal: ",nrow(rivm.death),")")
