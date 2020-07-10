@@ -121,3 +121,4 @@ hospital.deaths <- as.numeric(sub('.*(\\d{4}).*', '\\1', hospital.deaths.text))
 
 
 
+
