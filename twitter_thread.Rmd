@@ -141,7 +141,7 @@ age_corrected.flu.samenweeks <- round((sum(excess_flu.sameweeks$excess_flu) - ex
 
 
 ```{r tweets, echo=FALSE, eval=TRUE}
-tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. Deze week combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreide ondersterfte vergelijking tussen 2018 en 2020. Ik kijk ook naar Europa en de VS: er is veel te bespreken!")
+tweet1 <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",weeknumber," van dit jaar. Deze week combineer ik de grafieken over sterfte per week (alleen totaal) met een uitgebreide ondersterfte vergelijking tussen 2018 en 2020. Ik kijk ook naar de oversterfte in Europa.")
 
 tweet2 <- "De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70895ned. Ik gebruik de data van 2015-2019. Week 1, 52, en 53 zijn eruit gehaald omdat dit regelmatig halve weken zijn en dat creëert enigszins ruis. Data die ik gebruik voor de analyses vind je hier: https://surfdrive.surf.nl/files/index.php/s/QECTNiYZqdGyWL4"
 
@@ -166,19 +166,17 @@ tweet8 <- "In 2018 was er een zware griepepidemie waarna er ook een periode was 
 
 tweet9 <- paste0("De ondersterfte begon in 2018 vanaf week 14 voor alle leeftijdsgroepen. De ondersterfte van week 14 t/m ",weeknumber," was ",age_corrected.flu," (flink hoger dan in 2020). Maar dat is uiteraard ondersterfte over meer weken, namelijk ",weeknumber-14,". Dus wat als we net als in 2020 de eerste ",weeknumber-19," weken van 2018 pakken?")
 
-tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), was de ondersterfte in ",weeknumber-19," weken ",age_corrected.flu.samenweeks,". De ondersterfte in 2018 nam dus sneller toe dan nu, maar het verschil is klein (ook geen lockdown in 2018.")
+tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), was de ondersterfte in ",weeknumber-19," weken ",age_corrected.flu.samenweeks,". De ondersterfte in 2018 nam dus sneller toe dan nu, maar het verschil is klein (ook geen lockdown toen).")
 
-tweet11 <- paste0("Oversterfte Europa (analyses EuroMOMO): De totale sterfte in Europa blijft stabiel (geen duidelijke ondersterfte). Het enige land waar afgelopen week nog enige oversterfte was, u raadt het al, Zweden. Totale oversterfte week 12 t/m ",weeknumber," = 166000.")
+tweet11 <- paste0("Oversterfte Europa week 27: De oversterfte zakt met 6000. Echter, Belgie en Spanje hebben ineens weer serieuze oversterfte. Totale oversterfte week 12 t/m ",weeknumber+1," = 160000")
 
-tweet12 <- paste0("Er is een artikel verschenen over oversterfte in de VS (periode 1 maart - 25 april). De auteurs berekenen een oversterfte van 87000 (21% meer dan normaal), waarvan 65% aan covid-19 wordt toegeschreven. Artikel hier: https://jamanetwork.com/journals/jama/fullarticle/2768086 (via @Jopinie)")
+tweet12 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien). De snelheid van de ondersterfte is nu bijna gelijk aan 2018, dus het is afwachten of dit doorzet.")
 
-tweet13 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien). In de VS woedt het coronavirus nog stevig waardoor we op een bepaald moment de verschillende ondersterfte trends kunnen vergelijken.")
+tweet13 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
 
-tweet14 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
+tweet14 <- "Eindnoot 2: Voor de geinteresseerden, de R code die ik hiervoor gebruik is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R. Ik publiceer hier ook dagelijkse updates en zet deze data ook online."
 
-tweet15 <- "Eindnoot 2: Voor de geinteresseerden, de R code die ik hiervoor gebruik is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R. Ik publiceer hier ook dagelijkse updates en zet deze data ook online."
-
-tweet16 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
+tweet15 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
 
 tweet1
 
@@ -210,7 +208,6 @@ tweet14
 
 tweet15
 
-tweet16
 ```
 
 ```{r post tweets, eval=FALSE}
@@ -314,12 +311,6 @@ reply_id <- my_timeline$status_id[1]
 ## post reply
 post_tweet(tweet15,in_reply_to_status_id = reply_id)
 
-## lookup status_id
-my_timeline <- get_timeline(rtweet:::home_user())
-## ID for reply
-reply_id <- my_timeline$status_id[1]
-## post reply
-post_tweet(tweet16,in_reply_to_status_id = reply_id)
 
 ```
 

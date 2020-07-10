@@ -1,4 +1,6 @@
-require(dplyr)
+require(rvest)
+require(RSelenium)
+require(tidyverse)
 require(rjson)
 require(rtweet)
 get_token()
@@ -32,6 +34,13 @@ rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data
 write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
 
 rivm.daily_aggregate <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv")
+
+## Data for municipalities
+
+rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
+filename.municipality <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_municipality_cumulative/rivm_municipality_",Sys.Date(),".csv") ## Filename for daily data municipalities
+
+write.csv(rivm.municipalities, file=filename.municipality)
 
 
 ## Pull cumulative IC data
@@ -76,19 +85,39 @@ reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Voor een veel uitgebreidere update verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen die dit ook per gemeente doet.",
            in_reply_to_status_id = reply_id) ## Post reply
 
-
-post_tweet(status = "Het aantal positieve tests, ziekenhuisopnames, en overledenen per geslacht sinds 1 juni. Iets meer vrouwen dan mannen die positief getest zijn.",media="C:/Users/s379011/surfdrive/projects/CoronaWatchNL/plots/toename_plot_geslacht.png",in_reply_to_status_id = reply_id)
-
 post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/coronavirus-covid-19/actueel",in_reply_to_status_id = reply_id)
 
-## Data for municipalities
 
-rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
-filename.municipality <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_municipality_cumulative/rivm_municipality_",Sys.Date(),".csv") ## Filename for daily data municipalities
 
-write.csv(rivm.municipalities, file=filename.municipality)
+## SCRAPE DATA FROM Stichting NICE website ##
 
-gemeentes <- c("Rotterdam","'s-Gravenhage")
+rD <- rsDriver(browser="firefox") #start browser #
+remDr <- rD$client   # start client #
 
-gemeente <- filter(rivm.municipalities,Municipality_name %in% gemeentes)
+u.ic <- "https://www.stichting-nice.nl/covid-19-op-de-ic.jsp" #website for IC data
+remDr$navigate(u.ic) # Load website
+
+doc <- remDr$getPageSource()[[1]] %>% read_html() # pull rendered source
+
+ic.today.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[1]") %>% html_text() #download #patients on IC today
+ics.used.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[2]/text()") %>% html_text() #download #ICs used today
+ic.cumulative.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[3]/text()") %>% html_text() #download cumulative #patients on IC
+ic.deaths.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[4]/text()") %>% html_text() # Cumulative #patients that died in IC
+
+u.hospital <- "https://www.stichting-nice.nl/covid-19-op-de-zkh.jsp" #website for hospital departments (not IC) data
+remDr$navigate(u.hospital) #Load website
+doc <- remDr$getPageSource()[[1]] %>% read_html()   # pull rendered source
+
+hospital.today.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[1]") %>% html_text() #patients in hospital (not IC) today
+hospitals.cumulative.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[2]/text()") %>% html_text() #cumulative patients in hospital (not IC)
+hospital.deaths.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[3]/text()") %>% html_text() # cumulative deaths in hospital (not IC)
+
+# Transform all downloaded strings into numbers 
+ic.today <- as.numeric(sub('.*(\\d{2}).*', '\\1', ic.today.text))
+ics.used <- as.numeric(sub('.*(\\d{2}).*', '\\1', ics.used.text))
+ic.cumulative <- as.numeric(sub('.*(\\d{4}).*', '\\1', ic.cumulative.text))
+hospital.today <- as.numeric(sub('.*(\\d{3}).*', '\\1', hospital.today.text))
+hospital.deaths <- as.numeric(sub('.*(\\d{4}).*', '\\1', hospital.deaths.text))
+
+
 
