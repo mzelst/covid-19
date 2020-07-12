@@ -3,6 +3,9 @@ require(RSelenium)
 require(tidyverse)
 require(rjson)
 require(rtweet)
+require(purrr)
+require(data.table)
+
 get_token()
 
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
@@ -42,18 +45,75 @@ filename.municipality <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-1
 
 write.csv(rivm.municipalities, file=filename.municipality)
 
+## Stichting NICE data
 
-## Pull cumulative IC data
-json_file <- "https://www.stichting-nice.nl/covid-19/public/intake-cumulative"
-json_data <- fromJSON(file=json_file, simplify = TRUE)
-ic.cumulative <- data.frame(matrix(unlist(json_data), nrow=length(json_data), byrow=T))
-ic.cumulative$X2 <- as.numeric(ic.cumulative$X2)
+# IC patients died, discharged, discharged to other department (cumulative)
+ics.used <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/ic-count",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
 
+ic.died_survivors <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/died-and-survivors-cumulative", simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+ic.death_survive <- as.data.frame(t(ic.died_survivors[c(2,4,6),]))
+
+ic.death_survive$ic_deaths <- unlist(ic.death_survive$V1)
+ic.death_survive$ic_discharge <- unlist(ic.death_survive$V2)
+ic.death_survive$ic_discharge_inhosp <- unlist(ic.death_survive$V3)
+ic.death_survive <- ic.death_survive[,c(4:6)]
+
+# New patients at IC 
+ic_intake <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/new-intake/",simplify = TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill=TRUE)
+
+ic_intake <- as.data.frame(t(ic_intake[c(2,4),]))
+
+ic_intake$ic_intake_proven <- unlist(ic_intake$V1)
+ic_intake$ic_intake_suspected <- unlist(ic_intake$V2)
+ic_intake <- ic_intake[,c(3:4)]
+
+# IC patients currently
+ic_current <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/intake-count/",simplify = TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+# IC patients cumulative
+ic.cumulative <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/intake-cumulative",simplify = TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+# Number of patients currently in hospital (non-IC) 
+zkh_current <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/intake-count/",simplify = TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+# Intake per day of patients in hospital (non-IC) with suspected and/or proven covid-19
+json_zkh_df <- fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/new-intake/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill=TRUE)
+
+zkh_new <- as.data.frame(t(json_zkh_df[c(1,2,4),]))
+
+zkh_new$date <- unlist(zkh_new$V1)
+zkh_new$new_hosp_proven <- unlist(zkh_new$V2)
+zkh_new$new_hosp_suspected <- unlist(zkh_new$V3)
+zkh_new <- zkh_new[,c(4:6)]
+
+
+# Merge all data
+df <- data.frame(zkh_new,ic_intake,ic_current$value,ics.used$value,ic.cumulative$value,zkh_current$value,ic.death_survive)
+names(df) <- c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven","IC_Intake_Suspected","IC_Current","ICs_Used","IC_Cumulative","Hospital_Currently","IC_Deaths_Cumulative","IC_Discharge_Cumulative","IC_Discharge_InHospital")
+
+write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all cases until today
+
+## Build tweets
 
 cases.yesterday <- head(diff(rivm.daily_aggregate$cases),n=1)*-1 ## Calculate new cases
 hospital.yesterday <- head(diff(rivm.daily_aggregate$hospitalization),n=1)*-1 ## Calculate new hospitalizations
 deaths.yesterday <- head(diff(rivm.daily_aggregate$deaths),n=1)*-1 ## Calculate new deaths
-ic.yesterday <- tail(diff(ic.cumulative$X2),n=1) ## Calculate new IC intakes
+ic.yesterday <- tail(diff(ic.cumulative$value),n=1) ## Calculate new IC intakes
 
 cases.patient <- ifelse(cases.yesterday == 1, "patiënt","patiënten")
 hospital.patient <- ifelse(hospital.yesterday == 1, "patiënt","patiënten")
@@ -71,7 +131,7 @@ hospital.yesterday," ",hospital.patient," opgenomen
 (totaal: ",nrow(rivm.hospital),") 
 ",
 ic.yesterday," ",ic.patient," opgenomen op de IC 
-(totaal: ",tail(ic.cumulative$X2,n=1),") 
+(totaal: ",tail(ic.cumulative$value,n=1),") 
 ",
 deaths.yesterday," ",deaths.patient," overleden 
 (totaal: ",nrow(rivm.death),")")
@@ -82,43 +142,7 @@ post_tweet(status = tweet) ## Post tweet
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Voor een veel uitgebreidere update verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen die dit ook per gemeente doet.",
+post_tweet("Voor een veel uitgebreidere update verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen die dit ook per gemeente doet. Wij kijken samen nu ook of we de correcties beter in beeld kunnen krijgen.",
            in_reply_to_status_id = reply_id) ## Post reply
 
 post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/coronavirus-covid-19/actueel",in_reply_to_status_id = reply_id)
-
-
-
-## SCRAPE DATA FROM Stichting NICE website ##
-
-rD <- rsDriver(browser="firefox") #start browser #
-remDr <- rD$client   # start client #
-
-u.ic <- "https://www.stichting-nice.nl/covid-19-op-de-ic.jsp" #website for IC data
-remDr$navigate(u.ic) # Load website
-
-doc <- remDr$getPageSource()[[1]] %>% read_html() # pull rendered source
-
-ic.today.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[1]") %>% html_text() #download #patients on IC today
-ics.used.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[2]/text()") %>% html_text() #download #ICs used today
-ic.cumulative.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[3]/text()") %>% html_text() #download cumulative #patients on IC
-ic.deaths.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[4]/text()") %>% html_text() # Cumulative #patients that died in IC
-
-u.hospital <- "https://www.stichting-nice.nl/covid-19-op-de-zkh.jsp" #website for hospital departments (not IC) data
-remDr$navigate(u.hospital) #Load website
-doc <- remDr$getPageSource()[[1]] %>% read_html()   # pull rendered source
-
-hospital.today.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[1]") %>% html_text() #patients in hospital (not IC) today
-hospitals.cumulative.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[2]/text()") %>% html_text() #cumulative patients in hospital (not IC)
-hospital.deaths.text <- html_node(doc, xpath="/html/body/div[1]/div[2]/div[2]/p[3]/text()") %>% html_text() # cumulative deaths in hospital (not IC)
-
-# Transform all downloaded strings into numbers 
-ic.today <- as.numeric(sub('.*(\\d{2}).*', '\\1', ic.today.text))
-ics.used <- as.numeric(sub('.*(\\d{2}).*', '\\1', ics.used.text))
-ic.cumulative <- as.numeric(sub('.*(\\d{4}).*', '\\1', ic.cumulative.text))
-hospital.today <- as.numeric(sub('.*(\\d{3}).*', '\\1', hospital.today.text))
-hospital.deaths <- as.numeric(sub('.*(\\d{4}).*', '\\1', hospital.deaths.text))
-
-
-
-
