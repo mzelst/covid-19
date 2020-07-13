@@ -106,6 +106,7 @@ names(df) <- c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_I
 df$Hospital_Intake <- df$Hospital_Intake_Proven + df$Hospital_Intake_Suspected
 df$IC_Intake <- df$IC_Intake_Proven + df$IC_Intake_Suspected
 
+# Cumulative sums for suspected cases in hospital
 df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected))
 df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
 df$Datum <- as.Date(df$date)
@@ -114,7 +115,6 @@ write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_n
 
 all.data <- merge(rivm.daily_aggregate,df, by = "date") # Merge RIVM with NICE data
 write.csv(all.data, file = "all_data.csv") # Write dataframe
-
 
 all.data <- all.data %>%
   mutate(positivetests = c(0,diff(cases))) # Calculate number of positive tests per day
@@ -133,7 +133,7 @@ cases <- all.data %>%
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Opnames per dag")+
-  ggtitle("Positieve tests per dag") +
+  ggtitle("Meldingen van geconstateerde besmettingen per dag") +
   ggsave("plots/positieve_tests_per_dag.png",width=15, height = 4)
 
 # Plot for #patients in hospital per day
@@ -226,7 +226,7 @@ Bevestigde: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdachte: ",tail(all
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal aanwezige patienten in het ziekenhuis, opnames, en aantal positieve tests.")
+Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal geconstateerde besmettingen.")
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
