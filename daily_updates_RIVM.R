@@ -3,7 +3,6 @@ require(RSelenium)
 require(tidyverse)
 require(rjson)
 require(rtweet)
-require(purrr)
 require(data.table)
 
 get_token()
@@ -35,8 +34,6 @@ rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
 
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
 write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
-
-rivm.daily_aggregate <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv")
 
 ## Data for municipalities
 
@@ -106,7 +103,13 @@ zkh_new <- zkh_new[,c(4:6)]
 df <- data.frame(zkh_new,ic_intake,ic_current$value,ics.used$value,ic.cumulative$value,zkh_current$value,ic.death_survive)
 names(df) <- c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven","IC_Intake_Suspected","IC_Current","ICs_Used","IC_Cumulative","Hospital_Currently","IC_Deaths_Cumulative","IC_Discharge_Cumulative","IC_Discharge_InHospital")
 
+df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected))
+df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
+
 write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all cases until today
+
+df_diff <- as.data.frame(sapply(df[,c(2:12)], function(x) tail(diff(x),n=1)))
+df_diff['IC_Current',]
 
 ## Build tweets
 
