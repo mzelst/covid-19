@@ -23,7 +23,7 @@ rivm.death <- rivm.data %>%
 rivm.hospital <- rivm.data %>%
   dplyr::filter(Hospital_admission == "Yes") ## Extract hospital data only
 
-rivm.dailydata <- data.frame(Sys.Date(),nrow(rivm.data),nrow(rivm.hospital),nrow(rivm.death)) ## Calculate totals for cases, hospitalizations, deaths
+rivm.dailydata <- data.frame(as.Date(Sys.Date()),nrow(rivm.data),nrow(rivm.hospital),nrow(rivm.death)) ## Calculate totals for cases, hospitalizations, deaths
 names(rivm.dailydata) <- c("date","cases","hospitalization","deaths")
 
 filename.daily <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
@@ -34,6 +34,8 @@ rivm.daily_aggregate <- read.csv("rivm.daily_aggregate.csv") ## Read in aggregat
 rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
 
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
+rivm.daily_aggregate <- rivm.daily_aggregate[order(as.Date(rivm.daily_aggregate$date, format="%Y/%m/%d/")),]
+
 write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
 
 ## Data for municipalities
@@ -109,7 +111,7 @@ df$IC_Intake <- df$IC_Intake_Proven + df$IC_Intake_Suspected
 # Cumulative sums for suspected cases in hospital
 df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected))
 df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
-df$Datum <- as.Date(df$date)
+df$date <- as.Date(df$date)
 
 write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
 
@@ -221,7 +223,7 @@ post_tweet (status = tweet) ## Post tweet
 tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens: 
 
 Patiënten verpleegafdeling 
-Bevestigde: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdachte: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
+Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
 
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
@@ -236,7 +238,7 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Wij kijken samen nu ook of we de correcties beter in beeld kunnen krijgen.",
+post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Wij zijn nu samen aan het bestuderen hoe we de updates kunnen integreren.",
            in_reply_to_status_id = reply_id) ## Post reply
 
 post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/coronavirus-covid-19/actueel",in_reply_to_status_id = reply_id)
