@@ -1,5 +1,4 @@
-require(rvest)
-require(RSelenium)
+require(cowplot)
 require(tidyverse)
 require(rjson)
 require(rtweet)
@@ -34,7 +33,8 @@ rivm.daily_aggregate <- read.csv("rivm.daily_aggregate.csv") ## Read in aggregat
 rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
 
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
-rivm.daily_aggregate <- rivm.daily_aggregate[order(as.Date(rivm.daily_aggregate$date, format="%Y/%m/%d/")),]
+rivm.daily_aggregate <- rivm.daily_aggregate[order(rivm.daily_aggregate$date),]
+rivm.daily_aggregate$date <- as.Date(rivm.daily_aggregate$date)
 
 write.csv(rivm.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/rivm.daily_aggregate.csv") ## Write file with aggregate data per day
 
@@ -121,30 +121,36 @@ write.csv(all.data, file = "all_data.csv") # Write dataframe
 all.data <- all.data %>%
   mutate(positivetests = c(0,diff(cases))) # Calculate number of positive tests per day
 
+all.data$positive_7daverage <- round(frollmean(all.data[,"positivetests"],7),0)
+
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
+
+all.data$Datum <- as.Date(all.data$Datum)
 
 # Plot for positive tests per day
 cases <- all.data %>%
-  filter(Datum > filter.date) %>%
-  ggplot(aes(x=Datum, y=positivetests)) + 
-  geom_line(aes(y = positivetests, color = "Positieve tests per dag")) +
+  filter(date > filter.date) %>%
+  ggplot(aes(x=date, y=positivetests)) + 
+  geom_line(aes(y = positivetests, color = "Positieve tests per dag"), lwd=1.2) +
+  geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
         legend.title = element_blank()) +
   labs(x = "Datum",
-       y = "Opnames per dag")+
-  ggtitle("Meldingen van geconstateerde besmettingen per dag") +
+       y = "Besmettingen per dag",
+       color = "Legend") +
+  ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=15, height = 4)
 
 # Plot for #patients in hospital per day
 
 aanwezig <- all.data %>%
-  filter(Datum > filter.date) %>%
-  ggplot(aes(x=Datum, y=Hospital_Currently)) + 
-  geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling")) +
-  geom_line(aes(y = IC_Current, color = "Aanwezig op IC")) +
+  filter(date > filter.date) %>%
+  ggplot(aes(x=date, y=Hospital_Currently)) + 
+  geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling"), lwd=1.2) +
+  geom_line(aes(y = IC_Current, color = "Aanwezig op IC"), lwd=1.2) +
   ylim(0,250) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
@@ -159,10 +165,10 @@ aanwezig <- all.data %>%
 # Plot for #patients intake per day
 
 opnames <- all.data %>%
-  filter(Datum > filter.date) %>%
-  ggplot(aes(x=Datum, y=Hospital_Intake_Proven)) + 
-  geom_line(aes(y = Hospital_Intake_Proven, color = "Opname op verpleegafdeling")) +
-  geom_line(aes(y = IC_Intake_Proven, color = "Opname op IC")) +
+  filter(date > filter.date) %>%
+  ggplot(aes(x=date, y=Hospital_Intake_Proven)) + 
+  geom_line(aes(y = Hospital_Intake_Proven, color = "Opname op verpleegafdeling"), lwd=1.2) +
+  geom_line(aes(y = IC_Intake_Proven, color = "Opname op IC"), lwd=1.2) +
   ylim(0,15) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
@@ -189,7 +195,7 @@ save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, b
 ## Build tweets
 
 cases.yesterday <- tail(all.data$positivetests,n=1) ## Calculate new cases
-hospital.yesterday <- tail(all.data$Hospital_Intake_Proven,n=1) ## Calculate new hospitalizations
+hospital.yesterday <- tail(diff(all.data$hospitalization),n=1) ## Calculate new hospitalizations
 deaths.yesterday <- tail(diff(all.data$deaths),n=1) ## Calculate new deaths
 ic.yesterday <- tail(all.data$IC_Intake_Proven,n=1) ## Calculate new IC intakes
 
@@ -220,7 +226,7 @@ post_tweet (status = tweet) ## Post tweet
 
 # Tweet for hospital numbers
 
-tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens: 
+tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
 
 Patiënten verpleegafdeling 
 Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
@@ -228,7 +234,7 @@ Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.d
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal geconstateerde besmettingen.")
+Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal besmettingen.")
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
@@ -241,4 +247,7 @@ reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Wij zijn nu samen aan het bestuderen hoe we de updates kunnen integreren.",
            in_reply_to_status_id = reply_id) ## Post reply
 
-post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/coronavirus-covid-19/actueel",in_reply_to_status_id = reply_id)
+
+my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+reply_id <- my_timeline$status_id[1] ## Status ID for reply
+post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/sites/default/files/2020-07/COVID-19_WebSite_rapport_wekelijks_20200714_1040.pdf",in_reply_to_status_id = reply_id)
