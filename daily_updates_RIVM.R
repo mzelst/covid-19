@@ -194,30 +194,57 @@ save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, b
 
 ## Build tweets
 
-cases.yesterday <- tail(all.data$positivetests,n=1) ## Calculate new cases
+#### 
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative")
+
+temp = list.files(pattern="*.csv")
+myfiles = lapply(temp, read.csv) ## Load all daily datasets
+
+datefunction <- function(x) {
+  as.data.frame(table(x$Date_statistics))
+} ## Function for cases per day
+
+res <- lapply(myfiles, datefunction) ## Calculate cases per day
+
+df.dates <- res %>%
+  reduce(full_join, by = "Var1") ## Create dataframe for cases per day
+
+names(df.dates) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
+                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14") ## Rename dataframe columns
+
+df.dates$diff <- df.dates[,ncol(df.dates)] - df.dates[,ncol(df.dates)-1] ## Calculate differences per day
+
+neg <- sum(df.dates$diff[df.dates$diff<0], na.rm=TRUE) ## Negative corrections
+pos <- sum(df.dates$diff[df.dates$diff>0], na.rm=TRUE) ## Positive corrections (before day of reporting)
+
+net.diff <- sum(df.dates[,ncol(df.dates)-1],na.rm=TRUE) - sum(df.dates[,ncol(df.dates)-2],na.rm=TRUE) ## Net difference 
+
+new.infection <- neg*-1+net.diff ## Calculate new cases
+
+## Extract info for tweet
 hospital.yesterday <- tail(diff(all.data$hospitalization),n=1) ## Calculate new hospitalizations
 deaths.yesterday <- tail(diff(all.data$deaths),n=1) ## Calculate new deaths
 ic.yesterday <- tail(all.data$IC_Intake_Proven,n=1) ## Calculate new IC intakes
 
-cases.patient <- ifelse(cases.yesterday == 1, "patiënt","patiënten")
+cases.patient <- ifelse(new.infection == 1, "patiënt","patiënten")
 hospital.patient <- ifelse(hospital.yesterday == 1, "patiënt","patiënten")
 deaths.patient <- ifelse(deaths.yesterday == 1, "patiënt","patiënten")
 ic.patient <- ifelse(ic.yesterday == 1, "patiënt","patiënten")
 
-
 ## Build tweets
-tweet <- paste0("Dagelijkse corona-cijfers update: 
+tweet <- paste0("Dagelijkse corona update: 
 
-",cases.yesterday," ",cases.patient," positief getest 
+",new.infection," ",cases.patient," positief getest
+",neg, " negatieve correcties, ",net.diff, " netto toename                 
 (totaal: ",nrow(rivm.data),") 
 ",
-hospital.yesterday," ",hospital.patient," opgenomen 
+                hospital.yesterday," ",hospital.patient," opgenomen 
 (totaal: ",nrow(rivm.hospital),") 
 ",
-ic.yesterday," ",ic.patient," opgenomen op de IC 
+                ic.yesterday," ",ic.patient," opgenomen op de IC 
 (totaal: ",tail(all.data$IC_Cumulative,n=1),") 
 ",
-deaths.yesterday," ",deaths.patient," overleden 
+                deaths.yesterday," ",deaths.patient," overleden 
 (totaal: ",nrow(rivm.death),")")
 
 tweet
