@@ -200,9 +200,27 @@ setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cum
 temp = list.files(pattern="*.csv")
 myfiles = lapply(temp, read.csv) ## Load all daily datasets
 
-datefunction <- function(x) {
+df.hospital <- map_dfr(myfiles, ~{
+  .x %>% 
+    filter(Hospital_admission == "Yes")
+})
+df.hospital$count <- 1
+
+hospital.aggregate <- aggregate(count ~ Date_file + Date_statistics, data = df.hospital, FUN = sum)
+hospital.aggregate$Date_file <- as.Date((hospital.aggregate$Date_file))
+data.hospital <- spread(hospital.aggregate, Date_file, count)
+
+dates <- names(data.hospital)
+dates.lead <- dates[3:16]
+dates.trail <- dates[2:15]
+
+data.hospital[paste0("diff",seq_along(dates))] <- data.hospital[dates.lead] - data.hospital[dates.trail]
+
+
+
+datefunction <- function(x) { ## Function for cases per day
   as.data.frame(table(x$Date_statistics))
-} ## Function for cases per day
+} 
 
 res <- lapply(myfiles, datefunction) ## Calculate cases per day
 
@@ -210,7 +228,7 @@ df.dates <- res %>%
   reduce(full_join, by = "Var1") ## Create dataframe for cases per day
 
 names(df.dates) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
-                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14") ## Rename dataframe columns
+                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15") ## Rename dataframe columns
 
 df.dates$diff <- df.dates[,ncol(df.dates)] - df.dates[,ncol(df.dates)-1] ## Calculate differences per day
 
@@ -263,6 +281,7 @@ Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC
 
 Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal besmettingen.")
 
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/")
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
@@ -271,7 +290,7 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Wij zijn nu samen aan het bestuderen hoe we de updates kunnen integreren.",
+post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Een eerste resultaat van onze samenwerking is dus de correcties die ik vandaag post.",
            in_reply_to_status_id = reply_id) ## Post reply
 
 
