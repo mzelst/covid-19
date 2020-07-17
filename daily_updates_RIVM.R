@@ -118,6 +118,8 @@ write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_n
 all.data <- merge(rivm.daily_aggregate,df, by = "date") # Merge RIVM with NICE data
 write.csv(all.data, file = "all_data.csv") # Write dataframe
 
+all.data <- read.csv("all_data.csv")
+
 all.data <- all.data %>%
   mutate(positivetests = c(0,diff(cases))) # Calculate number of positive tests per day
 
@@ -125,7 +127,7 @@ all.data$positive_7daverage <- round(frollmean(all.data[,"positivetests"],7),0)
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
-all.data$Datum <- as.Date(all.data$Datum)
+all.data$date <- as.Date(all.data$date)
 
 # Plot for positive tests per day
 cases <- all.data %>%
@@ -210,13 +212,11 @@ hospital.aggregate <- aggregate(count ~ Date_file + Date_statistics, data = df.h
 hospital.aggregate$Date_file <- as.Date((hospital.aggregate$Date_file))
 data.hospital <- spread(hospital.aggregate, Date_file, count)
 
-dates <- names(data.hospital)
-dates.lead <- dates[3:16]
-dates.trail <- dates[2:15]
+dates <- names(data.hospital[,c(2:16)])
+dates.lead <- dates[2:15]
+dates.trail <- dates[1:14]
 
-data.hospital[paste0("diff",seq_along(dates))] <- data.hospital[dates.lead] - data.hospital[dates.trail]
-
-
+data.hospital[paste0("diff",seq_along(as.Date(dates)))] <- data.hospital[dates.lead] - data.hospital[dates.trail]
 
 datefunction <- function(x) { ## Function for cases per day
   as.data.frame(table(x$Date_statistics))
@@ -224,20 +224,26 @@ datefunction <- function(x) { ## Function for cases per day
 
 res <- lapply(myfiles, datefunction) ## Calculate cases per day
 
-df.dates <- res %>%
+df.dates.cases <- res %>%
   reduce(full_join, by = "Var1") ## Create dataframe for cases per day
 
-names(df.dates) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
-                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15") ## Rename dataframe columns
+names(df.dates.cases) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
+                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15","jul16") ## Rename dataframe columns
 
-df.dates$diff <- df.dates[,ncol(df.dates)] - df.dates[,ncol(df.dates)-1] ## Calculate differences per day
+df.dates.cases$diff <- df.dates.cases[,ncol(df.dates.cases)] - df.dates.cases[,ncol(df.dates.cases)-1] ## Calculate differences per day
 
-neg <- sum(df.dates$diff[df.dates$diff<0], na.rm=TRUE) ## Negative corrections
-pos <- sum(df.dates$diff[df.dates$diff>0], na.rm=TRUE) ## Positive corrections (before day of reporting)
+neg <- sum(df.dates.cases$diff[df.dates.cases$diff<0], na.rm=TRUE) ## Negative corrections
+pos <- sum(df.dates.cases$diff[df.dates.cases$diff>0], na.rm=TRUE) ## Positive corrections (before day of reporting)
 
-net.diff <- sum(df.dates[,ncol(df.dates)-1],na.rm=TRUE) - sum(df.dates[,ncol(df.dates)-2],na.rm=TRUE) ## Net difference 
+net.diff <- sum(df.dates.cases[,ncol(df.dates.cases)-1],na.rm=TRUE) - sum(df.dates.cases[,ncol(df.dates.cases)-2],na.rm=TRUE) ## Net difference 
 
 new.infection <- neg*-1+net.diff ## Calculate new cases
+
+dates.cases <- names(df.dates.cases)
+dates.cases.lead <- dates.cases[3:16]
+dates.cases.trail <- dates.cases[2:15]
+df.dates.cases[paste0("diff",seq_along(dates.cases))] <- df.dates.cases[dates.cases.lead] - df.dates.cases[dates.cases.trail]
+
 
 ## Extract info for tweet
 hospital.yesterday <- tail(diff(all.data$hospitalization),n=1) ## Calculate new hospitalizations
@@ -267,7 +273,10 @@ tweet <- paste0("Dagelijkse corona update:
 
 tweet
 
-post_tweet (status = tweet) ## Post tweet
+today.date <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/banners/",Sys.Date(),".png")
+setwd
+
+post_tweet (status = tweet, media = today.date) ## Post tweet
 
 # Tweet for hospital numbers
 
