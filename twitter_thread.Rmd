@@ -147,7 +147,7 @@ tweet2 <- "De data komt hier vandaan: https://www.cbs.nl/nl-nl/cijfers/detail/70
 
 tweet3 <- "Ik publiceer de oversterfte analyses volgens drie methodes: een historisch gemiddelde (1), de oversterfte per leeftijdsgroep omdat je daarmee beter corrigeert voor vergrijzing (2) en methode CBS (3). Groeifactor model publiceer ik niet meer, uitleg hier: https://twitter.com/mzelst/status/1266333188386848768"
 
-tweet4 <- "Ik splits de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). De grafiek hieronder loopt op de verticale as nu van 2000-5000, zodat je de verschillen tussen de weken beter kunt zien."
+tweet4 <- "Ik splits de analyses voor de weken waarin er oversterfte was (week 12 t/m 19) en de weken met ondersterfte (vanaf week 20). De grafiek hieronder loopt op de verticale as van 2000-5000, zodat je de verschillen tussen de weken beter kunt zien."
 
 tweet5 <- paste0("Sterfte per week: De blauwe piek die je ziet is 2020. Gemiddeld aantal overledenen in week ", weeknumber," (2015-2019) is ",week.benchmark,", 2020 = ",week.2020,". RIVM zegt nu ",rivm_thisweek," in week ",weeknumber,". Er is dus ondersterfte in week ",weeknumber,", zelfs met ",rivm_thisweek," officiële corona-overledenen (wat waarschijnlijk niet eens alles is).")
 
@@ -166,17 +166,17 @@ tweet8 <- "In 2018 was er een zware griepepidemie waarna er ook een periode was 
 
 tweet9 <- paste0("De ondersterfte begon in 2018 vanaf week 14 voor alle leeftijdsgroepen. De ondersterfte van week 14 t/m ",weeknumber," was ",age_corrected.flu," (flink hoger dan in 2020). Maar dat is uiteraard ondersterfte over meer weken, namelijk ",weeknumber-14,". Dus wat als we net als in 2020 de eerste ",weeknumber-19," weken van 2018 pakken?")
 
-tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), was de ondersterfte in ",weeknumber-19," weken ",age_corrected.flu.samenweeks,". De ondersterfte in 2018 nam dus sneller toe dan nu, maar het verschil is klein (ook geen lockdown toen).")
+tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), gebruiken we nu ",weeknumber-19," weken. De ondersterfte in 2020 gaat nu dus sneller dan in 2018 (",age_corrected_less," vs. ",age_corrected.flu.samenweeks,"). Het is afwachten of deze trend doorzet.")
 
-tweet11 <- paste0("Oversterfte Europa week 27: De oversterfte zakt met 6000. Echter, Belgie en Spanje hebben ineens weer serieuze oversterfte. Totale oversterfte week 12 t/m ",weeknumber+1," = 160000")
+tweet11 <- paste0("Europa week ",weeknumber+1,": EuroMOMO lijkt wat correcties doorgevoerd te hebben en heeft de oversterfte afgelopen week onderschat. De dalende trend was dus iets te voorbarig, het blijft vrij stabiel. Totale oversterfte week 12 t/m ",weeknumber+1," = 169000")
 
-tweet12 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien). De snelheid van de ondersterfte is nu bijna gelijk aan 2018, dus het is afwachten of dit doorzet.")
+tweet12 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien), waarbij de ondersterfte snel toeneemt. Afhankelijk van het type zomer kan dit ook wel flink doorzetten, maar dat is afwachten.")
 
 tweet13 <- "Eindnoot 1: dit draadje is een mix van eigen analyses en inspiratie vanuit dit mooie overzicht van The Economist: https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries The Economist en het FT publiceren hun data open source voor geinteresseerden: https://github.com/Financial-Times/coronavirus-excess-mortality-data"
 
-tweet14 <- "Eindnoot 2: Voor de geinteresseerden, de R code die ik hiervoor gebruik is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R. Ik publiceer hier ook dagelijkse updates en zet deze data ook online."
+tweet14 <- "Eindnoot 2: Voor de geinteresseerden, de R code die ik hiervoor gebruik is hier te vinden: https://github.com/mzelst/covid-19. Het draadje wordt nu ook gepost vanuit R. Ik publiceer hier ook dagelijkse updates met @edwinveldhuizen en zet deze data ook online."
 
-tweet15 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) Ik dank het @RIVM niet vanwege het continu aanpassen van de methoden van rapporteren: dit kost elke keer weer kostbare tijd."
+tweet15 <- "Eindnoot 3: Ik dank @statistiekcbs voor het publiceren van een R package, waardoor dit compleet geautomatiseerd kan :) En dank aan alle andere corona-dataverwerkers! Rutte geparafraseerd: 'Alleen samen krijgen we corona-data onder controle.'"
 
 tweet1
 
@@ -210,7 +210,7 @@ tweet15
 
 ```
 
-```{r post tweets, eval=FALSE}
+```{r post tweets, eval=TRUE}
 post_tweet(status=tweet1)
 
 ## lookup status_id
@@ -239,7 +239,7 @@ my_timeline <- get_timeline(rtweet:::home_user())
 ## ID for reply
 reply_id <- my_timeline$status_id[1]
 ## post reply
-post_tweet(tweet5,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week25/overledenen_week25.png",in_reply_to_status_id = reply_id)
+post_tweet(tweet5,media="C:/Users/s379011/surfdrive/projects/2020covid-19/graphs_excess_mortality/overledenen_thisweek.png",in_reply_to_status_id = reply_id)
 
 ## lookup status_id
 my_timeline <- get_timeline(rtweet:::home_user())
@@ -281,7 +281,7 @@ my_timeline <- get_timeline(rtweet:::home_user())
 ## ID for reply
 reply_id <- my_timeline$status_id[1]
 ## post reply
-post_tweet(tweet11,media="C:/Users/s379011/surfdrive/projects/2020covid-19/Week25/EuroMOMO.png",in_reply_to_status_id = reply_id)
+post_tweet(tweet11,media="C:/Users/s379011/surfdrive/projects/2020covid-19/graphs_excess_mortality/EuroMOMO_thisweek.png",in_reply_to_status_id = reply_id)
 
 ## lookup status_id
 my_timeline <- get_timeline(rtweet:::home_user())
