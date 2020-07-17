@@ -228,7 +228,7 @@ df.dates.cases <- res %>%
   reduce(full_join, by = "Var1") ## Create dataframe for cases per day
 
 names(df.dates.cases) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
-                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15","jul16") ## Rename dataframe columns
+                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15","jul16","jul17") ## Rename dataframe columns
 
 df.dates.cases$diff <- df.dates.cases[,ncol(df.dates.cases)] - df.dates.cases[,ncol(df.dates.cases)-1] ## Calculate differences per day
 
@@ -262,7 +262,7 @@ tweet <- paste0("Dagelijkse corona update:
 ",neg, " negatieve correcties, ",net.diff, " netto toename                 
 (totaal: ",nrow(rivm.data),") 
 ",
-                hospital.yesterday," ",hospital.patient," opgenomen 
+                hospital.yesterday," ",hospital.patient," opgenomen (correcties) 
 (totaal: ",nrow(rivm.hospital),") 
 ",
                 ic.yesterday," ",ic.patient," opgenomen op de IC 
