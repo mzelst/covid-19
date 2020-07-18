@@ -116,9 +116,9 @@ df$date <- as.Date(df$date)
 write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
 
 all.data <- merge(rivm.daily_aggregate,df, by = "date") # Merge RIVM with NICE data
-write.csv(all.data, file = "all_data.csv") # Write dataframe
 
 all.data <- read.csv("all_data.csv")
+all.data$date <- as.Date(all.data$date)
 
 all.data <- all.data %>%
   mutate(positivetests = c(0,diff(cases))) # Calculate number of positive tests per day
@@ -127,18 +127,20 @@ all.data$positive_7daverage <- round(frollmean(all.data[,"positivetests"],7),0)
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
-all.data$date <- as.Date(all.data$date)
-
+write.csv(all.data, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/all_data.csv") # Write dataframe
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/")
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=positivetests)) + 
-  geom_line(aes(y = positivetests, color = "Positieve tests per dag"), lwd=1.2) +
+  geom_line(aes(y = positivetests, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
+  geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
+        legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Besmettingen per dag",
@@ -157,6 +159,7 @@ aanwezig <- all.data %>%
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
+        legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Totaal aanwezig",
@@ -175,6 +178,7 @@ opnames <- all.data %>%
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
+        legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Opnames per dag",
@@ -185,7 +189,7 @@ opnames <- all.data %>%
 # Merge plots into grid
 plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
                    opnames + theme(legend.position="bottom"),
-                   cases + theme(legend.position = "bottom"),
+                   cases + theme(legend.position = "bottom", legend.direction = "vertical"),
                    align = 'hv',
                    nrow = 2,
                    hjust = -1
@@ -202,22 +206,6 @@ setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cum
 temp = list.files(pattern="*.csv")
 myfiles = lapply(temp, read.csv) ## Load all daily datasets
 
-df.hospital <- map_dfr(myfiles, ~{
-  .x %>% 
-    filter(Hospital_admission == "Yes")
-})
-df.hospital$count <- 1
-
-hospital.aggregate <- aggregate(count ~ Date_file + Date_statistics, data = df.hospital, FUN = sum)
-hospital.aggregate$Date_file <- as.Date((hospital.aggregate$Date_file))
-data.hospital <- spread(hospital.aggregate, Date_file, count)
-
-dates <- names(data.hospital[,c(2:16)])
-dates.lead <- dates[2:15]
-dates.trail <- dates[1:14]
-
-data.hospital[paste0("diff",seq_along(as.Date(dates)))] <- data.hospital[dates.lead] - data.hospital[dates.trail]
-
 datefunction <- function(x) { ## Function for cases per day
   as.data.frame(table(x$Date_statistics))
 } 
@@ -226,6 +214,7 @@ res <- lapply(myfiles, datefunction) ## Calculate cases per day
 
 df.dates.cases <- res %>%
   reduce(full_join, by = "Var1") ## Create dataframe for cases per day
+
 
 names(df.dates.cases) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
                      "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15","jul16","jul17") ## Rename dataframe columns
@@ -250,7 +239,7 @@ hospital.yesterday <- tail(diff(all.data$hospitalization),n=1) ## Calculate new 
 deaths.yesterday <- tail(diff(all.data$deaths),n=1) ## Calculate new deaths
 ic.yesterday <- tail(all.data$IC_Intake_Proven,n=1) ## Calculate new IC intakes
 
-cases.patient <- ifelse(new.infection == 1, "patiënt","patiënten")
+cases.patient <- ifelse(last(new.infection) == 1, "patiënt","patiënten")
 hospital.patient <- ifelse(hospital.yesterday == 1, "patiënt","patiënten")
 deaths.patient <- ifelse(deaths.yesterday == 1, "patiënt","patiënten")
 ic.patient <- ifelse(ic.yesterday == 1, "patiënt","patiënten")
@@ -258,25 +247,30 @@ ic.patient <- ifelse(ic.yesterday == 1, "patiënt","patiënten")
 ## Build tweets
 tweet <- paste0("Dagelijkse corona update: 
 
-",new.infection," ",cases.patient," positief getest
-",neg, " negatieve correcties, ",net.diff, " netto toename                 
+",last(new.infection)," ",cases.patient," positief getest
+",last(corrections), " negatieve correcties, ",last(net.diff), " netto toename                 
 (totaal: ",nrow(rivm.data),") 
 ",
-                hospital.yesterday," ",hospital.patient," opgenomen (correcties) 
+                hospital.yesterday," ",hospital.patient," opgenomen
 (totaal: ",nrow(rivm.hospital),") 
 ",
                 ic.yesterday," ",ic.patient," opgenomen op de IC 
 (totaal: ",tail(all.data$IC_Cumulative,n=1),") 
 ",
-                deaths.yesterday," ",deaths.patient," overleden 
+                deaths.yesterday," ",deaths.patient," overleden (correcties) 
 (totaal: ",nrow(rivm.death),")")
 
 tweet
 
 today.date <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/banners/",Sys.Date(),".png")
-setwd
 
 post_tweet (status = tweet, media = today.date) ## Post tweet
+
+my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+reply_id <- my_timeline$status_id[1] ## Status ID for reply
+post_tweet(status = "Interpretatie: de laatste keer dat het aantal netto besmettingen boven de 125 lag was 16 juni. In de grafiek heb ik vandaag een wijziging aangebracht. Het 'nieuwe aantal besmettingen per dag' is de bruto toename, 'toename per dag' is incl. correcties.",
+           in_reply_to_status_id = reply_id) ## Post reply
+
 
 # Tweet for hospital numbers
 
