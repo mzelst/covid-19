@@ -212,13 +212,13 @@ Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
+Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
 
-Opgenomen op IC: ",ic.yesterday,"
+Opgenomen op IC: ",last(all.data$IC_Intake_Proven),"
 Totaal: ",tail(all.data$IC_Cumulative,n=1)," 
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
+Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
 
 tweet
 
