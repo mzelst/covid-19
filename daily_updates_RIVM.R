@@ -116,14 +116,21 @@ df$date <- as.Date(df$date)
 write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
 
 all.data <- merge(rivm.daily_aggregate,df, by = "date") # Merge RIVM with NICE data
-
-all.data <- read.csv("all_data.csv")
-all.data$date <- as.Date(all.data$date)
-
 all.data <- all.data %>%
   mutate(positivetests = c(0,diff(cases))) # Calculate number of positive tests per day
 
 all.data$positive_7daverage <- round(frollmean(all.data[,"positivetests"],7),0)
+
+write.csv(all.data, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/all_data.csv")
+
+## Parse corrections per day
+source("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/parse_corrections.R")
+
+
+all.data <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/all_data.csv")
+all.data$date <- as.Date(all.data$date)
+
+all.data <- merge(all.data,corrections.perday,by="date",all.x=TRUE)
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
@@ -199,66 +206,19 @@ plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
 save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
 
 ## Build tweets
+tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-#### 
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative")
+Positief getest: ",last(all.data$new.infection),"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
-temp = list.files(pattern="*.csv")
-myfiles = lapply(temp, read.csv) ## Load all daily datasets
+Opgenomen: ",last(all.data$new.hospitals),"
+Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
 
-datefunction <- function(x) { ## Function for cases per day
-  as.data.frame(table(x$Date_statistics))
-} 
+Opgenomen op IC: ",ic.yesterday,"
+Totaal: ",tail(all.data$IC_Cumulative,n=1)," 
 
-res <- lapply(myfiles, datefunction) ## Calculate cases per day
-
-df.dates.cases <- res %>%
-  reduce(full_join, by = "Var1") ## Create dataframe for cases per day
-
-
-names(df.dates.cases) <- c("date","jul01","jul02","jul03","jul04","jul05","jul06","jul07",
-                     "jul08","jul09","jul10","jul11","jul12","jul13","jul14","jul15","jul16","jul17") ## Rename dataframe columns
-
-df.dates.cases$diff <- df.dates.cases[,ncol(df.dates.cases)] - df.dates.cases[,ncol(df.dates.cases)-1] ## Calculate differences per day
-
-neg <- sum(df.dates.cases$diff[df.dates.cases$diff<0], na.rm=TRUE) ## Negative corrections
-pos <- sum(df.dates.cases$diff[df.dates.cases$diff>0], na.rm=TRUE) ## Positive corrections (before day of reporting)
-
-net.diff <- sum(df.dates.cases[,ncol(df.dates.cases)-1],na.rm=TRUE) - sum(df.dates.cases[,ncol(df.dates.cases)-2],na.rm=TRUE) ## Net difference 
-
-new.infection <- neg*-1+net.diff ## Calculate new cases
-
-dates.cases <- names(df.dates.cases)
-dates.cases.lead <- dates.cases[3:16]
-dates.cases.trail <- dates.cases[2:15]
-df.dates.cases[paste0("diff",seq_along(dates.cases))] <- df.dates.cases[dates.cases.lead] - df.dates.cases[dates.cases.trail]
-
-
-## Extract info for tweet
-hospital.yesterday <- tail(diff(all.data$hospitalization),n=1) ## Calculate new hospitalizations
-deaths.yesterday <- tail(diff(all.data$deaths),n=1) ## Calculate new deaths
-ic.yesterday <- tail(all.data$IC_Intake_Proven,n=1) ## Calculate new IC intakes
-
-cases.patient <- ifelse(last(new.infection) == 1, "patiënt","patiënten")
-hospital.patient <- ifelse(hospital.yesterday == 1, "patiënt","patiënten")
-deaths.patient <- ifelse(deaths.yesterday == 1, "patiënt","patiënten")
-ic.patient <- ifelse(ic.yesterday == 1, "patiënt","patiënten")
-
-## Build tweets
-tweet <- paste0("Dagelijkse corona update: 
-
-",last(new.infection)," ",cases.patient," positief getest
-",last(corrections), " negatieve correcties, ",last(net.diff), " netto toename                 
-(totaal: ",nrow(rivm.data),") 
-",
-                hospital.yesterday," ",hospital.patient," opgenomen
-(totaal: ",nrow(rivm.hospital),") 
-",
-                ic.yesterday," ",ic.patient," opgenomen op de IC 
-(totaal: ",tail(all.data$IC_Cumulative,n=1),") 
-",
-                deaths.yesterday," ",deaths.patient," overleden (correcties) 
-(totaal: ",nrow(rivm.death),")")
+Overleden: ",last(all.data$new.deaths),"
+Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
 
 tweet
 
