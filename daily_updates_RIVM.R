@@ -205,6 +205,7 @@ plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
 # Save grid plot for daily use
 save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
 
+
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
@@ -224,13 +225,7 @@ tweet
 
 today.date <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/banners/",Sys.Date(),".png")
 
-post_tweet (status = tweet, media = today.date) ## Post tweet
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(status = "Interpretatie: de laatste keer dat het aantal netto besmettingen boven de 125 lag was 16 juni. In de grafiek heb ik vandaag een wijziging aangebracht. Het 'nieuwe aantal besmettingen per dag' is de bruto toename, 'toename per dag' is incl. correcties.",
-           in_reply_to_status_id = reply_id) ## Post reply
-
+post_tweet (status = tweet,media = today.date) ## Post tweet
 
 # Tweet for hospital numbers
 
@@ -253,7 +248,7 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Voor een uitgebreide update per gemeente verwijs ik graag naar de dagelijkse updates van @edwinveldhuizen. Een eerste resultaat van onze samenwerking is dus de correcties die ik vandaag post.",
+post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
            in_reply_to_status_id = reply_id) ## Post reply
 
 
