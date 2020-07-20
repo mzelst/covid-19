@@ -24,7 +24,7 @@ dates.trail <- names(df.cases)[2:(ncol(df.cases)-1)] ## Set trail colnames for d
 # Calculate moving difference between cases per day
 df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
 
-write.csv(df.cases, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/cases_perday.csv")
+write.csv(df.cases, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/cases_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(df.cases)) {
@@ -53,6 +53,8 @@ hospitals.wide <- spread(df.hospitals, key = Var2, value = Freq)
 # Calculate moving difference between cases per day
 hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
 
+write.csv(hospitals.wide, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/hospital_perday.csv")
+
 neg.values <- c()
 for(i in col.start.diff:ncol(hospitals.wide)) {
   neg.values[i] <- sum(hospitals.wide[,i][hospitals.wide[,i]<0], na.rm=TRUE)
@@ -79,6 +81,8 @@ deaths.wide <- spread(df.deaths, key = Var2, value = Freq)
 
 # Calculate moving difference between cases per day
 deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
+
+write.csv(deaths.wide, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/deaths_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(deaths.wide)) {
