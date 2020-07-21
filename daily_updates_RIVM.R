@@ -25,7 +25,7 @@ rivm.hospital <- rivm.data %>%
 rivm.dailydata <- data.frame(as.Date(Sys.Date()),nrow(rivm.data),nrow(rivm.hospital),nrow(rivm.death)) ## Calculate totals for cases, hospitalizations, deaths
 names(rivm.dailydata) <- c("date","cases","hospitalization","deaths")
 
-filename.daily <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+filename.daily <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/data-rivm/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 
 write.csv(rivm.dailydata, file = filename.daily) ## Write file with daily data
 
@@ -113,7 +113,23 @@ df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected)
 df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
 df$date <- as.Date(df$date)
 
-write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_nice_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
+write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
+
+## Daily NICE data
+nice.dailydata <- last(df)
+filename.daily.nice <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/data-nice/nice_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(nice.dailydata, file = filename.daily.nice) ## Write file with daily data
+
+nice.daily_aggregate <- read.csv("nice.daily_aggregate.csv") ## Read in aggregate data
+nice.daily_aggregate <- nice.daily_aggregate[,-1] ## Remove identifier column
+
+nice.daily_aggregate <- rbind(nice.dailydata, nice.daily_aggregate) ## Bind data today with aggregate data per day
+nice.daily_aggregate <- nice.daily_aggregate[order(nice.daily_aggregate$date),]
+nice.daily_aggregate$date <- as.Date(nice.daily_aggregate$date)
+
+write.csv(nice.daily_aggregate, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/nice.daily_aggregate.csv")
+
+## Merge RIVM and NICE data
 
 all.data <- merge(rivm.daily_aggregate,df, by = "date") # Merge RIVM with NICE data
 all.data <- all.data %>%
@@ -205,6 +221,9 @@ plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
 # Save grid plot for daily use
 save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
 
+# Daily NICE data aggregate for tweet
+
+nice.daily_aggregate <- read.csv("nice.daily_aggregate.csv")
 
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
@@ -215,8 +234,8 @@ Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(a
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
 
-Opgenomen op IC: ",last(all.data$IC_Intake_Proven),"
-Totaal: ",tail(all.data$IC_Cumulative,n=1)," (-1 ivm. 1 corr.)
+Opgenomen op IC: ",tail(diff(nice.daily_aggregate$IC_Cumulative),n=1),"
+Totaal: ",tail(nice.daily_aggregate$IC_Cumulative,n=1),"
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
