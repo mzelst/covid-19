@@ -114,6 +114,8 @@ df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
 df$date <- as.Date(df$date)
 
 write.csv(df, "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/Cumulative_NICE.csv") ## Write file with all NICE data until today
+filename.nice.perday <- paste0("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_data/data-nice-json/",Sys.Date(),".csv")
+write.csv(df, filename.nice.perday) ## Save daily NICE data - JSON parsed - downloaded around 14:30 PM (CET)
 
 ## Daily NICE data
 nice.dailydata <- last(df)
@@ -250,10 +252,10 @@ post_tweet (status = tweet,media = today.date) ## Post tweet
 
 tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
 
-Patiënten verpleegafdeling 
+PatiÃ«nten verpleegafdeling 
 Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
 
-Patiënten IC
+PatiÃ«nten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
 Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal besmettingen.")
