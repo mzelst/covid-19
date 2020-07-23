@@ -153,6 +153,7 @@ all.data <- merge(all.data,corrections.perday,by="date",all.x=TRUE)
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
 write.csv(all.data, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/all_data.csv") # Write dataframe
+
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/")
 # Plot for positive tests per day
 cases <- all.data %>%
@@ -258,7 +259,7 @@ Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.d
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal bevestigde aanwezige patienten in het ziekenhuis, opnames, en aantal besmettingen.")
+Grafisch per dag: Het aantal bevestigde aanwezige patiënten in het ziekenhuis, opnames, en aantal besmettingen.")
 
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/")
 # Tweet for graph
@@ -269,15 +270,10 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(status = "Bevestiging van wat ik afgelopen week dus al 'voorspelde': het aantal tests was 81269 (8.5% meer dan vorige week) met een netto toename van 817 besmettingen (76.4% meer dan vorige week). De pos. rate stijgt dus van 0.6% naar 1.0% en komt dus vooral door daadwerkelijke toename.", 
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
            in_reply_to_status_id = reply_id) ## Post reply
 
-
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(status = "Het RIVM publiceert nu de wekelijkse updates op dinsdag (vandaag dus). Zie voor de update over afgelopen week de site van het @RIVM: https://www.rivm.nl/sites/default/files/2020-07/COVID-19_WebSite_rapport_wekelijks_20200721_1135.pdf",in_reply_to_status_id = reply_id)
+post_tweet("Reminder: ik heb staycation en zal mijn mentions sporadisch checken. Bij inhoudelijke vragen kunt u een DM sturen (ik hanteer een zero-tolerance policy voor niet-inhoudelijke vragen). Stay safe! https://twitter.com/mzelst/status/1285917046698647553",
+           in_reply_to_status_id = reply_id) ## Post reply
