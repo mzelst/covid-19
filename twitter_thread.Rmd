@@ -168,7 +168,7 @@ tweet9 <- paste0("De ondersterfte begon in 2018 vanaf week 14 voor alle leeftijd
 
 tweet10 <- paste0("Als we het aantal weken ondersterfte gelijkzetten (zodat we de 'snelheid' waarmee oversterfte 'gecorrigeerd' wordt kunnen vergelijken), gebruiken we nu ",weeknumber-19," weken. De ondersterfte in 2020 gaat nu dus sneller dan in 2018 (",age_corrected_less," vs. ",age_corrected.flu.samenweeks,"). Het is afwachten of deze trend doorzet.")
 
-tweet11 <- paste0("Europa week ",weeknumber+1,": EuroMOMO lijkt wat correcties doorgevoerd te hebben en heeft de oversterfte afgelopen week onderschat. De dalende trend was dus iets te voorbarig, het blijft vrij stabiel. Totale oversterfte week 12 t/m ",weeknumber+1," = 169000")
+tweet11 <- paste0("Europa week ",weeknumber+1,": Een aantal landen laten weer wat oversterfte zien (Belgie, Zweden, Spanje, en zeker Portugal), maar Europees breed blijft het gelijk. Totale oversterfte week 12 t/m ",weeknumber+1," = 170000")
 
 tweet12 <- paste0("Conclusie na week ",weeknumber,": we zitten in een periode van ondersterfte (dat is normaal na een heftige epidemie, zoals ik deze week cijfermatig laat zien), waarbij de ondersterfte snel toeneemt. Afhankelijk van het type zomer kan dit ook wel flink doorzetten, maar dat is afwachten.")
 
