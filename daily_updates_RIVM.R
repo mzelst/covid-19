@@ -253,13 +253,13 @@ post_tweet (status = tweet,media = today.date) ## Post tweet
 
 tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
 
-PatiÃ«nten verpleegafdeling 
+Patiënten verpleegafdeling 
 Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
 
-PatiÃ«nten IC
+Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal bevestigde aanwezige patiÃ«nten in het ziekenhuis, opnames, en aantal besmettingen.")
+Grafisch per dag: Het aantal bevestigde aanwezige patiënten in het ziekenhuis, opnames, en aantal besmettingen.")
 
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/")
 # Tweet for graph
@@ -267,6 +267,8 @@ my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet(tweet2, media = "plots/plot_daily.png",
            in_reply_to_status_id = reply_id) ## Post reply
+
+Een intermezzo: we posten hier de toename van de meldingen ten opzichte van gisteren. Een aantal 
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
