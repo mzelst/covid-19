@@ -38,3 +38,5 @@ filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_
 
 write.csv(rivm.municipalities, file=filename.municipality)
 
+rm(list=ls())
+
