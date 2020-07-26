@@ -1,10 +1,9 @@
 require(tidyverse)
 require(data.table)
-
+rm(list=ls())
 #### Corrections scripts
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/daily_total_cumulative")
 
-temp = list.files(pattern="*.csv")
+temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T)
 myfiles = lapply(temp, read.csv)
 
 df <- map_dfr(myfiles, ~{
@@ -24,7 +23,7 @@ dates.trail <- names(df.cases)[2:(ncol(df.cases)-1)] ## Set trail colnames for d
 # Calculate moving difference between cases per day
 df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
 
-write.csv(df.cases, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/cases_perday.csv")
+write.csv(df.cases, file = "corrections/cases_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(df.cases)) {
@@ -53,7 +52,7 @@ hospitals.wide <- spread(df.hospitals, key = Var2, value = Freq)
 # Calculate moving difference between cases per day
 hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
 
-write.csv(hospitals.wide, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/hospital_perday.csv")
+write.csv(hospitals.wide, file = "corrections/hospital_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(hospitals.wide)) {
@@ -82,7 +81,7 @@ deaths.wide <- spread(df.deaths, key = Var2, value = Freq)
 # Calculate moving difference between cases per day
 deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
 
-write.csv(deaths.wide, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/deaths_perday.csv")
+write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(deaths.wide)) {
@@ -107,10 +106,10 @@ corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infe
 corrections.all$date <- as.Date(rownames(corrections.all))
 
 
-write.csv(corrections.all, file = "C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/corrections_perday.csv")
+write.csv(corrections.all, file = "corrections/corrections_perday.csv")
 rm(list=ls())
 
-corrections.perday <- read.csv("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/corrections/corrections_perday.csv")
+corrections.perday <- read.csv("corrections/corrections_perday.csv")
 corrections.perday$date <- as.Date(corrections.perday$date)
 
 
