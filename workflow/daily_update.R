@@ -3,8 +3,9 @@ require(tidyverse)
 require(rjson)
 require(rtweet)
 require(data.table)
-
 get_token()
+
+rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
@@ -32,6 +33,9 @@ write.csv(all.data, file = "data/all_data.csv")
 
 source("plot_scripts/daily_plots.R")
 
+all.data <- read.csv("data/all_data.csv")
+nice_by_day <- read.csv("data/nice_by_day.csv")
+
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
@@ -41,8 +45,8 @@ Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(a
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
 
-Opgenomen op IC: ",tail(diff(nice.daily_aggregate$IC_Cumulative),n=1),"
-Totaal: ",tail(nice.daily_aggregate$IC_Cumulative,n=1),"
+Opgenomen op IC: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
+Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
@@ -78,10 +82,7 @@ post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Ik heb gisteren een draadje gepost over mijn eigen wetenschappelijke specialisme: Hoe leren organisaties van dit soort indicatoren en hoe die kennis kan helpen om het dashboard te verbeteren: https://twitter.com/mzelst/status/1287032693100810240",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Reminder: ik heb staycation en zal mijn mentions sporadisch checken. Bij inhoudelijke vragen kunt u een DM sturen (ik hanteer een zero-tolerance policy voor niet-inhoudelijke vragen). Stay safe! https://twitter.com/mzelst/status/1285917046698647553",
            in_reply_to_status_id = reply_id) ## Post reply
+
+rm(list=ls()) # Clean environment
