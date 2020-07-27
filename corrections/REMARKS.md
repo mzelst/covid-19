@@ -22,6 +22,13 @@ An example: The cumulative count of cases on calendar day 22-07 is reported to b
 
 ## Substantive interpretation
 
+Given that we cannot differentiate between gross increases and decreases in the mutations, interpreting the mutations becomes somewhat difficult. However, we can differentiate between meaningful and inconsequential mutations if we assume an epidemiological curve where the right hand side of the curve is currently the most important side. For example, mutations in the last two weeks where cases get shifted around on reporting dates are inconsequential for understanding transmission: as long as they are still within the last two to three weeks, there is a possibility that these people are still infectious. However, given that we only see net mutations and the number of cases increases mostly in the last two weeks, we cannot see these mutations anyhow and we can therefore mostly ignore them.
+
+Mutations that are done for much earlier reporting days are much more meaningful in the sense that we need to correct for them in the reported cases per day, as these are inconsequential for understanding viral transmission at this point in time. Negative mutations from this period should be removed from the cumulative net increase per day. The same goes for positive mutations: if, for example, cases get added on reporting days that happened two months ago, these are also inconsequential and should be removed from the net increase as well.
+
+## Current daily reports (last updated: 27-07-2020)
+
+At this point, we report the net increase in cases each day as well as the cumulative negative mutations that we can detect. In future updates, we want to differentiate between meaningful and inconsequential mutations.
 
 
  
