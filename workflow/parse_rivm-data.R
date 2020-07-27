@@ -21,7 +21,7 @@ filename.daily <- paste0("data-rivm/data-per-day/rivm_daily_",Sys.Date(),".csv")
 write.csv(rivm.dailydata, file = filename.daily) ## Write file with daily data
 
 rivm.daily_aggregate <- read.csv("data/rivm_by_day.csv") ## Read in aggregate data
-rivm.daily_aggregate <- rivm.daily_aggregate[,-1] ## Remove identifier column
+rivm.daily_aggregate <- rivm.daily_aggregate[,-c(1,6)] ## Remove identifier column
 
 rivm.daily_aggregate <- rbind(rivm.dailydata, rivm.daily_aggregate) ## Bind data today with aggregate data per day
 rivm.daily_aggregate <- rivm.daily_aggregate[order(rivm.daily_aggregate$date),]
