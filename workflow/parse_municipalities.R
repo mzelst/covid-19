@@ -1,6 +1,46 @@
 require(tidyverse)
 require(data.table)
 
+## Test code - Only use latest dataset
+
+temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+
+dat <- read.csv(last(temp)) ## Take last filename from the folder, load csv
+dat$date <- as.Date(dat$Date_of_report) ## character into Date class
+filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
+
+dat <- dat %>%
+  filter(Municipality_name != "") %>% # Filter observations without municipal name
+  filter(date >= filter.date) %>% # Filter last four weeks 
+  select(Municipality_name, date, Total_reported) # Select municipality, cases reported
+
+dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
+                    timevar="date",
+                    idvar="Municipality_name")
+
+dat.wide$increase <- dat.wide[,ncol(dat.wide)]-dat.wide[,(ncol(dat.wide)-1)] # Calculate increase since last day 
+dat.wide$increase.week <- dat.wide[,(ncol(dat.wide)-1)]-dat.wide[,(ncol(dat.wide)-8)] # Calculate increase since last week
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Municipality data
 
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T)
@@ -43,4 +83,5 @@ data_wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- data
 week <- last(colnames(data_wide), n = 7)
 
 data_wide$weeksum <- rowSums(data_wide[,week])
+
 
