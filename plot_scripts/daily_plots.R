@@ -1,5 +1,7 @@
 require(cowplot)
 require(tidyverse)
+require(rjson)
+require(data.table)
 rm(list=ls())
 
 # Script plots for daily update
@@ -66,10 +68,36 @@ opnames <- all.data %>%
   ggtitle("Opnames op de IC vs. verpleegafdeling") +
   ggsave("plots/overview_opnames_zkh.png", width = 15, height=4)
 
+reproduction <- fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+reproduction <- reproduction %>%
+  mutate(Date = Date %>% as.Date)
+
+reproduction <- reproduction %>%
+  ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
+  geom_line(aes(y = Rt_low), lwd=0.6) +
+  geom_line(aes(y = Rt_up), lwd=0.6) +
+  geom_ribbon(aes(ymin=Rt_low,ymax=Rt_up), fill="lightblue") +
+  geom_line(aes(y = Rt_avg, color = "Effectieve R"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "vertical",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Reproductiegetal",
+       color = "Legend") +
+  ggtitle("Reproductiegetal") + 
+  ggsave("plots/reproductie_getal.png",width=15, height = 4)  
+
 # Merge plots into grid
 plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
                          opnames + theme(legend.position="bottom"),
                          cases + theme(legend.position = "bottom", legend.direction = "vertical"),
+                         reproduction + theme(legend.position="bottom"),
                          align = 'hv',
                          nrow = 2,
                          hjust = -1
