@@ -9,6 +9,7 @@ rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.cs
 
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
+source("workflow/parse_municipalities.R")
 source("workflow/parse_nice-data.R")
 source("workflow/parse_corrections.R")
 
@@ -32,6 +33,7 @@ all.data$positive_7daverage <- round(frollmean(all.data[,"new.infection"],7),0) 
 write.csv(all.data, file = "data/all_data.csv")
 
 source("plot_scripts/daily_plots.R")
+source("plot_scripts/daily_maps_plots.R")
 
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
@@ -67,7 +69,7 @@ Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.d
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal bevestigde aanwezige patiënten in het ziekenhuis, opnames, aantal besmettingen, en het reproductiegetal.")
+Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, aantal besmettingen, en het reproductiegetal.")
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
@@ -82,7 +84,8 @@ post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Het RIVM publiceert nu wekelijkse epidemiologische update op dinsdag (vandaag dus) die je hier kunt vinden: https://www.rivm.nl/sites/default/files/2020-07/COVID-19_WebSite_rapport_dagelijks_20200728_1152.pdf",
+post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
+           media = "plots/plot_daily_maps.png",
            in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
