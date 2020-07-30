@@ -22,8 +22,7 @@ dat.wide$increase <- dat.wide[,ncol(dat.wide)]-dat.wide[,(ncol(dat.wide)-1)] # C
 dat.wide$increase.week <- dat.wide[,(ncol(dat.wide)-1)]-dat.wide[,(ncol(dat.wide)-8)] # Calculate increase since last week
 
 dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
-                                     "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân",
-                                     "'s-Gravenhage" = "s-Gravenhage")
+                                     "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
 
 
 mun.pop <- read.csv("misc/municipalities-population.csv")
