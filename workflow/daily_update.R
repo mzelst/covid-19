@@ -35,6 +35,12 @@ write.csv(all.data, file = "data/all_data.csv")
 source("plot_scripts/daily_plots.R")
 source("plot_scripts/daily_maps_plots.R")
 
+# Copy plots to report folder
+list.plots = list.files(path = "plots/", full.names = T)
+file.copy(from=list.plots, to="reports/plots/", overwrite=T, recursive = F,copy.mode = T)
+
+
+
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
@@ -86,11 +92,6 @@ my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
            media = "plots/plot_daily_maps.png",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Reminder: ik heb staycation en zal mijn mentions sporadisch checken. Bij inhoudelijke vragen kunt u een DM sturen (ik hanteer een zero-tolerance policy voor niet-inhoudelijke vragen). Stay safe! https://twitter.com/mzelst/status/1285917046698647553",
            in_reply_to_status_id = reply_id) ## Post reply
 
 rm(list=ls()) # Clean environment
