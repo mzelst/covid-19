@@ -85,13 +85,15 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
+post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
+           media = "plots/plot_daily_maps.png",
            in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
-           media = "plots/plot_daily_maps.png",
+post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
            in_reply_to_status_id = reply_id) ## Post reply
+
+
 
 rm(list=ls()) # Clean environment
