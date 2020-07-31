@@ -11,6 +11,7 @@ all.data <- all.data[order(all.data$date),]
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
+
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
@@ -28,7 +29,7 @@ cases <- all.data %>%
        y = "Besmettingen per dag",
        color = "Legend") +
   ggtitle("Meldingen van geconstateerde besmettingen") +
-  ggsave("plots/positieve_tests_per_dag.png",width=15, height = 4)
+  ggsave("plots/positieve_tests_per_dag.png",width=12, height = 10)
 
 # Plot for #patients in hospital per day
 
