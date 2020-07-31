@@ -210,7 +210,7 @@ tweet15
 
 ```
 
-```{r post tweets, eval=TRUE}
+```{r post tweets, eval=FALSE}
 post_tweet(status=tweet1)
 
 ## lookup status_id

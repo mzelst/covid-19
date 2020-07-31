@@ -75,7 +75,7 @@ Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.d
 Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
-Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, aantal besmettingen, en het reproductiegetal.")
+Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
