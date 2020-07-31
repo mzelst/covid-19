@@ -38,59 +38,59 @@ source("plot_scripts/daily_maps_plots.R")
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
-## Build tweets
-tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
-
-Positief getest: ",last(all.data$new.infection),"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
-
-Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
-
-Opgenomen op IC: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
-Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
-
-Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
-
-tweet
-
-today.date <- paste0("banners/",Sys.Date(),".png")
-
-post_tweet (status = tweet,media = today.date) ## Post tweet
-
-# Tweet for hospital numbers
-
-tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
-
-Patiënten verpleegafdeling 
-Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
-
-Patiënten IC
-Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
-
-Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, aantal besmettingen, en het reproductiegetal.")
-
-# Tweet for graph
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(tweet2, media = "plots/plot_daily.png",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
-           media = "plots/plot_daily_maps.png",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Reminder: ik heb staycation en zal mijn mentions sporadisch checken. Bij inhoudelijke vragen kunt u een DM sturen (ik hanteer een zero-tolerance policy voor niet-inhoudelijke vragen). Stay safe! https://twitter.com/mzelst/status/1285917046698647553",
-           in_reply_to_status_id = reply_id) ## Post reply
-
-rm(list=ls()) # Clean environment
+# ## Build tweets
+# tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
+# 
+# Positief getest: ",last(all.data$new.infection),"
+# Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
+# 
+# Opgenomen: ",last(all.data$new.hospitals),"
+# Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
+# 
+# Opgenomen op IC: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
+# Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
+# 
+# Overleden: ",last(all.data$new.deaths),"
+# Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
+# 
+# tweet
+# 
+# today.date <- paste0("banners/",Sys.Date(),".png")
+# 
+# post_tweet (status = tweet,media = today.date) ## Post tweet
+# 
+# # Tweet for hospital numbers
+# 
+# tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
+# 
+# Patiënten verpleegafdeling 
+# Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
+# 
+# Patiënten IC
+# Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
+# 
+# Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, aantal besmettingen, en het reproductiegetal.")
+# 
+# # Tweet for graph
+# my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+# reply_id <- my_timeline$status_id[1] ## Status ID for reply
+# post_tweet(tweet2, media = "plots/plot_daily.png",
+#            in_reply_to_status_id = reply_id) ## Post reply
+# 
+# my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+# reply_id <- my_timeline$status_id[1] ## Status ID for reply
+# post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
+#            in_reply_to_status_id = reply_id) ## Post reply
+# 
+# my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+# reply_id <- my_timeline$status_id[1] ## Status ID for reply
+# post_tweet("De komende tijd zal ik proberen de dagelijkse updates uitgebreider te maken. De kaarten hieronder laten het aantal besmettingen zien van afgelopen dag (links) en afgelopen week (rechts).",
+#            media = "plots/plot_daily_maps.png",
+#            in_reply_to_status_id = reply_id) ## Post reply
+# 
+# my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+# reply_id <- my_timeline$status_id[1] ## Status ID for reply
+# post_tweet("Reminder: ik heb staycation en zal mijn mentions sporadisch checken. Bij inhoudelijke vragen kunt u een DM sturen (ik hanteer een zero-tolerance policy voor niet-inhoudelijke vragen). Stay safe! https://twitter.com/mzelst/status/1285917046698647553",
+#            in_reply_to_status_id = reply_id) ## Post reply
+# 
+# rm(list=ls()) # Clean environment
