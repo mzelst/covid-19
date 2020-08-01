@@ -8,7 +8,6 @@
 
 library(jsonlite)
 library(geojsonio)
-library(tidyverse)
 library(sp)
 
 get_odata <- function(targetUrl) {

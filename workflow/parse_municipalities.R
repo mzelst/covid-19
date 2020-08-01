@@ -10,9 +10,9 @@ dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
 
 dat <- dat %>%
-  filter(Municipality_name != "") %>% # Filter observations without municipal name
-  filter(date >= filter.date) %>% # Filter last four weeks 
-  select(Municipality_name, date, Total_reported) # Select municipality, cases reported
+  dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
+  dplyr::filter(date >= filter.date) %>% # Filter last four weeks 
+  dplyr::select(Municipality_name, date, Total_reported) # Select municipality, cases reported
 
 dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
                     timevar="date",
