@@ -22,6 +22,7 @@ dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-Fry
                                      "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
 mun.pop <- read.csv("misc/municipalities-population.csv")
 dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
+write.csv(dat.wide, file = "data/municipality-totals.csv")
 
 dat.today.wide <- transmute(dat.wide,
   municipality = Municipality_name,
@@ -54,7 +55,8 @@ dat.today <- select( dat.today.wide,
   increase_week,
 )
 
-# write.csv(dat.wide, file = "data/municipality-today.csv")
+write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv")
+write.csv(dat.today, file = "data/municipality-today.csv")
 
 
 # Municipality data
