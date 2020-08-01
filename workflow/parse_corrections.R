@@ -31,6 +31,9 @@ for(i in col.start.diff:ncol(df.cases)) {
   neg.values <- c(neg.values)
 }
 
+neg.values[] <- sum(df.cases[,34][df.cases[,34]<0], na.rm=TRUE)
+
+
 neg.counts <- neg.values[col.start.diff:ncol(df.cases)]
 corrections.cases <- neg.values[col.start.diff:ncol(df.cases)]
 
@@ -43,7 +46,7 @@ net.infection <- new.infection + corrections.cases
 
 ## Hospital
 df.hospital <- df %>%
-  filter(Hospital_admission == "Yes")
+  dplyr::filter(Hospital_admission == "Yes")
 
 df.hospitals <- as.data.frame(table(df.hospital$Date_statistics,df.hospital$date)) ## Success
 
@@ -72,7 +75,7 @@ net.hospitals <- new.hospitals + corrections.hospitals
 
 ## Deaths
 df.death <- df %>%
-  filter(Deceased == "Yes")
+  dplyr::filter(Deceased == "Yes")
 
 df.deaths <- as.data.frame(table(df.death$Date_statistics,df.death$date)) ## Success
 
@@ -110,6 +113,5 @@ write.csv(corrections.all, file = "corrections/corrections_perday.csv")
 rm(list=ls())
 
 corrections.perday <- read.csv("corrections/corrections_perday.csv")
-corrections.perday$date <- as.Date(corrections.perday$date)
 
 
