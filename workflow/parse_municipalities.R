@@ -11,26 +11,50 @@ filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
 
 dat <- dat %>%
   dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
-  dplyr::filter(date >= filter.date) %>% # Filter last four weeks 
+#  dplyr::filter(date >= filter.date) %>% # Filter last four weeks 
   dplyr::select(Municipality_name, date, Total_reported) # Select municipality, cases reported
 
 dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
                     timevar="date",
                     idvar="Municipality_name")
 
-dat.wide$increase <- dat.wide[,ncol(dat.wide)]-dat.wide[,(ncol(dat.wide)-1)] # Calculate increase since last day 
-dat.wide$increase.week <- dat.wide[,(ncol(dat.wide)-1)]-dat.wide[,(ncol(dat.wide)-8)] # Calculate increase since last week
-
 dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
                                      "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
-
-
 mun.pop <- read.csv("misc/municipalities-population.csv")
 dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
-dat.wide$rel.increase <- dat.wide$increase/dat.wide$population*100000
-dat.wide$rel.increase.week <- dat.wide$increase.week/dat.wide$population*100000
 
-write.csv(dat.wide, file = "data/municipality-today.csv")
+dat.today.wide <- transmute(dat.wide,
+  municipality = Municipality_name,
+  d0 = dat.wide[,ncol(dat.wide)], # today
+  d1 = dat.wide[,ncol(dat.wide)-1], # yesterday
+  d7 = dat.wide[,ncol(dat.wide)-7], # last week
+  d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
+  d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
+  july1 = dat.wide$`Total_reported.2020-07-01`, # july 1st
+  july1_normalized = pmin(d14, july1), 
+  current = d0-july1_normalized,
+  increase_day = d0-d1, # Calculate increase since last day
+  increase_week = d0-d7, # Calculate increase since last week
+  population,
+  rel_increase_day = increase_day / population * 100000,
+  rel_increase_week = increase_week / population * 100000,
+  color = ifelse( (d1 - d8) <= 0 & (d0 - d7) > 0, "💥",
+          ifelse( rel_increase_week > 50, "🛑", 
+          ifelse( rel_increase_week > 5, "🟧",
+          ifelse( rel_increase_week > 0, "🟡",
+                                         "✅"
+  ))))
+)
+
+dat.today <- select( dat.today.wide,
+  current,
+  color,
+  municipality,
+  increase_day,
+  increase_week,
+)
+
+# write.csv(dat.wide, file = "data/municipality-today.csv")
 
 
 # Municipality data
