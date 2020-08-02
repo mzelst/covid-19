@@ -31,9 +31,6 @@ for(i in col.start.diff:ncol(df.cases)) {
   neg.values <- c(neg.values)
 }
 
-neg.values[] <- sum(df.cases[,34][df.cases[,34]<0], na.rm=TRUE)
-
-
 neg.counts <- neg.values[col.start.diff:ncol(df.cases)]
 corrections.cases <- neg.values[col.start.diff:ncol(df.cases)]
 

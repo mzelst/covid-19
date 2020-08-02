@@ -1,0 +1,430 @@
+---
+title             : "Epidemiologische situatie COVID-19 in Nederland - 2 augustus 2020"
+shorttitle        : "Dagelijkse rapportage"
+
+author: 
+  - name          : "Marino van Zelst"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "twitter.com/mzelst"
+    email         : "j.m.vanzelst@uvt.nl"
+
+affiliation:
+  - id            : "1"
+    institution   : "-"
+
+authornote: |
+  Voeg notities toe van auteur.
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+figsintext        : yes
+tablesintext      : yes
+
+documentclass     : "apa6"
+classoption       : "man"
+urlcolor          : blue
+indent            : false
+output            : papaja::apa6_pdf
+toc               : true
+
+
+
+---
+```{r setup, include = FALSE}
+library("papaja")
+require(knitr)
+require(tidyverse)
+r_refs("r-references.bib")
+```
+
+```{r echo = F}
+library(knitr)
+opts_chunk$set(fig.lp = '')
+```
+
+\newpage
+
+# Samenvatting
+
+```{r samenvatting,message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+all.data <- read.csv("data/all_data.csv")
+nice_by_day <- read.csv("data/nice_by_day.csv")
+
+tweet2 <- paste0("Patiënten verpleegafdeling 
+Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
+
+Patiënten IC
+Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".")
+```
+
+**Samenvatting**  
+Tot en met `r Sys.Date()` zijn er in Nederland in totaal `r last(all.data$cases)` COVID-19 patiënten gemeld aan het RIVM. Van alle gemelde patiënten is de helft 57 jaar of ouder. Tot nu toe zijn `r last(all.data$hospitalization)` van de gemelde patiënten opgenomen in het ziekenhuis en `r last(all.data$deaths)` mensen overleden.
+
+**Gegevens t. o. v. gisteren**  
+Positief getest: `r last(all.data$new.infection)`
+Totaal: `r last(all.data$cases)` (+ `r last(all.data$net.infection)` ivm `r last(all.data$corrections.cases)` corr.)
+
+Opgenomen: `r last(all.data$new.hospitals)`
+Totaal: `r last(all.data$hospitalization)` `r ifelse(last(all.data$net.hospitals)>=0," (+"," (-")` 
+`r abs(last(all.data$net.hospitals))` ivm `r last(all.data$corrections.hospitals)` corr.)
+
+Opgenomen op IC: `r tail(diff(nice_by_day$IC_Cumulative),n=1)`
+Totaal: `r tail(nice_by_day$IC_Cumulative,n=1)`
+
+Overleden: `r last(all.data$new.deaths)`
+Totaal: `r last(all.data$deaths)` `r ifelse(last(all.data$net.deaths)>=0," (+"," (-")`
+`r abs(last(all.data$net.deaths))` ivm `r last(all.data$corrections.deaths)` corr.)
+
+**Update met betrekking tot ziekenhuis-gegevens (data NICE)**
+
+Patiënten verpleegafdeling  
+Bevestigd: `r tail(all.data$Hospital_Intake_Proven,n=1)` Verdacht: `r tail(all.data$Hospital_Intake_Suspected, n=1)`
+
+Patiënten IC  
+Bevestigd: `r tail(all.data$IC_Intake_Proven,n=1)` Verdacht: `r tail(all.data$IC_Intake_Suspected,n=1)`
+
+**Data**  
+Een databestand met de cumulatieve aantallen per gemeente per dag van gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten is [hier](https://data.rivm.nl/geonetwork/srv/dut/catalog.search#/metadata/1c0fcd57-1102-4620-9cfa-441e93ea5604 "hier") te vinden. Een databestand met karakteristieken van elke positief geteste COVID-19 patiënt in Nederland is [hier](https://data.rivm.nl/geonetwork/srv/dut/catalog.search#/metadata/2c4357c8-76e4-4662-9574-1deb8a73f724?tab=relations) te vinden. Alle gegevens die voor dit rapport gebruikt worden zijn te vinden in de [Github repository](https://github.com/mzelst/covid-19).
+
+\newpage
+
+# COVID-19 meldingen in de afgelopen vier weken
+```{r Gemelde besmettingen, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 10, fig.width = 8}
+# Script plots for daily update
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+all.data <- read.csv("data/all_data.csv")
+all.data$date <- as.Date(all.data$date)
+all.data <- all.data[order(all.data$date),]
+
+filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
+
+# Plot for positive tests per day
+all.data %>%
+  filter(date > filter.date) %>%
+  ggplot(aes(x=date, y=positivetests)) + 
+  geom_line(aes(y = positivetests, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
+  geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
+  geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.text = element_text(size =18),
+        legend.direction = "vertical",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Besmettingen per dag",
+       color = "Legend") +
+  ggtitle("Meldingen van geconstateerde besmettingen")
+
+```
+
+\newpage
+
+# Kaart met COVID-19 meldingen per gemeente sinds gisteren
+
+```{r Gemeentes - sinds gisteren, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 9, fig.width = 8,fig.cap=" Aantal, sinds gisteren, bij de GGD’en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente"}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+library(jsonlite)
+library(geojsonio)
+library(sp)
+
+gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
+dat.wide <- read.csv("data/municipality-today.csv")
+
+cbs.data.plot <- dat.wide[,c("Municipality_name","rel.increase","rel.increase.week")]
+colnames(cbs.data.plot) <- c("statnaam","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
+cbs.data.plot$`Besmettingen (sinds gisteren)` <- ifelse((cbs.data.plot$`Besmettingen (sinds gisteren)`) < 0, 0, cbs.data.plot$`Besmettingen (sinds gisteren)`)
+cbs.data.plot$`Besmettingen (7 dagen)` <- ifelse((cbs.data.plot$`Besmettingen (7 dagen)`) < 0, 0, cbs.data.plot$`Besmettingen (7 dagen)`)
+
+gemeentegrenzen@data <- gemeentegrenzen@data %>%
+  left_join(cbs.data.plot,by=c("statnaam"))
+
+g <- fortify(gemeentegrenzen, region = "id")
+gemeentegrenzenDF <- merge(g, gemeentegrenzen@data, by = "id")
+
+ggplot(data = gemeentegrenzenDF) +
+  geom_polygon(aes(x=long, y=lat, group = group, fill = `Besmettingen (sinds gisteren)`), color = "black", lwd=0.2) +
+  coord_equal()+
+  theme_void() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.text = element_text(color = "black",size=10),
+        legend.pos = c(0.1,0.9),
+        legend.title = element_blank()) +
+  ggtitle("Nieuwe besmettingen per gemeente per 100.000 inwoners") +
+  scale_fill_gradientn(colours=c("white","yellow","orange", "red"))
+```
+
+\newpage
+
+# Kaart met COVID-19 meldingen per gemeente in de afgelopen week
+
+```{r Gemeentes - Sinds vorige week, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 9, fig.width = 8,fig.cap=" Aantal in de afgelopen week bij de GGD’en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente."}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+library(jsonlite)
+library(geojsonio)
+library(sp)
+
+ggplot(data = gemeentegrenzenDF) +
+  geom_polygon(aes(x=long, y=lat, group = group, fill = `Besmettingen (7 dagen)`), color = "black", lwd=0.2) +
+  coord_equal()+
+  theme_void() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.text = element_text(color = "black",size=10),
+        legend.pos = c(0.1,0.9),
+        legend.title = element_blank()) +
+  ggtitle("Nieuwe besmettingen per gemeente per 100.000 inwoners") +
+  scale_fill_gradientn(colours=c("white","yellow","orange", "red"))
+```
+
+\newpage
+
+# Aantal COVID-19 meldingen per provincie in de afgelopen twee weken
+
+```{r province, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+
+temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles 
+dat.today <- read.csv(last(temp)) ## Case file today
+dat.weekago <- read.csv(temp[length(temp)-14]) ## Case file week ago
+
+dat.today[dat.today == "Unknown"] <- "Onbekend"
+dat.weekago[dat.weekago == "Unknown"] <- "Onbekend"
+
+hosp.today <- dat.today %>%
+  filter(Hospital_admission == "Yes")
+death.today <- dat.today %>%
+  filter(Deceased == "Yes")
+
+hosp.weekago <- dat.weekago %>%
+  filter(Hospital_admission == "Yes")
+death.weekago <- dat.weekago %>%
+  filter(Deceased == "Yes")
+
+
+province.cases.today <- as.data.frame(table(dat.today$Province)) ## Cumulative cases per GGD
+province.cases.weekago <- as.data.frame(table(dat.weekago$Province)) ## Cumulative cases per GGD - week ago
+
+province.cases.today <- as.data.frame(table(dat.today$Province)) ## Cumulative cases per province
+province.cases.weekago <- as.data.frame(table(dat.weekago$Province)) ## Cumulative cases per province - week ago
+
+province.hosp.today <- as.data.frame(table(hosp.today$Province)) ## Cumulative cases per province
+province.hosp.weekago <- as.data.frame(table(hosp.weekago$Province)) ## Cumulative cases per province - week ago
+
+province.death.today <- as.data.frame(table(death.today$Province)) ## Cumulative cases per province
+province.death.weekago <- as.data.frame(table(death.weekago$Province)) ## Cumulative cases per province - week ago
+
+province_datalist <- list(province.cases.today,province.cases.weekago,province.hosp.today,province.hosp.weekago,province.death.today,province.death.weekago)
+
+province.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="Var1", ...),
+  province_datalist
+)
+
+colnames(province.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
+
+province.data <- province.data[order(province.data$statnaam),]
+province.data$ID <- seq.int(nrow(province.data))
+
+province.population <- read.csv("misc/provinces-population.csv")
+province.data <- merge(province.data,province.population[,c("ID","population")],by = "ID", all=TRUE)
+
+province.data$cases.toename <- province.data$cases_today - province.data$cases_lastweek
+province.data$hosp.toename <- province.data$hosp_today - province.data$hosp_lastweek
+province.data$death.toename <- province.data$death_today - province.data$death_lastweek
+
+province.data$`Cases /100000` <- round(province.data$cases.toename/province.data$population*100000,1)
+province.data$`Ziekenhuisopname /100000` <- round(province.data$hosp.toename/province.data$population*100000,1)
+province.data$`Overleden /100000` <- round(province.data$death.toename/province.data$population*100000,1)
+
+```
+
+```{r Provincie Table, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+require(kableExtra)
+province.data.table <- province.data[,c(2,10,13,11,14,12,15)]
+colnames(province.data.table) <- c("Provincie","Totaal","/100000","Totaal","/100000","Totaal","/100000")
+
+footnote.provincie <- paste0("Aantal bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten per provincie van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur, totaal en per 100.000 inwoners")
+
+kable(province.data.table, "latex", booktabs = T, linesep="") %>%
+kable_styling() %>%
+add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overleden" = 2)) %>%
+  footnote(general = footnote.provincie, threeparttable = T)
+``` 
+
+\newpage
+
+# Aantal COVID-19 meldingen per GGD in de afgelopen twee weken
+
+```{r ggd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+
+ggd.cases.today <- as.data.frame(table(dat.today$Municipal_health_service)) ## Cumulative cases per GGD
+ggd.cases.weekago <- as.data.frame(table(dat.weekago$Municipal_health_service)) ## Cumulative cases per GGD - week ago
+
+ggd.hosp.today <- as.data.frame(table(hosp.today$Municipal_health_service)) ## Cumulative cases per GGD
+ggd.hosp.weekago <- as.data.frame(table(hosp.weekago$Municipal_health_service)) ## Cumulative cases per GGD - week ago
+
+ggd.death.today <- as.data.frame(table(death.today$Municipal_health_service)) ## Cumulative cases per GGD
+ggd.death.weekago <- as.data.frame(table(death.weekago$Municipal_health_service)) ## Cumulative cases per GGD - week ago
+
+
+ggd_datalist <- list(ggd.cases.today,ggd.cases.weekago,ggd.hosp.today,ggd.hosp.weekago,ggd.death.today,ggd.death.weekago)
+
+
+ggd.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="Var1", ...),
+  ggd_datalist
+)
+
+colnames(ggd.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
+
+ggd.data <- ggd.data[order(ggd.data$statnaam),]
+ggd.data$ID <- seq.int(nrow(ggd.data))
+
+ggd.population <- read.csv("misc/ggds-population.csv")
+ggd.data <- merge(ggd.data,ggd.population[,c("ID","population")],by = "ID", all=TRUE)
+
+ggd.data$cases.toename <- ggd.data$cases_today - ggd.data$cases_lastweek
+ggd.data$hosp.toename <- ggd.data$hosp_today - ggd.data$hosp_lastweek
+ggd.data$death.toename <- ggd.data$death_today - ggd.data$death_lastweek
+
+ggd.data$`Cases /100000` <- round(ggd.data$cases.toename/ggd.data$population*100000,1)
+ggd.data$`Ziekenhuisopname /100000` <- round(ggd.data$hosp.toename/ggd.data$population*100000,1)
+ggd.data$`Overleden /100000` <- round(ggd.data$death.toename/ggd.data$population*100000,1)
+
+```
+
+```{r GGD Table, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+require(kableExtra)
+ggd.data.table <- ggd.data[,c(2,10,13,11,14,12,15)]
+colnames(ggd.data.table) <- c("GGD","Totaal","/100000","Totaal","/100000","Totaal","/100000")
+
+footnote.ggd <- paste0("Aantal bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten per GGD van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur, totaal en per 100.000 inwoners")
+
+kable(ggd.data.table, "latex", booktabs = T, linesep="") %>%
+kable_styling(font_size = 10) %>%
+add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overleden" = 2)) %>%
+  footnote(general = footnote.ggd, threeparttable = T)
+``` 
+
+\newpage
+
+# Leeftijdsverdeling en man-vrouwverdeling van COVID-19 patiënten in de afgelopen twee weken
+
+```{r Leeftijd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+
+agegroup.cases.today <- as.data.frame(table(dat.today$Agegroup)) ## Cumulative cases per age group
+agegroup.cases.weekago <- as.data.frame(table(dat.weekago$Agegroup)) ## Cumulative cases per age group - week ago
+
+agegroup.cases.today <- as.data.frame(table(dat.today$Agegroup)) ## Cumulative cases per age group
+agegroup.cases.weekago <- as.data.frame(table(dat.weekago$Agegroup)) ## Cumulative cases per age group - week ago
+
+agegroup.hosp.today <- as.data.frame(table(hosp.today$Agegroup)) ## Cumulative cases per age group
+agegroup.hosp.weekago <- as.data.frame(table(hosp.weekago$Agegroup)) ## Cumulative cases per age group - week ago
+
+agegroup.death.today <- as.data.frame(table(death.today$Agegroup)) ## Cumulative cases per age group
+agegroup.death.weekago <- as.data.frame(table(death.weekago$Agegroup)) ## Cumulative cases age group - week ago
+
+agegroup_datalist <- list(agegroup.cases.today,agegroup.cases.weekago,agegroup.hosp.today,agegroup.hosp.weekago,agegroup.death.today,agegroup.death.weekago)
+
+agegroup.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="Var1", all.x=T, ...),
+  agegroup_datalist
+)
+
+colnames(agegroup.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
+
+agegroup.data <- agegroup.data %>%
+  dplyr::filter(statnaam != "<50")
+
+agegroup.data <- agegroup.data[order(agegroup.data$statnaam),]
+agegroup.data$ID <- seq.int(nrow(agegroup.data))
+
+agegroup.data$cases.toename <- agegroup.data$cases_today - agegroup.data$cases_lastweek
+agegroup.data$hosp.toename <- agegroup.data$hosp_today - agegroup.data$hosp_lastweek
+agegroup.data$death.toename <- agegroup.data$death_today - agegroup.data$death_lastweek
+
+agegroup.data$cases.percentage <- round(agegroup.data$cases.toename/sum(agegroup.data$cases.toename, na.rm = T)*100,1)
+agegroup.data$hosp.percentage <- round(agegroup.data$hosp.toename/sum(agegroup.data$hosp.toename, na.rm = T)*100,1)
+agegroup.data$death.percentage <- round(agegroup.data$death.toename/sum(agegroup.data$death.toename, na.rm = T)*100,1)
+
+```
+
+```{r Leeftijd Table, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+require(kableExtra)
+
+agegroup.data.table <- agegroup.data[,c(1,9,12,10,13,11,14)]
+colnames(agegroup.data.table) <- c("Leeftijdsgroep","Totaal","%","Totaal","%","Totaal","%")
+
+footnote.leeftijd <- paste0("Leeftijdsverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur.")
+
+kable(agegroup.data.table, "latex", booktabs = T, linesep="") %>%
+kable_styling(font_size = 11) %>%
+add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overleden" = 2)) %>%
+  footnote(general = footnote.leeftijd, threeparttable = T)
+``` 
+
+```{r Geslacht, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+
+sex.cases.today <- as.data.frame(table(dat.today$Sex)) ## Cumulative cases per age group
+sex.cases.weekago <- as.data.frame(table(dat.weekago$Sex)) ## Cumulative cases per age group - week ago
+
+sex.cases.today <- as.data.frame(table(dat.today$Sex)) ## Cumulative cases per age group
+sex.cases.weekago <- as.data.frame(table(dat.weekago$Sex)) ## Cumulative cases per age group - week ago
+
+sex.hosp.today <- as.data.frame(table(hosp.today$Sex)) ## Cumulative cases per age group
+sex.hosp.weekago <- as.data.frame(table(hosp.weekago$Sex)) ## Cumulative cases per age group - week ago
+
+sex.death.today <- as.data.frame(table(death.today$Sex)) ## Cumulative cases per age group
+sex.death.weekago <- as.data.frame(table(death.weekago$Sex)) ## Cumulative cases age group - week ago
+
+sex_datalist <- list(sex.cases.today,sex.cases.weekago,sex.hosp.today,sex.hosp.weekago,sex.death.today,sex.death.weekago)
+
+sex.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="Var1", all.x=T, ...),
+  sex_datalist
+)
+
+colnames(sex.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
+
+sex.data <- sex.data[order(sex.data$statnaam),]
+sex.data$ID <- seq.int(nrow(sex.data))
+
+sex.data$cases.toename <- sex.data$cases_today - sex.data$cases_lastweek
+sex.data$hosp.toename <- sex.data$hosp_today - sex.data$hosp_lastweek
+sex.data$death.toename <- sex.data$death_today - sex.data$death_lastweek
+
+sex.data$cases.percentage <- round(sex.data$cases.toename/sum(sex.data$cases.toename, na.rm = T)*100,1)
+sex.data$hosp.percentage <- round(sex.data$hosp.toename/sum(sex.data$hosp.toename, na.rm = T)*100,1)
+sex.data$death.percentage <- round(sex.data$death.toename/sum(sex.data$death.toename, na.rm = T)*100,1)
+
+```
+
+```{r Geslacht Table, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+require(kableExtra)
+
+sex.data.table <- sex.data[,c(1,9,12,10,13,11,14)]
+colnames(sex.data.table) <- c("Leeftijdsgroep","Totaal","%","Totaal","%","Totaal","%")
+
+footnote.geslacht <- paste0("Man-vrouwverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur.")
+
+kable(sex.data.table, "latex", booktabs = T, linesep="") %>%
+kable_styling(font_size = 11) %>%
+add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overleden" = 2)) %>%
+  footnote(general = footnote.geslacht, threeparttable = T)
+``` 
+\newpage
