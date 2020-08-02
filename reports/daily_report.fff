@@ -1,0 +1,14 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{daily_report_files/figure-latex/gemeente - sinds gisteren-1.pdf}
+\caption{(\#fig:gemeente - sinds gisteren)Aantal, sinds gisteren, bij de GGD'en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{daily_report_files/figure-latex/gemeente - sinds vorige week-1.pdf}
+\caption{(\#fig:gemeente - sinds vorige week)Aantal in de afgelopen week bij de GGD'en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente.}
+\end{figure*}
