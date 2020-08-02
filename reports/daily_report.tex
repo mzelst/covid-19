@@ -1,0 +1,366 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+  english,
+  man,floatsintext]{apa6}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Epidemiologische situatie COVID-19 in Nederland - 2 augustus 2020},
+  pdfauthor={Marino van Zelst1},
+  pdflang={en-EN},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% \usepackage{etoolbox}
+\makeatletter
+\patchcmd{\HyOrg@maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\HyOrg@maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
+\shorttitle{Dagelijkse rapportage}
+\DeclareDelayedFloatFlavor{ThreePartTable}{table}
+\DeclareDelayedFloatFlavor{lltable}{table}
+\DeclareDelayedFloatFlavor*{longtable}{table}
+\makeatletter
+\renewcommand{\efloat@iwrite}[1]{\immediate\expandafter\protected@write\csname efloat@post#1\endcsname{}}
+\makeatother
+\usepackage{csquotes}
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\else
+  \usepackage[shorthands=off,main=english]{babel}
+\fi
+
+\title{Epidemiologische situatie COVID-19 in Nederland - 2 augustus 2020}
+\author{Marino van Zelst\textsuperscript{1}}
+\date{}
+
+
+\authornote{
+
+Voeg notities toe van auteur.
+
+Correspondence concerning this article should be addressed to Marino van Zelst, twitter.com/mzelst. E-mail: \href{mailto:j.m.vanzelst@uvt.nl}{\nolinkurl{j.m.vanzelst@uvt.nl}}
+
+}
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} -}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\newpage
+
+\hypertarget{samenvatting}{%
+\section{Samenvatting}\label{samenvatting}}
+
+\textbf{Samenvatting}\\
+Tot en met 2020-08-02 zijn er in Nederland in totaal 55098 COVID-19 patiënten gemeld aan het RIVM. Van alle gemelde patiënten is de helft 57 jaar of ouder. Tot nu toe zijn 11943 van de gemelde patiënten opgenomen in het ziekenhuis en 6149 mensen overleden.
+
+\textbf{Gegevens t. o. v. gisteren}\\
+Positief getest: 376
+Totaal: 55098 (+ 366 ivm -10 corr.)
+
+Opgenomen: 6
+Totaal: 11943 (+
+6 ivm 0 corr.)
+
+Opgenomen op IC: 0
+Totaal: 2951
+
+Overleden: 1
+Totaal: 6149 (+
+1 ivm 0 corr.)
+
+\textbf{Update met betrekking tot ziekenhuis-gegevens (data NICE)}
+
+Patiënten verpleegafdeling\\
+Bevestigd: 1 Verdacht: 5
+
+Patiënten IC\\
+Bevestigd: 0 Verdacht: 0
+
+\textbf{Data}\\
+Een databestand met de cumulatieve aantallen per gemeente per dag van gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten is \href{https://data.rivm.nl/geonetwork/srv/dut/catalog.search\#/metadata/1c0fcd57-1102-4620-9cfa-441e93ea5604}{hier} te vinden. Een databestand met karakteristieken van elke positief geteste COVID-19 patiënt in Nederland is \href{https://data.rivm.nl/geonetwork/srv/dut/catalog.search\#/metadata/2c4357c8-76e4-4662-9574-1deb8a73f724?tab=relations}{hier} te vinden. Alle gegevens die voor dit rapport gebruikt worden zijn te vinden in de \href{https://github.com/mzelst/covid-19}{Github repository}.
+
+\newpage
+
+\hypertarget{covid-19-meldingen-in-de-afgelopen-vier-weken}{%
+\section{COVID-19 meldingen in de afgelopen vier weken}\label{covid-19-meldingen-in-de-afgelopen-vier-weken}}
+
+\includegraphics{daily_report_files/figure-latex/Gemelde besmettingen-1.pdf}
+
+\newpage
+
+\hypertarget{kaart-met-covid-19-meldingen-per-gemeente-sinds-gisteren}{%
+\section{Kaart met COVID-19 meldingen per gemeente sinds gisteren}\label{kaart-met-covid-19-meldingen-per-gemeente-sinds-gisteren}}
+
+\begin{figure}
+\centering
+\includegraphics{daily_report_files/figure-latex/Gemeentes - sinds gisteren-1.pdf}
+\caption{(\#Gemeentes - sinds gisteren) Aantal, sinds gisteren, bij de GGD'en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente}
+\end{figure}
+
+\newpage
+
+\hypertarget{kaart-met-covid-19-meldingen-per-gemeente-in-de-afgelopen-week}{%
+\section{Kaart met COVID-19 meldingen per gemeente in de afgelopen week}\label{kaart-met-covid-19-meldingen-per-gemeente-in-de-afgelopen-week}}
+
+\begin{figure}
+\centering
+\includegraphics{daily_report_files/figure-latex/Gemeentes - Sinds vorige week-1.pdf}
+\caption{(\#Gemeentes - Sinds vorige week) Aantal in de afgelopen week bij de GGD'en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente.}
+\end{figure}
+
+\newpage
+
+\hypertarget{aantal-covid-19-meldingen-per-provincie-in-de-afgelopen-twee-weken}{%
+\section{Aantal COVID-19 meldingen per provincie in de afgelopen twee weken}\label{aantal-covid-19-meldingen-per-provincie-in-de-afgelopen-twee-weken}}
+
+\begin{table}[H]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Besmettingen} & \multicolumn{2}{c}{Ziekenhuisopnames} & \multicolumn{2}{c}{Overleden} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+Provincie & Totaal & /100000 & Totaal & /100000 & Totaal & /100000\\
+\midrule
+Drenthe & 14 & 2.8 & 1 & 0.2 & 0 & 0.0\\
+Flevoland & 38 & 9.0 & 4 & 0.9 & 1 & 0.2\\
+Friesland & 14 & 2.2 & 0 & 0.0 & 0 & 0.0\\
+Gelderland & 131 & 6.3 & -2 & -0.1 & 0 & 0.0\\
+Groningen & 25 & 4.3 & 0 & 0.0 & 0 & 0.0\\
+Limburg & 42 & 3.8 & 0 & 0.0 & 2 & 0.2\\
+Noord-Brabant & 420 & 16.4 & 6 & 0.2 & 2 & 0.1\\
+Noord-Holland & 733 & 25.5 & 15 & 0.5 & 1 & 0.0\\
+Overijssel & 44 & 3.8 & 1 & 0.1 & 0 & 0.0\\
+Utrecht & 254 & 18.7 & 5 & 0.4 & 1 & 0.1\\
+Zeeland & 81 & 21.1 & 0 & 0.0 & 0 & 0.0\\
+Zuid-Holland & 1577 & 42.5 & 15 & 0.4 & 6 & 0.2\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Aantal bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten per provincie van 19 juli t/m 02 augustus 10:00 uur, totaal en per 100.000 inwoners
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\newpage
+
+\hypertarget{aantal-covid-19-meldingen-per-ggd-in-de-afgelopen-twee-weken}{%
+\section{Aantal COVID-19 meldingen per GGD in de afgelopen twee weken}\label{aantal-covid-19-meldingen-per-ggd-in-de-afgelopen-twee-weken}}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{10}{12}\selectfont
+
+\begin{threeparttable}
+\begin{tabular}{lrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Besmettingen} & \multicolumn{2}{c}{Ziekenhuisopnames} & \multicolumn{2}{c}{Overleden} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+GGD & Totaal & /100000 & Totaal & /100000 & Totaal & /100000\\
+\midrule
+Dienst Gezondheid \& Jeugd ZHZ & 97 & 21.2 & 2 & 0.4 & 1 & 0.2\\
+GGD Amsterdam & 492 & 46.5 & 13 & 1.2 & 0 & 0.0\\
+GGD Brabant Zuid-Oost & 84 & 10.9 & 0 & 0.0 & 0 & 0.0\\
+GGD Drenthe & 15 & 3.0 & 1 & 0.2 & 0 & 0.0\\
+GGD Flevoland & 38 & 9.1 & 4 & 1.0 & 1 & 0.2\\
+GGD FryslÃ¢n & 13 & 2.0 & 0 & 0.0 & 0 & 0.0\\
+GGD Gelderland-Midden & 51 & 9.0 & -2 & -0.4 & 0 & 0.0\\
+GGD Gelderland-Zuid & 37 & 14.5 & 0 & 0.0 & 0 & 0.0\\
+GGD Gooi en Vechtstreek & 39 & 6.7 & 0 & 0.0 & 0 & 0.0\\
+GGD Groningen & 27 & 2.4 & 0 & 0.0 & 0 & 0.0\\
+GGD Haaglanden & 351 & 33.0 & 3 & 0.3 & 4 & 0.4\\
+GGD Hart voor Brabant & 88 & 11.0 & 4 & 0.5 & 1 & 0.1\\
+GGD Hollands Midden & 212 & 32.2 & 2 & 0.3 & 0 & 0.0\\
+GGD Hollands Noorden & 71 & 13.5 & 0 & 0.0 & 0 & 0.0\\
+GGD IJsselland & 22 & 4.0 & 0 & 0.0 & 0 & 0.0\\
+GGD Kennemerland & 92 & 18.0 & 0 & 0.0 & 1 & 0.2\\
+GGD Limburg Noord & 15 & 2.4 & 0 & 0.0 & 1 & 0.2\\
+GGD Noord en Oost Gelderland & 44 & 3.3 & 0 & 0.0 & 0 & 0.0\\
+GGD Regio Twente & 21 & 1.6 & 1 & 0.1 & 0 & 0.0\\
+GGD regio Utrecht & 253 & 35.8 & 5 & 0.7 & 1 & 0.1\\
+GGD Rotterdam Rijnmond & 919 & 272.9 & 8 & 2.4 & 1 & 0.3\\
+GGD West Brabant & 244 & 63.7 & 2 & 0.5 & 1 & 0.3\\
+GGD Zaanstreek-Waterland & 39 & 6.5 & 2 & 0.3 & 0 & 0.0\\
+GGD Zeeland & 82 & 9.9 & 0 & 0.0 & 0 & 0.0\\
+GGD Zuid Limburg & 27 & 3.9 & 0 & 0.0 & 1 & 0.1\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Aantal bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten per GGD van 19 juli t/m 02 augustus 10:00 uur, totaal en per 100.000 inwoners
+\end{tablenotes}
+\end{threeparttable}
+\endgroup{}
+\end{table}
+
+\newpage
+
+\hypertarget{leeftijdsverdeling-en-man-vrouwverdeling-van-covid-19-patiuxebnten-in-de-afgelopen-twee-weken}{%
+\section{Leeftijdsverdeling en man-vrouwverdeling van COVID-19 patiënten in de afgelopen twee weken}\label{leeftijdsverdeling-en-man-vrouwverdeling-van-covid-19-patiuxebnten-in-de-afgelopen-twee-weken}}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{threeparttable}
+\begin{tabular}{lrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Besmettingen} & \multicolumn{2}{c}{Ziekenhuisopnames} & \multicolumn{2}{c}{Overleden} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+Leeftijdsgroep & Totaal & \% & Totaal & \% & Totaal & \%\\
+\midrule
+0-9 & 39 & 1.2 & 0 & 0.0 & NA & NA\\
+10-19 & 358 & 10.6 & 0 & 0.0 & NA & NA\\
+20-29 & 847 & 25.1 & 1 & 2.2 & NA & NA\\
+30-39 & 617 & 18.3 & 5 & 11.1 & NA & NA\\
+40-49 & 480 & 14.2 & 7 & 15.6 & NA & NA\\
+50-59 & 536 & 15.9 & 9 & 20.0 & 0 & 0.0\\
+60-69 & 293 & 8.7 & 14 & 31.1 & 2 & 15.4\\
+70-79 & 133 & 3.9 & 6 & 13.3 & 3 & 23.1\\
+80-89 & 57 & 1.7 & 3 & 6.7 & 5 & 38.5\\
+90+ & 13 & 0.4 & 0 & 0.0 & 3 & 23.1\\
+Onbekend & 0 & 0.0 & NA & NA & NA & NA\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Leeftijdsverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van 19 juli t/m 02 augustus 10:00 uur.
+\end{tablenotes}
+\end{threeparttable}
+\endgroup{}
+\end{table}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{threeparttable}
+\begin{tabular}{lrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Besmettingen} & \multicolumn{2}{c}{Ziekenhuisopnames} & \multicolumn{2}{c}{Overleden} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+Leeftijdsgroep & Totaal & \% & Totaal & \% & Totaal & \%\\
+\midrule
+Female & 1762 & 52.2 & 17 & 37.8 & 8 & 61.5\\
+Male & 1611 & 47.8 & 28 & 62.2 & 5 & 38.5\\
+Onbekend & 0 & 0.0 & 0 & 0.0 & NA & NA\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textit{Note: } 
+\item Man-vrouwverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van 19 juli t/m 02 augustus 10:00 uur.
+\end{tablenotes}
+\end{threeparttable}
+\endgroup{}
+\end{table}
+\newpage
+
+
+\end{document}
