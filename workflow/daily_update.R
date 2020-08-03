@@ -90,6 +90,4 @@ reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Wellicht zijn deze nog belangrijker dan de landelijke cijfers.",
            in_reply_to_status_id = reply_id) ## Post reply
 
-
-
 rm(list=ls()) # Clean environment
