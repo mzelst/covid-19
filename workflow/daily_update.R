@@ -38,12 +38,6 @@ all.data <- read.csv("data/all_data.csv")
 source("plot_scripts/daily_plots.R")
 source("plot_scripts/daily_maps_plots.R")
 
-# Copy plots to report folder
-list.plots = list.files(path = "plots/", full.names = T)
-file.copy(from=list.plots, to="reports/plots/", overwrite=T, recursive = F,copy.mode = T)
-
-
-
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
@@ -82,13 +76,13 @@ Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, be
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[3] ## Status ID for reply
+reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet(tweet2, media = "plots/plot_daily.png",
            in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://www.dropbox.com/s/3ka00340fao3skt/Epidemiologische%20situatie%20COVID-19%20in%20Nederland%20-%201%20augustus.pdf?dl=0",
+post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
            in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
