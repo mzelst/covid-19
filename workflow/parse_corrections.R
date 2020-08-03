@@ -3,7 +3,7 @@ require(data.table)
 rm(list=ls())
 #### Corrections scripts
 
-temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T)
+temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
 myfiles = lapply(temp, read.csv)
 
 df <- map_dfr(myfiles, ~{
@@ -105,10 +105,17 @@ corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infe
 
 corrections.all$date <- as.Date(rownames(corrections.all))
 
-
-write.csv(corrections.all, file = "corrections/corrections_perday.csv")
+filename <- paste0("corrections/corrections_per_day/corrections-",Sys.Date(),'.csv')
+write.csv(corrections.all, file = filename)
 rm(list=ls())
 
-corrections.perday <- read.csv("corrections/corrections_perday.csv")
+temp = list.files(path = "corrections/corrections_per_day/",pattern="*.csv", full.names = T)
+myfiles = lapply(temp, read.csv)
+
+corrections.perday <- map_dfr(myfiles, ~{
+  .x
+})
+corrections.perday$date <- corrections.perday$X
+write.csv(corrections.perday, file = "corrections/corrections_perday.csv")
 
 
