@@ -1,5 +1,5 @@
 ---
-title             : "Epidemiologische situatie COVID-19 in Nederland - 2 augustus 2020"
+title             : "Epidemiologische situatie COVID-19 in Nederland - `r format((Sys.Date()),'%d')` `r format((Sys.Date()),'%B')` 2020"
 shorttitle        : "Dagelijkse rapportage"
 
 author: 
