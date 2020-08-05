@@ -13,9 +13,6 @@ affiliation:
   - id            : "1"
     institution   : "-"
 
-authornote: |
-  Voeg notities toe van auteur.
-
 bibliography      : ["r-references.bib"]
 
 floatsintext      : no
@@ -34,6 +31,7 @@ urlcolor          : blue
 indent            : false
 output            : papaja::apa6_pdf
 toc               : true
+keep_tex          : false
 
 
 
@@ -58,12 +56,6 @@ opts_chunk$set(fig.lp = '')
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
-
-tweet2 <- paste0("Patiënten verpleegafdeling 
-Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
-
-Patiënten IC
-Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".")
 ```
 
 **Samenvatting**  
@@ -110,8 +102,8 @@ filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 # Plot for positive tests per day
 all.data %>%
   filter(date > filter.date) %>%
-  ggplot(aes(x=date, y=positivetests)) + 
-  geom_line(aes(y = positivetests, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
+  ggplot(aes(x=date, y=new.infection)) + 
+  geom_line(aes(y = net.infection, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
