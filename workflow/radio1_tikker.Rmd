@@ -5,7 +5,7 @@ date: "`r format((Sys.Date()),'%d')` `r format((Sys.Date()),'%B')` 2020"
 output: html_document
 ---
   
-  ```{r, include=FALSE}
+```{r, include=FALSE}
 library(cowplot)
 library(tidyverse)
 library(rjson)
@@ -37,4 +37,8 @@ Totaal besmettingen: `r last(all.data$cases)`
 Gewone ziekenhuisopnames vandaag: `r last(all.data$new.hospitals)`
 Totaal aantal ziekenhuisopnames: 
   
-Intensive Care: `
+Intensive Care:
+
+### Overleden
+Nieuwe doden vandaag: `r last(all.data$new.deaths)` 
+Totaal aantal doden: `r last(all.data$)
