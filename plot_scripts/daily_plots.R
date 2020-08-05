@@ -15,8 +15,8 @@ filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
-  ggplot(aes(x=date, y=positivetests)) + 
-  geom_line(aes(y = positivetests, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
+  ggplot(aes(x=date, y=new.infection)) + 
+  geom_line(aes(y = net.infection, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
@@ -32,8 +32,10 @@ cases <- all.data %>%
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 10)
 
 # Plot for #patients in hospital per day
+nice.today <- read.csv("data-nice/nice-today.csv")
+nice.today$date <- as.Date(nice.today$date)
 
-aanwezig <- all.data %>%
+aanwezig <- nice.today %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
   geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling"), lwd=1.2) +
@@ -54,9 +56,9 @@ aanwezig <- all.data %>%
 
 opnames <- all.data %>%
   filter(date > filter.date) %>%
-  ggplot(aes(x=date, y=Hospital_Intake_Proven)) + 
-  geom_line(aes(y = Hospital_Intake_Proven, color = "Opname op verpleegafdeling"), lwd=1.2) +
-  geom_line(aes(y = IC_Intake_Proven, color = "Opname op IC"), lwd=1.2) +
+  ggplot(aes(x=date, y=hospital_intake_rivm)) + 
+  geom_line(aes(y = hospital_intake_rivm, color = "Opname op verpleegafdeling"), lwd=1.2) +
+  geom_line(aes(y = ic_intake_nice, color = "Opname op IC"), lwd=1.2) +
   ylim(0,15) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
@@ -69,12 +71,17 @@ opnames <- all.data %>%
   ggtitle("Opnames op de IC vs. verpleegafdeling") +
   ggsave("plots/overview_opnames_zkh.png", width = 15, height=4)
 
-reproduction <- fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
+reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
 
 reproduction <- reproduction %>%
   mutate(Date = Date %>% as.Date)
+
+prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
 
 reproduction <- reproduction %>%
   ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 

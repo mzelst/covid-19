@@ -2,7 +2,7 @@ library(tidyverse)
 library(janitor)
 require(gganimate)
 
-dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-03.csv")
+dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-04.csv")
 dat$week <- strftime(dat$Date_statistics, format = "%V")
 dat$value <- 1
 
@@ -69,3 +69,6 @@ anim = staticplot + transition_states(Week, transition_length = 4, state_length 
 
 animate(anim, 400, fps = 20,  width = 1200, height = 1000, 
         renderer = gifski_renderer("age_corona_final.gif"))
+
+animate(anim, 400, fps = 20,  width = 1200, height = 1000, 
+        renderer = av_renderer("age_corona_final.mp4"))

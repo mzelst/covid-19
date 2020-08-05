@@ -79,13 +79,20 @@ nice.dailydata <- last(df)
 filename.daily.nice <- paste0("data-nice/data-per-day/nice_daily_",Sys.Date(),".csv") ## Filename for daily data
 write.csv(nice.dailydata, file = filename.daily.nice) ## Write file with daily data
 
-nice.daily_aggregate <- read.csv("data/nice_by_day.csv") ## Read in aggregate data
-nice.daily_aggregate <- nice.daily_aggregate[,-1] ## Remove identifier column
+temp = list.files(path = "data-nice/data-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
+myfiles = lapply(temp, read.csv) ## Load all day files
 
-nice.daily_aggregate <- rbind(nice.dailydata, nice.daily_aggregate) ## Bind data today with aggregate data per day
-nice.daily_aggregate <- nice.daily_aggregate[order(nice.daily_aggregate$date),]
-nice.daily_aggregate$date <- as.Date(nice.daily_aggregate$date)
+nice_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
+  .x
+})
 
-write.csv(nice.daily_aggregate, file = "data/nice_by_day.csv")
+nice_by_day$date <- as.Date(nice_by_day$date)
+nice_by_day <- nice_by_day[order(nice_by_day$date),]
+
+nice_by_day <- nice_by_day %>%
+  mutate(ic_intake_nice = c(0,diff(IC_Cumulative))) %>%
+  mutate(ic_intake_nice = replace(ic_intake_nice, ic_intake_nice<0, 0))# Calculate number of positive tests per day
+           
+write.csv(nice_by_day, file = "data/nice_by_day.csv")
 
 rm(list=ls())

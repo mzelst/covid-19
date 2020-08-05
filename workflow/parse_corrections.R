@@ -116,6 +116,9 @@ corrections.perday <- map_dfr(myfiles, ~{
   .x
 })
 corrections.perday$date <- corrections.perday$X
+
+corrections.perday$positive_7daverage <- round(frollmean(corrections.perday[,"new.infection"],7),0) # Calculate 7-day average (based on newly reported infections, gross number)
+
 write.csv(corrections.perday, file = "corrections/corrections_perday.csv")
 
 
