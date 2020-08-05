@@ -1,8 +1,10 @@
 library(tidyverse)
 library(janitor)
 require(gganimate)
+rm(list=ls())
 
-dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-04.csv")
+dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-04.csv") %>%
+  dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
 dat$week <- strftime(dat$Date_statistics, format = "%V")
 dat$value <- 1
 
@@ -12,10 +14,13 @@ colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
 
 
 perc <- dat_tidy %>% 
-  group_by(Week) %>% mutate(value = (Besmettingen/sum(Besmettingen)))
+  group_by(Week) %>% mutate(value = round((Besmettingen/sum(Besmettingen))*100,2))
 
-dat_tidy <- cbind(dat_tidy,as.numeric(perc$value))
-colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen","value")
+dat_tidy <- cbind(dat_tidy[,c("Leeftijd","Week")],as.numeric(perc$value))
+colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
+
+dat_wide <- dat_tidy %>%
+  spread(Week,value = Besmettingen)
 
 
 # The * 1 makes it possible to have non-integer ranks while sliding
