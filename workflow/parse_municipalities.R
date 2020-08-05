@@ -12,11 +12,11 @@ filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
 dat <- dat %>%
   dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
   dplyr::filter(date >= filter.date) %>% # Filter last four weeks 
-  dplyr::select(Municipality_name, date, Total_reported) # Select municipality, cases reported
+  dplyr::select(Municipality_name, Municipality_code,date, Total_reported) # Select municipality, cases reported
 
 dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
                     timevar="date",
-                    idvar="Municipality_name")
+                    idvar=c("Municipality_name","Municipality_code"))
 
 dat.wide$increase <- dat.wide[,ncol(dat.wide)]-dat.wide[,(ncol(dat.wide)-1)] # Calculate increase since last day 
 dat.wide$increase.week <- dat.wide[,(ncol(dat.wide)-1)]-dat.wide[,(ncol(dat.wide)-8)] # Calculate increase since last week
@@ -26,11 +26,33 @@ dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-Fry
 
 
 mun.pop <- read.csv("misc/municipalities-population.csv")
-dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
+dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_code", all.y=TRUE)
 dat.wide$rel.increase <- dat.wide$increase/dat.wide$population*100000
 dat.wide$rel.increase.week <- dat.wide$increase.week/dat.wide$population*100000
 
 write.csv(dat.wide, file = "data/municipality-today.csv")
+
+
+## Pull municipal data from CBS
+
+#require(cbsodataR)
+#require(geojsonio)
+
+#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM06")))
+#dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
+#colnames(dat.mun) <- c("statcode","populatie")
+
+#dat.mun <- dat.mun %>%
+#  dplyr::filter(!is.na(populatie)) %>%
+#  dplyr::filter(grepl("GM", statcode))
+
+#gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
+#gemeentes <- gemeentegrenzen@data[,c(2,4)]
+
+#gemeente.stats <- merge(gemeentes, dat.mun, by = "statcode")
+#colnames(gemeente.stats) <- c("Municipality_code","Municipality_name","population")
+#write.csv(gemeente.stats, file = "misc/municipalities-population.csv")
+
 
 
 # Municipality data
