@@ -1,0 +1,40 @@
+---
+title: "De Argos/NPO Radio 1 Coronatikker"
+author: "Door Reinier Tromp"
+date: "`r format((Sys.Date()),'%d')` `r format((Sys.Date()),'%B')` 2020"
+output: html_document
+---
+  
+  ```{r, include=FALSE}
+library(cowplot)
+library(tidyverse)
+library(rjson)
+require(data.table)
+library(dplyr)
+library(magrittr)
+library(knitr)
+```
+
+```{r setup, include=FALSE, eval = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/r.tromp/Code/covid-19")
+source("workflow/daily_update.R", local = knitr::knit_global())
+```
+
+```{r load data, include=FALSE, eval = TRUE}
+setwd("C:/Users/r.tromp/Code/covid-19")
+all.data <- read.csv("data/all_data.csv")
+nice_by_day <- read.csv("data/nice_by_day.csv")
+```
+
+## Nieuwe coronacijfers vandaag:
+### Bevestigde besmettingen
+Nieuwe besmettingen vandaag: `r last(all.data$new.infection)`
+
+Totaal besmettingen: `r last(all.data$cases)`
+
+### Ziekenhuizen
+Gewone ziekenhuisopnames vandaag: `r last(all.data$new.hospitals)`
+Totaal aantal ziekenhuisopnames: 
+  
+Intensive Care: `
