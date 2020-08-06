@@ -83,7 +83,7 @@ post_tweet(tweet2, media = "plots/plot_daily.png",
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/blob/master/reports/daily_report.pdf",
+post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
            in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
