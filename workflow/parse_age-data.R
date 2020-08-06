@@ -25,3 +25,4 @@ dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
 
 write.csv(dat_leeftijd, file = "misc/age-week.csv")
 
+
