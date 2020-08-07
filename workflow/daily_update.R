@@ -3,6 +3,7 @@ require(tidyverse)
 require(rjson)
 require(rtweet)
 require(data.table)
+require(git2r)
 get_token()
 
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
@@ -41,6 +42,21 @@ file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE),
 
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
+
+## Push to git
+
+status()
+
+repo <- init()
+
+add(repo, path = getwd())
+
+commit(repo, all = T, paste0("Daily update RIVM and NICE data ",Sys.Date()))
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+push(repo, credentials = git.auth)
 
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
@@ -88,7 +104,7 @@ post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends. Edwin is vandaag helaas iets later met zijn lijstjes.",
+post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
            in_reply_to_status_id = reply_id) ## Post reply
-
+#Edwin is vandaag helaas iets later met zijn lijstjes.
 rm(list=ls()) # Clean environment

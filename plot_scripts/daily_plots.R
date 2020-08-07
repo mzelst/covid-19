@@ -56,8 +56,8 @@ aanwezig <- nice.today %>%
 
 opnames <- all.data %>%
   filter(date > filter.date) %>%
-  ggplot(aes(x=date, y=hospital_intake_rivm)) + 
-  geom_line(aes(y = hospital_intake_rivm, color = "Opname op verpleegafdeling"), lwd=1.2) +
+  ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
+  geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling"), lwd=1.2) +
   geom_line(aes(y = ic_intake_nice, color = "Opname op IC"), lwd=1.2) +
   ylim(0,15) + 
   theme(axis.title.x=element_blank(),
