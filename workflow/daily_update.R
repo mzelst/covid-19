@@ -49,7 +49,7 @@ status()
 
 repo <- init()
 
-add(repo, path = getwd())
+add(repo, path = "*")
 
 commit(repo, all = T, paste0("Daily update RIVM and NICE data ",Sys.Date()))
 
