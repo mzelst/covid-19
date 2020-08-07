@@ -14,15 +14,32 @@ dat <- dat %>%
 #  dplyr::filter(date >= filter.date) %>% # Filter last four weeks
   dplyr::select(Municipality_name, Municipality_code,date, Total_reported) # Select municipality, cases reported
 
+dat$Municipality_name <- recode(dat$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân",
+                                     "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
+
 dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
                     timevar="date",
                     idvar=c("Municipality_name","Municipality_code"))
 
-dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân",
-                                     "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
+
 mun.pop <- read.csv("misc/municipalities-population.csv")
 dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
 write.csv(dat.wide, file = "data/municipality-totals.csv")
+
+dat.lowest <- dat %>% 
+  dplyr::filter(date >= as.Date('2020-07-01')) %>%
+  group_by(Municipality_name) %>%
+  slice(which.min(Total_reported))
+
+# create method to convert a rel_increase to traffic light
+increase_to_trafficlight <- function(rel_increase) {
+  trafficlight <- ifelse( rel_increase >= 50, "🛑",
+                  ifelse( rel_increase > 5, "🟧",
+                  ifelse( rel_increase > 0, "🟡",
+                  "✅"
+  )))
+  return(trafficlight)
+}
 
 dat.today.wide <- transmute(dat.wide,
   municipality = Municipality_name,
@@ -32,24 +49,23 @@ dat.today.wide <- transmute(dat.wide,
   d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
   d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
   july1 = dat.wide$`Total_reported.2020-07-01`, # july 1st
-  july1_normalized = pmin(d14, july1),
-  current = d0-july1_normalized,
+  lowest_since_july1 = dat.lowest$`Total_reported`,
+  lowest_since_july1_date = dat.lowest$`date`,
+  current = d0-lowest_since_july1,
   increase_day = d0-d1, # Calculate increase since last day
   increase_week = d0-d7, # Calculate increase since last week
   population,
   rel_increase_day = increase_day / population * 100000,
   rel_increase_week = increase_week / population * 100000,
-  color = ifelse( (d1 - d8) <= 0 & (d0 - d7) > 0, "💥",
-          ifelse( rel_increase_week > 50, "🛑",
-          ifelse( rel_increase_week > 5, "🟧",
-          ifelse( rel_increase_week > 0, "🟡",
-                                         "✅"
-  ))))
+  color = increase_to_trafficlight(rel_increase_week),
+  color_incl_new = ifelse( (d1 - d8) <= 0 & (d0 - d7) > 0, "💥", color),
+  color_yesterday = increase_to_trafficlight( (d1 - d8)/ population * 100000),
+  color_lastweek = increase_to_trafficlight( (d7 - d14)/ population * 100000)
 )
 
 dat.today <- select( dat.today.wide,
   current,
-  color,
+  color_incl_new,
   municipality,
   increase_day,
   increase_week,
@@ -124,4 +140,4 @@ write.csv(dat.today, file = "data/municipality-today.csv")
 
 #data_wide$weeksum <- rowSums(data_wide[,week])
 
-rm(list=ls())
+# rm(list=ls())
