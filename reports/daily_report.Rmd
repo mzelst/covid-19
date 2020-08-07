@@ -410,7 +410,7 @@ sex.data$death.percentage <- round(sex.data$death.toename/sum(sex.data$death.toe
 require(kableExtra)
 
 sex.data.table <- sex.data[,c(1,9,12,10,13,11,14)]
-colnames(sex.data.table) <- c("Leeftijdsgroep","Totaal","%","Totaal","%","Totaal","%")
+colnames(sex.data.table) <- c("Geslacht","Totaal","%","Totaal","%","Totaal","%")
 
 footnote.geslacht <- paste0("Man-vrouwverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur.")
 
