@@ -1,27 +1,7 @@
-# Voorbeelden gebruik van beta-versie CBS Open Data in R
-# https://beta-odata4.cbs.nl
-# Auteur: Jolien Oomens
-# Centraal Bureau voor de Statistiek
-
-# In dit voorbeeld worden gemeentegrenzen gekoppeld aan geboortecijfers om een 
-# thematische kaart te maken.
-
 library(jsonlite)
 library(geojsonio)
 library(sp)
-
-get_odata <- function(targetUrl) {
-  response <- fromJSON(url(targetUrl))
-  data <- response$value
-  targetUrl <- response[["@odata.nextLink"]]
-  
-  while(!is.null(targetUrl)){
-    response <- fromJSON(url(targetUrl))
-    data <- bind_rows(data,response$value)
-    targetUrl <- response[["@odata.nextLink"]]
-  }
-  return(data)
-}
+rm(list=ls())
 
 # De geodata wordt via de API van het Nationaal Georegister van PDOK opgehaald.
 # Een overzicht van beschikbare data staat op https://www.pdok.nl/datasets.
@@ -29,13 +9,13 @@ geoUrl <- "https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?requ
 gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
 dat.wide <- read.csv("data/municipality-today.csv")
 
-cbs.data.plot <- dat.wide[,c("Municipality_name","rel.increase","rel.increase.week")]
-colnames(cbs.data.plot) <- c("statnaam","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
+cbs.data.plot <- dat.wide[,c("Municipality_code","rel.increase","rel.increase.week")]
+colnames(cbs.data.plot) <- c("statcode","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
 cbs.data.plot$`Besmettingen (sinds gisteren)` <- ifelse((cbs.data.plot$`Besmettingen (sinds gisteren)`) < 0, 0, cbs.data.plot$`Besmettingen (sinds gisteren)`)
 cbs.data.plot$`Besmettingen (7 dagen)` <- ifelse((cbs.data.plot$`Besmettingen (7 dagen)`) < 0, 0, cbs.data.plot$`Besmettingen (7 dagen)`)
 
 gemeentegrenzen@data <- gemeentegrenzen@data %>%
-  left_join(cbs.data.plot,by=c("statnaam"))
+  left_join(cbs.data.plot,by=c("statcode"))
 
 g <- fortify(gemeentegrenzen, region = "id")
 gemeentegrenzenDF <- merge(g, gemeentegrenzen@data, by = "id")
@@ -160,5 +140,5 @@ plot.daily.maps <- plot_grid(mun.map.today + theme(legend.position="right"),
 # Save grid plot for daily use
 save_plot("plots/plot_daily_maps.png", plot.daily.maps, base_asp = 1.1, base_height = 7, base_width = 10)
 
-
+rm(list=ls())
 

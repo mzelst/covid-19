@@ -11,14 +11,14 @@ filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
 
 dat <- dat %>%
   dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
-#  dplyr::filter(date >= filter.date) %>% # Filter last four weeks 
-  dplyr::select(Municipality_name, date, Total_reported) # Select municipality, cases reported
+#  dplyr::filter(date >= filter.date) %>% # Filter last four weeks
+  dplyr::select(Municipality_name, Municipality_code,date, Total_reported) # Select municipality, cases reported
 
 dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
                     timevar="date",
-                    idvar="Municipality_name")
+                    idvar=c("Municipality_name","Municipality_code"))
 
-dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
+dat.wide$Municipality_name <- recode(dat.wide$Municipality_name, "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân",
                                      "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân")
 mun.pop <- read.csv("misc/municipalities-population.csv")
 dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
@@ -32,7 +32,7 @@ dat.today.wide <- transmute(dat.wide,
   d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
   d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
   july1 = dat.wide$`Total_reported.2020-07-01`, # july 1st
-  july1_normalized = pmin(d14, july1), 
+  july1_normalized = pmin(d14, july1),
   current = d0-july1_normalized,
   increase_day = d0-d1, # Calculate increase since last day
   increase_week = d0-d7, # Calculate increase since last week
@@ -40,7 +40,7 @@ dat.today.wide <- transmute(dat.wide,
   rel_increase_day = increase_day / population * 100000,
   rel_increase_week = increase_week / population * 100000,
   color = ifelse( (d1 - d8) <= 0 & (d0 - d7) > 0, "💥",
-          ifelse( rel_increase_week > 50, "🛑", 
+          ifelse( rel_increase_week > 50, "🛑",
           ifelse( rel_increase_week > 5, "🟧",
           ifelse( rel_increase_week > 0, "🟡",
                                          "✅"
@@ -57,6 +57,28 @@ dat.today <- select( dat.today.wide,
 
 write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv")
 write.csv(dat.today, file = "data/municipality-today.csv")
+
+
+## Pull municipal data from CBS
+
+#require(cbsodataR)
+#require(geojsonio)
+
+#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM06")))
+#dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
+#colnames(dat.mun) <- c("statcode","populatie")
+
+#dat.mun <- dat.mun %>%
+#  dplyr::filter(!is.na(populatie)) %>%
+#  dplyr::filter(grepl("GM", statcode))
+
+#gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
+#gemeentes <- gemeentegrenzen@data[,c(2,4)]
+
+#gemeente.stats <- merge(gemeentes, dat.mun, by = "statcode")
+#colnames(gemeente.stats) <- c("Municipality_code","Municipality_name","population")
+#write.csv(gemeente.stats, file = "misc/municipalities-population.csv")
+
 
 
 # Municipality data
@@ -103,5 +125,3 @@ write.csv(dat.today, file = "data/municipality-today.csv")
 #data_wide$weeksum <- rowSums(data_wide[,week])
 
 rm(list=ls())
-
-

@@ -1,5 +1,5 @@
 ---
-title             : "Epidemiologische situatie COVID-19 in Nederland - 2 augustus 2020"
+title             : "Epidemiologische situatie COVID-19 in Nederland - `r format((Sys.Date()),'%d')` `r format((Sys.Date()),'%B')` 2020"
 shorttitle        : "Dagelijkse rapportage"
 
 author: 
@@ -12,9 +12,6 @@ author:
 affiliation:
   - id            : "1"
     institution   : "-"
-
-authornote: |
-  Voeg notities toe van auteur.
 
 bibliography      : ["r-references.bib"]
 
@@ -34,6 +31,7 @@ urlcolor          : blue
 indent            : false
 output            : papaja::apa6_pdf
 toc               : true
+keep_tex          : false
 
 
 
@@ -58,12 +56,6 @@ opts_chunk$set(fig.lp = '')
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
-
-tweet2 <- paste0("Patiënten verpleegafdeling 
-Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
-
-Patiënten IC
-Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".")
 ```
 
 **Samenvatting**  
@@ -110,8 +102,8 @@ filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 # Plot for positive tests per day
 all.data %>%
   filter(date > filter.date) %>%
-  ggplot(aes(x=date, y=positivetests)) + 
-  geom_line(aes(y = positivetests, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
+  ggplot(aes(x=date, y=new.infection)) + 
+  geom_line(aes(y = net.infection, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
@@ -141,13 +133,13 @@ library(sp)
 gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
 dat.wide <- read.csv("data/municipality-today.csv")
 
-cbs.data.plot <- dat.wide[,c("Municipality_name","rel.increase","rel.increase.week")]
-colnames(cbs.data.plot) <- c("statnaam","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
+cbs.data.plot <- dat.wide[,c("Municipality_code","rel.increase","rel.increase.week")]
+colnames(cbs.data.plot) <- c("statcode","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
 cbs.data.plot$`Besmettingen (sinds gisteren)` <- ifelse((cbs.data.plot$`Besmettingen (sinds gisteren)`) < 0, 0, cbs.data.plot$`Besmettingen (sinds gisteren)`)
 cbs.data.plot$`Besmettingen (7 dagen)` <- ifelse((cbs.data.plot$`Besmettingen (7 dagen)`) < 0, 0, cbs.data.plot$`Besmettingen (7 dagen)`)
 
 gemeentegrenzen@data <- gemeentegrenzen@data %>%
-  left_join(cbs.data.plot,by=c("statnaam"))
+  left_join(cbs.data.plot,by=c("statcode"))
 
 g <- fortify(gemeentegrenzen, region = "id")
 gemeentegrenzenDF <- merge(g, gemeentegrenzen@data, by = "id")
@@ -418,7 +410,7 @@ sex.data$death.percentage <- round(sex.data$death.toename/sum(sex.data$death.toe
 require(kableExtra)
 
 sex.data.table <- sex.data[,c(1,9,12,10,13,11,14)]
-colnames(sex.data.table) <- c("Leeftijdsgroep","Totaal","%","Totaal","%","Totaal","%")
+colnames(sex.data.table) <- c("Geslacht","Totaal","%","Totaal","%","Totaal","%")
 
 footnote.geslacht <- paste0("Man-vrouwverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur.")
 
