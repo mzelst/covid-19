@@ -22,8 +22,8 @@ library(xlsx)
 set.seed(123)
 
 
-## set working directory to <path-to>/r_script/src
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19/workflow/r_script")
+## set working directory to <path-to>/workflow/excess_mortality/src/
+setwd("workflow/excess_mortality/src/")
 
 ## helper functions
 
