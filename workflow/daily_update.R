@@ -67,8 +67,10 @@ Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(a
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
 
-Opgenomen op IC: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
-Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
+Opgenomen op IC*: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
+Totaal*: ",tail(nice_by_day$IC_Cumulative,n=1),"
+* bewezen of verdacht
+(www.stichting-nice.nl)
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
