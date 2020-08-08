@@ -47,8 +47,8 @@ find_week <- function(var) {
 
 ## registered corona deaths
 ## data from RIVM: downloaded 08.06.2020
-if(!file.exists('/data/covid_deaths_dt.rds')) {
-    rivm_dt <- fread('https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_2020-06-08.csv'
+if(file.exists('/data/covid_deaths_dt.rds')) {
+    rivm_dt <- fread('https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_2020-08-04.csv'
                   )[,
                     Datum := as.IDate(Datum)
                     ][,
@@ -60,7 +60,7 @@ if(!file.exists('/data/covid_deaths_dt.rds')) {
 }
 
 ## read cbsodata on weekly deaths
-if(!file.exists('/data/cbs_deaths_dt.rds')) {
+if(file.exists('/data/cbs_deaths_dt.rds')) {
     cbs_dt <- data.table(cbs_get_data('70895ned',
                                       Geslacht = "1100",
                                       LeeftijdOp31December = "10000",
@@ -74,7 +74,7 @@ if(!file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('data/Berekening oversterfte CBS.xlsx', range = 'F3:I13', col_names = F))
+cbs_oversterfte <- data.table(read_excel('data/Berekening oversterfte CBS.xlsx', range = 'F3:I22', col_names = F))
 
 
 ##
@@ -86,6 +86,8 @@ nl_dt <- rivm_dt[Type == 'Overleden',
                   .(year = 2020, covid_deaths = sum(Aantal)),
                   by = week
                   ]
+
+nl_dt <- nl_dt[c(1:22),] ## Only use data up to week 30
 
 ## ts objects assume 52 weeks per year. Adjust the CBS data for 52 week/year 
 
@@ -142,7 +144,7 @@ nl_dt <- merge(cbs_dt[week %in% seq(1, 52),
                )[!is.na(cbs_deaths)
                    ][is.na(covid_deaths),
                      covid_deaths := 0
-                     ][!(year == 2020 & week > 27),
+                     ][!(year == 2020 & week > 30),
                        ]
 
 ## create time series objects
@@ -388,7 +390,7 @@ beta_long[,
             ]
 
 ## calculate mean and CI interval 
-totals <- beta_long[t >= 2020 & week %in% seq(11, 27),
+totals <- beta_long[t >= 2020 & week %in% seq(11, 30),
                      .(week, cumsum(oversterfte)),
                      by=c('variable', 'model')
                      ][,
@@ -404,6 +406,8 @@ totals <- beta_long[t >= 2020 & week %in% seq(11, 27),
                          ),
                        by = c('model', 'week')
                        ]
+
+write.csv(totals, file = "data/run_10.csv")
 
 ##
 ## Figures
@@ -499,7 +503,7 @@ fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                           upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
                           )[!(year == 2020 & week >= 9),
                             ':=' (smooth = NA, lwr = NA, upr = NA)
-                            ][year > 2009 & week <= 27,
+                            ][year > 2009 & week <= 30,
                               ]
 
 ## write to excel
@@ -525,6 +529,9 @@ fig4.2.1_dt <-beta_long[t >= 2020 & week >= 11,
                         by = c('week', 'model')
                         ]
 
+fig4.2.1_dt <- fig4.2.1_dt %>%
+  dplyr::filter(model == "Dynamisch")
+
 ## write to excel
 write.xlsx(fig4.2.1_dt, 'output/figures.xlsx', sheetName = 'fig4.2.1', append = T)
 
@@ -535,7 +542,6 @@ ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
     ## scale_x_continuous(breaks = as.numeric(time(window(cbs_deaths_ts, start = c(2020, 1)))),
     ##                    labels = seq(1, nl_dt[year == 2020, max(week)])
     ##                    ) +
-    facet_wrap(~model, ncol = 2) +
     scale_colour_manual(values = c('red', NA)) +
     guides(colour = F) + 
     ylab('Oversterfte') +
@@ -544,7 +550,9 @@ ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
 ggsave('figs/fig4.2.1.png')
 
 ## figure 4.2.2
-fig4.2.2_dt <- melt(totals[week == 19][,-'week'], id.vars = 'model')
+fig4.2.2_dt <- melt(totals[week == 30][,-'week'], id.vars = 'model')
+fig4.2.2_dt <- fig4.2.2_dt %>%
+  dplyr::filter(model == "Dynamisch")
 
 ## write to excel
 write.xlsx(fig4.2.2_dt, 'output/figures.xlsx', sheetName = 'fig4.2.2', append = T)
@@ -552,7 +560,6 @@ write.xlsx(fig4.2.2_dt, 'output/figures.xlsx', sheetName = 'fig4.2.2', append = 
 ## plot
 ggplot(fig4.2.2_dt, aes(variable, value)) +
     geom_col(alpha = 0.4) + 
-    facet_wrap(~model) +
     geom_text(aes(label = round(value)), vjust = 3) + 
     xlab('') +
     ylab('Totale oversterfte') + 
