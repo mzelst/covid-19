@@ -101,7 +101,7 @@ historic.average.excess <- round(sum(excess_deaths$excess_death) - age_corrected
 u <- "https://www.cbs.nl/nl-nl/faq/corona/medisch/hoeveel-sterfgevallen-zijn-er-per-week"
 webpage <- read_html(u)
 cbs.tables <- html_table(webpage, fill=TRUE)
-cbs.df <- as.data.frame(cbs.tables[2])
+cbs.df <- as.data.frame(cbs.tables[1])
 cbs.df <- cbs.df %>%
   dplyr::filter(Week > 11 & Week < (weeknumber + 1) & Week != 2)
 
