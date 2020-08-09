@@ -1,182 +1,182 @@
 "","current","color_incl_new","municipality","increase_day","increase_week"
-"1",545,"🟧","'s-Gravenhage",38,269
-"2",36,"🟧","'s-Hertogenbosch",1,14
+"1",590,"🛑","'s-Gravenhage",45,275
+"2",38,"🟧","'s-Hertogenbosch",2,12
 "3",0,"✅","Aa en Hunze",0,0
-"4",8,"🟧","Aalsmeer",1,6
+"4",8,"🟧","Aalsmeer",0,4
 "5",0,"✅","Aalten",0,0
 "6",3,"✅","Achtkarspelen",0,0
 "7",7,"🟧","Alblasserdam",0,3
-"8",22,"🟧","Albrandswaard",1,5
-"9",24,"🟧","Alkmaar",4,13
+"8",24,"🟧","Albrandswaard",2,7
+"9",25,"🟧","Alkmaar",1,12
 "10",3,"🟡","Almelo",0,1
-"11",59,"🟧","Almere",3,35
-"12",25,"🟧","Alphen aan den Rijn",1,6
-"13",15,"🟧","Alphen-Chaam",1,4
-"14",20,"🟧","Altena",2,8
+"11",62,"🟧","Almere",3,30
+"12",25,"🟡","Alphen aan den Rijn",0,4
+"13",15,"🟧","Alphen-Chaam",0,2
+"14",20,"🟧","Altena",0,7
 "15",0,"✅","Ameland",0,0
-"16",50,"🟧","Amersfoort",3,12
-"17",47,"🟧","Amstelveen",2,26
-"18",1059,"🛑","Amsterdam",74,546
-"19",27,"🟧","Apeldoorn",3,13
+"16",52,"🟧","Amersfoort",2,12
+"17",52,"🟧","Amstelveen",5,31
+"18",1156,"🛑","Amsterdam",97,582
+"19",29,"🟧","Apeldoorn",2,12
 "20",0,"✅","Appingedam",0,0
-"21",33,"🟧","Arnhem",2,14
-"22",6,"🟡","Assen",0,1
+"21",35,"🟡","Arnhem",2,7
+"22",7,"🟡","Assen",1,2
 "23",2,"🟧","Asten",0,1
 "24",2,"✅","Baarle-Nassau",0,0
 "25",4,"🟧","Baarn",0,2
-"26",26,"🟧","Barendrecht",3,15
-"27",5,"🟧","Barneveld",2,3
+"26",28,"🟧","Barendrecht",2,17
+"27",5,"🟧","Barneveld",0,3
 "28",0,"✅","Beek",0,0
 "29",1,"✅","Beekdaelen",0,0
-"30",5,"🟧","Beemster",0,4
+"30",6,"🟧","Beemster",1,5
 "31",1,"✅","Beesel",0,0
-"32",5,"🟧","Berg en Dal",1,3
+"32",5,"🟧","Berg en Dal",0,2
 "33",0,"✅","Bergeijk",0,0
 "34",0,"✅","Bergen (L.)",0,0
-"35",16,"🟧","Bergen (NH.)",1,2
-"36",92,"🛑","Bergen op Zoom",15,71
+"35",16,"🟧","Bergen (NH.)",0,2
+"36",111,"🛑","Bergen op Zoom",19,84
 "37",2,"✅","Berkelland",0,0
-"38",3,"🟧","Bernheze",2,3
-"39",9,"🟧","Best",1,5
-"40",6,"🟧","Beuningen",0,3
-"41",5,"🟡","Beverwijk",1,2
-"42",3,"🟧","Bladel",2,3
-"43",9,"🛑","Blaricum",1,6
-"44",5,"🟧","Bloemendaal",0,2
-"45",13,"🟧","Bodegraven-Reeuwijk",3,7
+"38",3,"🟧","Bernheze",0,3
+"39",9,"🟧","Best",0,5
+"40",7,"🟧","Beuningen",1,4
+"41",5,"🟡","Beverwijk",0,2
+"42",4,"🟧","Bladel",1,4
+"43",9,"🛑","Blaricum",0,6
+"44",5,"🟡","Bloemendaal",0,1
+"45",17,"🟧","Bodegraven-Reeuwijk",4,10
 "46",0,"✅","Boekel",0,0
 "47",1,"✅","Borger-Odoorn",0,0
-"48",1,"💥","Borne",1,1
+"48",1,"🟡","Borne",0,1
 "49",2,"🟡","Borsele",0,1
-"50",2,"🟧","Boxmeer",0,2
+"50",3,"🟧","Boxmeer",1,3
 "51",2,"✅","Boxtel",0,0
-"52",190,"🟧","Breda",10,65
+"52",206,"🟧","Breda",16,74
 "53",3,"🟧","Brielle",0,1
-"54",8,"🟧","Bronckhorst",4,4
-"55",5,"🟧","Brummen",0,2
+"54",8,"🟧","Bronckhorst",0,4
+"55",6,"🟧","Brummen",1,3
 "56",2,"✅","Brunssum",0,0
-"57",2,"✅","Bunnik",0,0
+"57",3,"💥","Bunnik",1,1
 "58",6,"🟧","Bunschoten",0,2
 "59",0,"✅","Buren",0,0
-"60",72,"🟧","Capelle aan den IJssel",2,31
-"61",5,"🟡","Castricum",0,1
+"60",75,"🟧","Capelle aan den IJssel",3,31
+"61",6,"🟧","Castricum",1,2
 "62",0,"✅","Coevorden",0,0
 "63",0,"✅","Cranendonck",0,0
 "64",1,"✅","Cuijk",0,0
-"65",13,"🟧","Culemborg",1,3
+"65",15,"🟧","Culemborg",2,5
 "66",5,"🟧","Dalfsen",0,2
 "67",0,"✅","Dantumadiel",0,0
-"68",13,"🟡","De Bilt",1,2
+"68",16,"🟧","De Bilt",3,5
 "69",6,"🟡","De Fryske Marren",0,2
-"70",9,"🟧","De Ronde Venen",0,4
+"70",10,"🟧","De Ronde Venen",1,5
 "71",0,"✅","De Wolden",0,0
-"72",46,"🟧","Delft",3,22
-"73",0,"✅","Delfzijl",0,0
-"74",10,"💥","Den Helder",1,1
-"75",3,"🟧","Deurne",0,2
-"76",28,"🟧","Deventer",4,11
-"77",18,"🟧","Diemen",1,10
-"78",4,"🟧","Dinkelland",0,2
+"72",49,"🟧","Delft",3,23
+"73",1,"💥","Delfzijl",1,1
+"74",10,"🟡","Den Helder",0,1
+"75",3,"✅","Deurne",0,0
+"76",32,"🟧","Deventer",4,15
+"77",18,"🟧","Diemen",0,9
+"78",5,"🟧","Dinkelland",1,3
 "79",0,"✅","Doesburg",0,0
-"80",2,"🟡","Doetinchem",0,1
-"81",6,"🟧","Dongen",1,3
-"82",62,"🟧","Dordrecht",8,23
+"80",4,"🟧","Doetinchem",2,3
+"81",6,"🟧","Dongen",0,3
+"82",66,"🟧","Dordrecht",4,26
 "83",0,"✅","Drechterland",0,0
 "84",6,"🟧","Drimmelen",0,2
 "85",0,"✅","Dronten",0,0
 "86",0,"✅","Druten",0,0
 "87",2,"✅","Duiven",0,0
 "88",1,"🟡","Echt-Susteren",0,1
-"89",0,"✅","Edam-Volendam",0,0
-"90",19,"🟧","Ede",1,11
+"89",1,"💥","Edam-Volendam",1,1
+"90",20,"🟧","Ede",1,9
 "91",6,"✅","Eemnes",0,0
 "92",0,"✅","Eersel",0,0
-"93",7,"🟡","Eijsden-Margraten",0,1
-"94",71,"🟧","Eindhoven",5,31
+"93",7,"✅","Eijsden-Margraten",0,0
+"94",74,"🟧","Eindhoven",3,32
 "95",1,"✅","Elburg",0,0
 "96",3,"✅","Emmen",0,0
 "97",2,"🟧","Enkhuizen",0,2
-"98",28,"🟧","Enschede",0,9
+"98",29,"🟡","Enschede",1,5
 "99",0,"✅","Epe",0,0
 "100",1,"🟡","Ermelo",0,1
-"101",18,"🟧","Etten-Leur",0,3
+"101",20,"🟧","Etten-Leur",2,5
 "102",6,"🟧","Geertruidenberg",0,6
-"103",4,"🟧","Geldrop-Mierlo",1,3
-"104",17,"🟧","Gemert-Bakel",0,2
+"103",7,"🟧","Geldrop-Mierlo",3,6
+"104",18,"🟧","Gemert-Bakel",1,3
 "105",0,"✅","Gennep",0,0
-"106",13,"🟧","Gilze en Rijen",0,4
-"107",10,"🟧","Goeree-Overflakkee",3,7
-"108",76,"🟧","Goes",2,5
-"109",14,"🟧","Goirle",1,6
-"110",16,"🟧","Gooise Meren",1,6
-"111",38,"🛑","Gorinchem",8,22
-"112",100,"🛑","Gouda",9,59
+"106",13,"🟧","Gilze en Rijen",0,3
+"107",11,"🟧","Goeree-Overflakkee",1,8
+"108",79,"🟧","Goes",3,8
+"109",14,"🟧","Goirle",0,5
+"110",16,"🟧","Gooise Meren",0,6
+"111",40,"🛑","Gorinchem",2,24
+"112",111,"🛑","Gouda",11,64
 "113",0,"✅","Grave",0,0
-"114",45,"🟧","Groningen",7,29
+"114",49,"🟧","Groningen",4,30
 "115",2,"✅","Gulpen-Wittem",0,0
-"116",0,"✅","Haaksbergen",0,0
-"117",3,"💥","Haaren",1,1
-"118",58,"🟧","Haarlem",6,25
-"119",98,"🟧","Haarlemmermeer",2,33
-"120",11,"🟧","Halderberge",0,6
+"116",1,"💥","Haaksbergen",1,1
+"117",3,"🟧","Haaren",0,1
+"118",64,"🟧","Haarlem",6,28
+"119",100,"🟧","Haarlemmermeer",2,27
+"120",11,"🟧","Halderberge",0,2
 "121",4,"🟡","Hardenberg",0,2
-"122",3,"🟡","Harderwijk",1,2
-"123",9,"🟧","Hardinxveld-Giessendam",3,5
+"122",4,"🟧","Harderwijk",1,3
+"123",9,"🟧","Hardinxveld-Giessendam",0,5
 "124",0,"✅","Harlingen",0,0
 "125",0,"✅","Hattem",0,0
 "126",2,"✅","Heemskerk",0,0
-"127",8,"💥","Heemstede",1,1
+"127",8,"🟡","Heemstede",0,1
 "128",0,"✅","Heerde",0,0
 "129",2,"✅","Heerenveen",0,0
-"130",16,"🟧","Heerhugowaard",3,7
-"131",6,"🟡","Heerlen",0,2
+"130",20,"🟧","Heerhugowaard",4,9
+"131",6,"🟡","Heerlen",0,1
 "132",2,"🟧","Heeze-Leende",0,1
 "133",2,"🟧","Heiloo",0,2
-"134",1,"🟡","Hellendoorn",0,1
+"134",2,"🟧","Hellendoorn",1,2
 "135",22,"🟧","Hellevoetsluis",0,12
-"136",30,"🟧","Helmond",1,14
-"137",14,"🟧","Hendrik-Ido-Ambacht",1,6
+"136",31,"🟧","Helmond",1,13
+"137",15,"🟧","Hendrik-Ido-Ambacht",1,6
 "138",7,"🟡","Hengelo",0,2
 "139",4,"🟡","Het Hogeland",0,1
-"140",3,"🟧","Heumen",1,1
-"141",22,"🟧","Heusden",2,9
+"140",3,"🟧","Heumen",0,1
+"141",23,"🟧","Heusden",1,10
 "142",45,"🟧","Hillegom",0,4
 "143",3,"✅","Hilvarenbeek",0,0
-"144",40,"🟧","Hilversum",2,21
-"145",27,"🟧","Hoeksche Waard",7,12
+"144",43,"🟧","Hilversum",3,22
+"145",28,"🟧","Hoeksche Waard",1,13
 "146",0,"✅","Hof van Twente",0,0
 "147",3,"🟡","Hollands Kroon",0,1
-"148",10,"🟧","Hoogeveen",1,9
-"149",26,"🟧","Hoorn",1,13
-"150",2,"💥","Horst aan de Maas",1,1
-"151",22,"🟧","Houten",2,9
-"152",23,"🟧","Huizen",0,5
-"153",4,"🟧","Hulst",0,2
-"154",12,"🟧","IJsselstein",3,10
+"148",11,"🟧","Hoogeveen",1,9
+"149",27,"🟧","Hoorn",1,14
+"150",3,"🟡","Horst aan de Maas",1,2
+"151",22,"🟧","Houten",0,5
+"152",24,"🟧","Huizen",1,6
+"153",3,"✅","Hulst",-1,0
+"154",15,"🟧","IJsselstein",3,13
 "155",5,"🟡","Kaag en Braassem",0,1
 "156",4,"🟧","Kampen",0,3
 "157",3,"🟧","Kapelle",0,1
-"158",13,"🟡","Katwijk",0,2
+"158",14,"🟡","Katwijk",1,2
 "159",0,"✅","Kerkrade",0,-3
-"160",2,"🟧","Koggenland",1,2
-"161",12,"🟧","Krimpen aan den IJssel",1,8
-"162",26,"🟧","Krimpenerwaard",0,6
+"160",2,"🟧","Koggenland",0,2
+"161",12,"🟧","Krimpen aan den IJssel",0,6
+"162",27,"🟧","Krimpenerwaard",1,4
 "163",0,"✅","Laarbeek",0,0
-"164",0,"✅","Landerd",0,0
+"164",1,"💥","Landerd",1,1
 "165",1,"✅","Landgraaf",0,0
-"166",1,"🟧","Landsmeer",0,1
-"167",9,"🟧","Langedijk",0,2
-"168",35,"🟧","Lansingerland",2,22
-"169",4,"🟧","Laren",1,2
-"170",6,"✅","Leeuwarden",0,0
-"171",37,"🟧","Leiden",2,21
+"166",1,"✅","Landsmeer",0,0
+"167",9,"🟡","Langedijk",0,1
+"168",37,"🟧","Lansingerland",2,19
+"169",5,"🟧","Laren",1,2
+"170",7,"💥","Leeuwarden",1,1
+"171",39,"🟧","Leiden",2,19
 "172",8,"🟧","Leiderdorp",0,4
 "173",40,"🟧","Leidschendam-Voorburg",0,13
-"174",3,"🟡","Lelystad",2,3
+"174",4,"🟡","Lelystad",1,3
 "175",4,"🟡","Leudal",0,1
-"176",9,"🟧","Leusden",1,6
-"177",1,"✅","Lingewaard",0,0
-"178",12,"💥","Lisse",1,1
+"176",9,"🟧","Leusden",0,5
+"177",2,"💥","Lingewaard",1,1
+"178",13,"🟧","Lisse",1,2
 "179",1,"✅","Lochem",0,0
 "180",4,"🟧","Loon op Zand",0,2
 "181",7,"🟧","Lopik",0,1
@@ -184,173 +184,173 @@
 "183",1,"✅","Losser",0,0
 "184",3,"✅","Maasdriel",0,0
 "185",0,"✅","Maasgouw",0,0
-"186",29,"🟧","Maassluis",1,16
-"187",9,"🟡","Maastricht",0,1
-"188",0,"✅","Medemblik",0,0
+"186",31,"🟧","Maassluis",2,15
+"187",10,"🟡","Maastricht",1,2
+"188",1,"💥","Medemblik",1,1
 "189",5,"✅","Meerssen",0,0
-"190",7,"🟡","Meierijstad",1,3
+"190",7,"🟡","Meierijstad",0,2
 "191",6,"✅","Meppel",0,0
-"192",24,"🟧","Middelburg",0,3
+"192",26,"🟧","Middelburg",2,4
 "193",6,"🟧","Midden-Delfland",0,2
-"194",1,"🟡","Midden-Drenthe",0,1
-"195",5,"🟡","Midden-Groningen",0,3
+"194",2,"🟧","Midden-Drenthe",1,2
+"195",6,"🟧","Midden-Groningen",1,4
 "196",1,"✅","Mill en Sint Hubert",0,0
-"197",6,"🟧","Moerdijk",1,2
-"198",5,"🟡","Molenlanden",0,2
+"197",6,"🟧","Moerdijk",0,2
+"198",5,"🟡","Molenlanden",0,1
 "199",2,"🟡","Montferland",0,1
 "200",4,"🟧","Montfoort",0,1
 "201",1,"✅","Mook en Middelaar",0,0
 "202",1,"🟡","Neder-Betuwe",0,1
 "203",1,"🟧","Nederweert",0,1
-"204",30,"🟧","Nieuwegein",2,14
-"205",5,"🟧","Nieuwkoop",0,2
+"204",35,"🟧","Nieuwegein",5,15
+"205",6,"🟧","Nieuwkoop",1,3
 "206",7,"✅","Nijkerk",0,0
-"207",43,"🟧","Nijmegen",2,14
-"208",58,"🟧","Nissewaard",1,9
-"209",4,NA,"Noardeast-Fryslân",0,2
+"207",43,"🟧","Nijmegen",0,9
+"208",60,"🟧","Nissewaard",2,5
+"209",6,NA,"Noardeast-Fryslân",2,4
 "210",3,"🟧","Noord-Beveland",0,1
 "211",0,"✅","Noordenveld",0,0
-"212",1,"✅","Noordoostpolder",0,0
+"212",1,"💥","Noordoostpolder",0,1
 "213",10,"🟡","Noordwijk",0,2
 "214",0,"✅","Nuenen, Gerwen en Nederwetten",0,0
-"215",2,"🟡","Nunspeet",1,1
+"215",2,"🟡","Nunspeet",0,1
 "216",2,"✅","Oegstgeest",0,0
-"217",8,"🟧","Oirschot",3,5
-"218",5,"🟧","Oisterwijk",0,5
-"219",0,"✅","Oldambt",0,0
+"217",8,"🟧","Oirschot",0,4
+"218",6,"🟧","Oisterwijk",1,6
+"219",1,"💥","Oldambt",1,1
 "220",6,"🟡","Oldebroek",0,1
 "221",1,"🟡","Oldenzaal",0,1
-"222",3,"🟧","Olst-Wijhe",1,2
+"222",3,"🟧","Olst-Wijhe",0,2
 "223",1,"✅","Ommen",0,0
 "224",1,"✅","Oost Gelre",0,0
-"225",27,"🟧","Oosterhout",3,9
+"225",31,"🟧","Oosterhout",4,12
 "226",1,"✅","Ooststellingwerf",0,0
 "227",5,"🟧","Oostzaan",0,1
 "228",1,"✅","Opmeer",0,0
 "229",1,"✅","Opsterland",0,0
-"230",9,"🟧","Oss",2,5
+"230",11,"🟧","Oss",2,7
 "231",2,"🟧","Oude IJsselstreek",0,2
-"232",9,"🛑","Ouder-Amstel",0,8
+"232",9,"🟧","Ouder-Amstel",0,7
 "233",6,"✅","Oudewater",0,0
 "234",5,"🟡","Overbetuwe",0,2
 "235",6,"✅","Papendrecht",0,0
-"236",8,"🟧","Peel en Maas",0,4
+"236",8,"🟧","Peel en Maas",0,3
 "237",0,"✅","Pekela",0,0
-"238",34,"🟧","Pijnacker-Nootdorp",2,10
-"239",18,"🟧","Purmerend",0,11
-"240",0,"✅","Putten",0,0
-"241",3,"💥","Raalte",2,2
+"238",36,"🟧","Pijnacker-Nootdorp",2,11
+"239",20,"🟧","Purmerend",2,11
+"240",1,"💥","Putten",1,1
+"241",3,"🟧","Raalte",0,2
 "242",5,"✅","Reimerswaal",0,0
-"243",3,"✅","Renkum",0,0
+"243",4,"💥","Renkum",1,1
 "244",0,"✅","Renswoude",0,0
 "245",1,"🟧","Reusel-De Mierden",0,1
 "246",2,"✅","Rheden",0,0
-"247",1,"💥","Rhenen",1,1
-"248",33,"🟧","Ridderkerk",2,19
-"249",3,"💥","Rijssen-Holten",3,3
-"250",45,"🟧","Rijswijk",5,26
-"251",0,"✅","Roerdalen",0,0
-"252",15,"🟧","Roermond",2,11
-"253",53,"🟧","Roosendaal",2,23
-"254",1352,"🛑","Rotterdam",83,619
+"247",1,"🟡","Rhenen",0,1
+"248",33,"🟧","Ridderkerk",0,15
+"249",4,"🟧","Rijssen-Holten",1,4
+"250",50,"🛑","Rijswijk",5,28
+"251",1,"💥","Roerdalen",1,1
+"252",15,"🟧","Roermond",0,9
+"253",57,"🟧","Roosendaal",4,24
+"254",1405,"🛑","Rotterdam",53,577
 "255",0,"✅","Rozendaal",0,0
 "256",3,"🟡","Rucphen",0,1
 "257",5,"🟡","Schagen",0,1
 "258",0,"✅","Scherpenzeel",0,0
-"259",94,"🛑","Schiedam",5,42
+"259",99,"🛑","Schiedam",5,44
 "260",0,"✅","Schiermonnikoog",0,0
-"261",3,"🟡","Schouwen-Duiveland",0,1
+"261",3,"✅","Schouwen-Duiveland",0,0
 "262",1,"✅","Simpelveld",0,0
 "263",4,"🟧","Sint Anthonis",0,1
-"264",3,"🟧","Sint-Michielsgestel",0,2
-"265",6,"🟡","Sittard-Geleen",0,2
+"264",4,"🟧","Sint-Michielsgestel",1,2
+"265",7,"🟡","Sittard-Geleen",1,2
 "266",6,"🟧","Sliedrecht",0,2
 "267",4,"🟧","Sluis",0,3
 "268",3,"✅","Smallingerland",0,0
 "269",4,"✅","Soest",0,0
-"270",2,"🟧","Someren",0,1
-"271",0,"✅","Son en Breugel",0,0
+"270",2,"✅","Someren",0,0
+"271",1,"💥","Son en Breugel",1,1
 "272",0,"✅","Stadskanaal",0,0
 "273",2,"✅","Staphorst",0,0
 "274",2,"✅","Stede Broec",0,0
-"275",14,"🟧","Steenbergen",2,3
-"276",21,"🟡","Steenwijkerland",1,2
+"275",14,"🟧","Steenbergen",0,3
+"276",21,"🟡","Steenwijkerland",0,2
 "277",3,"✅","Stein",0,0
-"278",22,"🟧","Stichtse Vecht",2,8
-"279",1,"💥","Súdwest-Fryslân",1,1
-"280",3,"💥","Terneuzen",1,1
+"278",23,"🟧","Stichtse Vecht",1,9
+"279",1,NA,"Súdwest-Fryslân",0,1
+"280",3,"🟡","Terneuzen",0,1
 "281",0,"✅","Terschelling",0,0
 "282",0,"✅","Texel",0,0
-"283",7,"🟧","Teylingen",0,2
-"284",5,"🟡","Tholen",0,1
-"285",2,"🟡","Tiel",0,1
-"286",76,"🟧","Tilburg",3,31
+"283",7,"🟡","Teylingen",0,1
+"284",7,"🟧","Tholen",2,3
+"285",4,"🟡","Tiel",2,2
+"286",81,"🟧","Tilburg",5,32
 "287",0,"✅","Tubbergen",0,0
 "288",0,"✅","Twenterand",0,0
 "289",1,"🟡","Tynaarlo",0,1
 "290",0,"✅","Tytsjerksteradiel",0,0
-"291",5,"🟧","Uden",2,5
-"292",3,"🟧","Uitgeest",1,2
-"293",8,"🟧","Uithoorn",2,7
+"291",5,"🟧","Uden",0,5
+"292",3,"🟧","Uitgeest",0,2
+"293",8,"🟧","Uithoorn",0,5
 "294",1,"✅","Urk",0,0
-"295",302,"🟧","Utrecht",33,121
-"296",13,"🟧","Utrechtse Heuvelrug",0,5
+"295",319,"🟧","Utrecht",17,132
+"296",13,"🟧","Utrechtse Heuvelrug",0,4
 "297",1,"✅","Vaals",0,0
 "298",1,"✅","Valkenburg aan de Geul",0,0
-"299",6,"🟧","Valkenswaard",0,5
+"299",7,"🟧","Valkenswaard",1,6
 "300",0,"✅","Veendam",0,0
-"301",2,"🟡","Veenendaal",0,1
-"302",12,"🟧","Veere",1,6
-"303",10,"🟧","Veldhoven",1,6
-"304",7,"🟡","Velsen",1,2
-"305",12,"🟧","Venlo",5,10
-"306",4,"🟧","Venray",1,3
-"307",8,"🟧","Vijfheerenlanden",1,3
-"308",73,"🟧","Vlaardingen",5,35
+"301",2,"✅","Veenendaal",0,0
+"302",12,"🟧","Veere",0,6
+"303",11,"🟧","Veldhoven",1,4
+"304",11,"🟧","Velsen",4,5
+"305",14,"🟧","Venlo",2,12
+"306",5,"🟧","Venray",1,3
+"307",9,"🟧","Vijfheerenlanden",1,3
+"308",77,"🟧","Vlaardingen",4,35
 "309",0,"✅","Vlieland",0,0
-"310",29,"🟧","Vlissingen",0,17
+"310",30,"🟧","Vlissingen",1,17
 "311",1,"✅","Voerendaal",0,0
 "312",6,"🟡","Voorschoten",0,1
-"313",3,"🟧","Voorst",1,2
+"313",4,"🟧","Voorst",1,3
 "314",2,"🟧","Vught",0,2
 "315",0,"✅","Waadhoeke",0,0
 "316",3,"✅","Waalre",0,0
-"317",14,"🟧","Waalwijk",3,9
-"318",48,"🟧","Waddinxveen",1,9
-"319",4,"🟡","Wageningen",0,1
-"320",7,"🟧","Wassenaar",0,5
+"317",14,"🟧","Waalwijk",0,8
+"318",49,"🟧","Waddinxveen",1,7
+"319",5,"🟧","Wageningen",1,2
+"320",9,"🟧","Wassenaar",2,6
 "321",1,"✅","Waterland",0,0
 "322",4,"🟡","Weert",0,2
-"323",7,"🟧","Weesp",0,2
-"324",5,"🟡","West Betuwe",1,1
+"323",7,"✅","Weesp",0,0
+"324",5,"🟡","West Betuwe",0,1
 "325",2,"✅","West Maas en Waal",0,0
 "326",1,"✅","Westerkwartier",0,0
 "327",5,"✅","Westerveld",0,0
 "328",2,"✅","Westervoort",0,0
 "329",1,"✅","Westerwolde",0,0
-"330",49,"🟧","Westland",6,26
-"331",1,"🟡","Weststellingwerf",0,1
-"332",6,"🟧","Westvoorne",2,4
+"330",64,"🟧","Westland",15,39
+"331",1,"✅","Weststellingwerf",0,0
+"332",6,"🟧","Westvoorne",0,4
 "333",2,"✅","Wierden",0,0
 "334",1,"✅","Wijchen",0,0
-"335",10,"🟧","Wijdemeren",2,6
+"335",10,"🟧","Wijdemeren",0,6
 "336",3,"✅","Wijk bij Duurstede",0,0
 "337",0,"✅","Winterswijk",0,0
-"338",14,"🟧","Woensdrecht",1,6
-"339",15,"🟧","Woerden",0,9
+"338",15,"🟧","Woensdrecht",1,5
+"339",16,"🟧","Woerden",1,9
 "340",4,"🟧","Wormerland",0,1
 "341",1,"✅","Woudenberg",0,0
-"342",50,"🟧","Zaanstad",5,23
-"343",7,"🟧","Zaltbommel",2,5
-"344",8,"🟧","Zandvoort",0,2
+"342",51,"🟧","Zaanstad",1,22
+"343",7,"🟧","Zaltbommel",0,5
+"344",10,"🟧","Zandvoort",2,4
 "345",2,"🟡","Zeewolde",0,1
-"346",15,"🟧","Zeist",2,5
+"346",16,"🟧","Zeist",1,5
 "347",4,"✅","Zevenaar",0,0
-"348",43,"🟧","Zoetermeer",4,14
-"349",4,"🟧","Zoeterwoude",0,1
+"348",46,"🟧","Zoetermeer",3,14
+"349",4,"✅","Zoeterwoude",0,0
 "350",14,"✅","Zuidplas",0,0
 "351",11,"🟧","Zundert",0,2
 "352",8,"🟡","Zutphen",0,1
 "353",0,"✅","Zwartewaterland",0,0
-"354",15,"🟧","Zwijndrecht",7,13
-"355",8,"🟡","Zwolle",0,4
+"354",17,"🟧","Zwijndrecht",2,14
+"355",9,"🟡","Zwolle",1,3
