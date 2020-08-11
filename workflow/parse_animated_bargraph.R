@@ -3,7 +3,7 @@ library(janitor)
 require(gganimate)
 rm(list=ls())
 
-dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-04.csv") %>%
+dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-10.csv") %>%
   dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
 dat$week <- strftime(dat$Date_statistics, format = "%V")
 dat$value <- 1
@@ -17,7 +17,7 @@ perc <- dat_tidy %>%
   group_by(Week) %>% mutate(value = round((Besmettingen/sum(Besmettingen))*100,2))
 
 dat_tidy <- cbind(dat_tidy[,c("Leeftijd","Week")],as.numeric(perc$value))
-colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
+colnames(dat_tidy) <- c("Leeftijd","Week","value")
 
 dat_wide <- dat_tidy %>%
   spread(Week,value = Besmettingen)
@@ -73,7 +73,7 @@ anim = staticplot + transition_states(Week, transition_length = 4, state_length 
 
 
 animate(anim, 400, fps = 20,  width = 1200, height = 1000, 
-        renderer = gifski_renderer("age_corona_final.gif"))
+        renderer = gifski_renderer("plots/age_bargraph_week32.gif"))
 
 animate(anim, 400, fps = 20,  width = 1200, height = 1000, 
         renderer = av_renderer("age_corona_final.mp4"))
