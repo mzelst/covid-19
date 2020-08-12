@@ -1,4 +1,4 @@
-dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-06.csv") %>%
+dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-11.csv") %>%
   dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
 dat$week <- strftime(dat$Date_statistics, format = "%V")
 dat$value <- 1
