@@ -23,7 +23,7 @@ dates.trail <- names(df.cases)[2:(ncol(df.cases)-1)] ## Set trail colnames for d
 # Calculate moving difference between cases per day
 df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
 
-write.csv(df.cases, file = "corrections/cases_perday.csv",row.names = F)
+write.csv(df.cases, file = "corrections/cases_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(df.cases)) {
@@ -52,7 +52,7 @@ hospitals.wide <- spread(df.hospitals, key = Var2, value = Freq)
 # Calculate moving difference between cases per day
 hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
 
-write.csv(hospitals.wide, file = "corrections/hospital_perday.csv",row.names = F)
+write.csv(hospitals.wide, file = "corrections/hospital_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(hospitals.wide)) {
@@ -81,7 +81,7 @@ deaths.wide <- spread(df.deaths, key = Var2, value = Freq)
 # Calculate moving difference between cases per day
 deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
 
-write.csv(deaths.wide, file = "corrections/deaths_perday.csv",row.names = F)
+write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
 
 neg.values <- c()
 for(i in col.start.diff:ncol(deaths.wide)) {
@@ -106,7 +106,7 @@ corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infe
 corrections.all$date <- as.Date(rownames(corrections.all))
 
 filename <- paste0("corrections/corrections_per_day/corrections-",Sys.Date(),'.csv')
-write.csv(corrections.all, file = filename,row.names = F)
+write.csv(corrections.all, file = filename)
 rm(list=ls())
 
 temp = list.files(path = "corrections/corrections_per_day/",pattern="*.csv", full.names = T)
@@ -119,6 +119,6 @@ corrections.perday$date <- corrections.perday$X
 
 corrections.perday$positive_7daverage <- round(frollmean(corrections.perday[,"new.infection"],7),0) # Calculate 7-day average (based on newly reported infections, gross number)
 
-write.csv(corrections.perday, file = "corrections/corrections_perday.csv",row.names = F)
+write.csv(corrections.perday, file = "corrections/corrections_perday.csv")
 
 
