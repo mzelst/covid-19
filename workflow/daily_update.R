@@ -30,7 +30,7 @@ all.data <- Reduce(
 all.data$date <- as.Date(all.data$date)
 all.data <- all.data[order(all.data$date),]
 
-write.csv(all.data, file = "data/all_data.csv")
+write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
 source("plot_scripts/daily_plots.R")
 source("plot_scripts/daily_maps_plots.R")

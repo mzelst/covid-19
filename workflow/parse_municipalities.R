@@ -30,7 +30,7 @@ dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_code", all.y=TRUE)
 dat.wide$rel.increase <- dat.wide$increase/dat.wide$population*100000
 dat.wide$rel.increase.week <- dat.wide$increase.week/dat.wide$population*100000
 
-write.csv(dat.wide, file = "data/municipality-today.csv")
+write.csv(dat.wide, file = "data/municipality-today.csv",row.names = F)
 
 
 ## Pull municipal data from CBS

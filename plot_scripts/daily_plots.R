@@ -40,7 +40,7 @@ aanwezig <- nice.today %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
   geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling"), lwd=1.2) +
   geom_line(aes(y = IC_Current, color = "Aanwezig op IC"), lwd=1.2) +
-  ylim(0,250) + 
+  ylim(0,350) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
