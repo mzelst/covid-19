@@ -26,7 +26,7 @@ mun.pop <- read.csv("misc/municipalities-population.csv")
 dat.wide <- merge(mun.pop,dat.wide, by = "Municipality_name", all.y=TRUE)
 write.csv(dat.wide, file = "data/municipality-totals.csv")
 
-dat.lowest <- dat %>% 
+dat.lowest <- dat %>%
   dplyr::filter(date >= as.Date('2020-07-01')) %>%
   group_by(Municipality_name) %>%
   slice(which.min(Total_reported))
@@ -71,8 +71,8 @@ dat.today <- select( dat.today.wide,
   increase_week,
 )
 
-write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv")
-write.csv(dat.today, file = "data/municipality-today.csv")
+write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F)
+write.csv(dat.today, file = "data/municipality-today.csv",row.names = F)
 
 
 ## Pull municipal data from CBS
