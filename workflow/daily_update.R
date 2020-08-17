@@ -58,6 +58,11 @@ git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
 push(repo, credentials = git.auth)
 
+
+## Corrections or not?
+text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)")
+text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
+
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
@@ -65,15 +70,16 @@ Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)
+Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)>0,text.hosp.corrections,""),"
 
 Opgenomen op IC*: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
+Huidig: ",last(nice_by_day$IC_Current),"
 Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 * bewezen of verdacht
 (www.stichting-nice.nl)
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
+Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)>0,text.deaths.corrections,""))
 
 tweet
 
