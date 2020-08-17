@@ -70,14 +70,14 @@ df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected)
 df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
 df$date <- as.Date(df$date)
 
-write.csv(df, "data-nice/nice-today.csv") ## Write file with all NICE data until today
+write.csv(df, "data-nice/nice-today.csv", row.names = F) ## Write file with all NICE data until today
 filename.nice.perday <- paste0("data-nice/data-nice-json/",Sys.Date(),".csv")
-write.csv(df, filename.nice.perday) ## Save daily NICE data - JSON parsed - downloaded around 14:30 PM (CET)
+write.csv(df, filename.nice.perday, row.names = F) ## Save daily NICE data - JSON parsed - downloaded around 14:30 PM (CET)
 
 ## Daily NICE data
 nice.dailydata <- last(df)
 filename.daily.nice <- paste0("data-nice/data-per-day/nice_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(nice.dailydata, file = filename.daily.nice) ## Write file with daily data
+write.csv(nice.dailydata, file = filename.daily.nice, row.names = F) ## Write file with daily data
 
 temp = list.files(path = "data-nice/data-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
 myfiles = lapply(temp, read.csv) ## Load all day files
@@ -93,6 +93,6 @@ nice_by_day <- nice_by_day %>%
   mutate(ic_intake_nice = c(0,diff(IC_Cumulative))) %>%
   mutate(ic_intake_nice = replace(ic_intake_nice, ic_intake_nice<0, 0))# Calculate number of positive tests per day
            
-write.csv(nice_by_day, file = "data/nice_by_day.csv")
+write.csv(nice_by_day, file = "data/nice_by_day.csv", row.names = F)
 
 rm(list=ls())
