@@ -82,6 +82,10 @@ prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_pre
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
 
+prevalence <- prevalence %>%
+  mutate(groei_besmettelijken = c(0,diff(prev_avg)))
+
+prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 reproduction <- reproduction %>%
   ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
