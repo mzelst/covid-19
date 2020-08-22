@@ -8,6 +8,9 @@ get_token()
 
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 
+# Generate Banner
+source("workflow/generate_banner.R")
+
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
 source("workflow/parse_municipalities.R")
