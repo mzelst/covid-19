@@ -59,7 +59,7 @@ opnames <- all.data %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
   geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling"), lwd=1.2) +
   geom_line(aes(y = ic_intake_nice, color = "Opname op IC"), lwd=1.2) +
-  ylim(0,15) + 
+  ylim(0,25) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -82,6 +82,10 @@ prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_pre
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
 
+prevalence <- prevalence %>%
+  mutate(groei_besmettelijken = c(0,diff(prev_avg)))
+
+prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 reproduction <- reproduction %>%
   ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 

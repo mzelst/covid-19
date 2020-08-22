@@ -59,7 +59,7 @@ nice_by_day <- read.csv("data/nice_by_day.csv")
 ```
 
 **Samenvatting**  
-Tot en met `r Sys.Date()` zijn er in Nederland in totaal `r last(all.data$cases)` COVID-19 patiënten gemeld aan het RIVM. Van alle gemelde patiënten is de helft 57 jaar of ouder. Tot nu toe zijn `r last(all.data$hospitalization)` van de gemelde patiënten opgenomen in het ziekenhuis en `r last(all.data$deaths)` mensen overleden.
+Tot en met `r Sys.Date()` zijn er in Nederland in totaal `r last(all.data$cases)` COVID-19 patiënten gemeld aan het RIVM. Van alle gemelde patiënten is de helft 55 jaar of ouder. Tot nu toe zijn `r last(all.data$hospitalization)` van de gemelde patiënten opgenomen in het ziekenhuis en `r last(all.data$deaths)` mensen overleden.
 
 **Gegevens t. o. v. gisteren**  
 Positief getest: `r last(all.data$new.infection)`
@@ -312,9 +312,7 @@ add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overle
 ``` 
 
 \newpage
-
 # Leeftijdsverdeling en man-vrouwverdeling van COVID-19 patiënten in de afgelopen twee weken
-
 ```{r Leeftijd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
 setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
 
@@ -340,7 +338,9 @@ agegroup.data <- Reduce(
 colnames(agegroup.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
 
 agegroup.data <- agegroup.data %>%
-  dplyr::filter(statnaam != "<50")
+  dplyr::filter(statnaam != "<50") %>%
+  dplyr::filter(statnaam != "Onbekend") %>%
+  replace_na(list(death_today = 0, death_lastweek = 0))
 
 agegroup.data <- agegroup.data[order(agegroup.data$statnaam),]
 agegroup.data$ID <- seq.int(nrow(agegroup.data))
@@ -393,6 +393,9 @@ sex.data <- Reduce(
 
 colnames(sex.data) <- c("statnaam","cases_today","cases_lastweek","hosp_today","hosp_lastweek","death_today","death_lastweek")
 
+sex.data <- sex.data %>%
+  replace_na(list(cases_today = 0, cases_lastweek = 0, hosp_today = 0, hosp_lastweek = 0,death_today = 0, death_lastweek = 0))
+
 sex.data <- sex.data[order(sex.data$statnaam),]
 sex.data$ID <- seq.int(nrow(sex.data))
 
@@ -411,6 +414,10 @@ require(kableExtra)
 
 sex.data.table <- sex.data[,c(1,9,12,10,13,11,14)]
 colnames(sex.data.table) <- c("Geslacht","Totaal","%","Totaal","%","Totaal","%")
+
+sex.data.table$Geslacht <- as.character(sex.data.table$Geslacht)
+sex.data.table[1,1] <- c("Vrouw")
+sex.data.table[2,1] <- c("Man")
 
 footnote.geslacht <- paste0("Man-vrouwverdeling van bij de GGD’en gemelde COVID-19 patiënten, in het ziekenhuis opgenomen COVID-19 patiënten en overleden COVID-19 patiënten van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 10:00 uur.")
 
