@@ -33,6 +33,7 @@ write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write fil
 
 ## Data for municipalities
 
+# Cumulative dataset 
 rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
 filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_",Sys.Date(),".csv") ## Filename for daily data municipalities
 
