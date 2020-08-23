@@ -39,11 +39,4 @@ filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_
 
 write.csv(rivm.municipalities, file=filename.municipality,row.names = F)
 
-# Data per day
-
-rivm.municipalities.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",sep=";")
-filename.municipality.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_",Sys.Date(),".csv") ## Filename for daily data municipalities
-
-write.csv(rivm.municipalities.perday, file=filename.municipality.perday,row.names = F)
-
 rm(list=ls())
