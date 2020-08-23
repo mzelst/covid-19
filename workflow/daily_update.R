@@ -8,6 +8,9 @@ get_token()
 
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 
+# Generate Banner
+source("workflow/generate_banner.R")
+
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
 source("workflow/parse_municipalities.R")
@@ -57,7 +60,6 @@ git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
 push(repo, credentials = git.auth)
-
 
 ## Corrections or not?
 text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)")
@@ -114,5 +116,19 @@ my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
            in_reply_to_status_id = reply_id) ## Post reply
-#Edwin is vandaag helaas iets later met zijn lijstjes.
+
+# Data municipalities per day
+
+rivm.municipalities.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",sep=";")
+filename.municipality.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_",Sys.Date(),".csv") ## Filename for daily data municipalities
+
+write.csv(rivm.municipalities.perday, file=filename.municipality.perday,row.names = F)
+
+## Push data municipalities per day to repo
+add(repo, path = "*")
+commit(repo, all = T, paste0("Data municipalities per day ",Sys.Date()))
+push(repo, credentials = git.auth)
+
 rm(list=ls()) # Clean environment
+
+
