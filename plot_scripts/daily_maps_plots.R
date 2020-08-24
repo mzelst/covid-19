@@ -7,9 +7,9 @@ rm(list=ls())
 # Een overzicht van beschikbare data staat op https://www.pdok.nl/datasets.
 geoUrl <- "https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=cbs_gemeente_2020_gegeneraliseerd&outputFormat=json"
 gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
-dat.wide <- read.csv("data/municipality-today.csv")
+dat.wide <- read.csv("data/municipality-today-detailed.csv")
 
-cbs.data.plot <- dat.wide[,c("Municipality_code","rel.increase","rel.increase.week")]
+cbs.data.plot <- dat.wide[,c("Municipality_code","rel_increase_1d","rel_increase_7d")]
 colnames(cbs.data.plot) <- c("statcode","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
 cbs.data.plot$`Besmettingen (sinds gisteren)` <- ifelse((cbs.data.plot$`Besmettingen (sinds gisteren)`) < 0, 0, cbs.data.plot$`Besmettingen (sinds gisteren)`)
 cbs.data.plot$`Besmettingen (7 dagen)` <- ifelse((cbs.data.plot$`Besmettingen (7 dagen)`) < 0, 0, cbs.data.plot$`Besmettingen (7 dagen)`)
