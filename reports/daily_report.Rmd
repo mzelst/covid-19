@@ -131,9 +131,9 @@ library(geojsonio)
 library(sp)
 
 gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
-dat.wide <- read.csv("data/municipality-today.csv")
+dat.wide <- read.csv("data/municipality-today-detailed.csv")
 
-cbs.data.plot <- dat.wide[,c("Municipality_code","rel.increase","rel.increase.week")]
+cbs.data.plot <- dat.wide[,c("Municipality_code","rel_increase_1d","rel_increase_7d")]
 colnames(cbs.data.plot) <- c("statcode","Besmettingen (sinds gisteren)","Besmettingen (7 dagen)")
 cbs.data.plot$`Besmettingen (sinds gisteren)` <- ifelse((cbs.data.plot$`Besmettingen (sinds gisteren)`) < 0, 0, cbs.data.plot$`Besmettingen (sinds gisteren)`)
 cbs.data.plot$`Besmettingen (7 dagen)` <- ifelse((cbs.data.plot$`Besmettingen (7 dagen)`) < 0, 0, cbs.data.plot$`Besmettingen (7 dagen)`)
