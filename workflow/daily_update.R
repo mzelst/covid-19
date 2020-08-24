@@ -72,7 +72,7 @@ Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)>0,text.hosp.corrections,""),"
+Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
 
 Opgenomen op IC*: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
 Huidig: ",last(nice_by_day$IC_Current),"
@@ -81,7 +81,7 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 (www.stichting-nice.nl)
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)>0,text.deaths.corrections,""))
+Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
 
 tweet
 

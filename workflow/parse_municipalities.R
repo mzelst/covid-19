@@ -67,6 +67,7 @@ increase_growth_to_arrows <- function(increase_growth) {
 
 dat.today.wide <- transmute(dat.wide,
   municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
   d0 = dat.wide[,ncol(dat.wide)], # today
   d1 = dat.wide[,ncol(dat.wide)-1], # yesterday
   d7 = dat.wide[,ncol(dat.wide)-7], # last week
