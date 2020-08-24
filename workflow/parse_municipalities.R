@@ -1,5 +1,7 @@
 require(tidyverse)
+require(magick)
 require(data.table)
+require(emojifont)
 
 ## Test code - Only use latest dataset
 
@@ -124,6 +126,34 @@ rm(totals.color_yesterday, totals.color_lastweek)
 write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F)
 write.csv(dat.today, file = "data/municipality-today.csv",row.names = F)
 
+
+?magick
+
+image_legend <-"
+✅ geen geconstateerde besmettingen
+💥 nieuwe besmettingen in een groene gemeente
+🟡  < 5 / 100.000 inwoners / 7 dagen
+🟧  < 50 / 100.000 inwoners / 7 dagen
+🛑  >= 50 / 100.000 inwoners / 7 dagen
+
+⬆️⬆️ Fors stijgende trend ( > 100% )
+⬆️ Stijgende trend ( 0 - 100% )
+⬇️ Dalende trend 
+
+Bovenstaande zijn berekend op laatste
+7 dagen t.o.v. de 7 dagen daarvoor"
+
+?magick
+image_format <- image_blank(600, 400, "transparent") %>%
+  image_annotate( "Legenda", font = 'Cabin SemiBold', size = 12,  location = "+0+0", gravity = "NorthWest") %>%
+  image_annotate( emoji(search_emoji('smile')), font = 'EmojiOne', size = 12,  location = "+0+10", gravity = "NorthWest") %>%
+  image_annotate( image_legend, font = 'Cabin', size = 12,  location = "+0+10", gravity = "NorthWest")
+
+image_format <- image_draw(image_format)
+text(10, 100, labels=emoji('cow'), cex=1.5, col='steelblue', family='OpenSansEmoji')
+dev.off()
+
+print(image_format)
 
 ## Pull municipal data from CBS
 
