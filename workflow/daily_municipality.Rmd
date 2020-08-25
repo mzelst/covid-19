@@ -1,0 +1,48 @@
+---
+title: "daily_municipality"
+author: "Edwin Veldhuizen"
+date: "8/24/2020"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately. 
+
+To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
+
+## Legenda
+✅ geen geconstateerde besmettingen  
+💥 nieuwe besmettingen in een groene gemeente  
+🟡  < 5 / 100.000 inwoners / 7 dagen  
+🟧  < 50 / 100.000 inwoners / 7 dagen  
+🛑  >= 50 / 100.000 inwoners / 7 dagen  
+⬆️ ⬆️ Fors stijgende trend ( > 100% )  
+⬆️ Stijgende trend ( 0 - 100% )  
+⬇️ Dalende trend   
+
+Bovenstaande zijn berekend op laatste  
+7 dagen t.o.v. de 7 dagen daarvoor  
+
+```{r eruptions, echo=FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+
