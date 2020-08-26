@@ -4,7 +4,13 @@ require(rjson)
 require(rtweet)
 require(data.table)
 require(git2r)
-get_token()
+
+twit.auth <- read.csv("twitter_auth.csv")
+token <- create_token(app = twit.auth[1,2],
+                      consumer_key = twit.auth[2,2],
+                      access_token = twit.auth[3,2],
+                      consumer_secret = twit.auth[4,2],
+                      access_secret = twit.auth[5,2])
 
 Sys.sleep(10)
 
@@ -86,6 +92,8 @@ Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.
 tweet
 
 today.date <- paste0("banners/",Sys.Date(),".png")
+
+post_tweet(status = "Dit is een test tweet in het kader van het verder automatiseren van de dagelijkse update: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf")
 
 #post_tweet (status = tweet,media = today.date) ## Post tweet
 
