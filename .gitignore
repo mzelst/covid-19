@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 /twitter_auth.txt
+/twitter_auth.csv
 /twitter_thread.doc
 /meetings/*
 /reports/*.tex
