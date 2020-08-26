@@ -1,10 +1,10 @@
 require(cowplot)
 require(tidyverse)
 require(rjson)
-require(rtweet)
+#require(rtweet)
 require(data.table)
 require(git2r)
-get_token()
+#get_token()
 
 rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
 
@@ -14,7 +14,7 @@ source("workflow/generate_banner.R")
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
 source("workflow/parse_municipalities.R")
-source("workflow/parse_nice-data.R")
+#source("workflow/parse_nice-data.R")
 source("workflow/parse_corrections.R")
 
 ## Merge RIVM, NICE and corrections data
@@ -35,10 +35,10 @@ all.data <- all.data[order(all.data$date),]
 
 write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
-source("plot_scripts/daily_plots.R")
+#source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
-rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
+Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
           to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
                                  format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
@@ -54,7 +54,7 @@ repo <- init()
 
 add(repo, path = "*")
 
-commit(repo, all = T, paste0("Daily update RIVM and NICE data ",Sys.Date()))
+commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
@@ -87,7 +87,7 @@ tweet
 
 today.date <- paste0("banners/",Sys.Date(),".png")
 
-post_tweet (status = tweet,media = today.date) ## Post tweet
+#post_tweet (status = tweet,media = today.date) ## Post tweet
 
 # Tweet for hospital numbers
 
@@ -102,20 +102,20 @@ Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC
 Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
 
 # Tweet for graph
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(tweet2, media = "plots/plot_daily.png",
-           in_reply_to_status_id = reply_id) ## Post reply
+#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+#reply_id <- my_timeline$status_id[1] ## Status ID for reply
+#post_tweet(tweet2, media = "plots/plot_daily.png",
+ #          in_reply_to_status_id = reply_id) ## Post reply
 
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
-           in_reply_to_status_id = reply_id) ## Post reply
+#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+#reply_id <- my_timeline$status_id[1] ## Status ID for reply
+#post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
+ #          in_reply_to_status_id = reply_id) ## Post reply
 
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
-           in_reply_to_status_id = reply_id) ## Post reply
+#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+#reply_id <- my_timeline$status_id[1] ## Status ID for reply
+#post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
+  #         in_reply_to_status_id = reply_id) ## Post reply
 
 # Data municipalities per day
 
