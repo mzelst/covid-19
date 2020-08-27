@@ -20,7 +20,7 @@ source("workflow/generate_banner.R")
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
 source("workflow/parse_municipalities.R")
-#source("workflow/parse_nice-data.R")
+source("workflow/parse_nice-data.R")
 source("workflow/parse_corrections.R")
 
 ## Merge RIVM, NICE and corrections data
@@ -41,7 +41,7 @@ all.data <- all.data[order(all.data$date),]
 
 write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
-#source("plot_scripts/daily_plots.R")
+source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
@@ -93,9 +93,7 @@ tweet
 
 today.date <- paste0("banners/",Sys.Date(),".png")
 
-post_tweet(status = "Dit is een test tweet in het kader van het verder automatiseren van de dagelijkse update: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf")
-
-#post_tweet (status = tweet,media = today.date) ## Post tweet
+post_tweet (status = tweet,media = today.date) ## Post tweet
 
 # Tweet for hospital numbers
 
@@ -110,10 +108,10 @@ Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC
 Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
 
 # Tweet for graph
-#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-#reply_id <- my_timeline$status_id[1] ## Status ID for reply
-#post_tweet(tweet2, media = "plots/plot_daily.png",
- #          in_reply_to_status_id = reply_id) ## Post reply
+my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+reply_id <- my_timeline$status_id[1] ## Status ID for reply
+post_tweet(tweet2, media = "plots/plot_daily.png",
+          in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
