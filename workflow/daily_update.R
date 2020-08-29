@@ -4,9 +4,15 @@ require(rjson)
 require(rtweet)
 require(data.table)
 require(git2r)
-get_token()
 
-rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
+twit.auth <- read.csv("twitter_auth.csv")
+token <- create_token(app = twit.auth[1,2],
+                      consumer_key = twit.auth[2,2],
+                      access_token = twit.auth[3,2],
+                      consumer_secret = twit.auth[4,2],
+                      access_secret = twit.auth[5,2])
+
+Sys.sleep(10)
 
 # Generate Banner
 source("workflow/generate_banner.R")
@@ -38,7 +44,7 @@ write.csv(all.data, file = "data/all_data.csv",row.names = F)
 source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
-rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
+Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
           to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
                                  format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
@@ -54,7 +60,7 @@ repo <- init()
 
 add(repo, path = "*")
 
-commit(repo, all = T, paste0("Daily update RIVM and NICE data ",Sys.Date()))
+commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
@@ -72,7 +78,7 @@ Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)>0,text.hosp.corrections,""),"
+Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
 
 Opgenomen op IC*: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
 Huidig: ",last(nice_by_day$IC_Current),"
@@ -81,7 +87,7 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 (www.stichting-nice.nl)
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)>0,text.deaths.corrections,""))
+Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
 
 tweet
 
@@ -105,17 +111,17 @@ Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, be
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet(tweet2, media = "plots/plot_daily.png",
-           in_reply_to_status_id = reply_id) ## Post reply
+          in_reply_to_status_id = reply_id) ## Post reply
 
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
-           in_reply_to_status_id = reply_id) ## Post reply
+          in_reply_to_status_id = reply_id) ## Post reply
 
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
-           in_reply_to_status_id = reply_id) ## Post reply
+#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+#reply_id <- my_timeline$status_id[1] ## Status ID for reply
+#post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
+  #         in_reply_to_status_id = reply_id) ## Post reply
 
 # Data municipalities per day
 
