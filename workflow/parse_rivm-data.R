@@ -1,6 +1,11 @@
+require(cowplot)
+require(tidyverse)
+require(rjson)
+require(data.table)
+
 rm(list=ls())
 
-rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";") ## Read in data with all cases until today
+rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
 filename <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
 
 paste0("data-rivm/casus-data/COVID-19_casus_landelijk_",Sys.Date(),".csv")
