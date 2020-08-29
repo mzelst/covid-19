@@ -1,4 +1,6 @@
 require(tidyverse)
+require(git2r)
+
 
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 dat <- read.csv(last(temp), )
@@ -29,3 +31,8 @@ ggd_data <- ggd_data %>%
   relocate(date, .before = age_group)
 
 write.csv(ggd_data, file = "data-dashboards/cases_ggd_agegroups.csv", row.names = F)
+
+add(repo, path = "data-dashboards/cases_ggd_agegroups.csv")
+commit(repo, all = T, paste0("Update cases per ggd per agegroup ",Sys.Date()))
+push(repo, credentials = git.auth)
+
