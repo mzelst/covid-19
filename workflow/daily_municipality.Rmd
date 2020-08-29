@@ -1,18 +1,22 @@
 ---
-title: "daily_municipality"
-author: "Edwin Veldhuizen"
-date: "8/24/2020"
+pagetitle: Daily Municipality Update
 output: html_document
 runtime: shiny
+css: daily_municipality.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+require(data.table)
+require(xtable)
+
+setwd('../')
+
+dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
+  arrange(municipality)
+
 ```
-
-This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately. 
-
-To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authoring_shiny.html).
 
 ## Legenda
 ✅ geen geconstateerde besmettingen  
@@ -27,22 +31,50 @@ To learn more, see [Interactive Documents](http://rmarkdown.rstudio.com/authorin
 Bovenstaande zijn berekend op laatste  
 7 dagen t.o.v. de 7 dagen daarvoor  
 
-```{r eruptions, echo=FALSE}
-inputPanel(
-  selectInput("n_breaks", label = "Number of bins:",
-              choices = c(10, 20, 35, 50), selected = 20),
-  
-  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
-              min = 0.2, max = 2, value = 1, step = 0.2)
+## Voorbeeld:
+*17	🛑	Montfoort (+5) ( w: +10 ⬆️⬆️ )*
+      
++17 sinds 1 juli     
++5 sinds gisteren     
++10 sinds 7 dagen ( 	22-08-2020 )  
+Wat meer is dan de +1 in de 7 dagen ervoor  
+13.901 inwoners maakt dat	🛑	71,9 / 100.000 / 7d 
+
+## Landelijk:
+19.301 🟧 totaal sinds 1 juli (+501) ( w: +3.535 ⬇️ )   
+142 / 355 gemeentes met nieuwe besmettingen (w: 299 )   
+116 	Gemeente Onbekend (+2)   
+
+## Stand der gemeentes:
+✅ 6 / 355 gemeentes (-5) ( w:-12 )   
+🟡	52 / 355 gemeentes (+5) ( w: +6 )   
+🟧	237 / 355 gemeentes (-1) ( w: +6 )   
+🛑	10 / 355 gemeentes (+1) ( w: )   
+      
+⬆️⬆️ 87 / 355 gemeentes    
+⬆️  	59 / 355 gemeentes    
+(-)  	68 / 355 gemeentes    
+⬇️  	141 / 355 gemeentes    
+
+## Hoogste toenames van vandaag:
+
+## Alle gemeentes
+
+```{r echo = FALSE, results = "asis"}
+template <- "%s %s (w: %s %s)"
+dat.today.wide.printable <- transmute(dat.today.wide,
+  current = current,
+  color = color_incl_new,
+  text = sprintf(template, municipality, increase_1d, increase_7d, growth)
 )
 
-renderPlot({
-  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
-       xlab = "Duration (minutes)", main = "Geyser eruption duration")
-  
-  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
-  lines(dens, col = "blue")
-})
+table <- xtable(dat.today.wide.printable, auto = TRUE)
+align(table) <- "llll"
+
+print( table, 
+  type = "html", 
+  html.table.attributes = 'border=0', 
+  include.colnames = FALSE, 
+  include.rownames = FALSE
+)
 ```
-
-
