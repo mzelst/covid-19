@@ -18,4 +18,3 @@ token <- create_token(app = twit.auth[1,2],
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 repo <- init()
-source("workflow/daily_update.R")
