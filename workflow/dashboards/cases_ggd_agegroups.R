@@ -23,7 +23,9 @@ ggd.desc.data <- read.csv("misc/ggds-population.csv")[,c("statnaam","ggd_code")]
 
 ggd_data <- merge(ggd_data_long, ggd.desc.data, by = "statnaam")
 colnames(ggd_data) <- c("ggd_naam","age_group","date","cases","ggd_code")
-ggd_data <- ggd_data[order(ggd_data$date),]
-
+ggd_data <- ggd_data %>%
+  select(age_group, date, cases, ggd_code) %>%
+  arrange(date) %>%
+  relocate(date, .before = age_group)
 
 write.csv(ggd_data, file = "data-dashboards/cases_ggd_agegroups.csv", row.names = F)
