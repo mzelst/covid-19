@@ -1,19 +1,3 @@
-require(cowplot)
-require(tidyverse)
-require(rjson)
-require(rtweet)
-require(data.table)
-require(git2r)
-
-twit.auth <- read.csv("twitter_auth.csv")
-token <- create_token(app = twit.auth[1,2],
-                      consumer_key = twit.auth[2,2],
-                      access_token = twit.auth[3,2],
-                      consumer_secret = twit.auth[4,2],
-                      access_secret = twit.auth[5,2])
-
-Sys.sleep(10)
-
 # Generate Banner
 source("workflow/generate_banner.R")
 
@@ -48,23 +32,14 @@ Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::ren
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
           to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
                                  format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
+rm(list=ls()) # Clean environment
 
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
 ## Push to git
-
-status()
-
-repo <- init()
-
 add(repo, path = "*")
-
 commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
-
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
 push(repo, credentials = git.auth)
 
 ## Corrections or not?
@@ -89,11 +64,7 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
 
-tweet
-
-today.date <- paste0("banners/",Sys.Date(),".png")
-
-post_tweet (status = tweet,media = today.date) ## Post tweet
+post_tweet (status = tweet,media = (paste0("banners/",Sys.Date(),".png"))) ## Post tweet
 
 # Tweet for hospital numbers
 
@@ -106,6 +77,8 @@ Patiënten IC
 Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
 
 Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
+
+Encoding(tweet2) <- "UTF-8"
 
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
@@ -135,6 +108,6 @@ add(repo, path = "*")
 commit(repo, all = T, paste0("Data municipalities per day ",Sys.Date()))
 push(repo, credentials = git.auth)
 
-rm(list=ls()) # Clean environment
+## Workflows for databases
 
-
+source("workflow/dashboards/cases_ggd_agegroups.R")
