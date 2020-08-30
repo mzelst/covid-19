@@ -13,8 +13,29 @@ require(xtable)
 
 setwd('../')
 
+dat.totals.color <- read.csv("data/municipality-totals-color.csv")
+dat.totals.growth <- read.csv("data/municipality-totals-growth.csv")
 dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
   arrange(municipality)
+
+print_municipality_data <- function(data) {
+  template <- "%s (%+d) (*w: %+d *%s)"
+  data.printable <- transmute(data,
+    current = current,
+    color = color_incl_new,
+    text = sprintf(template, municipality, increase_1d, increase_7d, growth)
+  )
+
+  table <- xtable(data.printable, auto = TRUE)
+  align(table) <- "llll"
+
+  print( table, 
+    type = "html", 
+    html.table.attributes = 'border=0', 
+    include.colnames = FALSE, 
+    include.rownames = FALSE
+  )
+}
 
 ```
 
@@ -24,6 +45,7 @@ dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
 🟡  < 5 / 100.000 inwoners / 7 dagen  
 🟧  < 50 / 100.000 inwoners / 7 dagen  
 🛑  >= 50 / 100.000 inwoners / 7 dagen  
+
 ⬆️ ⬆️ Fors stijgende trend ( > 100% )  
 ⬆️ Stijgende trend ( 0 - 100% )  
 ⬇️ Dalende trend   
@@ -45,31 +67,17 @@ Wat meer is dan de +1 in de 7 dagen ervoor
 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )   
 116 	Gemeente Onbekend (+2)   
 
-## Stand der gemeentes:
-✅ 6 / 355 gemeentes (-5) ( w:-12 )   
-🟡	52 / 355 gemeentes (+5) ( w: +6 )   
-🟧	237 / 355 gemeentes (-1) ( w: +6 )   
-🛑	10 / 355 gemeentes (+1) ( w: )   
-      
-⬆️⬆️ 87 / 355 gemeentes    
-⬆️  	59 / 355 gemeentes    
-(-)  	68 / 355 gemeentes    
-⬇️  	141 / 355 gemeentes    
-
-## Hoogste toenames van vandaag:
-
-## Alle gemeentes
-
+#### Alert niveaus
 ```{r echo = FALSE, results = "asis"}
-template <- "%s %s (w: %s %s)"
-dat.today.wide.printable <- transmute(dat.today.wide,
-  current = current,
-  color = color_incl_new,
-  text = sprintf(template, municipality, increase_1d, increase_7d, growth)
+
+template <- "%d / %d gemeentes ( %+d ) ( *w: %+d* )"
+dat.totals.color.printable <- transmute(dat.totals.color,
+  color = color,
+  text = sprintf(template, d0, 355, increase_1d, increase_7d)
 )
 
-table <- xtable(dat.today.wide.printable, auto = TRUE)
-align(table) <- "llll"
+table <- xtable(dat.totals.color.printable, auto = TRUE)
+align(table) <- "lll"
 
 print( table, 
   type = "html", 
@@ -77,4 +85,44 @@ print( table,
   include.colnames = FALSE, 
   include.rownames = FALSE
 )
+rm(template, table, dat.totals.color.printable)
+```
+
+#### Groei
+```{r echo = FALSE, results = "asis"}
+
+template <- "%d / %d gemeentes"
+dat.totals.growth.printable <- transmute(dat.totals.growth,
+  growth = ifelse( growth == "-", "(-)", growth),
+  text = sprintf(template, d0, 355)
+)
+
+table <- xtable(dat.totals.growth.printable, auto = TRUE)
+align(table) <- "lll"
+
+print( table, 
+  type = "html", 
+  html.table.attributes = 'border=0', 
+  include.colnames = FALSE, 
+  include.rownames = FALSE
+)
+rm(template, table, dat.totals.growth.printable)
+
+```
+
+## Hoogste toenames van vandaag:
+```{r echo = FALSE, results = "asis"}
+dat.today.highest <- dat.today.wide %>%
+  filter(increase_1d != 0) %>%
+  arrange(desc(increase_1d), current)
+
+print_municipality_data(dat.today.highest)
+
+```
+## Alle gemeentes
+
+```{r echo = FALSE, results = "asis"}
+
+print_municipality_data(dat.today.wide)
+
 ```

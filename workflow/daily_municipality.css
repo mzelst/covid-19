@@ -1,3 +1,7 @@
 td{
-  padding-right: 1em;
+  min-width: 2em;
+}
+
+td:first-child{
+  min-width: 3em;
 }

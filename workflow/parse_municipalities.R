@@ -99,32 +99,44 @@ dat.today <- select( dat.today.wide,
   growth,
 )
 
-totals.growth <- dat.today.wide %>%
+dat.totals.growth <- dat.today.wide %>%
   group_by(growth) %>%
-  summarise(growth_n = n())
-
-totals.color <- dat.today.wide %>%
+  summarise(d0 = n()) %>%
+  arrange(match(growth, c("⬆️⬆️","⬆️","-","⬇️⬇️","⬇️")))
+  
+dat.totals.color <- dat.today.wide %>%
   group_by(color) %>%
-  summarise(n = n())
+  summarise(d0 = n())
 
-totals.color_yesterday <- dat.today.wide %>%
+dat.totals.color_yesterday <- dat.today.wide %>%
   group_by(color_yesterday) %>%
-  summarise(yesterday_n = n()) %>%
+  summarise(d1 = n()) %>%
   rename(color = color_yesterday)
 
-totals.color_lastweek <- dat.today.wide %>%
+dat.totals.color_lastweek <- dat.today.wide %>%
   group_by(color_lastweek) %>%
-  summarise(lastweek_n = n()) %>%
+  summarise(d7 = n()) %>%
   rename(color = color_lastweek)
 
-totals.color <- merge(totals.color, totals.color_yesterday, by = "color", all.y=TRUE)
-totals.color <- merge(totals.color, totals.color_lastweek, by = "color", all.y=TRUE)
-rm(totals.color_yesterday, totals.color_lastweek)
+dat.totals.color <- dat.totals.color %>%
+  merge(dat.totals.color_yesterday, by = "color", all.y=TRUE) %>%
+  merge(dat.totals.color_lastweek, by = "color", all.y=TRUE) %>%
+  arrange(match(color, c("✅","🟡","🟧","🛑")))
+
+rm(dat.totals.color_yesterday, dat.totals.color_lastweek)
+
+dat.totals.color <- mutate(dat.totals.color,
+  increase_1d = d0-d1, # Calculate increase since last day
+  increase_7d = d0-d7, # Calculate increase in 7 days
+)
 
 write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F)
 write.csv(dat.today, file = "data/municipality-today.csv",row.names = F)
+write.csv(dat.totals.growth, file = "data/municipality-totals-growth.csv",row.names = F)
+write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.names = F)
 
-rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)
+
+# rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)
 
 ## Pull municipal data from CBS
 
