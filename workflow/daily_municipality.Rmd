@@ -39,7 +39,7 @@ print_municipality_data <- function(data) {
 
 ```
 
-## Legenda
+### Legenda
 ✅ geen geconstateerde besmettingen  
 💥 nieuwe besmettingen in een groene gemeente  
 🟡  < 5 / 100.000 inwoners / 7 dagen  
@@ -53,7 +53,7 @@ print_municipality_data <- function(data) {
 Bovenstaande zijn berekend op laatste  
 7 dagen t.o.v. de 7 dagen daarvoor  
 
-## Voorbeeld:
+### Voorbeeld:
 *17	🛑	Montfoort (+5) ( w: +10 ⬆️⬆️ )*
       
 +17 sinds 1 juli     
@@ -62,7 +62,7 @@ Bovenstaande zijn berekend op laatste
 Wat meer is dan de +1 in de 7 dagen ervoor  
 13.901 inwoners maakt dat	🛑	71,9 / 100.000 / 7d 
 
-## Landelijk:
+### Landelijk:
 19.301 🟧 totaal sinds 1 juli (+501) ( w: +3.535 ⬇️ )   
 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )   
 116 	Gemeente Onbekend (+2)   
@@ -110,7 +110,7 @@ rm(template, table, dat.totals.growth.printable)
 
 ```
 
-## Hoogste toenames van vandaag:
+### Hoogste toenames van vandaag:
 ```{r echo = FALSE, results = "asis"}
 dat.today.highest <- dat.today.wide %>%
   filter(increase_1d != 0) %>%
@@ -119,7 +119,7 @@ dat.today.highest <- dat.today.wide %>%
 print_municipality_data(dat.today.highest)
 
 ```
-## Alle gemeentes
+### Alle gemeentes
 
 ```{r echo = FALSE, results = "asis"}
 
