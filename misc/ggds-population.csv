@@ -1,26 +1,26 @@
-statnaam,ID,population
-Dienst Gezondheid & Jeugd ZHZ,1,456891
-GGD Amsterdam,2,1058067
-GGD Brabant-Zuidoost,3,773203
-GGD Drenthe,4,492167
-GGD Flevoland,5,416546
-GGD Fryslân,6,647672
-GGD Gelderland-Zuid,7,565503
-GGD Gooi en Vechtstreek,8,254970
-GGD Groningen,9,583990
-GGD Haaglanden,10,1103368
-GGD Hart voor Brabant,11,1065191
-GGD Hollands-Midden,12,801600
-GGD Hollands-Noorden,13,658161
-GGD IJsselland,14,527147
-GGD Kennemerland,15,545423
-GGD Limburg-Noord,16,510963
-GGD Regio Twente,17,629284
-GGD Regio Utrecht,18,1342158
-GGD Rotterdam-Rijnmond,19,1312034
-GGD West-Brabant,20,706412
-GGD Zaanstreek/Waterland,21,336738
-GGD Zeeland,22,383032
-GGD Zuid-Limburg,23,597368
-GGD Noord- en Oost-Gelderland,24,824213
-Veiligheids- en Gezondheidsregio Gelderland-Midden,25,690062
+statnaam,ID,population,ggd_code
+Dienst Gezondheid & Jeugd ZHZ,1,456891,GG4816
+GGD Amsterdam,2,1058067,GG3406
+GGD Brabant-Zuidoost,3,773203,GG5608
+GGD Drenthe,4,492167,GG0706
+GGD Flevoland,5,416546,GG2209
+GGD Fryslân,6,647672,GG7206
+GGD Gelderland-Zuid,7,565503,GG2014
+GGD Gooi en Vechtstreek,8,254970,GG3606
+GGD Groningen,9,583990,GG0111
+GGD Haaglanden,10,1103368,GG7014
+GGD Hart voor Brabant,11,1065191,GG5406
+GGD Hollands-Midden,12,801600,GG4506
+GGD Hollands-Noorden,13,658161,GG2707
+GGD IJsselland,14,527147,GG1009
+GGD Kennemerland,15,545423,GG3109
+GGD Limburg-Noord,16,510963,GG6011
+GGD Regio Twente,17,629284,GG1106
+GGD Regio Utrecht,18,1342158,GG2514
+GGD Rotterdam-Rijnmond,19,1312034,GG4607
+GGD West-Brabant,20,706412,GG5206
+GGD Zaanstreek/Waterland,21,336738,GG7306
+GGD Zeeland,22,383032,GG5006
+GGD Zuid-Limburg,23,597368,GG6106
+GGD Noord- en Oost-Gelderland,24,824213,GG1413
+Veiligheids- en Gezondheidsregio Gelderland-Midden,25,690062,GG1911
