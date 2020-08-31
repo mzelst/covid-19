@@ -6,7 +6,8 @@ temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.n
 
 dat <- read.csv(last(temp), ) ## Take last filename from the folder, load csv
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
-filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
+used_date <- as.Date(last(dat$Date_of_report))
+filter.date <- used_date-28 ## Create filter for last four weeks +1
 
 dat <- dat %>%
   dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
@@ -67,6 +68,7 @@ increase_growth_to_arrows <- function(increase_growth) {
 dat.today.wide <- transmute(dat.wide,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
+  date = used_date,
   d0 = dat.wide[,ncol(dat.wide)], # today
   d1 = dat.wide[,ncol(dat.wide)-1], # yesterday
   d7 = dat.wide[,ncol(dat.wide)-7], # last week
