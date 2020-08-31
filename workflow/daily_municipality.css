@@ -1,3 +1,8 @@
+body{
+  transform: scale(0.65);
+  transform-origin: 0 0;
+}
+
 td{
   min-width: 2em;
   padding: 0 0.2em;

@@ -104,17 +104,38 @@ rm(dat.example, example, template.example)
 ### Landelijk:
 ```{r echo = FALSE, results = "asis"}
 # +527	🟧	Nederland	20.332	( w: +3.539 )	⬇️
+
 dat.total <- dat.today.wide %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
 
 print_municipality_data(dat.total, 'align-left')
+
 rm(dat.total)
 ```
 
-142 / 355 gemeentes met nieuwe besmettingen (w: 299 )   
+```{r echo = FALSE, results = "asis"}
+# 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )
+
+int.count.municipality.today <- dat.today.wide %>%
+  filter(Municipality_code != "" & increase_1d > 0) %>%
+  nrow()
+
+int.count.municipality.week <- dat.today.wide %>%
+  filter(Municipality_code != "" & increase_7d > 0) %>%
+  nrow()
+
+cat(sprintf("%s / 355 gemeentes met nieuwe besmettingen (w: %s )",
+  format_custom_number(int.count.municipality.today),
+  format_custom_number(int.count.municipality.week, TRUE)
+))
+
+rm(int.count.municipality.today, int.count.municipality.week)
+```
+
 ```{r echo = FALSE, results = "asis"}
 # 127 Gemeente Onbekend (+2)
+
 dat.unknown <- dat.today.wide %>%
   filter( municipality == "Unknown" )
 
@@ -123,6 +144,7 @@ cat(sprintf("%s Gemeente Onbekend (%s)",
   format_custom_number(unknown$current),
   format_custom_number(unknown$increase_1d, TRUE)
 ))
+
 rm(dat.unknown, unknown)
 ```
 
@@ -195,7 +217,7 @@ print_municipality_data(dat.today.highest)
 ```{r echo = FALSE, results = "asis"}
 
 dat.today.all <- dat.today.wide %>%
-  filter(Municipality_code != "" )
+  filter(Municipality_code != "")
 
 print_municipality_data(dat.today.all)
 
