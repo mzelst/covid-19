@@ -21,13 +21,24 @@ used_date <- as.Date(last(dat.today.wide$date))
 
 str.none <- '<span class="none">&nbsp;-&nbsp;</span>'
 
+format_custom_number <- function(data, plus = FALSE, format = "%s") {
+  return( sapply(data, function(value){
+    formatted_value <- formatC(value, format="f", big.mark=".", decimal.mark=",", digits=0)
+    plus_or_minus <- ifelse(value > 0, '+', '-')
+    formatted_value <- ifelse(plus, paste( plus_or_minus, formatted_value, sep = ''), formatted_value)
+    formatted_value <- sprintf(format, formatted_value)
+    formatted_value <- ifelse(value == 0, str.none, formatted_value)
+    return(formatted_value)
+  }))
+}
+
 print_municipality_data <- function(data, cssClass = "") {
   data.printable <- transmute(data,
-    increase_1d = ifelse( increase_1d == 0, str.none, sprintf("%+d", increase_1d)),
+    increase_1d = format_custom_number(increase_1d, TRUE),
     color = color_incl_new,
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
-    current = ifelse( current == 0, str.none, sprintf("%d", current)),
-    increase_7d = ifelse( increase_7d == 0, str.none, sprintf("( *w: %+d * )", increase_7d)),
+    current = format_custom_number(current),
+    increase_7d = format_custom_number(increase_7d, TRUE, "( *w: %s * )"),
     growth = ifelse( growth == "-", str.none, growth)
   )
 
@@ -65,7 +76,7 @@ Bovenstaande zijn berekend op laatste
 dat.example <- dat.today.wide %>%
   filter( municipality == "Amsterdam" )
 
-print_municipality_data(dat.example, "example")
+print_municipality_data(dat.example, "example align-left")
 
 template.example <- "
 %+d sinds gisteren   
@@ -82,17 +93,38 @@ cat(sprintf(template.example,
   example$increase_7d, 
   format(used_date - 7, '%d-%m-%Y'), 
   example$d7 - example$d14, 
-  formatC(example$population, format="f", big.mark=".", decimal.mark=",", digits=0),
+  format_custom_number(example$population, TRUE),
   example$color, 
   example$rel_increase_7d, 
   0
 ))
+rm(dat.example, example, template.example)
 ```
 
 ### Landelijk:
-19.301 🟧 totaal sinds 1 juli (+501) ( w: +3.535 ⬇️ )   
+```{r echo = FALSE, results = "asis"}
+# +527	🟧	Nederland	20.332	( w: +3.539 )	⬇️
+dat.total <- dat.today.wide %>%
+  filter( municipality == "Netherlands" )
+dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
+
+print_municipality_data(dat.total, 'align-left')
+rm(dat.total)
+```
+
 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )   
-116 	Gemeente Onbekend (+2)   
+```{r echo = FALSE, results = "asis"}
+# 127 Gemeente Onbekend (+2)
+dat.unknown <- dat.today.wide %>%
+  filter( municipality == "Unknown" )
+
+unknown <- first(dat.unknown)
+cat(sprintf("%s Gemeente Onbekend (%s)",
+  format_custom_number(unknown$current),
+  format_custom_number(unknown$increase_1d, TRUE)
+))
+rm(dat.unknown, unknown)
+```
 
 #### Alert niveaus
 ```{r echo = FALSE, results = "asis"}
@@ -147,7 +179,12 @@ rm(template, table, dat.totals.growth.printable)
 ### Hoogste toenames van vandaag:
 ```{r echo = FALSE, results = "asis"}
 dat.today.highest <- dat.today.wide %>%
-  filter( increase_1d > 1 | (increase_1d == 1 & color_incl_new %in% c("🛑", "💥")) ) %>%
+  filter( 
+    Municipality_code != ""
+      & (increase_1d > 1
+         | (increase_1d == 1 & color_incl_new %in% c("🛑", "💥"))
+      )
+  ) %>%
   arrange(desc(increase_1d), current)
 
 print_municipality_data(dat.today.highest)
@@ -157,6 +194,9 @@ print_municipality_data(dat.today.highest)
 
 ```{r echo = FALSE, results = "asis"}
 
-print_municipality_data(dat.today.wide)
+dat.today.all <- dat.today.wide %>%
+  filter(Municipality_code != "" )
+
+print_municipality_data(dat.today.all)
 
 ```

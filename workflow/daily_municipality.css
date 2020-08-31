@@ -29,11 +29,11 @@ table.example{
   font-style: italic;
 }
 
-table.example td{
+table.align-left td{
   text-align: left;
   min-width: 0;
 }
 
-table.example hr{
+table.align-left hr{
   display: none;
 }
