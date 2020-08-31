@@ -118,3 +118,4 @@ push(repo, credentials = git.auth)
 
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
+source("workflow/parse_age-data.R")
