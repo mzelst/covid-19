@@ -27,6 +27,12 @@ dat_besmettingen_perc <- dat_tidy %>%
 
 dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
 
+dat_leeftijd$Type <- c("Aantal besmettingen")
+dat_leeftijd[11:20,35] <- c("Percentage")
+
+dat_leeftijd <- dat_leeftijd %>%
+  relocate(Type, .before = Leeftijd)
+
 write.csv(dat_leeftijd, file = "data-dashboards/age-week.csv", row.names = F)
 
 git.credentials <- read_lines("git_auth.txt")
