@@ -1,7 +1,39 @@
 td{
   min-width: 2em;
+  padding: 0 0.2em;
 }
 
 td:first-child{
   min-width: 3em;
+}
+
+td .municipality{
+  display: block;
+  float: left;
+  margin-right: 0.5em;
+}
+
+td .municipality + hr {
+  margin: 0.7em 0.5em 0 0;
+  border-top-style: dashed;
+} 
+
+td .none{
+  display: inline-block;
+  color: #aaa;
+  text-align: center;
+  width: 1.3em;
+}
+
+table.example{
+  font-style: italic;
+}
+
+table.example td{
+  text-align: left;
+  min-width: 0;
+}
+
+table.example hr{
+  display: none;
 }

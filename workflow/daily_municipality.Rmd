@@ -17,24 +17,31 @@ dat.totals.color <- read.csv("data/municipality-totals-color.csv")
 dat.totals.growth <- read.csv("data/municipality-totals-growth.csv")
 dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
   arrange(municipality)
+used_date <- as.Date(last(dat.today.wide$date))
 
-print_municipality_data <- function(data) {
-  template <- "%s (%+d) (*w: %+d *%s)"
+str.none <- '<span class="none">&nbsp;-&nbsp;</span>'
+
+print_municipality_data <- function(data, cssClass = "") {
   data.printable <- transmute(data,
-    current = current,
+    increase_1d = ifelse( increase_1d == 0, str.none, sprintf("%+d", increase_1d)),
     color = color_incl_new,
-    text = sprintf(template, municipality, increase_1d, increase_7d, growth)
+    municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
+    current = ifelse( current == 0, str.none, sprintf("%d", current)),
+    increase_7d = ifelse( increase_7d == 0, str.none, sprintf("( *w: %+d * )", increase_7d)),
+    growth = ifelse( growth == "-", str.none, growth)
   )
 
   table <- xtable(data.printable, auto = TRUE)
-  align(table) <- "llll"
+  align(table) <- "ccllrll"
 
   print( table, 
     type = "html", 
-    html.table.attributes = 'border=0', 
+    sanitize.text.function=function(x){x},
+    html.table.attributes = paste('border=0', ifelse( cssClass == "", "", paste( 'class="',  cssClass, '"', sep =  "")), sep = " "), 
     include.colnames = FALSE, 
     include.rownames = FALSE
   )
+  rm(data.printable, table)
 }
 
 ```
@@ -54,13 +61,33 @@ Bovenstaande zijn berekend op laatste
 7 dagen t.o.v. de 7 dagen daarvoor  
 
 ### Voorbeeld:
-*17	🛑	Montfoort (+5) ( w: +10 ⬆️⬆️ )*
-      
-+17 sinds 1 juli     
-+5 sinds gisteren     
-+10 sinds 7 dagen ( 	22-08-2020 )  
-Wat meer is dan de +1 in de 7 dagen ervoor  
-13.901 inwoners maakt dat	🛑	71,9 / 100.000 / 7d 
+```{r echo = FALSE, results = "asis"}
+dat.example <- dat.today.wide %>%
+  filter( municipality == "Montfoort" )
+
+print_municipality_data(dat.example, "example")
+
+template.example <- "
+%+d sinds gisteren   
+%+d sinds 1 juli   
+%+d sinds 7 dagen ( %s )   
+Wat meer is dan de %+d in de 7 dagen ervoor   
+%s inwoners maakt dat	%s %.1f / 100.000 / 7d
+"
+
+example <- first(dat.example)
+cat(sprintf(template.example, 
+  example$increase_1d, 
+  example$current, 
+  example$increase_7d, 
+  format(used_date - 7, '%d-%m-%Y'), 
+  example$d7 - example$d14, 
+  formatC(example$population, format="f", big.mark=".", decimal.mark=",", digits=0),
+  example$color, 
+  example$rel_increase_7d, 
+  0
+))
+```
 
 ### Landelijk:
 19.301 🟧 totaal sinds 1 juli (+501) ( w: +3.535 ⬇️ )   
@@ -93,7 +120,7 @@ rm(template, table, dat.totals.color.printable)
 
 template <- "%d / %d gemeentes"
 dat.totals.growth.printable <- transmute(dat.totals.growth,
-  growth = ifelse( growth == "-", "(-)", growth),
+  growth = ifelse( growth == "-", str.none, growth),
   text = sprintf(template, d0, 355)
 )
 
@@ -103,6 +130,7 @@ align(table) <- "lll"
 print( table, 
   type = "html", 
   html.table.attributes = 'border=0', 
+  sanitize.text.function=function(x){x},
   include.colnames = FALSE, 
   include.rownames = FALSE
 )
@@ -113,7 +141,7 @@ rm(template, table, dat.totals.growth.printable)
 ### Hoogste toenames van vandaag:
 ```{r echo = FALSE, results = "asis"}
 dat.today.highest <- dat.today.wide %>%
-  filter(increase_1d != 0) %>%
+  filter( increase_1d > 1 | (increase_1d == 1 & color_incl_new %in% c("🛑", "💥")) ) %>%
   arrange(desc(increase_1d), current)
 
 print_municipality_data(dat.today.highest)
