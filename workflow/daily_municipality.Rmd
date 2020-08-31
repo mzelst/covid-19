@@ -80,7 +80,7 @@ print_municipality_data(dat.example, "example align-left")
 
 template.example <- "
 %+d sinds gisteren   
-%+d sinds 1 juli   
+%+d sinds 1 augustus   
 %+d sinds 7 dagen ( %s )   
 Wat meer is dan de %+d in de 7 dagen ervoor   
 %s inwoners maakt dat	%s %.1f / 100.000 / 7d
