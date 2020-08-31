@@ -408,7 +408,7 @@ totals <- beta_long[t >= 2020 & week %in% seq(11, week.now),
                        by = c('model', 'week')
                        ]
 
-write.csv(totals, file = paste0("data/run_week",week.now,"_1.csv"))
+write.csv(totals, file = paste0("data/run_week",week.now,".csv"))
 
 ##
 ## Figures

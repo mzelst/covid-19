@@ -1,7 +1,10 @@
 require(tidyverse)
+require(git2r)
 
-dat <- read.csv("data-rivm/casus-datasets/COVID-19_casus_landelijk_2020-08-26.csv") %>%
+temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+dat <- read.csv(last(temp), )%>%
   dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
+
 dat$week <- strftime(dat$Date_statistics, format = "%V")
 dat$value <- 1
 
@@ -11,7 +14,6 @@ colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
 
 dat_besmettingen_abs <- dat_tidy %>%
   spread(Week,value = Besmettingen)
-
 
 
 perc <- dat_tidy %>% 
@@ -24,7 +26,20 @@ dat_besmettingen_perc <- dat_tidy %>%
   spread(Week,value = Besmettingen)
 
 dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
-dat_leeftijd <- dat_leeftijd[,c(1,25:34)]
 
-write.csv(dat_leeftijd, file = "misc/age-week.csv")
+dat_leeftijd$Type <- c("Aantal besmettingen")
+dat_leeftijd[11:20,36] <- c("Percentage")
+
+dat_leeftijd <- dat_leeftijd %>%
+  relocate(Type, .before = Leeftijd)
+
+write.csv(dat_leeftijd, file = "data-dashboards/age-week.csv", row.names = F)
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+add(repo, path = "data-dashboards/age-week.csv")
+commit(repo, all = T, paste0("Update data agegroups per week ",Sys.Date()))
+push(repo, credentials = git.auth)
+
 
