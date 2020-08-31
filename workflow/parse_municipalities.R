@@ -53,7 +53,7 @@ dat.wide[dat.wide$Municipality_name=="Netherlands", "population"] <- 17445629
 write.csv(dat.wide, file = "data/municipality-totals.csv")
 
 dat.lowest <- dat %>%
-  filter(date >= as.Date('2020-07-01')) %>%
+  filter(date >= as.Date('2020-08-01')) %>%
   group_by(Municipality_name) %>%
   slice(which.min(Total_reported)) %>%
   arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
@@ -99,10 +99,10 @@ dat.today.wide <- transmute(dat.wide,
   d7 = dat.wide[,ncol(dat.wide)-7], # last week
   d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
   d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
-  july1 = dat.wide$`Total_reported.2020-07-01`, # july 1st
-  lowest_since_july1 = dat.lowest$`Total_reported`,
-  lowest_since_july1_date = dat.lowest$`date`,
-  current = d0-lowest_since_july1,
+  aug1 = dat.wide$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_aug1 = dat.lowest$`Total_reported`,
+  lowest_since_aug1_date = dat.lowest$`date`,
+  current = d0-lowest_since_aug1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
