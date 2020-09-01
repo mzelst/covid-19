@@ -82,16 +82,19 @@ template.example <- "
 %+d sinds gisteren   
 %+d sinds 1 augustus   
 %+d sinds 7 dagen ( %s )   
-Wat meer is dan de %+d in de 7 dagen ervoor   
-%s inwoners maakt dat	%s %.1f / 100.000 / 7d
+Wat %s is dan de %+d in de 7 dagen ervoor   
+%s inwoners maakt dat %s %.1f / 100.000 / 7d
 "
 
 example <- first(dat.example)
+more_or_less <- (example$d0 - example$d7) / (example$d7 - example$d14)
+
 cat(sprintf(template.example, 
   example$increase_1d, 
   example$current, 
   example$increase_7d, 
   format(used_date - 7, '%d-%m-%Y'), 
+  ifelse( more_or_less >= 2, "fors meer", ifelse( more_or_less >= 1, "meer",  "minder" ) ),
   example$d7 - example$d14, 
   format_custom_number(example$population, TRUE),
   example$color, 
