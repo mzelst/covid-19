@@ -100,8 +100,6 @@ post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
   #         in_reply_to_status_id = reply_id) ## Post reply
 
-dev.off()
-
 # Data municipalities per day
 
 rivm.municipalities.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",sep=";")
