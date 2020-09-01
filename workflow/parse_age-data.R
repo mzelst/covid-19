@@ -28,7 +28,7 @@ dat_besmettingen_perc <- dat_tidy %>%
 dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
 
 dat_leeftijd$Type <- c("Aantal besmettingen")
-dat_leeftijd[11:20,36] <- c("Percentage")
+dat_leeftijd[11:20,isoweek(Sys.Date())] <- c("Percentage")
 
 dat_leeftijd <- dat_leeftijd %>%
   relocate(Type, .before = Leeftijd)
