@@ -1,17 +1,40 @@
 require(tidyverse)
 require(data.table)
-
-## Test code - Only use latest dataset
+require(webshot2)
 
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 
 dat <- read.csv(last(temp), ) ## Take last filename from the folder, load csv
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
-filter.date <- Sys.Date()-28 ## Create filter for last four weeks +1
+used_date <- as.Date(last(dat$Date_of_report))
+
+dat.unknown <- dat %>%
+  filter(Municipality_code == "")  %>%
+  group_by(date) %>%
+  summarise(
+    Municipality_name = 'Unknown',
+    Municipality_code = '',
+    Total_reported = sum(Total_reported),
+    .groups = 'drop_last'
+  )
+
+dat.total <- dat %>%
+  group_by(date) %>%
+  summarise(
+    Municipality_name = 'Netherlands',
+    Municipality_code = '',
+    Total_reported = sum(Total_reported),
+    .groups = 'drop_last'
+  )
 
 dat <- dat %>%
-  dplyr::filter(Municipality_name != "") %>% # Filter observations without municipal name
-  dplyr::select(Municipality_name, Municipality_code,date, Total_reported) # Select municipality, cases reported
+  filter(Municipality_code != "") %>% # Filter observations without municipal name
+  select(Municipality_name, Municipality_code,date, Total_reported) %>% # Select municipality, cases reported
+  rbind(dat.total) %>%
+  rbind(dat.unknown)
+  
+
+rm(dat.unknown, dat.total)
 
 dat$Municipality_name <- recode(dat$Municipality_name, 
   "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
@@ -26,12 +49,14 @@ mun.pop <- read.csv("misc/municipalities-population.csv") %>%
   select(Municipality_code, population)
 
 dat.wide <- merge(mun.pop, dat.wide, by = "Municipality_code", all.y=TRUE)
+dat.wide[dat.wide$Municipality_name=="Netherlands", "population"] <- 17445629
 write.csv(dat.wide, file = "data/municipality-totals.csv")
 
 dat.lowest <- dat %>%
-  dplyr::filter(date >= as.Date('2020-07-01')) %>%
-  group_by(Municipality_code) %>%
-  slice(which.min(Total_reported))
+  filter(date >= as.Date('2020-08-01')) %>%
+  group_by(Municipality_name) %>%
+  slice(which.min(Total_reported)) %>%
+  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
 
 # create method to convert a rel_increase to traffic light
 convert_to_trafficlight <- function(rel_increase) {
@@ -68,15 +93,16 @@ increase_growth_to_arrows <- function(increase_growth) {
 dat.today.wide <- transmute(dat.wide,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
+  date = used_date,
   d0 = dat.wide[,ncol(dat.wide)], # today
   d1 = dat.wide[,ncol(dat.wide)-1], # yesterday
   d7 = dat.wide[,ncol(dat.wide)-7], # last week
   d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
   d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
-  july1 = dat.wide$`Total_reported.2020-07-01`, # july 1st
-  lowest_since_july1 = dat.lowest$`Total_reported`,
-  lowest_since_july1_date = dat.lowest$`date`,
-  current = d0-lowest_since_july1,
+  aug1 = dat.wide$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_aug1 = dat.lowest$`Total_reported`,
+  lowest_since_aug1_date = dat.lowest$`date`,
+  current = d0-lowest_since_aug1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -91,40 +117,60 @@ dat.today.wide <- transmute(dat.wide,
   color_lastweek = convert_to_trafficlight( (d7 - d14)/ population * 100000)
 )
 
-dat.today <- select( dat.today.wide,
-  current,
-  color_incl_new,
-  municipality,
-  increase_1d,
-  increase_7d,
-  growth,
-)
+dat.today <- dat.today.wide %>%
+  filter(Municipality_code != "") %>%
+  arrange(municipality) %>%
+  select(
+    current,
+    color_incl_new,
+    municipality,
+    increase_1d,
+    increase_7d,
+    growth,
+  )
 
-totals.growth <- dat.today.wide %>%
+dat.totals.growth <- dat.today.wide %>%
+  filter(Municipality_code != "") %>%
   group_by(growth) %>%
-  summarise(growth_n = n())
-
-totals.color <- dat.today.wide %>%
+  summarise(d0 = n(), .groups = 'drop_last') %>%
+  arrange(match(growth, c("⬆️⬆️","⬆️","-","⬇️⬇️","⬇️")))
+  
+dat.totals.color <- dat.today.wide %>%
+  filter(Municipality_code != "") %>%
   group_by(color) %>%
-  summarise(n = n())
+  summarise(d0 = n(), .groups = 'drop_last')
 
-totals.color_yesterday <- dat.today.wide %>%
+dat.totals.color_yesterday <- dat.today.wide %>%
+  filter(Municipality_code != "") %>%
   group_by(color_yesterday) %>%
-  summarise(yesterday_n = n()) %>%
+  summarise(d1 = n(), .groups = 'drop_last') %>%
   rename(color = color_yesterday)
 
-totals.color_lastweek <- dat.today.wide %>%
+dat.totals.color_lastweek <- dat.today.wide %>%
+  filter(Municipality_code != "") %>%
   group_by(color_lastweek) %>%
-  summarise(lastweek_n = n()) %>%
+  summarise(d7 = n(), .groups = 'drop_last') %>%
   rename(color = color_lastweek)
 
-totals.color <- merge(totals.color, totals.color_yesterday, by = "color", all.y=TRUE)
-totals.color <- merge(totals.color, totals.color_lastweek, by = "color", all.y=TRUE)
-rm(totals.color_yesterday, totals.color_lastweek)
+dat.totals.color <- dat.totals.color %>%
+  merge(dat.totals.color_yesterday, by = "color", all.y=TRUE) %>%
+  merge(dat.totals.color_lastweek, by = "color", all.y=TRUE) %>%
+  arrange(match(color, c("✅","🟡","🟧","🛑")))
+
+rm(dat.totals.color_yesterday, dat.totals.color_lastweek)
+
+dat.totals.color <- mutate(dat.totals.color,
+  increase_1d = d0-d1, # Calculate increase since last day
+  increase_7d = d0-d7, # Calculate increase in 7 days
+)
 
 write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F)
 write.csv(dat.today, file = "data/municipality-today.csv",row.names = F)
+write.csv(dat.totals.growth, file = "data/municipality-totals-growth.csv",row.names = F)
+write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.names = F)
 
+
+# rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)
 
 ## Pull municipal data from CBS
 

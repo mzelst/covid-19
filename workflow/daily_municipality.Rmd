@@ -1,0 +1,221 @@
+---
+pagetitle: Daily Municipality Update
+output: html_document
+runtime: shiny
+css: daily_municipality.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+require(data.table)
+require(xtable)
+
+setwd('../')
+
+dat.totals.color <- read.csv("data/municipality-totals-color.csv")
+dat.totals.growth <- read.csv("data/municipality-totals-growth.csv")
+dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
+  arrange(municipality)
+used_date <- as.Date(last(dat.today.wide$date))
+
+str.none <- '<span class="none">&nbsp;-&nbsp;</span>'
+
+format_custom_number <- function(data, plus = FALSE, format = "%s") {
+  return( sapply(data, function(value){
+    formatted_value <- formatC(value, format="f", big.mark=".", decimal.mark=",", digits=0)
+    plus_or_minus <- ifelse(value > 0, '+', '-')
+    formatted_value <- ifelse(plus, paste( plus_or_minus, formatted_value, sep = ''), formatted_value)
+    formatted_value <- sprintf(format, formatted_value)
+    formatted_value <- ifelse(value == 0, str.none, formatted_value)
+    return(formatted_value)
+  }))
+}
+
+print_municipality_data <- function(data, cssClass = "") {
+  data.printable <- transmute(data,
+    increase_1d = format_custom_number(increase_1d, TRUE),
+    color = color_incl_new,
+    municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
+    current = format_custom_number(current),
+    increase_7d = format_custom_number(increase_7d, TRUE, "( *w: %s * )"),
+    growth = ifelse( growth == "-", str.none, growth)
+  )
+
+  table <- xtable(data.printable, auto = TRUE)
+  align(table) <- "ccllrll"
+  
+  print( table, 
+    type = "html", 
+    sanitize.text.function=function(x){x},
+    html.table.attributes = paste('border=0', ifelse( cssClass == "", "", paste( 'class="',  cssClass, '"', sep =  "")), sep = " "), 
+    include.colnames = FALSE, 
+    include.rownames = FALSE
+  )
+  rm(data.printable, table)
+}
+
+```
+
+### Legenda
+✅ geen geconstateerde besmettingen  
+💥 nieuwe besmettingen in een groene gemeente  
+🟡  < 5 / 100.000 inwoners / 7 dagen  
+🟧  < 50 / 100.000 inwoners / 7 dagen  
+🛑  >= 50 / 100.000 inwoners / 7 dagen  
+
+⬆️ ⬆️ Fors stijgende trend ( > 100% )  
+⬆️ Stijgende trend ( 0 - 100% )  
+⬇️ Dalende trend   
+
+Bovenstaande zijn berekend op laatste  
+7 dagen t.o.v. de 7 dagen daarvoor  
+
+### Voorbeeld:
+```{r echo = FALSE, results = "asis"}
+dat.example <- dat.today.wide %>%
+  filter( municipality == "Amsterdam" )
+
+print_municipality_data(dat.example, "example align-left")
+
+template.example <- "
+%+d sinds gisteren   
+%+d sinds 1 augustus   
+%+d sinds 7 dagen ( %s )   
+Wat %s is dan de %+d in de 7 dagen ervoor   
+%s inwoners maakt dat %s %.1f / 100.000 / 7d
+"
+
+example <- first(dat.example)
+more_or_less <- (example$d0 - example$d7) / (example$d7 - example$d14)
+
+cat(sprintf(template.example, 
+  example$increase_1d, 
+  example$current, 
+  example$increase_7d, 
+  format(used_date - 7, '%d-%m-%Y'), 
+  ifelse( more_or_less >= 2, "fors meer", ifelse( more_or_less >= 1, "meer",  "minder" ) ),
+  example$d7 - example$d14, 
+  format_custom_number(example$population, TRUE),
+  example$color, 
+  example$rel_increase_7d, 
+  0
+))
+rm(dat.example, example, template.example)
+```
+
+### Landelijk:
+```{r echo = FALSE, results = "asis"}
+# +527	🟧	Nederland	20.332	( w: +3.539 )	⬇️
+
+dat.total <- dat.today.wide %>%
+  filter( municipality == "Netherlands" )
+dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
+
+print_municipality_data(dat.total, 'align-left')
+
+rm(dat.total)
+```
+
+```{r echo = FALSE, results = "asis"}
+# 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )
+# 127 Gemeente Onbekend (+2)
+
+int.count.municipality.today <- dat.today.wide %>%
+  filter(Municipality_code != "" & increase_1d > 0) %>%
+  nrow()
+
+int.count.municipality.week <- dat.today.wide %>%
+  filter(Municipality_code != "" & increase_7d > 0) %>%
+  nrow()
+
+dat.unknown <- dat.today.wide %>%
+  filter( municipality == "Unknown" )
+unknown <- first(dat.unknown)
+
+cat(sprintf("
+%s / 355 gemeentes met nieuwe besmettingen (w: %s )   
+%s Gemeente Onbekend (%s)",
+  format_custom_number(int.count.municipality.today),
+  format_custom_number(int.count.municipality.week, TRUE),
+  format_custom_number(unknown$current),
+  format_custom_number(unknown$increase_1d, TRUE)
+))
+
+rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
+```
+
+#### Alert niveaus
+```{r echo = FALSE, results = "asis"}
+
+template <- "%d / %d gemeentes (%s) ( *w: %s* )"
+dat.totals.color.printable <- transmute(dat.totals.color,
+  color = color,
+  text = sprintf(template, 
+    d0, 
+    355, 
+    ifelse(increase_1d == 0, str.none, sprintf(" %+d ", increase_1d)), 
+    ifelse(increase_7d == 0, str.none, sprintf(" %+d ", increase_7d))
+  )
+)
+
+table <- xtable(dat.totals.color.printable, auto = TRUE)
+align(table) <- "lll"
+
+print( table, 
+  type = "html", 
+  sanitize.text.function=function(x){x},
+  html.table.attributes = 'border=0', 
+  include.colnames = FALSE, 
+  include.rownames = FALSE
+)
+rm(template, table, dat.totals.color.printable)
+```
+
+#### Groei
+```{r echo = FALSE, results = "asis"}
+
+template <- "%d / %d gemeentes"
+dat.totals.growth.printable <- transmute(dat.totals.growth,
+  growth = ifelse( growth == "-", str.none, growth),
+  text = sprintf(template, d0, 355)
+)
+
+table <- xtable(dat.totals.growth.printable, auto = TRUE)
+align(table) <- "lll"
+
+print( table, 
+  type = "html", 
+  html.table.attributes = 'border=0', 
+  sanitize.text.function=function(x){x},
+  include.colnames = FALSE, 
+  include.rownames = FALSE
+)
+rm(template, table, dat.totals.growth.printable)
+
+```
+
+### Hoogste toenames van vandaag:
+```{r echo = FALSE, results = "asis"}
+dat.today.highest <- dat.today.wide %>%
+  filter( 
+    Municipality_code != ""
+      & (increase_1d > 1
+         | (increase_1d == 1 & color_incl_new %in% c("🛑", "💥"))
+      )
+  ) %>%
+  arrange(desc(increase_1d), current)
+
+print_municipality_data(dat.today.highest)
+
+```
+### Alle gemeentes
+
+```{r echo = FALSE, results = "asis"}
+
+dat.today.all <- dat.today.wide %>%
+  filter(Municipality_code != "")
+
+print_municipality_data(dat.today.all)
+
+```
