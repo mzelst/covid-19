@@ -44,7 +44,7 @@ print_municipality_data <- function(data, cssClass = "") {
 
   table <- xtable(data.printable, auto = TRUE)
   align(table) <- "ccllrll"
-
+  
   print( table, 
     type = "html", 
     sanitize.text.function=function(x){x},
@@ -116,6 +116,7 @@ rm(dat.total)
 
 ```{r echo = FALSE, results = "asis"}
 # 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )
+# 127 Gemeente Onbekend (+2)
 
 int.count.municipality.today <- dat.today.wide %>%
   filter(Municipality_code != "" & increase_1d > 0) %>%
@@ -125,27 +126,20 @@ int.count.municipality.week <- dat.today.wide %>%
   filter(Municipality_code != "" & increase_7d > 0) %>%
   nrow()
 
-cat(sprintf("%s / 355 gemeentes met nieuwe besmettingen (w: %s )",
-  format_custom_number(int.count.municipality.today),
-  format_custom_number(int.count.municipality.week, TRUE)
-))
-
-rm(int.count.municipality.today, int.count.municipality.week)
-```
-
-```{r echo = FALSE, results = "asis"}
-# 127 Gemeente Onbekend (+2)
-
 dat.unknown <- dat.today.wide %>%
   filter( municipality == "Unknown" )
-
 unknown <- first(dat.unknown)
-cat(sprintf("%s Gemeente Onbekend (%s)",
+
+cat(sprintf("
+%s / 355 gemeentes met nieuwe besmettingen (w: %s )   
+%s Gemeente Onbekend (%s)",
+  format_custom_number(int.count.municipality.today),
+  format_custom_number(int.count.municipality.week, TRUE),
   format_custom_number(unknown$current),
   format_custom_number(unknown$increase_1d, TRUE)
 ))
 
-rm(dat.unknown, unknown)
+rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
 ```
 
 #### Alert niveaus

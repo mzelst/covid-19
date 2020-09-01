@@ -1,6 +1,21 @@
 body{
-  transform: scale(0.65);
-  transform-origin: 0 0;
+  background-color: rgb(21, 32, 43);
+  color: white;
+  font-size: 0.9em;
+  padding: 4em 0;
+}
+
+h3, 
+h4{
+  margin: 0.5em 0 0.2em;
+}
+
+h3{
+  font-size: 2em;
+}
+
+h4{
+  font-size: 1.5em;
 }
 
 td{
@@ -21,7 +36,13 @@ td .municipality{
 td .municipality + hr {
   margin: 0.7em 0.5em 0 0;
   border-top-style: dashed;
+  border-top-color: rgb(56, 68, 77);
 } 
+
+tr:nth-child(115) td,
+tr:nth-child(240) td{
+  padding-bottom: 2em;
+}
 
 td .none{
   display: inline-block;
