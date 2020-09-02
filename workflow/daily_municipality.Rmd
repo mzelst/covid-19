@@ -137,7 +137,7 @@ cat(sprintf("
 %s / 355 gemeentes met nieuwe besmettingen (w: %s )   
 %s Gemeente Onbekend (%s)",
   format_custom_number(int.count.municipality.today),
-  format_custom_number(int.count.municipality.week, TRUE),
+  format_custom_number(int.count.municipality.week),
   format_custom_number(unknown$current),
   format_custom_number(unknown$increase_1d, TRUE)
 ))
