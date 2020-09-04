@@ -164,10 +164,10 @@ dat.totals.color <- mutate(dat.totals.color,
   increase_7d = d0-d7, # Calculate increase in 7 days
 )
 
-write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F)
-write.csv(dat.today, file = "data/municipality-today.csv",row.names = F)
-write.csv(dat.totals.growth, file = "data/municipality-totals-growth.csv",row.names = F)
-write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.names = F)
+write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.today, file = "data/municipality-today.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.totals.growth, file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
 
 
 # rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)

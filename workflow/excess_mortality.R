@@ -56,13 +56,20 @@ mortality_full$Overledenen_1 <- mortality_full$Overledenen_1/mortality_full$Bevo
 mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, value.var = "Overledenen_1", sum)
 
 mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
+mortality_wide$Average20132017 <- rowMeans(mortality_wide[,c("2013","2014","2015","2016","2017")])
 
 mortality_wide$excess_death <- round(mortality_wide$`2020` - mortality_wide$Average20152019,0)
+mortality_wide$excess_flu <- mortality_wide$`2018` - mortality_wide$Average20132017
 
 excess_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = mortality_wide, FUN = sum)
 excess_deaths_wide <- spread(excess_deaths, key = LeeftijdOp31December, value = excess_death)
 excess_deaths_wide$total_deaths_corrected <- excess_deaths_wide$`0 tot 65` + excess_deaths_wide$`65 tot 80` + excess_deaths_wide$`80+`
 
+
+griep <- subset(mortality_wide, Week > 13)
+excess_flu <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep, FUN = sum)
+excess_flu.sameweeks <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep.sameweeks, FUN = sum)
+age_corrected.flu.samenweeks <- round((sum(excess_flu.sameweeks$excess_flu) - excess_flu.sameweeks[excess_flu.sameweeks$LeeftijdOp31December == "Totaal","excess_flu"]),0)
 
 #alleen_ondersterfte <- subset(mortality_wide, Week > 19)
 #less_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = alleen_ondersterfte, FUN = sum)

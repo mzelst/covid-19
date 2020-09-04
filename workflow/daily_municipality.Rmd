@@ -13,9 +13,9 @@ require(xtable)
 
 setwd('../')
 
-dat.totals.color <- read.csv("data/municipality-totals-color.csv")
-dat.totals.growth <- read.csv("data/municipality-totals-growth.csv")
-dat.today.wide <- read.csv("data/municipality-today-detailed.csv") %>%
+dat.totals.color <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
+dat.totals.growth <- read.csv("data/municipality-totals-growth.csv", fileEncoding = "UTF-8")
+dat.today.wide <- read.csv("data/municipality-today-detailed.csv", fileEncoding = "UTF-8") %>%
   arrange(municipality)
 used_date <- as.Date(last(dat.today.wide$date))
 
