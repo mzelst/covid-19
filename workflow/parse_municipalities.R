@@ -81,7 +81,7 @@ calc_growth_increase <- function(increase_7d, increase_14d){
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth >= 100,  "⬆️⬆️",
+    ifelse( increase_growth > 100,  "⬆️⬆️",
     ifelse( increase_growth > 1,     "⬆️",
     #ifelse( increase_growth <= -100, "⬇️⬇️",
     ifelse( increase_growth < -1,    "⬇️",
