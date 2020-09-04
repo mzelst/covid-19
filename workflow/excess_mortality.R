@@ -91,7 +91,9 @@ deaths_2020 <- mortality_wide %>%
 
 deaths_weekly <- merge(deaths_2020, excess_deaths_wide, by = "Week")
 
-excess_cbsmodel <- read.csv("workflow/excess_mortality/data/run_week33.csv")
+week.now <- week(Sys.Date())-2 ## Which week?
+
+excess_cbsmodel <- read.csv(paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
 excess_cbsmodel <- excess_cbsmodel[which(excess_cbsmodel$model=="Dynamisch"),c("week","model","Gemiddeld")]
 
