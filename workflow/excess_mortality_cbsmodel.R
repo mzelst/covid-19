@@ -45,7 +45,7 @@ find_week <- function(var) {
 ## registered corona deaths
 ## data from RIVM: downloaded 08.06.2020
 if(file.exists('/data/covid_deaths_dt.rds')) {
-  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-5,".csv")
+  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-3,".csv")
   )[,
     Datum := as.IDate(Datum)
   ][,
@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I23', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I26', col_names = F))
 
 
 ##
@@ -405,4 +405,146 @@ totals <- beta_long[t >= 2020 & week %in% seq(11, week.now),
 ]
 
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
-rm(list=ls())
+
+##
+## Figures
+##
+
+## Figure 2.1
+
+## data
+fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
+                        week = find_week(as.numeric(time(covid_filt$y))),
+                        smooth = apply(smooth_dt_dyn, 1, mean),
+                        covid_sterfte = as.numeric(covid_filt$mod$X),
+                        cbs_deaths = covid_filt$y,
+                        lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
+                        upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
+)[!(year == 2020 & week >= 9),
+  ':=' (
+    smooth = NA, lwr = NA, upr = NA)
+][year >= 2020,
+]
+
+## create plot
+ggplot(fig2.1_dt, aes(factor(week), cbs_deaths, group = 1)) +
+  geom_ribbon(aes(ymin = 0, ymax = as.numeric(cbs_deaths) - covid_sterfte),
+              fill = 'grey50', alpha = 0.4
+  ) +
+  geom_ribbon(aes(ymax = as.numeric(cbs_deaths),
+                  ymin = as.numeric(cbs_deaths) - covid_sterfte),
+              fill = 'grey10', alpha = 0.4
+  ) +
+  geom_ribbon(aes(ymax = upr,
+                  ymin = lwr),
+              fill = 'red', alpha = 0.4
+  ) +    
+  geom_line(aes(y=smooth), lty = 'dotted') +
+  coord_cartesian(ylim = c(2000, 5500)) +
+  xlab('Week') +
+  ylab('') + 
+  theme_bw()
+ggsave('plots/fig2.1.png')
+
+
+## Figure 2.2
+
+## data for figure
+fig2.2_dt <- totals[model == 'Dynamisch']
+
+## create plot
+ggplot(fig2.2_dt, aes(factor(week), Gemiddeld)) +
+  geom_col(alpha = 0.4) +
+  geom_errorbar(aes(ymax = Hoog, ymin = Laag), col = 'red', alpha = 0.4) +
+  geom_text(aes(label = round(Gemiddeld)), vjust = 3.0) +
+  xlab('Week') +
+  ylab('Oversterfte cumulatief') +
+  theme_bw()
+ggsave('plots/fig2.2.png')
+
+## Figure 4.1.1
+fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 11,
+                         .(mid = mean(value),
+                           upr = ci_5p(value, side = 'upr'),
+                           lwr = ci_5p(value, side = 'lwr')
+                         ),
+                         by = week
+]
+
+
+## create plot
+ggplot(fig4.1.1_dt, aes(factor(week), mid, group = 1)) +
+  geom_line() +
+  geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
+  xlab('Week') +
+  ylab('Beta') + 
+  theme_bw()
+ggsave('plots/fig4.1.1.png')
+
+## Figure 4.1.2
+
+## data
+fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
+                          week = find_week(time(covid_filt$y)),
+                          cbs_deaths = covid_filt$y,
+                          mid = apply(smooth_dt_dyn, 1, mean),
+                          lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
+                          upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
+)[!(year == 2020 & week >= 9),
+  ':=' (smooth = NA, lwr = NA, upr = NA)
+][year > 2009 & week <= week.now,
+]
+
+
+## plot
+ggplot(fig4.1.2_dt,
+       aes(as.factor(week), mid, group = year)) +
+  geom_line(aes(y = cbs_deaths, col = ifelse(year >= 2020, 'grey', 'black'))) +
+  geom_line(aes(lty = ifelse(year >= 2020, 'solid', 'dotted'), col = ifelse(year >= 2020, 'grey', 'black'))) +
+  geom_ribbon(aes(ymax = upr, ymin = lwr), fill = 'red', alpha = 0.1) +
+  scale_color_manual(values=c("grey", "black")) + 
+  guides(lty = F, col = F) + 
+  xlab('week') +
+  ylab('') + 
+  theme_bw()
+ggsave('plots/fig4.1.2.png')
+
+## figure 4.2.1
+fig4.2.1_dt <-beta_long[t >= 2020 & week >= 11,
+                        lapply(.SD, function(x) unique(x)),
+                        .SDcols = c('mid', 'lwr', 'upr'),
+                        by = c('week', 'model')
+]
+
+fig4.2.1_dt <- fig4.2.1_dt %>%
+  dplyr::filter(model == "Dynamisch")
+
+## plot
+ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
+  geom_col(size = 4, position = 'dodge') +
+  geom_errorbar(aes(ymin = lwr, ymax = upr, col = ifelse(model == 'CBS', NA, 'red')), alpha = 0.4) +
+  ## scale_x_continuous(breaks = as.numeric(time(window(cbs_deaths_ts, start = c(2020, 1)))),
+  ##                    labels = seq(1, nl_dt[year == 2020, max(week)])
+  ##                    ) +
+  scale_colour_manual(values = c('red', NA)) +
+  guides(colour = F) + 
+  ylab('Oversterfte') +
+  xlab('Week') + 
+  theme_bw()
+ggsave('plots/fig4.2.1.png')
+
+## figure 4.2.2
+fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
+fig4.2.2_dt <- fig4.2.2_dt %>%
+  dplyr::filter(model == "Dynamisch")
+
+## plot
+ggplot(fig4.2.2_dt, aes(variable, value)) +
+  geom_col(alpha = 0.4) + 
+  geom_text(aes(label = round(value)), vjust = 3) + 
+  xlab('') +
+  ylab('Totale oversterfte') + 
+  theme_bw()
+ggsave('plots/fig4.2.2.png')
+
+## end of script
