@@ -6,7 +6,7 @@ require(lubridate)
 
 weeknumber <- isoweek(ymd(Sys.Date()))-2
 
-table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
+table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
 
 table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
@@ -14,7 +14,7 @@ table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
 table_mortality$LeeftijdOp31December <- factor(table_mortality$LeeftijdOp31December, levels = c(10000, 41700, 53950, 21700),
                                                labels = c("Totaal","0 tot 65", "65 tot 80", "80+"))
 
-bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2013JJ00","2014JJ00","2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
+bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2001JJ00","2002JJ00","2003JJ00","2004JJ00","2005JJ00","2006JJ00","2013JJ00","2014JJ00","2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
 bevolking <- bevolking[,c("Perioden","TotaleBevolking_1", "JongerDan20Jaar_10","k_20Tot40Jaar_11","k_40Tot65Jaar_12","k_65Tot80Jaar_13","k_80JaarOfOuder_14")]
 
 colnames(bevolking) <- c("Jaar","Totaal","Jonger20","20tot40","40tot65","65tot80","80ouder")
@@ -57,19 +57,21 @@ mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, valu
 
 mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
 mortality_wide$Average20132017 <- rowMeans(mortality_wide[,c("2013","2014","2015","2016","2017")])
+mortality_wide$Average20012005 <- rowMeans(mortality_wide[,c("2001","2002","2003","2004","2005")])
 
 mortality_wide$excess_death <- round(mortality_wide$`2020` - mortality_wide$Average20152019,0)
 mortality_wide$excess_flu <- mortality_wide$`2018` - mortality_wide$Average20132017
+mortality_wide$excess_heatwave <- mortality_wide$`2006` - mortality_wide$Average20012005
 
 excess_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = mortality_wide, FUN = sum)
 excess_deaths_wide <- spread(excess_deaths, key = LeeftijdOp31December, value = excess_death)
 excess_deaths_wide$total_deaths_corrected <- excess_deaths_wide$`0 tot 65` + excess_deaths_wide$`65 tot 80` + excess_deaths_wide$`80+`
 
-
 griep <- subset(mortality_wide, Week > 13)
 excess_flu <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep, FUN = sum)
-excess_flu.sameweeks <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep.sameweeks, FUN = sum)
-age_corrected.flu.samenweeks <- round((sum(excess_flu.sameweeks$excess_flu) - excess_flu.sameweeks[excess_flu.sameweeks$LeeftijdOp31December == "Totaal","excess_flu"]),0)
+
+hittegolf2006 <- subset(mortality_wide, Week > 26 & Week < 31)
+excess_heatwave <- aggregate(excess_heatwave ~ LeeftijdOp31December, data = hittegolf2006, FUN = sum)
 
 #alleen_ondersterfte <- subset(mortality_wide, Week > 19)
 #less_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = alleen_ondersterfte, FUN = sum)
