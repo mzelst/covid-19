@@ -200,8 +200,8 @@ rm(template, table, dat.totals.growth.printable)
 dat.today.highest <- dat.today.wide %>%
   filter( 
     Municipality_code != ""
-      & (increase_1d > 1
-         | (increase_1d == 1 & color_incl_new %in% c("🛑", "💥"))
+      & (increase_1d > 2
+         | ((increase_1d == 1 | increase_1d == 2) & color_incl_new %in% c("🛑", "💥"))
       )
   ) %>%
   arrange(desc(increase_1d), current)
