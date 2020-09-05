@@ -73,6 +73,8 @@ excess_flu <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep, FUN = s
 hittegolf2006 <- subset(mortality_wide, Week > 26 & Week < 31)
 excess_heatwave <- aggregate(excess_heatwave ~ LeeftijdOp31December, data = hittegolf2006, FUN = sum)
 
+write.csv(mortality_wide, file = "mortality.csv")
+
 #alleen_ondersterfte <- subset(mortality_wide, Week > 19)
 #less_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = alleen_ondersterfte, FUN = sum)
 
