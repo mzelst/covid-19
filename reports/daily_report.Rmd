@@ -53,7 +53,7 @@ opts_chunk$set(fig.lp = '')
 # Samenvatting
 
 ```{r samenvatting,message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 ```
@@ -92,7 +92,7 @@ Een databestand met de cumulatieve aantallen per gemeente per dag van gemelde CO
 # COVID-19 meldingen in de afgelopen vier weken
 ```{r Gemelde besmettingen, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 10, fig.width = 8}
 # Script plots for daily update
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 all.data <- read.csv("data/all_data.csv")
 all.data$date <- as.Date(all.data$date)
 all.data <- all.data[order(all.data$date),]
@@ -125,7 +125,7 @@ all.data %>%
 # Kaart met COVID-19 meldingen per gemeente sinds gisteren
 
 ```{r Gemeentes - sinds gisteren, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 9, fig.width = 8,fig.cap=" Aantal, sinds gisteren, bij de GGD’en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente"}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 library(jsonlite)
 library(geojsonio)
 library(sp)
@@ -162,7 +162,7 @@ ggplot(data = gemeentegrenzenDF) +
 # Kaart met COVID-19 meldingen per gemeente in de afgelopen week
 
 ```{r Gemeentes - Sinds vorige week, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE, fig.height = 9, fig.width = 8,fig.cap=" Aantal in de afgelopen week bij de GGD’en gemelde COVID-19 patiënten per 100.000 inwoners per gemeente."}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 library(jsonlite)
 library(geojsonio)
 library(sp)
@@ -185,7 +185,7 @@ ggplot(data = gemeentegrenzenDF) +
 # Aantal COVID-19 meldingen per provincie in de afgelopen twee weken
 
 ```{r province, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles 
 dat.today <- read.csv(last(temp)) ## Case file today
@@ -260,7 +260,7 @@ add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overle
 # Aantal COVID-19 meldingen per GGD in de afgelopen twee weken
 
 ```{r ggd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 
 ggd.cases.today <- as.data.frame(table(dat.today$Municipal_health_service)) ## Cumulative cases per GGD
 ggd.cases.weekago <- as.data.frame(table(dat.weekago$Municipal_health_service)) ## Cumulative cases per GGD - week ago
@@ -314,7 +314,7 @@ add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overle
 \newpage
 # Leeftijdsverdeling en man-vrouwverdeling van COVID-19 patiënten in de afgelopen twee weken
 ```{r Leeftijd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 
 agegroup.cases.today <- as.data.frame(table(dat.today$Agegroup)) ## Cumulative cases per age group
 agegroup.cases.weekago <- as.data.frame(table(dat.weekago$Agegroup)) ## Cumulative cases per age group - week ago
@@ -370,7 +370,7 @@ add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overle
 ``` 
 
 ```{r Geslacht, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
-setwd("C:/Users/s379011/surfdrive/projects/2020covid-19/covid-19")
+setwd('../')
 
 sex.cases.today <- as.data.frame(table(dat.today$Sex)) ## Cumulative cases per age group
 sex.cases.weekago <- as.data.frame(table(dat.weekago$Sex)) ## Cumulative cases per age group - week ago
