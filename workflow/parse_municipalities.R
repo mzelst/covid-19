@@ -1,6 +1,5 @@
 require(tidyverse)
 require(data.table)
-require(webshot2)
 
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 
