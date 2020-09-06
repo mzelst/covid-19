@@ -11,6 +11,9 @@ require(tidyverse)
 require(data.table)
 require(xtable)
 
+const.toplist_minimum = 3
+const.example_city = "Delft"
+
 setwd('../')
 
 dat.totals.color <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
@@ -74,7 +77,7 @@ Bovenstaande zijn berekend op laatste
 ### Voorbeeld:
 ```{r echo = FALSE, results = "asis"}
 dat.example <- dat.today.wide %>%
-  filter( municipality == "Amsterdam" )
+  filter( municipality == const.example_city )
 
 print_municipality_data(dat.example, "example align-left")
 
@@ -200,8 +203,8 @@ rm(template, table, dat.totals.growth.printable)
 dat.today.highest <- dat.today.wide %>%
   filter( 
     Municipality_code != ""
-      & (increase_1d > 2
-         | ((increase_1d == 1 | increase_1d == 2) & color_incl_new %in% c("🛑", "💥"))
+      & (increase_1d >= const.toplist_minimum
+         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("🛑", "💥"))
       )
   ) %>%
   arrange(desc(increase_1d), current)
