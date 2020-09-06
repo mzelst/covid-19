@@ -82,8 +82,6 @@ Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC
 
 Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
 
-Encoding(tweet2) <- "UTF-8"
-
 # Tweet for graph
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
