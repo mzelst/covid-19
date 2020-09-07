@@ -39,11 +39,23 @@ format_custom_number <- function(data, plus = FALSE, format = "%s") {
   }))
 }
 
+print_table <- function(data, alignment, cssClass = "") {
+  table <- xtable(data, auto = TRUE)
+  align(table) <- alignment
+  
+  print( table, 
+    type = "html", 
+    sanitize.text.function=function(x){x},
+    html.table.attributes = paste('border=0', ifelse( cssClass == "", "", paste( 'class="',  cssClass, '"', sep =  "")), sep = " "), 
+    include.colnames = FALSE, 
+    include.rownames = FALSE
+  )
+}
+
 print_municipality_data <- function(data, cssClass = "", include_color = TRUE) {
   if (!include_color) {
     data <- mutate( data, color_incl_new = '') 
   }
-  
   
   data.printable <- transmute(data,
     increase_1d = format_custom_number(increase_1d, TRUE),
@@ -60,18 +72,8 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE) {
     alignment <- "cclccl"
     data.printable <- subset(data.printable, select = -c(color))
   }
-
-  table <- xtable(data.printable, auto = TRUE)
-  align(table) <- alignment
   
-  print( table, 
-    type = "html", 
-    sanitize.text.function=function(x){x},
-    html.table.attributes = paste('border=0', ifelse( cssClass == "", "", paste( 'class="',  cssClass, '"', sep =  "")), sep = " "), 
-    include.colnames = FALSE, 
-    include.rownames = FALSE
-  )
-  rm(data.printable, table)
+  print_table(data.printable, alignment, cssClass)
 }
 
 ```
@@ -179,17 +181,9 @@ dat.totals.color.printable <- transmute(dat.totals.color,
   )
 )
 
-table <- xtable(dat.totals.color.printable, auto = TRUE)
-align(table) <- "lll"
+print_table(dat.totals.color.printable, "lll")
 
-print( table, 
-  type = "html", 
-  sanitize.text.function=function(x){x},
-  html.table.attributes = 'border=0', 
-  include.colnames = FALSE, 
-  include.rownames = FALSE
-)
-rm(template, table, dat.totals.color.printable)
+rm(template, dat.totals.color.printable)
 ```
 
 #### Groei
@@ -201,19 +195,28 @@ dat.totals.growth.printable <- transmute(dat.totals.growth,
   text = sprintf(template, d0, 355)
 )
 
-table <- xtable(dat.totals.growth.printable, auto = TRUE)
-align(table) <- "lll"
+print_table(dat.totals.growth.printable, "lll")
 
-print( table, 
-  type = "html", 
-  html.table.attributes = 'border=0', 
-  sanitize.text.function=function(x){x},
-  include.colnames = FALSE, 
-  include.rownames = FALSE
-)
-rm(template, table, dat.totals.growth.printable)
+rm(template, dat.totals.growth.printable)
 
 ```
+
+#### Top 15
+```{r echo = FALSE, results = "asis"}
+dat.cases.today.top10 <- dat.cases %>%
+  arrange(desc(rel_increase_7d), current) %>%
+  head(15) %>%
+  transmute(
+    color = color_incl_new,
+    municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
+    rel_increase_7d = format_custom_number(rel_increase_7d),
+    per = "/ 100.000 / 7d",
+    growth = ifelse( growth == "-", str.none, growth)
+  )
+
+print_table(dat.cases.today.top10, "cclrll", "")
+```
+
 
 ### Hoogste toenames van vandaag:
 ```{r echo = FALSE, results = "asis"}
