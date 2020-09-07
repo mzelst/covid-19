@@ -129,15 +129,15 @@ dat.pop <- read.csv("misc/municipalities-population.csv") %>%
   select(Municipality_code, population)
 
 dat.cases <- merge(dat.pop, dat.cases, by = "Municipality_code", all.y=TRUE)
-dat.cases[dat.cases$Municipality_name=="Netherlands", "population"] <- 17445629
+dat.cases[dat.cases$Municipality_name=="Netherlands", "population"] <- 17443797
 write.csv(dat.cases, file = "data/municipality-totals.csv")
 
 dat.hosp <- merge(dat.pop, dat.hosp, by = "Municipality_code", all.y=TRUE)
-dat.hosp[dat.hosp$Municipality_name=="Netherlands", "population"] <- 17445629
+dat.hosp[dat.hosp$Municipality_name=="Netherlands", "population"] <- 17443797
 write.csv(dat.hosp, file = "data/municipality-hospitalisations.csv")
 
 dat.deaths <- merge(dat.pop, dat.deaths, by = "Municipality_code", all.y=TRUE)
-dat.deaths[dat.deaths$Municipality_name=="Netherlands", "population"] <- 17445629
+dat.deaths[dat.deaths$Municipality_name=="Netherlands", "population"] <- 17443797
 write.csv(dat.deaths, file = "data/municipality-deaths.csv")
 
 # Calculate zero point
@@ -313,8 +313,6 @@ write.csv(dat.deaths.today,       file = "data/municipality-deaths-today-detaile
 write.csv(dat.deaths.today.simple,file = "data/municipality-deaths-today.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.totals.growth,file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
-
-# rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)
 
 ## Pull municipal data from CBS
 
