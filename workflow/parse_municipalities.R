@@ -245,7 +245,7 @@ dat.deaths.today <- transmute(dat.deaths,
   aug1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
   lowest_since_aug1 = dat.deaths.lowest$`Deceased`,
   lowest_since_aug1_date = dat.deaths.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  current = d0,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
