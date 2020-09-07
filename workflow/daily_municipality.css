@@ -5,9 +5,15 @@ body{
   padding: 4em 0;
 }
 
+h1,
+h2,
 h3, 
 h4{
   margin: 0.5em 0 0.2em;
+}
+
+h1{
+  font-size: 2.3em;
 }
 
 h3{
