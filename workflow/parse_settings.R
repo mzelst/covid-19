@@ -12,6 +12,10 @@ dat <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_
                       area = list(
                         c(120, 55, 563, 555)),
                       guess=FALSE)
+df <- do.call(rbind,dat)
+
+colnames(df) <- c("Settings","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
+write.csv(df,file = "data-dashboards/settings.csv", row.names = F)
 
 settings <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
                            output = "data.frame",
@@ -19,11 +23,12 @@ settings <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVI
                            area = list(
                              c(220, 55, 340, 544)),
                            guess=FALSE)
-
-df <- do.call(rbind,dat)
 settings <- do.call(rbind,settings)
-colnames(df) <- c("Settings","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
-write.csv(df,file = "data-dashboards/settings.csv", row.names = F)
+colnames(settings) <- c("Related_cases_present","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
+write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
+
+
+
 
 infections <- read.csv("corrections/corrections_perday.csv")
 infections$Week <- isoweek(infections$date)
