@@ -3,29 +3,43 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-locate_areas("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
-           pages=c(16))
+report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200908_1159_0.pdf"
 
-dat <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
-                      output = "data.frame",
-                      pages = c(17),
-                      area = list(
-                        c(120, 55, 563, 555)),
-                      guess=FALSE)
-df <- do.call(rbind,dat)
 
-colnames(df) <- c("Settings","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
-write.csv(df,file = "data-dashboards/settings.csv", row.names = F)
+## Totaal - settings
 
-settings <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
+area.table <- locate_areas(report,
+             pages=c(16))
+
+settings <- extract_tables(report,
                            output = "data.frame",
                            pages = c(16),
-                           area = list(
-                             c(220, 55, 340, 544)),
+                           area = area.table,
                            guess=FALSE)
 settings <- do.call(rbind,settings)
 colnames(settings) <- c("Related_cases_present","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
 write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
+
+
+
+## Alle settings
+
+
+area.table <- locate_areas(report,
+             pages=c(17))
+
+dat <- extract_tables(report,
+                      output = "data.frame",
+                      pages = c(17),
+                      area = area.table,
+                      guess=FALSE)
+df <- do.call(rbind,dat)
+
+
+colnames(df) <- c("Settings","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
+write.csv(df,file = "data-dashboards/settings.csv", row.names = F)
+
+
 
 infections <- read.csv("corrections/corrections_perday.csv")
 infections$Week <- isoweek(infections$date)
@@ -58,10 +72,10 @@ perc.priv_extend.known <- round((perc.home+perc.family+perc.friends+perc.parties
 
 ## GGD Positive rate
 
-area.table <- locate_areas("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
+area.table <- locate_areas(report,
                            pages=c(22))
 
-ggd_tests <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
+ggd_tests <- extract_tables(report,
                              output = "data.frame",
                              pages = c(22),
                              area = area.table,
@@ -70,18 +84,49 @@ ggd_tests <- do.call(rbind,ggd_tests)
 
 ggd_tests <- ggd_tests[c(2:(nrow(ggd_tests)-1)),]
 ggd_tests[nrow(ggd_tests),1] <- weeknumber
+ggd_tests$Week <- ggd_tests$Weeknummer
+
+## Tests door labs
+
+area.table <- locate_areas(report,
+                           pages=c(31))
+
+
+tests.labs <- extract_tables(report,
+                             output = "data.frame",
+                             pages = c(31),
+                             area = area.table,
+                             guess=FALSE)
+tests.labs <- do.call(rbind,tests.labs)
+
+colnames(tests.labs) <- c("Datum","Aantal_labs","Tests","Aantal_positief","Perc_positief")
+
+tests.labs <- tests.labs[c(2:(nrow(tests.labs))),]
+tests.labs$Week <- c(11:weeknumber)
+
 
 ## Contactinventarisatie
 
-area.table <- locate_areas("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
+area.table <- locate_areas(report,
              pages=c(20))
 
 
-contactinv <- extract_tables("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
+contactinv <- extract_tables(report,
                       output = "data.frame",
                       pages = c(20),
                       area = area.table,
                       guess=FALSE)
 contactinv <- do.call(rbind,contactinv)
-
+contactinv <- contactinv[c(2:(nrow(contactinv))),]
 colnames(contactinv) <- c("Week","Nieuwe_meldingen","Aantal_BCO","Perc_BCO","Aantal_contact","Perc_contact")
+
+
+## Merge data
+
+weekly_datalist <- list(tests.labs, ggd_tests, contactinv)
+
+all.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="Week",all.x = TRUE, ...),
+  weekly_datalist
+)
+
