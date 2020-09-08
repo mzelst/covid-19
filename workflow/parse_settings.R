@@ -1,6 +1,5 @@
 require(tabulizer)
-
-weeknumber <- isoweek(Sys.Date())-1
+require(tidyverse)
 
 locate_areas("https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf",
              pages=c(16))
