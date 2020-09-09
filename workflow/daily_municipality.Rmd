@@ -11,7 +11,7 @@ require(tidyverse)
 require(data.table)
 require(xtable)
 
-const.toplist_minimum = 4
+const.toplist_minimum = 5
 const.example_city = "Amsterdam"
 
 setwd('../')
