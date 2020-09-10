@@ -1,3 +1,5 @@
+pull(repo)
+
 # Generate Banner
 source("workflow/generate_banner.R")
 
