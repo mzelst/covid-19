@@ -29,11 +29,6 @@ bevolking2020 <- data.frame(c("2020","17414600","14015030", "2570467", "822088")
 bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
 
 
-test <- cbs_get_data("03759ned", Perioden = has_substring(c("2020JJ00")), Geslacht = has_substring(c("T001038")),
-                     BurgerlijkeStaat = has_substring(c("T001019")), RegioS = has_substring(c("NL01")), typed = T)
-test$Leeftijd <- as.numeric(test$Leeftijd)
-test$Leeftijd <- (test$Leeftijd-10000)
-
 bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
 
 bevolking$Bevolking <- as.numeric(bevolking$Bevolking)
