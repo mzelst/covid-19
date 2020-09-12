@@ -1,8 +1,12 @@
 ---
 pagetitle: Daily Municipality Update
-output: html_document
+output:
+  html_document:
+    theme: null
+    highlight: null
+    mathjax: null
+    css: ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css', 'daily_municipality.css']
 runtime: shiny
-css: daily_municipality.css
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +16,7 @@ require(data.table)
 require(xtable)
 
 const.toplist_minimum = 4
-const.example_city = "Delft"
+const.example_city = "Zaanstad"
 
 setwd('../')
 
