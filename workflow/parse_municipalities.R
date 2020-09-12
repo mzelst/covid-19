@@ -1,6 +1,8 @@
 require(tidyverse)
 require(data.table)
 
+# const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
+
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
@@ -37,7 +39,10 @@ increase_growth_to_arrows <- function(increase_growth) {
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 dat <- read.csv(last(temp), ) ## Take last filename from the folder, load csv
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
-used_date <- as.Date(last(dat$Date_of_report))
+last_date <- as.Date(last(dat$Date_of_report))
+if(!exists("const.date")){ 
+  const.date <- last_date
+}
 
 rm(temp)
 
@@ -124,6 +129,8 @@ dat.deaths <- reshape(dat.deaths,
   timevar="date",
   idvar=c("Municipality_name","Municipality_code"))
 
+date_diff <- ncol(dat.cases)-grep(paste("Total_reported.",const.date, sep=''), colnames(dat.cases))
+
 # Add population
 dat.pop <- read.csv("misc/municipalities-population.csv") %>%
   select(Municipality_code, population)
@@ -163,12 +170,12 @@ rm(dat.zeropoint)
 dat.cases.today <-transmute(dat.cases,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
-  date = used_date,
-  d0 = dat.cases[,ncol(dat.cases)], # today
-  d1 = dat.cases[,ncol(dat.cases)-1], # yesterday
-  d7 = dat.cases[,ncol(dat.cases)-7], # last week
-  d8 = dat.cases[,ncol(dat.cases)-8], # yesterday's last week
-  d14 = dat.cases[,ncol(dat.cases)-14], # 2 weeks back
+  date = const.date,
+  d0  = dat.cases[,ncol(dat.cases)-date_diff], # today
+  d1  = dat.cases[,ncol(dat.cases)-date_diff-1], # yesterday
+  d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
+  d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
+  d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
   aug1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
   lowest_since_aug1 = dat.cases.lowest$`Total_reported`,
   lowest_since_aug1_date = dat.cases.lowest$`date`,
@@ -202,12 +209,12 @@ dat.cases.today.simple <- dat.cases.today %>%
 dat.hosp.today <- transmute(dat.hosp,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
-  date = used_date,
-  d0 = dat.hosp[,ncol(dat.hosp)], # today
-  d1 = dat.hosp[,ncol(dat.hosp)-1], # yesterday
-  d7 = dat.hosp[,ncol(dat.hosp)-7], # last week
-  d8 = dat.hosp[,ncol(dat.hosp)-8], # yesterday's last week
-  d14 = dat.hosp[,ncol(dat.hosp)-14], # 2 weeks back
+  date = const.date,
+  d0  = dat.hosp[,ncol(dat.hosp)-date_diff], # today
+  d1  = dat.hosp[,ncol(dat.hosp)-date_diff-1], # yesterday
+  d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
+  d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
+  d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
   aug1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
   lowest_since_aug1 = dat.hosp.lowest$`Hospital_admission`,
   lowest_since_aug1_date = dat.hosp.lowest$`date`,
@@ -236,12 +243,12 @@ dat.hosp.today.simple <- dat.hosp.today %>%
 dat.deaths.today <- transmute(dat.deaths,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
-  date = used_date,
-  d0 = dat.deaths[,ncol(dat.deaths)], # today
-  d1 = dat.deaths[,ncol(dat.deaths)-1], # yesterday
-  d7 = dat.deaths[,ncol(dat.deaths)-7], # last week
-  d8 = dat.deaths[,ncol(dat.deaths)-8], # yesterday's last week
-  d14 = dat.deaths[,ncol(dat.deaths)-14], # 2 weeks back
+  date = const.date,
+  d0 = dat.deaths[,ncol(dat.deaths)-date_diff], # today
+  d1 = dat.deaths[,ncol(dat.deaths)-date_diff-1], # yesterday
+  d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
+  d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
+  d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
   aug1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
   lowest_since_aug1 = dat.deaths.lowest$`Deceased`,
   lowest_since_aug1_date = dat.deaths.lowest$`date`,
@@ -314,6 +321,9 @@ write.csv(dat.deaths.today.simple,file = "data/municipality-deaths-today.csv",ro
 write.csv(dat.cases.totals.growth,file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
 
+rm(const.date)
+rm(list=ls())
+
 ## Pull municipal data from CBS
 
 #require(cbsodataR)
@@ -379,4 +389,4 @@ write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",ro
 
 #data_wide$weeksum <- rowSums(data_wide[,week])
 
-# rm(list=ls())
+
