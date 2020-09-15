@@ -92,7 +92,7 @@ Patiënten IC
 Bevestigd: ",IC_Opname_Bevestigd,".
 Verdacht: ",IC_Opname_Verdacht,".
 Huidig: ",last(dat.today$IC_Current)," (+",IC_Huidig_Toename,")
-Totaal: ",last(dat.today$IC_Cumulative),")")
+Totaal: ",last(dat.today$IC_Cumulative))
 Encoding(tweet2) <- "UTF-8"
 
 # Tweet for report ####

@@ -8,13 +8,13 @@ report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapp
 
 ## Totaal - settings
 
-area.table <- locate_areas(report,
+area.table.settings.total <- locate_areas(report,
              pages=c(16))
 
 settings <- extract_tables(report,
                            output = "data.frame",
                            pages = c(16),
-                           area = area.table,
+                           area = area.table.settings.total,
                            guess=FALSE)
 settings <- do.call(rbind,settings)
 colnames(settings) <- c("Related_cases_present","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
@@ -25,13 +25,13 @@ write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
 ## Alle settings
 
 
-area.table <- locate_areas(report,
+area.table.settings.specific <- locate_areas(report,
              pages=c(17))
 
 dat <- extract_tables(report,
                       output = "data.frame",
                       pages = c(17),
-                      area = area.table,
+                      area = area.table.settings.specific,
                       guess=FALSE)
 df <- do.call(rbind,dat)
 
@@ -72,13 +72,13 @@ perc.priv_extend.known <- round((perc.home+perc.family+perc.friends+perc.parties
 
 ## GGD Positive rate
 
-area.table <- locate_areas(report,
+area.table.ggdpos.rate <- locate_areas(report,
                            pages=c(22))
 
 ggd_tests <- extract_tables(report,
                              output = "data.frame",
                              pages = c(22),
-                             area = area.table,
+                             area = area.table.ggdpos.rate,
                              guess=FALSE, )
 ggd_tests <- do.call(rbind,ggd_tests)
 
@@ -88,14 +88,14 @@ ggd_tests$Week <- ggd_tests$Weeknummer
 
 ## Tests door labs
 
-area.table <- locate_areas(report,
+area.table.testlabs <- locate_areas(report,
                            pages=c(31))
 
 
 tests.labs <- extract_tables(report,
                              output = "data.frame",
                              pages = c(31),
-                             area = area.table,
+                             area = area.table.testlabs,
                              guess=FALSE)
 tests.labs <- do.call(rbind,tests.labs)
 
@@ -107,14 +107,14 @@ tests.labs$Week <- c(11:weeknumber)
 
 ## Contactinventarisatie
 
-area.table <- locate_areas(report,
+area.table.contacts <- locate_areas(report,
              pages=c(20))
 
 
 contactinv <- extract_tables(report,
                       output = "data.frame",
                       pages = c(20),
-                      area = area.table,
+                      area = area.table.contacts,
                       guess=FALSE)
 contactinv <- do.call(rbind,contactinv)
 contactinv <- contactinv[c(2:(nrow(contactinv))),]
