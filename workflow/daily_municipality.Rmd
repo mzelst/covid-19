@@ -18,7 +18,7 @@ require(xtable)
 require(shiny)
 
 const.toplist_minimum = 7
-const.example_city = "Zaanstad"
+const.example_city = "Nijmegen"
 
 setwd('../')
 
