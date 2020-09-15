@@ -59,21 +59,43 @@ Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.
 
 post_tweet (status = tweet,media = (paste0("banners/",Sys.Date(),".png"))) ## Post tweet
 
-# Tweet for hospital numbers
+# Tweet for hospital numbers - Data NICE ####
 
-tweet2 <- paste0("Update met betrekking tot ziekenhuis-gegevens (data NICE): 
+temp = tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),2)
+myfiles = lapply(temp, read.csv)
+
+dat.today <- as.data.frame(myfiles[2])
+dat.yesterday <- as.data.frame(myfiles[1])
+
+Verpleeg_Opname_Bevestigd <- sum(dat.today$Hospital_Intake_Proven) - sum(dat.yesterday$Hospital_Intake_Proven)
+Verpleeg_Opname_Verdacht <- sum(dat.today$Hospital_Intake_Suspected) - sum(dat.yesterday$Hospital_Intake_Suspected)
+
+IC_Opname_Bevestigd <- sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
+IC_Opname_Verdacht <- sum(dat.today$IC_Intake_Suspected) - sum(dat.yesterday$IC_Intake_Suspected)
+
+Verpleeg_Huidig_Toename <- last(dat.today$Hospital_Currently) - last(dat.yesterday$Hospital_Currently)
+IC_Huidig_Toename <- last(dat.today$IC_Current) - last(dat.yesterday$IC_Current)
+
+hospital.cumulative <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/intake-cumulative/",simplify = TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+tweet2 <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
 
 Patiënten verpleegafdeling 
-Bevestigd: ",tail(all.data$Hospital_Intake_Proven,n=1),". Verdacht: ",tail(all.data$Hospital_Intake_Suspected, n=1),".
+Bevestigd: ",Verpleeg_Opname_Bevestigd,".
+Verdacht: ",Verpleeg_Opname_Verdacht,".
+Huidig: ",last(dat.today$Hospital_Currently)," (+",Verpleeg_Huidig_Toename,")
+Totaal: ",last(hospital.cumulative$value),"
 
 Patiënten IC
-Bevestigd: ",tail(all.data$IC_Intake_Proven,n=1),". Verdacht: ",tail(all.data$IC_Intake_Suspected,n=1),".
-
-Grafisch per dag: Het aantal aanwezige patiënten in het ziekenhuis, opnames, besmettingen, en het reproductiegetal.")
-
+Bevestigd: ",IC_Opname_Bevestigd,".
+Verdacht: ",IC_Opname_Verdacht,".
+Huidig: ",last(dat.today$IC_Current)," (+",IC_Huidig_Toename,")
+Totaal: ",last(dat.today$IC_Cumulative),")")
 Encoding(tweet2) <- "UTF-8"
 
-# Tweet for graph
+# Tweet for report ####
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
 reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet(tweet2, media = "plots/plot_daily.png",
