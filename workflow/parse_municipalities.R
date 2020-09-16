@@ -3,14 +3,16 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
+emoji.stop_sign <- emo::ji("stop_sign")
+emoji.white_check_mark <- emo::ji("white_check_mark")
 
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
-    ifelse( rel_increase >= 50, emo::ji("stop_sign"),
+    ifelse( rel_increase >= 50, emoji.stop_sign,
     ifelse( rel_increase > 5,   "🟧",
     ifelse( rel_increase > 0,   "🟡",
-                                emo::ji("white_check_mark"),
+                                emoji.white_check_mark,
     )))
   return(trafficlight)
 }
