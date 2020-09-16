@@ -1,3 +1,4 @@
+# Install devtools::install_github("hadley/emo")
 require(tidyverse)
 require(data.table)
 
@@ -6,10 +7,10 @@ require(data.table)
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
-    ifelse( rel_increase >= 50, "🛑",
+    ifelse( rel_increase >= 50, emo::ji("stop_sign"),
     ifelse( rel_increase > 5,   "🟧",
     ifelse( rel_increase > 0,   "🟡",
-                                "✅"
+                                emo::ji("white_check_mark"),
     )))
   return(trafficlight)
 }
@@ -26,10 +27,10 @@ calc_growth_increase <- function(increase_7d, increase_14d){
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth > 100,   "⬆️⬆️",
-    ifelse( increase_growth > 1,     "⬆️",
-   #ifelse( increase_growth <= -100, "⬇️⬇️",
-    ifelse( increase_growth < -1,    "⬇️",
+    ifelse( increase_growth > 100,   paste(emo::ji("arrow_up"), emo::ji("arrow_up")),
+    ifelse( increase_growth > 1,     emo::ji("arrow_up"),
+   #ifelse( increase_growth <= -100, paste(emo::ji("arrow_down"), emo::ji("arrow_down")),
+    ifelse( increase_growth < -1,    emo::ji("arrow_down"),
                                      "-"
   )))#)
   return(arrows)
