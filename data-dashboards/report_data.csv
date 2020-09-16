@@ -1,4 +1,4 @@
-"","Week","Datum","Aantal_labs","Tests","Aantal_positief","Perc_positief","Weeknummer","Totaal.aantal.testen","Aantal.positief","Percentage.positief","Nieuwe_meldingen","Aantal_BCO","Perc_BCO","Aantal_contact","Perc_contact"
+"","Week","Datum-weken","Aantal_Labs","Tests_Labs","Positief_Labs","Percentage_Labs","Weeknummer","Tests_GGD","Positief_GGD","Percentage_GGD","Meldingen_BCO","Positief_via_BCO","Percentage_via_BCO","Contactinventarisaties","Perc_inven_uitgevoerd"
 "1",13,"2020-03-23 - 2020-03-29",37,24745,7232,29.2,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "2",14,"2020-03-30 - 2020-04-05",40,29098,7424,25.5,NA,NA,NA,NA,NA,NA,NA,NA,NA
 "3",15,"2020-04-06 - 2020-04-12",41,38960,8391,21.5,NA,NA,NA,NA,NA,NA,NA,NA,NA
