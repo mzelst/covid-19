@@ -3,7 +3,7 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200908_1159_0.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200915_1433_NICEedit.pdf"
 
 
 ## Totaal - settings
@@ -20,11 +20,7 @@ settings <- do.call(rbind,settings)
 colnames(settings) <- c("Related_cases_present","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
 write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
 
-
-
 ## Alle settings
-
-
 area.table.settings.specific <- locate_areas(report,
              pages=c(17))
 
@@ -34,7 +30,7 @@ dat <- extract_tables(report,
                       area = area.table.settings.specific,
                       guess=FALSE)
 df <- do.call(rbind,dat)
-
+df <- df[1:29,]
 
 colnames(df) <- c("Settings","Aantal_6juli","perc_6juli","Aantal_week","perc_week")
 write.csv(df,file = "data-dashboards/settings.csv", row.names = F)
@@ -102,7 +98,7 @@ tests.labs <- do.call(rbind,tests.labs)
 colnames(tests.labs) <- c("Datum","Aantal_labs","Tests","Aantal_positief","Perc_positief")
 
 tests.labs <- tests.labs[c(2:(nrow(tests.labs))),]
-tests.labs$Week <- c(11:weeknumber)
+tests.labs$Week <- c(13:weeknumber)
 
 
 ## Contactinventarisatie
@@ -120,6 +116,7 @@ contactinv <- do.call(rbind,contactinv)
 contactinv <- contactinv[c(2:(nrow(contactinv))),]
 colnames(contactinv) <- c("Week","Nieuwe_meldingen","Aantal_BCO","Perc_BCO","Aantal_contact","Perc_contact")
 
+write.csv(contactinv, file = "data-dashboards/settings.csv")
 
 ## Merge data
 
@@ -130,3 +127,8 @@ all.data <- Reduce(
   weekly_datalist
 )
 
+colnames(all.data) <- c("Week","Datum-weken","Aantal_Labs","Tests_Labs","Positief_Labs","Percentage_Labs",
+                        "Weeknummer","Tests_GGD","Positief_GGD","Percentage_GGD","Meldingen_BCO","Positief_via_BCO",
+                        "Percentage_via_BCO","Contactinventarisaties","Perc_inven_uitgevoerd")
+
+write.csv(all.data, file = "data-dashboards/report_data.csv")

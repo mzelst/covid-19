@@ -80,19 +80,25 @@ hospital.cumulative <- rjson::fromJSON(file = "https://www.stichting-nice.nl/cov
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
 
+sign.hosp.nice <- paste0(ifelse(Verpleeg_Huidig_Toename>=0," (+"," ("))
+sign.ic.nice <- paste0(ifelse(IC_Huidig_Toename>=0," (+"," ("))
+
 tweet2 <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
 
 Patiënten verpleegafdeling 
-Bevestigd: ",Verpleeg_Opname_Bevestigd,".
-Verdacht: ",Verpleeg_Opname_Verdacht,".
-Huidig: ",last(dat.today$Hospital_Currently)," (+",Verpleeg_Huidig_Toename,")
+Bevestigd: ",Verpleeg_Opname_Bevestigd,"
+Verdacht: ",Verpleeg_Opname_Verdacht,"
+Huidig: ",last(dat.today$Hospital_Currently),sign.hosp.nice,Verpleeg_Huidig_Toename,")
 Totaal: ",last(hospital.cumulative$value),"
 
 Patiënten IC
-Bevestigd: ",IC_Opname_Bevestigd,".
-Verdacht: ",IC_Opname_Verdacht,".
-Huidig: ",last(dat.today$IC_Current)," (+",IC_Huidig_Toename,")
+Bevestigd: ",IC_Opname_Bevestigd,"
+Verdacht: ",IC_Opname_Verdacht,"
+Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
 Totaal: ",last(dat.today$IC_Cumulative))
+
+tweet2
+
 Encoding(tweet2) <- "UTF-8"
 
 # Tweet for report ####
