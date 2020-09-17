@@ -1,3 +1,7 @@
+# For emo:ji please install the following
+# install.packages("devtools")
+# devtools::install_github("hadley/emo")
+
 require(tidyverse)
 require(data.table)
 
