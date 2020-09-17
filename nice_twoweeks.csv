@@ -1,0 +1,9 @@
+"","colSums(nice.twoweeks[, c(2:9)], na.rm = T)"
+"hosp_today_proven",269
+"hosp_today_suspec",202
+"ic_today_proven",54
+"ic_today_suspected",13
+"hosp_yesterday_proven",238
+"hosp_yesterday_suspec",160
+"ic_yesterday_proven",50
+"ic_yesterday_suspected",11
