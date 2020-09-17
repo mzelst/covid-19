@@ -69,7 +69,7 @@ Opgenomen: `r last(all.data$new.hospitals)`
 Totaal: `r last(all.data$hospitalization)` `r ifelse(last(all.data$net.hospitals)>=0," (+"," (-")` 
 `r abs(last(all.data$net.hospitals))` ivm `r last(all.data$corrections.hospitals)` corr.)
 
-Opgenomen op IC: `r tail(diff(nice_by_day$IC_Cumulative),n=1)`
+Opgenomen op IC: 6
 Totaal: `r tail(nice_by_day$IC_Cumulative,n=1)`
 
 Overleden: `r last(all.data$new.deaths)`
