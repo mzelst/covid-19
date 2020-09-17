@@ -17,7 +17,7 @@ require(data.table)
 require(xtable)
 require(shiny)
 
-const.toplist_minimum = 8
+const.toplist_minimum = 7
 const.example_city = "Netherlands"
 
 setwd('../')
@@ -235,7 +235,7 @@ dat.cases.today.highest <- dat.cases %>%
   filter( 
     Municipality_code != ""
       & (increase_1d >= const.toplist_minimum
-         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("🛑", "💥"))
+         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("💥"))
       )
   ) %>%
   arrange(desc(increase_1d), current)
