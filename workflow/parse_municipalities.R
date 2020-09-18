@@ -6,8 +6,8 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
-emoji.up <- emo::ji("up_arrow")
-emoji.down <- emo::ji("down_arrow")
+emoji.up <- "&#11014;"
+emoji.down <- "&#11015;"
 emoji.red <- "&#128721;"
 emoji.orange <- "&#128999;"
 emoji.yellow <- "&#128993;"
