@@ -1,0 +1,38 @@
+---
+pagetitle: Daily Municipality Update
+output:
+  html_document:
+    theme: null
+    highlight: null
+    mathjax: null
+    css: ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css', 'daily_municipality.css']
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+require(data.table)
+require(xtable)
+
+const.toplist_minimum = 4
+const.example_city = "Zaanstad"
+
+```
+
+# Geconstateerde Besmettingen
+### Legenda
+✅ geen geconstateerde besmettingen  
+💥 nieuwe besmettingen in een groene gemeente  
+🟡  < 5 / 100.000 inwoners / 7 dagen  
+🟧  < 50 / 100.000 inwoners / 7 dagen  
+🛑  >= 50 / 100.000 inwoners / 7 dagen  
+
+⬆️ ⬆️ Fors stijgende trend ( > 100% )  
+⬆️ Stijgende trend ( 0 - 100% )  
+⬇️ Dalende trend   
+
+Bovenstaande zijn berekend op laatste  
+7 dagen t.o.v. de 7 dagen daarvoor  
+
+### Voorbeeld:
