@@ -48,7 +48,7 @@ increase_growth_to_arrows <- function(increase_growth) {
 
 # Parse and cleanup data
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
-dat <- read.csv(last(temp), ) ## Take last filename from the folder, load csv
+dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
@@ -95,10 +95,10 @@ dat <- dat %>%
 
 rm(dat.unknown, dat.total)
 
-dat$Municipality_name <- recode(dat$Municipality_name, 
-  "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
-  "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
-)
+# dat$Municipality_name <- recode(dat$Municipality_name, 
+#   "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
+#   "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
+# )
 
 dat.cases <- dat %>%
   select(
@@ -143,20 +143,24 @@ dat.deaths <- reshape(dat.deaths,
 date_diff <- ncol(dat.cases)-grep(paste("Total_reported.",const.date, sep=''), colnames(dat.cases))
 
 # Add population
-dat.pop <- read.csv("misc/municipalities-population.csv") %>%
+dat.pop <- read.csv("misc/municipalities-population.csv",
+                    encoding = "UTF-8") %>%
   select(Municipality_code, population)
 
 dat.cases <- merge(dat.pop, dat.cases, by = "Municipality_code", all.y=TRUE)
 dat.cases[dat.cases$Municipality_name=="Netherlands", "population"] <- 17443797
-write.csv(dat.cases, file = "data/municipality-totals.csv")
+write.csv(dat.cases, file = "data/municipality-totals.csv",
+          fileEncoding = "UTF-8")
 
 dat.hosp <- merge(dat.pop, dat.hosp, by = "Municipality_code", all.y=TRUE)
 dat.hosp[dat.hosp$Municipality_name=="Netherlands", "population"] <- 17443797
-write.csv(dat.hosp, file = "data/municipality-hospitalisations.csv")
+write.csv(dat.hosp, file = "data/municipality-hospitalisations.csv",
+          fileEncoding = "UTF-8")
 
 dat.deaths <- merge(dat.pop, dat.deaths, by = "Municipality_code", all.y=TRUE)
 dat.deaths[dat.deaths$Municipality_name=="Netherlands", "population"] <- 17443797
-write.csv(dat.deaths, file = "data/municipality-deaths.csv")
+write.csv(dat.deaths, file = "data/municipality-deaths.csv",
+          fileEncoding = "UTF-8")
 
 # Calculate zero point
 dat.zeropoint <- dat %>%
