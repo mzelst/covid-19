@@ -1,15 +1,26 @@
+# For emo:ji please install the following
+# install.packages("devtools")
+# devtools::install_github("hadley/emo")
+
 require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
+emoji.up <- emo::ji("up_arrow")
+emoji.down <- emo::ji("down_arrow")
+emoji.red <- "&#128721;"
+emoji.orange <- "&#128999;"
+emoji.yellow <- "&#128993;"
+emoji.green <- "&#9989;"
+emoji.new <- "&#128165;"
 
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
-    ifelse( rel_increase >= 50, "🛑",
-    ifelse( rel_increase > 5,   "🟧",
-    ifelse( rel_increase > 0,   "🟡",
-                                "✅"
+    ifelse( rel_increase >= 50, emoji.red,
+    ifelse( rel_increase > 5,   emoji.orange,
+    ifelse( rel_increase > 0,   emoji.yellow,
+                                emoji.green
     )))
   return(trafficlight)
 }
@@ -26,10 +37,10 @@ calc_growth_increase <- function(increase_7d, increase_14d){
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth > 100,   "⬆️⬆️",
-    ifelse( increase_growth > 1,     "⬆️",
-   #ifelse( increase_growth <= -100, "⬇️⬇️",
-    ifelse( increase_growth < -1,    "⬇️",
+    ifelse( increase_growth > 100,   paste(emoji.up,emoji.up),
+    ifelse( increase_growth > 1,     emoji.up,
+   #ifelse( increase_growth <= -100, paste(emoji.down, emoji.down),
+    ifelse( increase_growth < -1,    emoji.down,
                                      "-"
   )))#)
   return(arrows)
@@ -196,7 +207,7 @@ dat.cases.today <-transmute(dat.cases,
   color_incl_new = ifelse(
       ((d1 - d8) <= 0 & (d0 - d1) > 0)
     | ((d0 - d7) <= 0 & (d0 - d1) > 0),  
-  "💥", color),
+    emoji.new, color),
   color_yesterday = convert_to_trafficlight( (d1 - d8)/ population * 100000),
   color_lastweek = convert_to_trafficlight( (d7 - d14)/ population * 100000)
 )
@@ -287,8 +298,8 @@ dat.cases.totals.growth <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(growth) %>%
   summarise(d0 = n(), .groups = 'drop_last') %>%
-  arrange(match(growth, c("⬆️⬆️","⬆️","-","⬇️⬇️","⬇️")))
-  
+  arrange(match(growth, c(paste(emoji.up, emoji.up), emoji.up, "-", paste(emoji.down ,emoji.down), emoji.down)))
+
 dat.cases.totals.color <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(color) %>%
@@ -309,7 +320,7 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
 dat.cases.totals.color <- dat.cases.totals.color %>%
   merge(dat.cases.totals.color_yesterday, by = "color", all.y=TRUE) %>%
   merge(dat.cases.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c("✅","🟡","🟧","🛑")))
+  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red)))
 
 rm(dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
