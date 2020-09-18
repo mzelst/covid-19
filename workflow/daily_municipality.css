@@ -2,7 +2,11 @@ body{
   background-color: rgb(21, 32, 43);
   color: white;
   font-size: 0.9em;
-  padding: 4em 0;
+}
+
+section{
+  float: left;
+  margin: 2em;
 }
 
 h1,

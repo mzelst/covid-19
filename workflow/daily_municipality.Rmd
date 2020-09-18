@@ -1,8 +1,13 @@
 ---
 pagetitle: Daily Municipality Update
-output: html_document
+output:
+  html_document:
+    theme: null
+    highlight: null
+    mathjax: null
+    self_contained: false
+    css: ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css', 'daily_municipality.css']
 runtime: shiny
-css: daily_municipality.css
 ---
 
 ```{r setup, include=FALSE}
@@ -10,9 +15,10 @@ knitr::opts_chunk$set(echo = TRUE)
 require(tidyverse)
 require(data.table)
 require(xtable)
+require(shiny)
 
-const.toplist_minimum = 4
-const.example_city = "Delft"
+const.toplist_minimum = 7
+const.example_city = "Netherlands"
 
 setwd('../')
 
@@ -75,6 +81,13 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE) {
   
   print_table(data.printable, alignment, cssClass)
 }
+```
+
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+<section class='cases'>
+  <header>
+"))
 
 ```
 
@@ -137,9 +150,7 @@ dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
 print_municipality_data(dat.total, 'align-left')
 
 rm(dat.total)
-```
 
-```{r echo = FALSE, results = "asis"}
 # 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )
 # 127 Gemeente Onbekend (+2)
 
@@ -224,14 +235,22 @@ dat.cases.today.highest <- dat.cases %>%
   filter( 
     Municipality_code != ""
       & (increase_1d >= const.toplist_minimum
-         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("🛑", "💥"))
+         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("💥"))
       )
   ) %>%
   arrange(desc(increase_1d), current)
 
 print_municipality_data(dat.cases.today.highest)
+```
+
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </header>
+  <main>
+"))
 
 ```
+
 ### Alle gemeentes
 
 ```{r echo = FALSE, results = "asis"}
@@ -240,11 +259,17 @@ dat.cases.today.all <- dat.cases %>%
   filter(Municipality_code != "")
 
 print_municipality_data(dat.cases.today.all)
-
 ```
 
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </main>
+</section>
+<section>
+  <header>
+"))
 
-
+```
 
 # Opnames
 
@@ -298,6 +323,14 @@ print_municipality_data(dat.hosp.today.highest, "", FALSE)
 
 ```
 
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </header>
+  <main>
+"))
+
+```
+
 ### Alle gemeentes
 ```{r echo = FALSE, results = "asis"}
 
@@ -305,6 +338,16 @@ dat.hosp.today.all <- dat.hosp %>%
   filter(Municipality_code != "")
 
 print_municipality_data(dat.hosp.today.all, "", FALSE)
+
+```
+
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </main>
+</section>
+<section>
+  <header>
+"))
 
 ```
 
@@ -349,6 +392,7 @@ rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unkno
 ```
 
 ### Toenames van vandaag:
+
 ```{r echo = FALSE, results = "asis"}
 dat.deaths.today.highest <- dat.deaths %>%
   filter( 
@@ -360,12 +404,29 @@ print_municipality_data(dat.deaths.today.highest, "", FALSE)
 
 ```
 
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </header>
+  <main>
+"))
+
+```
+
 ### Alle gemeentes
+
 ```{r echo = FALSE, results = "asis"}
 
 dat.deaths.today.all <- dat.deaths %>%
   filter(Municipality_code != "")
 
 print_municipality_data(dat.deaths.today.all, "", FALSE)
+
+```
+
+```{r echo=FALSE}
+knitr::asis_output(htmltools::htmlPreserve("
+  </main>
+</section>
+"))
 
 ```
