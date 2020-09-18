@@ -46,8 +46,10 @@ colnames(lftverdeling)[1]<-"Agegroup"
 voorheat<-merge(voorheat,lftverdeling)
 voorheat$phd<-round(voorheat$n*100000/voorheat$Inwoners,0)
 
+weeknumber <- isoweek(Sys.Date())
+
 #Gewenste weken subsetten
-voorheat<-voorheat[voorheat$week>26&voorheat$week<38,]
+voorheat<-voorheat[voorheat$week>26&voorheat$week<weeknumber,]
 
 #De plot
 ggplot(voorheat,aes(week,Agegroup,fill=phd))+
@@ -66,4 +68,13 @@ ggplot(voorheat,aes(week,Agegroup,fill=phd))+
   theme(plot.title = element_text(hjust = 0.5,size = 20,family  = "Corbel",face = "bold"),
         plot.subtitle =  element_text(hjust=0.5,color = "black", face = "italic",family  = "Corbel"),
         axis.text = element_text(size=14,family  = "Corbel",face = "bold"),
-        axis.ticks = element_line(size = 1),axis.ticks.length = unit(0.2, "cm"))
+        axis.ticks = element_line(size = 1),axis.ticks.length = unit(0.2, "cm")) + 
+  ggsave("plots/leeftijd_heatmap.png",width=15, height = 4)
+
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+add(repo, path = "plots/leeftijd_heatmap.png")
+commit(repo, all = T, paste0("Update heatmap age-week ",Sys.Date()))
+push(repo, credentials = git.auth)
