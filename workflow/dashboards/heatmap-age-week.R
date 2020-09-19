@@ -64,11 +64,10 @@ ggplot(voorheat,aes(week,Agegroup,fill=phd))+
   theme(legend.position = "none")+
   labs(title = "Geconstateerde besmettingen COVID-19",
        subtitle = "Aantal positief geteste mensen per 100.000 binnen de leeftijdsgroep ",fill=NULL,
-       caption = paste("Bron data: RIVM",Sys.Date()))+
+       caption = paste("Bron data: RIVM / CBS ",Sys.Date()))+
   theme(plot.title = element_text(hjust = 0.5,size = 20,family  = "Corbel",face = "bold"),
         plot.subtitle =  element_text(hjust=0.5,color = "black", face = "italic",family  = "Corbel"),
-        axis.text = element_text(size=14,family  = "Corbel",face = "bold"),
-        axis.ticks = element_line(size = 1),axis.ticks.length = unit(0.2, "cm")) + 
+        axis.text = element_text(size=14,color = "black",family  = "Corbel",face = "bold")) + 
   ggsave("plots/leeftijd_heatmap.png",width=15, height = 4)
 
 
