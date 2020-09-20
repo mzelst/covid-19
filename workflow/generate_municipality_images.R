@@ -8,7 +8,7 @@ rmarkdown::render(
   output_file = "main.html",
   output_format = "all")
 
-webshot(
+webshot2::webshot(
   paste("file://", getwd(), "/workflow/main.html", sep=''),
   paste(getwd(), "/plots/list_municipality.png", sep=''),
   zoom = 2
