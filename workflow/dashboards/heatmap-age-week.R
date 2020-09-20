@@ -49,7 +49,7 @@ voorheat$phd<-round(voorheat$n*100000/voorheat$Inwoners,0)
 weeknumber <- isoweek(Sys.Date())
 
 #Gewenste weken subsetten
-voorheat<-voorheat[voorheat$week>26&voorheat$week<weeknumber,]
+voorheat<-voorheat[voorheat$week>26&voorheat$week<=weeknumber,]
 
 #De plot
 ggplot(voorheat,aes(week,Agegroup,fill=phd))+
