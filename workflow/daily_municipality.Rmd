@@ -18,7 +18,6 @@ require(xtable)
 require(shiny)
 
 const.toplist_minimum = 7
-const.example_city = "Netherlands"
 
 setwd('../')
 
@@ -109,7 +108,9 @@ Bovenstaande zijn berekend op laatste
 ### Voorbeeld:
 ```{r echo = FALSE, results = "asis"}
 dat.example <- dat.cases %>%
-  filter( municipality == const.example_city )
+  filter( population > 25000 ) %>%
+  arrange(desc(rel_increase_1d), current) %>%
+  head(1)
 
 print_municipality_data(dat.example, "example align-left")
 
