@@ -265,7 +265,7 @@ print_municipality_data(dat.cases.today.all)
 knitr::asis_output(htmltools::htmlPreserve("
   </main>
 </section>
-<section>
+<section class='hosp'>
   <header>
 "))
 
@@ -345,7 +345,7 @@ print_municipality_data(dat.hosp.today.all, "", FALSE)
 knitr::asis_output(htmltools::htmlPreserve("
   </main>
 </section>
-<section>
+<section class='deaths'>
   <header>
 "))
 
@@ -429,4 +429,5 @@ knitr::asis_output(htmltools::htmlPreserve("
 </section>
 "))
 
+rm(list=ls())
 ```
