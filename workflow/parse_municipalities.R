@@ -6,13 +6,19 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
-emoji.up <- "&#11014;"
-emoji.down <- "&#11015;"
-emoji.red <- "&#128721;"
-emoji.orange <- "&#128999;"
-emoji.yellow <- "&#128993;"
-emoji.green <- "&#9989;"
-emoji.new <- "&#128165;"
+
+
+emoji.up <- intToUtf8(0x2B06)
+emoji.up_double = paste(emoji.up, emoji.up, sep="")
+emoji.down <- intToUtf8(0x2B07)
+emoji.down_double = paste(emoji.down, emoji.down, sep="")
+emoji.red <- intToUtf8(0x1F6D1)
+emoji.orange <- intToUtf8(0x1F7E7)
+emoji.yellow <- intToUtf8(0x1F7E1)
+emoji.green <- intToUtf8(0x2705)
+emoji.new <- intToUtf8(0x1F4A5)
+
+
 
 # methods
 convert_to_trafficlight <- function(rel_increase) {
@@ -37,9 +43,9 @@ calc_growth_increase <- function(increase_7d, increase_14d){
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth > 100,   paste(emoji.up,emoji.up),
+    ifelse( increase_growth > 100,   emoji.up_double,
     ifelse( increase_growth > 1,     emoji.up,
-   #ifelse( increase_growth <= -100, paste(emoji.down, emoji.down),
+   #ifelse( increase_growth <= -100, emoji.down_double,
     ifelse( increase_growth < -1,    emoji.down,
                                      "-"
   )))#)
@@ -298,7 +304,7 @@ dat.cases.totals.growth <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(growth) %>%
   summarise(d0 = n(), .groups = 'drop_last') %>%
-  arrange(match(growth, c(paste(emoji.up, emoji.up), emoji.up, "-", paste(emoji.down ,emoji.down), emoji.down)))
+  arrange(match(growth, c(emoji.up_double, emoji.up, "-", emoji.down_double, emoji.down)))
 
 dat.cases.totals.color <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
