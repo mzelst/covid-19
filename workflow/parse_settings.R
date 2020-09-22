@@ -3,7 +3,7 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200915_1433_NICEedit.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200922_1141_0.pdf"
 
 
 ## Totaal - settings

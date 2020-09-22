@@ -49,7 +49,7 @@ voorheat$phd<-round(voorheat$n*100000/voorheat$Inwoners,0)
 weeknumber <- isoweek(Sys.Date())
 
 #Gewenste weken subsetten
-voorheat<-voorheat[voorheat$week>26&voorheat$week<=weeknumber,]
+voorheat<-voorheat[voorheat$week>26&voorheat$week<weeknumber,]
 
 #De plot
 ggplot(voorheat,aes(week,Agegroup,fill=phd))+
@@ -74,6 +74,8 @@ ggplot(voorheat,aes(week,Agegroup,fill=phd))+
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
+
+repo <- init()
 add(repo, path = "plots/leeftijd_heatmap.png")
 commit(repo, all = T, paste0("Update heatmap age-week ",Sys.Date()))
 push(repo, credentials = git.auth)
