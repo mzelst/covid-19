@@ -209,6 +209,7 @@ dat.cases.today <-transmute(dat.cases,
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000,
   color = convert_to_trafficlight(rel_increase_7d),
   color_incl_new = ifelse(
       ((d1 - d8) <= 0 & (d0 - d1) > 0)
@@ -250,7 +251,8 @@ dat.hosp.today <- transmute(dat.hosp,
   growth = increase_growth_to_arrows(increase_growth),
   population,
   rel_increase_1d = increase_1d / population * 100000,
-  rel_increase_7d = increase_7d / population * 100000
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
 )
 
 dat.hosp.today.simple <- dat.hosp.today %>%
@@ -284,7 +286,8 @@ dat.deaths.today <- transmute(dat.deaths,
   growth = increase_growth_to_arrows(increase_growth),
   population,
   rel_increase_1d = increase_1d / population * 100000,
-  rel_increase_7d = increase_7d / population * 100000
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
 )
 
 dat.deaths.today.simple <- dat.deaths.today %>%
