@@ -57,6 +57,8 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
 
+tweet
+
 post_tweet (status = tweet,media = (paste0("banners/",Sys.Date(),".png"))) ## Post tweet
 
 # Tweet for hospital numbers - Data NICE ####
