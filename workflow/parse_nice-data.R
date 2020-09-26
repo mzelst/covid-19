@@ -74,6 +74,8 @@ df <- df %>% mutate(Hosp_Intake_Suspec_Cumul = cumsum(Hospital_Intake_Suspected)
 df <- df %>% mutate(IC_Intake_Suspected_Cumul = cumsum(IC_Intake_Suspected))
 df$date <- as.Date(df$date)
 
+df$IC_Intake_Proven_Cumsum <- cumsum(df$IC_Intake_Proven)
+
 write.csv(df, "data-nice/nice-today.csv", row.names = F) ## Write file with all NICE data until today
 filename.nice.perday <- paste0("data-nice/data-nice-json/",Sys.Date(),".csv")
 write.csv(df, filename.nice.perday, row.names = F) ## Save daily NICE data - JSON parsed - downloaded around 14:30 PM (CET)
@@ -92,6 +94,7 @@ nice_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
 
 nice_by_day$date <- as.Date(nice_by_day$date)
 nice_by_day <- nice_by_day[order(nice_by_day$date),]
+
 
 nice_by_day <- nice_by_day %>%
   mutate(ic_intake_nice = c(0,diff(IC_Cumulative))) %>%

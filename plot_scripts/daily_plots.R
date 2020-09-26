@@ -12,6 +12,10 @@ all.data <- all.data[order(all.data$date),]
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
 
+all.data[211,27] <- 12
+all.data[212,27] <- 10
+
+
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
@@ -38,9 +42,9 @@ nice.today$date <- as.Date(nice.today$date)
 aanwezig <- nice.today %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
-  geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling"), lwd=1.2) +
-  geom_line(aes(y = IC_Current, color = "Aanwezig op IC"), lwd=1.2) +
-  ylim(0,350) + 
+  geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling (NICE)"), lwd=1.2) +
+  geom_line(aes(y = IC_Current, color = "Aanwezig op IC (NICE)"), lwd=1.2) +
+  ylim(0,500) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -57,9 +61,9 @@ aanwezig <- nice.today %>%
 opnames <- all.data %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
-  geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling"), lwd=1.2) +
-  geom_line(aes(y = ic_intake_nice, color = "Opname op IC"), lwd=1.2) +
-  ylim(0,25) + 
+  geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling (RIVM)"), lwd=1.2) +
+  geom_line(aes(y = ic_intake_nice, color = "Opname op IC (NICE)"), lwd=1.2) +
+  ylim(0,40) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -68,7 +72,7 @@ opnames <- all.data %>%
   labs(x = "Datum",
        y = "Opnames per dag",
        color = "Legend") +
-  ggtitle("Opnames op de IC vs. verpleegafdeling") +
+  ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 15, height=4)
 
 reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
