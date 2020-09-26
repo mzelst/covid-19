@@ -338,7 +338,33 @@ dat.cases.totals.color <- mutate(dat.cases.totals.color,
   increase_7d = d0-d7, # Calculate increase in 7 days
 )
 
+dat.cases_per_death <-transmute(dat.cases,
+  municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
+  date = const.date,
+  population = population,
+  cases_d0  = dat.cases[,ncol(dat.cases)-date_diff],
+  cases_d7 = dat.cases[,ncol(dat.cases)-date_diff-7], 
+  rel_cases_7d = (cases_d0 - cases_d7) / population * 100000,
+  rel_cases_total = cases_d0 / population * 100000,
+  color = convert_to_trafficlight(rel_cases_7d),
+  hosp_d0  = dat.hosp[,ncol(dat.hosp)-date_diff], 
+  hosp_d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], 
+  rel_hosp_7d = (hosp_d0 - hosp_d7) / population * 100000,
+  rel_hosp_total = hosp_d0 / population * 100000,
+  deaths_d0  = dat.deaths[,ncol(dat.deaths)-date_diff],
+  deaths_d7  = dat.deaths[,ncol(dat.deaths)-date_diff-7],
+  rel_deaths_7d = (deaths_d0 - deaths_d7) / population * 100000,
+  rel_deaths_total = deaths_d0 / population * 100000,
+  perc_cases = cases_d0 / population * 100,
+  perc_hosp = hosp_d0 / population * 100,
+  perc_deaths = deaths_d0 / population * 100, 
+  perc_deaths_per_case = deaths_d0 / cases_d0 * 100
+) %>% mutate(across(where(is.numeric), round, 1))
+  
+
 # Write to csv
+write.csv(dat.cases_per_death,    file = "data/municipality-combined.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.today,        file = "data/municipality-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.today.simple, file = "data/municipality-today.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.hosp.today,         file = "data/municipality-hospitalisations-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
