@@ -12,6 +12,10 @@ all.data <- all.data[order(all.data$date),]
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
 
+all.data[211,27] <- 12
+all.data[212,27] <- 10
+
+
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
