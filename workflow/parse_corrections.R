@@ -99,6 +99,26 @@ net.diff <- net.diff[2:length(net.diff)]
 new.deaths <- neg.counts*-1+net.diff ## Calculate new cases
 net.deaths <- new.deaths + corrections.deaths
 
+## Week of death - diff file
+
+temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
+myfiles = lapply(temp, read.csv)
+
+dat.today <- as.data.frame(myfiles[2])
+dat.yesterday <- as.data.frame(myfiles[1])
+
+dat.today$Week <- substr(dat.today$Week_of_death, 5, 6)
+dat.yesterday$Week <- substr(dat.yesterday$Week_of_death, 5, 6)
+today.weekdeath <- count(dat.today,Week)
+yesterday.weekdeath <- count(dat.yesterday,Week)
+
+df.weekdeath <- merge(today.weekdeath,yesterday.weekdeath,by="Week",all.X=T)
+df.weekdeath$diff <- df.weekdeath$n.x - df.weekdeath$n.y
+colnames(df.weekdeath) <- c("Week","weekdeath_today","weekdeath_yesterday","diff")
+df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
+
+write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv")
+
 ## Merge all correction data
 corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infection,new.hospitals,corrections.hospitals, 
                                        net.hospitals,new.deaths,corrections.deaths,net.deaths))
