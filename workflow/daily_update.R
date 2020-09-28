@@ -42,8 +42,8 @@ text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",last(all.data$new.infection),"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
+Positief getest: ",2995,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",0," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -100,8 +100,6 @@ Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
 Totaal: ",last(dat.today$IC_Cumulative))
 
 tweet2
-
-Encoding(tweet2) <- "UTF-8"
 
 # Tweet for report ####
 my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
