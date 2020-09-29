@@ -10,11 +10,12 @@ rmarkdown::render(
 
 screenshots = c(
   "section" = "full",
-  "section.cases header" = "cases-top",
+  "section.cases header" = "cases-head",
+  "section.cases #section-top-15" = "cases-top-15",
   "section.cases main" = "cases-all",
-  "section.hosp header" = "hosp-top",
+  "section.hosp header" = "hosp-head",
   "section.hosp main" = "hosp-all",
-  "section.deaths header" = "deaths-top",
+  "section.deaths header" = "deaths-head",
   "section.deaths main" = "deaths-all"
 )
 
