@@ -146,7 +146,7 @@ tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
 Encoding(tweet.municipality.tweet) <- "UTF-8"
 
 post_tweet(tweet.municipality.tweet, 
-  media = c("plots/list-cases-top.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
+  media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
   in_reply_to_status_id = get_reply_id() ## Post reply
 ) 
 
@@ -165,7 +165,7 @@ tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
 Encoding(tweet.municipality.tweet) <- "UTF-8"
 
 post_tweet(tweet.municipality.tweet, 
-  media = c("plots/list-hosp-top.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
+  media = c("plots/list-hosp-head.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
   in_reply_to_status_id = get_reply_id() ## Post reply
 ) 
 
@@ -187,7 +187,7 @@ tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
 Encoding(tweet.municipality.tweet) <- "UTF-8"
 
 post_tweet(tweet.municipality.tweet, 
-  media = c("plots/list-deaths-top.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
+  media = c("plots/list-deaths-head.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
   in_reply_to_status_id = get_reply_id() ## Post reply
 ) 
 
