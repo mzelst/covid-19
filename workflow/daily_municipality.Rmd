@@ -17,7 +17,7 @@ require(data.table)
 require(xtable)
 require(shiny)
 
-const.toplist_minimum = 10
+const.toplist_minimum = 15
 
 setwd('../')
 
@@ -57,7 +57,7 @@ print_table <- function(data, alignment, cssClass = "") {
   )
 }
 
-print_municipality_data <- function(data, cssClass = "", include_color = TRUE) {
+print_municipality_data <- function(data, cssClass = "", include_color = TRUE, two_weeks = FALSE) {
   if (!include_color) {
     data <- mutate( data, color_incl_new = '') 
   }
@@ -68,17 +68,55 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE) {
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
     current = format_custom_number(current),
     increase_7d = format_custom_number(increase_7d, TRUE, "( *w: %s * )"),
+    increase_14d = format_custom_number(increase_14d, TRUE, "( *2w: %s * )"),
     growth = ifelse( growth == "-", str.none, growth)
   )
+  
+  if (two_weeks){
+    data.printable <- subset(data.printable, select = -c(increase_7d))
+  } else {
+    data.printable <- subset(data.printable, select = -c(increase_14d))
+  }
   
   alignment <- "ccllrll"
   
   if (!include_color) {
-    alignment <- "cclccl"
+    alignment <- "cclrll"
     data.printable <- subset(data.printable, select = -c(color))
   }
   
   print_table(data.printable, alignment, cssClass)
+}
+
+print_detailed <- function(data){
+  template.example <- "
+  %s sinds gisteren   
+  %s sinds 1 september   
+  %s sinds 7 dagen ( %s )   
+  Wat %s is dan de %s in de 7 dagen ervoor   
+  %s inwoners maakt dat %s %.1f / 100.000 / 7d
+  "
+  
+  print_municipality_data(data, "example align-left")
+  
+  data <- first(data)
+  more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
+  cat(sprintf(template.example, 
+    ifelse(data$increase_1d == 0, 0, format_custom_number(data$increase_1d, TRUE)),
+    format_custom_number(data$current, TRUE),
+    format_custom_number(data$increase_7d, TRUE),
+    format(used_date - 7, '%d-%m-%Y'), 
+    ifelse(   more_or_less >= 2, "fors meer", 
+      ifelse( more_or_less >= 1, "meer",  
+      ifelse( more_or_less < 0.4, "fors minder", 
+                                  "minder" 
+    ))),
+    format_custom_number(data$d7 - data$d14, TRUE),
+    format_custom_number(data$population),
+    data$color, 
+    data$rel_increase_7d, 
+    0
+  ))
 }
 ```
 
@@ -92,64 +130,29 @@ knitr::asis_output(htmltools::htmlPreserve("
 
 # Geconstateerde Besmettingen
 ### Legenda
-✅ geen geconstateerde besmettingen  
-💥 nieuwe besmettingen in een groene gemeente  
-🟡  < 5 / 100.000 inwoners / 7 dagen  
-🟧  < 50 / 100.000 inwoners / 7 dagen  
-🛑  >= 50 / 100.000 inwoners / 7 dagen  
+✅   geen geconstateerde besmettingen  in 7 dagen   
+💥   nieuwe besmettingen in een groene gemeente  
+🟡   Gerustellend ( 1-5 / 100.000 inwoners / 7 dagen )  
+🟧   Waakzaam ( 5-50 / 100.000 inwoners / 7 dagen )   
+🛑   Zorgelijk ( 50-150 / 100.000 inwoners / 7 dagen )  
+🔘   Ernstig ( >= 150 / 100.000 inwoners / 7 dagen )
 
-⬆️ ⬆️ Fors stijgende trend ( > 100% )  
-⬆️ Stijgende trend ( 0 - 100% )  
-⬇️ Dalende trend   
+⬆⬆ Fors stijgende trend ( > 100% )  
+⬆ Stijgende trend ( 0 - 100% )  
+⬇ Dalende trend   
 
 Bovenstaande zijn berekend op laatste  
 7 dagen t.o.v. de 7 dagen daarvoor  
 
-### Voorbeeld:
-```{r echo = FALSE, results = "asis"}
-dat.example <- dat.cases %>%
-  filter( population > 25000 ) %>%
-  arrange(desc(rel_increase_1d), current) %>%
-  head(1)
-
-print_municipality_data(dat.example, "example align-left")
-
-template.example <- "
-%+d sinds gisteren   
-%+d sinds 1 augustus   
-%+d sinds 7 dagen ( %s )   
-Wat %s is dan de %+d in de 7 dagen ervoor   
-%s inwoners maakt dat %s %.1f / 100.000 / 7d
-"
-
-example <- first(dat.example)
-more_or_less <- (example$d0 - example$d7) / (example$d7 - example$d14)
-
-cat(sprintf(template.example, 
-  example$increase_1d, 
-  example$current, 
-  example$increase_7d, 
-  format(used_date - 7, '%d-%m-%Y'), 
-  ifelse( more_or_less >= 2, "fors meer", ifelse( more_or_less >= 1, "meer",  "minder" ) ),
-  example$d7 - example$d14, 
-  format_custom_number(example$population, TRUE),
-  example$color, 
-  example$rel_increase_7d, 
-  0
-))
-rm(dat.example, example, template.example)
-```
-
 ### Landelijk:
 ```{r echo = FALSE, results = "asis"}
-# +527	🟧	Nederland	20.332	( w: +3.539 )	⬇️
 
+# +527	🟧	Nederland	20.332	( w: +3.539 )	⬇️
 dat.total <- dat.cases %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
 
-print_municipality_data(dat.total, 'align-left')
-
+print_detailed(dat.total)
 rm(dat.total)
 
 # 142 / 355 gemeentes met nieuwe besmettingen (w: 299 )
@@ -168,6 +171,7 @@ dat.unknown <- dat.cases %>%
 unknown <- first(dat.unknown)
 
 cat(sprintf("
+
 %s / 355 gemeentes met nieuwe besmettingen (w: %s )   
 %s Gemeente Onbekend (%s)",
   format_custom_number(int.count.municipality.today),
@@ -213,11 +217,33 @@ rm(template, dat.totals.growth.printable)
 
 ```
 
-#### Top 15
+#### Indammer van de dag
+```{r echo = FALSE, results = "asis"}
+dat.success <- dat.cases %>%
+  filter( population > 25000 ) %>%
+  arrange(increase_growth, desc(current)) %>%
+  head(1)
+
+print_detailed(dat.success)
+rm(dat.success)
+```
+
+#### Prutser van de dag
+```{r echo = FALSE, results = "asis"}
+dat.example <- dat.cases %>%
+  filter( population > 25000 ) %>%
+  arrange(desc(rel_increase_1d), current) %>%
+  head(1)
+
+print_detailed(dat.example)
+rm(dat.example)
+```
+
+#### Bottom 20 van de week
 ```{r echo = FALSE, results = "asis"}
 dat.cases.today.top10 <- dat.cases %>%
   arrange(desc(rel_increase_7d), current) %>%
-  head(15) %>%
+  head(20) %>%
   transmute(
     color = color_incl_new,
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
@@ -229,8 +255,7 @@ dat.cases.today.top10 <- dat.cases %>%
 print_table(dat.cases.today.top10, "cclrll", "")
 ```
 
-
-### Hoogste toenames van vandaag:
+#### Hoogste toenames van vandaag:
 ```{r echo = FALSE, results = "asis"}
 dat.cases.today.highest <- dat.cases %>%
   filter( 
@@ -243,6 +268,8 @@ dat.cases.today.highest <- dat.cases %>%
 
 print_municipality_data(dat.cases.today.highest)
 ```
+
+
 
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
@@ -335,7 +362,7 @@ dat.hosp.today.highest <- dat.hosp %>%
   ) %>%
   arrange(desc(increase_1d), current)
 
-print_municipality_data(dat.hosp.today.highest, "", FALSE)
+print_municipality_data(dat.hosp.today.highest, "", FALSE, TRUE)
 
 ```
 
@@ -353,7 +380,7 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.hosp.today.all <- dat.hosp %>%
   filter(Municipality_code != "")
 
-print_municipality_data(dat.hosp.today.all, "", FALSE)
+print_municipality_data(dat.hosp.today.all, "", FALSE, TRUE)
 
 ```
 
@@ -377,7 +404,7 @@ dat.total <- dat.deaths %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 overlijdens"
 
-print_municipality_data(dat.total, 'align-left', FALSE)
+print_municipality_data(dat.total, 'align-left', FALSE, TRUE)
 
 rm(dat.total)
 ```
@@ -416,7 +443,7 @@ dat.deaths.today.highest <- dat.deaths %>%
   ) %>%
   arrange(desc(increase_1d), current)
 
-print_municipality_data(dat.deaths.today.highest, "", FALSE)
+print_municipality_data(dat.deaths.today.highest, "", FALSE, TRUE)
 
 ```
 
@@ -435,7 +462,7 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.deaths.today.all <- dat.deaths %>%
   filter(Municipality_code != "")
 
-print_municipality_data(dat.deaths.today.all, "", FALSE)
+print_municipality_data(dat.deaths.today.all, "", FALSE, TRUE)
 
 ```
 

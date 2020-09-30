@@ -12,6 +12,7 @@ emoji.up <- intToUtf8(0x2B06)
 emoji.up_double = paste(emoji.up, emoji.up, sep="")
 emoji.down <- intToUtf8(0x2B07)
 emoji.down_double = paste(emoji.down, emoji.down, sep="")
+emoji.black <- intToUtf8(0x1F518)
 emoji.red <- intToUtf8(0x1F6D1)
 emoji.orange <- intToUtf8(0x1F7E7)
 emoji.yellow <- intToUtf8(0x1F7E1)
@@ -23,11 +24,12 @@ emoji.new <- intToUtf8(0x1F4A5)
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
+    ifelse( rel_increase >= 150, emoji.black,
     ifelse( rel_increase >= 50, emoji.red,
     ifelse( rel_increase > 5,   emoji.orange,
     ifelse( rel_increase > 0,   emoji.yellow,
                                 emoji.green
-    )))
+    ))))
   return(trafficlight)
 }
 
@@ -197,10 +199,10 @@ dat.cases.today <-transmute(dat.cases,
   d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
   d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
   d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
-  aug1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.cases.lowest$`Total_reported`,
-  lowest_since_aug1_date = dat.cases.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  sep1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.cases.lowest$`Total_reported`,
+  lowest_since_sep1_date = dat.cases.lowest$`date`,
+  current = d0-lowest_since_sep1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -240,10 +242,10 @@ dat.hosp.today <- transmute(dat.hosp,
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
   d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
   d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
-  aug1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.hosp.lowest$`Hospital_admission`,
-  lowest_since_aug1_date = dat.hosp.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  sep1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.hosp.lowest$`Hospital_admission`,
+  lowest_since_sep1_date = dat.hosp.lowest$`date`,
+  current = d0-lowest_since_sep1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -275,9 +277,9 @@ dat.deaths.today <- transmute(dat.deaths,
   d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
   d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
   d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
-  aug1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.deaths.lowest$`Deceased`,
-  lowest_since_aug1_date = dat.deaths.lowest$`date`,
+  sep1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.deaths.lowest$`Deceased`,
+  lowest_since_sep1_date = dat.deaths.lowest$`date`,
   current = d0,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
@@ -329,7 +331,7 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
 dat.cases.totals.color <- dat.cases.totals.color %>%
   merge(dat.cases.totals.color_yesterday, by = "color", all.y=TRUE) %>%
   merge(dat.cases.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red)))
+  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.black)))
 
 rm(dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
