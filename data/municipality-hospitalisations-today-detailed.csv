@@ -1,4 +1,4 @@
-"municipality","Municipality_code","date","d0","d1","d7","d8","d14","lowest_since_aug1","lowest_since_aug1_date","current","increase_1d","increase_7d","increase_14d","increase_growth","growth","population","rel_increase_1d","rel_increase_7d","rel_increase_14d"
+"municipality","Municipality_code","date","d0","d1","d7","d8","d14","lowest_since_sep1","lowest_since_sep1_date","current","increase_1d","increase_7d","increase_14d","increase_growth","growth","population","rel_increase_1d","rel_increase_7d","rel_increase_14d"
 "Netherlands","",2020-09-30,12758,12710,12499,12467,12330,11937,2020-08-01,821,48,259,428,53.2544378698225,"⬆",17443797,0.275169448486473,1.48476848245826,2.45359424900439
 "Unknown","",2020-09-30,73,73,68,69,67,62,2020-08-02,11,0,5,6,400,"⬆⬆",NA,NA,NA,NA
 "Appingedam","GM0003",2020-09-30,3,3,3,3,3,3,2020-08-01,0,0,0,0,0,"-",11523,0,0,0
