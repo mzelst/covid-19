@@ -217,7 +217,7 @@ rm(template, dat.totals.growth.printable)
 
 ```
 
-#### Indammer van de dag
+#### Hoogste daling van laatste 7 dagen
 ```{r echo = FALSE, results = "asis"}
 dat.success <- dat.cases %>%
   filter( population > 25000 ) %>%
@@ -228,7 +228,7 @@ print_detailed(dat.success)
 rm(dat.success)
 ```
 
-#### Prutser van de dag
+#### Hoogste stijging per inwoner van vandaag
 ```{r echo = FALSE, results = "asis"}
 dat.example <- dat.cases %>%
   filter( population > 25000 ) %>%
