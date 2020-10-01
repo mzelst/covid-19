@@ -4,9 +4,9 @@ pull(repo)
 source("workflow/generate_banner.R")
 
 # Parse RIVM, NICE and corrections data
-source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
-source("workflow/parse_municipalities.R")
 source("workflow/parse_nice-data.R")
+source("workflow/parse_rivm-data.R")
+source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
 ## Merge RIVM, NICE and corrections data
@@ -42,8 +42,8 @@ text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",3025,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-14," corr.)
+Positief getest: ",3302,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-8," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
