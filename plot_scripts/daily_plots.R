@@ -63,7 +63,7 @@ opnames <- all.data %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
   geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling (RIVM)"), lwd=1.2) +
   geom_line(aes(y = ic_intake_nice, color = "Opname op IC (NICE)"), lwd=1.2) +
-  ylim(0,40) + 
+  ylim(0,50) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
