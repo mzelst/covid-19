@@ -42,8 +42,8 @@ text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-
 ## Build tweets
 tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",3825,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",0," corr.)
+Positief getest: ",last(all.data$new.infection),"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
