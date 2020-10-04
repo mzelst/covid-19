@@ -11,10 +11,8 @@ all.data <- all.data[order(all.data$date),]
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
-
 all.data[211,27] <- 12
 all.data[212,27] <- 10
-
 
 # Plot for positive tests per day
 cases <- all.data %>%
@@ -39,11 +37,21 @@ cases <- all.data %>%
 nice.today <- read.csv("data-nice/nice-today.csv")
 nice.today$date <- as.Date(nice.today$date)
 
+lcps.dat <- read.csv("https://lcps.nu/wp-content/uploads/covid-19.csv")
+lcps.dat$date <- as.Date(lcps.dat$Datum, format = "%d-%m-%y")
+lcps.dat <- lcps.dat %>%
+  arrange(date)
+
+nice.today <- merge(nice.today, lcps.dat, by = "date")
+str(nice.today)
+
 aanwezig <- nice.today %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
   geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling (NICE)"), lwd=1.2) +
   geom_line(aes(y = IC_Current, color = "Aanwezig op IC (NICE)"), lwd=1.2) +
+  geom_line(aes(y = Kliniek_Bedden, color = "Aanwezig op verpleegafdeling (LCPS)"), lwd=1.2) +
+  geom_line(aes(y = IC_Bedden_COVID, color = "Aanwezig op IC (LCPS)"), lwd=1.2) +
   ylim(0,700) + 
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
@@ -53,7 +61,7 @@ aanwezig <- nice.today %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Aanwezig op de IC vs. verpleegafdeling") +
+  ggtitle("Aanwezig op de verpleegafdeling vs. IC (NICE & LCPS)") +
   ggsave("plots/overview_aanwezig_zkh.png", width = 15, height=4)
 
 # Plot for #patients intake per day

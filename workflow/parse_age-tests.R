@@ -9,14 +9,14 @@ report <- "https://www.rivm.nl/sites/default/files/2020-08/COVID-19_WebSite_rapp
 report <- "https://www.rivm.nl/sites/default/files/2020-08/COVID-19_WebSite_rapport_wekelijks_20200825_1217.pdf"
 report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200901_1353_1.pdf"
 report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200908_1159.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200929_1159_0.pdf"
 
-
-#area.table <- locate_areas(report,
- #                          pages=c(26))
+area.table <- locate_areas(report,
+                          pages=c(29))
 
 age_tests <- extract_tables(report,
                            output = "data.frame",
-                           pages = c(26),
+                           pages = c(29),
                            area = area.table,
                            guess=FALSE)
 age_tests <- do.call(rbind,age_tests)
@@ -27,9 +27,10 @@ age_tests$Positief <- age_tests$Aantal + age_tests$Aantal.2
 age_tests$Tests <- age_tests$Aantal.1 + age_tests$Aantal.3
 age_tests <- age_tests[,c(1,8,9)]
 age_tests$Percentage_Positief <- age_tests$Positief/age_tests$Tests
-age_tests$Week <- isoweek("2020-08-18")-1
+age_tests$Week <- isoweek("2020-10-03")-1
 
 colnames(age_tests) <- c("Leeftijd","Positief_getest","Aantal_tests","Percentage_positief","Week")
+write.csv(age_tests,file="age_tests.csv")
 
 age_tests_df <- rbind(age_tests_df,age_tests)
 
