@@ -43,7 +43,6 @@ lcps.dat <- lcps.dat %>%
   arrange(date)
 
 nice.today <- merge(nice.today, lcps.dat, by = "date")
-str(nice.today)
 
 aanwezig <- nice.today %>%
   filter(date > filter.date) %>%
