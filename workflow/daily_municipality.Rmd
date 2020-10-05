@@ -239,7 +239,7 @@ print_detailed(dat.example)
 rm(dat.example)
 ```
 
-#### Bottom 20 van de week
+#### Hoogste besmettingsgraad
 ```{r echo = FALSE, results = "asis"}
 dat.cases.today.top10 <- dat.cases %>%
   arrange(desc(rel_increase_7d), current) %>%
@@ -255,7 +255,7 @@ dat.cases.today.top10 <- dat.cases %>%
 print_table(dat.cases.today.top10, "cclrll", "")
 ```
 
-#### Hoogste toenames van vandaag:
+#### Hoogste absolute toenames van vandaag
 ```{r echo = FALSE, results = "asis"}
 dat.cases.today.highest <- dat.cases %>%
   filter( 
@@ -309,7 +309,7 @@ dat.total <- dat.hosp %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 opnames"
 
-print_municipality_data(dat.total, 'align-left', FALSE)
+print_municipality_data(dat.total, 'align-left', FALSE, TRUE)
 
 rm(dat.total)
 ```
@@ -339,12 +339,12 @@ cat(sprintf("
 rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
 ```
 
-#### Top 10
+#### Hoogste aantal opnames per inwoner
 ```{r echo = FALSE, results = "asis"}
 dat.hosp.today.top10 <- dat.hosp %>%
   arrange(desc(rel_increase_14d), current) %>%
   filter(increase_14d >= 3) %>%
-  head(10) %>%
+  head(20) %>%
   transmute(
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
     rel_increase_14d = format_custom_number(rel_increase_14d),
@@ -354,7 +354,7 @@ dat.hosp.today.top10 <- dat.hosp %>%
 print_table(dat.hosp.today.top10, "llrl", "")
 ```
 
-### Toenames van vandaag:
+#### Absolute toenames van vandaag
 ```{r echo = FALSE, results = "asis"}
 dat.hosp.today.highest <- dat.hosp %>%
   filter( 
@@ -434,7 +434,22 @@ cat(sprintf("
 rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
 ```
 
-### Toenames van vandaag:
+#### Hoogste sterfte per inwoner
+```{r echo = FALSE, results = "asis"}
+dat.deaths.today.top10 <- dat.deaths %>%
+  arrange(desc(rel_increase_14d), current) %>%
+  filter(increase_14d >= 2) %>%
+  head(10) %>%
+  transmute(
+    municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
+    rel_increase_14d = format_custom_number(rel_increase_14d),
+    per = "/ 100.000 / 14d"
+  )
+
+print_table(dat.deaths.today.top10, "llrl", "")
+```
+
+#### Absolute toenames van vandaag
 
 ```{r echo = FALSE, results = "asis"}
 dat.deaths.today.highest <- dat.deaths %>%
