@@ -11,7 +11,7 @@ rmarkdown::render(
 screenshots = c(
   "section" = "full",
   "section.cases header" = "cases-head",
-  "section.cases #section-bottom-20-van-de-week" = "cases-bottom-20",
+  "section.cases #section-hoogste-besmettingsgraad" = "cases-bottom-20",
   "section.cases main" = "cases-all",
   "section.hosp header" = "hosp-head",
   "section.hosp main" = "hosp-all",
