@@ -126,18 +126,22 @@ tweet.municipality.date <- Sys.Date() %>%
 tweet.municipality.colors <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
 tweet.municipality.tweet <- "Geconstateerde besmettingen per gemeente %s
 
-%s %d / 355 gemeentes.
+%s %d / 355 gemeentes
+
+%s %d / 355 gemeentes
 
 Zie de eerste afbeelding voor een uitgebreide uitleg
 
-Let op: vrijwel alle gemeentes minder dan +7 passen niet meer op de eerste afbeelding
+Let op: vrijwel alle gemeentes minder dan +15 passen niet meer op de eerste afbeelding
 
 [%s met dank aan @edwinveldhuizen]"
 
 tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
   intToUtf8(0x1F447),
-  tweet.municipality.colors$color[[4]],
+  intToUtf8(0x1F6D1),
   tweet.municipality.colors$d0[[4]],
+  intToUtf8(0x1F7E3),
+  tweet.municipality.colors$d0[[5]],
   tweet.municipality.date
 )
 

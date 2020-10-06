@@ -7,24 +7,35 @@ require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 
-
+# set emoji's for unix and windows
 emoji.up <- intToUtf8(0x2B06)
-emoji.up_double = paste(emoji.up, emoji.up, sep="")
 emoji.down <- intToUtf8(0x2B07)
-emoji.down_double = paste(emoji.down, emoji.down, sep="")
-emoji.black <- intToUtf8(0x1F518)
+emoji.purple <- intToUtf8(0x1F7E3)
 emoji.red <- intToUtf8(0x1F6D1)
 emoji.orange <- intToUtf8(0x1F7E7)
 emoji.yellow <- intToUtf8(0x1F7E1)
 emoji.green <- intToUtf8(0x2705)
 emoji.new <- intToUtf8(0x1F4A5)
 
+if (.Platform$OS.type == "windows") {
+  emoji.up <- "&#11014;"
+  emoji.down <- "&#11015;"
+  emoji.purple <- "&#x1F7E3;"
+  emoji.red <- "&#128721;"
+  emoji.orange <- "&#128999;"
+  emoji.yellow <- "&#128993;"
+  emoji.green <- "&#9989;"
+  emoji.new <- "&#128165;"
+}
 
+emoji.up_double = paste(emoji.up, emoji.up, sep="")
+emoji.down_double = paste(emoji.down, emoji.down, sep="")
+  
 
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
-    ifelse( rel_increase >= 150, emoji.black,
+    ifelse( rel_increase >= 150, emoji.purple,
     ifelse( rel_increase >= 50, emoji.red,
     ifelse( rel_increase > 5,   emoji.orange,
     ifelse( rel_increase > 0,   emoji.yellow,
@@ -331,7 +342,7 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
 dat.cases.totals.color <- dat.cases.totals.color %>%
   merge(dat.cases.totals.color_yesterday, by = "color", all.y=TRUE) %>%
   merge(dat.cases.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.black)))
+  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple)))
 
 rm(dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
