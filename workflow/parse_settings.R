@@ -3,17 +3,17 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200922_1141_0.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200929_1157.pdf"
 
 
 ## Totaal - settings
 
 area.table.settings.total <- locate_areas(report,
-             pages=c(16))
+             pages=c(22))
 
 settings <- extract_tables(report,
                            output = "data.frame",
-                           pages = c(16),
+                           pages = c(22),
                            area = area.table.settings.total,
                            guess=FALSE)
 settings <- do.call(rbind,settings)
@@ -22,11 +22,11 @@ write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
 
 ## Alle settings
 area.table.settings.specific <- locate_areas(report,
-             pages=c(17))
+             pages=c(23))
 
 dat <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(17),
+                      pages = c(23),
                       area = area.table.settings.specific,
                       guess=FALSE)
 df <- do.call(rbind,dat)

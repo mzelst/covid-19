@@ -11,10 +11,8 @@ all.data <- all.data[order(all.data$date),]
 
 filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
 
-
 all.data[211,27] <- 12
 all.data[212,27] <- 10
-
 
 # Plot for positive tests per day
 cases <- all.data %>%
@@ -23,7 +21,7 @@ cases <- all.data %>%
   geom_line(aes(y = net.infection, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  scale_y_continuous(expand = c(0, 200), limits = c(0, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -39,12 +37,21 @@ cases <- all.data %>%
 nice.today <- read.csv("data-nice/nice-today.csv")
 nice.today$date <- as.Date(nice.today$date)
 
+lcps.dat <- read.csv("https://lcps.nu/wp-content/uploads/covid-19.csv")
+lcps.dat$date <- as.Date(lcps.dat$Datum, format = "%d-%m-%y")
+lcps.dat <- lcps.dat %>%
+  arrange(date)
+
+nice.today <- merge(nice.today, lcps.dat, by = "date")
+
 aanwezig <- nice.today %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
   geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling (NICE)"), lwd=1.2) +
   geom_line(aes(y = IC_Current, color = "Aanwezig op IC (NICE)"), lwd=1.2) +
-  ylim(0,500) + 
+  geom_line(aes(y = Kliniek_Bedden, color = "Aanwezig op verpleegafdeling (LCPS)"), lwd=1.2) +
+  geom_line(aes(y = IC_Bedden_COVID, color = "Aanwezig op IC (LCPS)"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -53,7 +60,7 @@ aanwezig <- nice.today %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Aanwezig op de IC vs. verpleegafdeling") +
+  ggtitle("Aanwezig op de verpleegafdeling vs. IC (NICE & LCPS)") +
   ggsave("plots/overview_aanwezig_zkh.png", width = 15, height=4)
 
 # Plot for #patients intake per day
@@ -63,7 +70,7 @@ opnames <- all.data %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
   geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling (RIVM)"), lwd=1.2) +
   geom_line(aes(y = ic_intake_nice, color = "Opname op IC (NICE)"), lwd=1.2) +
-  ylim(0,40) + 
+  scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -82,15 +89,15 @@ reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_r
 reproduction <- reproduction %>%
   mutate(Date = Date %>% as.Date)
 
-prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
-  map(as.data.table) %>%
-  rbindlist(fill = TRUE)
+#prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
+#  map(as.data.table) %>%
+#  rbindlist(fill = TRUE)
 
-prevalence <- prevalence %>%
-  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
-  mutate(Date = Date %>% as.Date)
+#prevalence <- prevalence %>%
+#  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
+#  mutate(Date = Date %>% as.Date)
 
-prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
+#prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 reproduction <- reproduction %>%
   ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
@@ -112,31 +119,31 @@ reproduction <- reproduction %>%
 
 filter.date <- Sys.Date()-56 # Set filter date for last 8 weeks
 
-prevalence %>%
-  filter(Date > filter.date) %>%
-  ggplot(aes(x=Date, y=prev_avg, group = 1)) + 
-  geom_line(aes(y = prev_low), lwd=0.6) +
-  geom_line(aes(y = prev_up), lwd=0.6) +
-  geom_ribbon(aes(ymin=prev_low,ymax=prev_up), fill="lightblue") +
-  geom_line(aes(y = prev_avg, color = "Aantal besmettelijke mensen"), color = "blue",lwd=1) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.pos = "bottom",
-        legend.direction = "vertical",
-        legend.title = element_blank(),
-        panel.background = element_rect(fill = "white",
-                                        colour = "white",
-                                        size = 0.5, linetype = "solid"),
-        panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
-                                        colour = "grey"), 
-        panel.grid.minor.y = element_line(size = 0.25, linetype = 'solid',
-                                        colour = "grey")) +
-  labs(x = "Datum",
-       y = "Aantal besmettelijke mensen",
-       color = "Legend") +
-  ggtitle("Aantal besmettelijke mensen in Nederland") + 
-  ggsave("plots/prevalentie_overzicht.png",width=15, height = 4)
+#prevalence %>%
+#  filter(Date > filter.date) %>%
+#  ggplot(aes(x=Date, y=prev_avg, group = 1)) + 
+#  geom_line(aes(y = prev_low), lwd=0.6) +
+#  geom_line(aes(y = prev_up), lwd=0.6) +
+#  geom_ribbon(aes(ymin=prev_low,ymax=prev_up), fill="lightblue") +
+#  geom_line(aes(y = prev_avg, color = "Aantal besmettelijke mensen"), color = "blue",lwd=1) +
+#  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+#  theme(axis.title.x=element_blank(),
+#        axis.title.y=element_blank(),
+#        legend.pos = "bottom",
+#        legend.direction = "vertical",
+#        legend.title = element_blank(),
+#        panel.background = element_rect(fill = "white",
+#                                        colour = "white",
+#                                        size = 0.5, linetype = "solid"),
+#        panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+#                                        colour = "grey"), 
+#        panel.grid.minor.y = element_line(size = 0.25, linetype = 'solid',
+#                                        colour = "grey")) +
+#  labs(x = "Datum",
+#       y = "Aantal besmettelijke mensen",
+#       color = "Legend") +
+#  ggtitle("Aantal besmettelijke mensen in Nederland") + 
+#  ggsave("plots/prevalentie_overzicht.png",width=15, height = 4)
 
 # Merge plots into grid
 plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
