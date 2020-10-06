@@ -4,9 +4,9 @@ pull(repo)
 source("workflow/generate_banner.R")
 
 # Parse RIVM, NICE and corrections data
-source("workflow/parse_rivm-data.R") ## Run only after new data upload by RIVM at 14:15
-source("workflow/parse_municipalities.R")
 source("workflow/parse_nice-data.R")
+source("workflow/parse_rivm-data.R")
+source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
 
@@ -107,8 +107,6 @@ Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
 Totaal: ",last(dat.today$IC_Cumulative))
 
 tweet2
-
-Encoding(tweet2) <- "UTF-8"
 
 # Tweet for report ####
 post_tweet(tweet2, media = "plots/plot_daily.png",
