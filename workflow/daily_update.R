@@ -9,6 +9,13 @@ source("workflow/parse_rivm-data.R")
 source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
+
+get_reply_id <- function(rel_increase) {
+  my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+  reply_id <- my_timeline$status_id[1] ## Status ID for reply
+  return(reply_id)
+}
+
 ## Merge RIVM, NICE and corrections data
 
 rivm_by_day <- read.csv("data/rivm_by_day.csv")
@@ -102,20 +109,101 @@ Totaal: ",last(dat.today$IC_Cumulative))
 tweet2
 
 # Tweet for report ####
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
 post_tweet(tweet2, media = "plots/plot_daily.png",
-          in_reply_to_status_id = reply_id) ## Post reply
+           in_reply_to_status_id = get_reply_id()) ## Post reply
 
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
+########
+# Municipality tweet - cases
+########
+source("workflow/generate_municipality_images.R")
+Sys.setlocale("LC_TIME", "nl_NL")
+
+tweet.municipality.date <- Sys.Date() %>%
+  format('%d %b') %>%
+  str_to_title()  %>%
+  str_replace( '^0', '')
+
+tweet.municipality.colors <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
+tweet.municipality.tweet <- "Geconstateerde besmettingen per gemeente %s
+
+%s %d / 355 gemeentes
+
+%s %d / 355 gemeentes
+
+Zie de eerste afbeelding voor een uitgebreide uitleg
+
+Let op: vrijwel alle gemeentes minder dan +15 passen niet meer op de eerste afbeelding
+
+[%s met dank aan @edwinveldhuizen]"
+
+tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+  intToUtf8(0x1F447),
+  intToUtf8(0x1F6D1),
+  tweet.municipality.colors$d0[[4]],
+  intToUtf8(0x1F7E3),
+  tweet.municipality.colors$d0[[5]],
+  tweet.municipality.date
+)
+
+Encoding(tweet.municipality.tweet) <- "UTF-8"
+
+post_tweet(tweet.municipality.tweet, 
+  media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
+  in_reply_to_status_id = get_reply_id() ## Post reply
+) 
+
+
+########
+# Municipality tweet - hospital admissions
+########
+tweet.municipality.tweet <- "Positief geteste patiënten per gemeente die zijn opgenomen met specifiek COVID-19 als reden v. opname
+
+[%s met dank aan @edwinveldhuizen]"
+
+tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+  tweet.municipality.date
+)
+
+Encoding(tweet.municipality.tweet) <- "UTF-8"
+
+post_tweet(tweet.municipality.tweet, 
+  media = c("plots/list-hosp-head.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
+  in_reply_to_status_id = get_reply_id() ## Post reply
+) 
+
+########
+# Municipality tweet - deaths
+########
+
+tweet.municipality.tweet <- "Patiënten per gemeente die positief getest zijn op COVID-19 en helaas zijn overleden
+
+[%s met dank aan @edwinveldhuizen]
+
+Onze condoleance en veel sterkte aan alle nabestaanden. %s"
+
+tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+  tweet.municipality.date,
+  intToUtf8(0x1F339)
+)
+
+Encoding(tweet.municipality.tweet) <- "UTF-8"
+
+post_tweet(tweet.municipality.tweet, 
+  media = c("plots/list-deaths-head.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
+  in_reply_to_status_id = get_reply_id() ## Post reply
+) 
+
+rm(tweet.municipality.tweet, tweet.municipality.colors, tweet.municipality.date)
+
+
+########
+# report
+########
 post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
-          in_reply_to_status_id = reply_id) ## Post reply
+          in_reply_to_status_id = get_reply_id()) ## Post reply
 
-#my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-#reply_id <- my_timeline$status_id[1] ## Status ID for reply
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
-  #         in_reply_to_status_id = reply_id) ## Post reply
+  #         in_reply_to_status_id = get_reply_id()) ## Post reply
 
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
