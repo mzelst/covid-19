@@ -70,6 +70,10 @@ table.align-left td{
   min-width: 0;
 }
 
+table.align-left td:first-child{
+  padding-left: 0;
+}
+
 table.align-left hr{
   display: none;
 }
