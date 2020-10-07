@@ -6,22 +6,41 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
-emoji.up <- "&#11014;"
-emoji.down <- "&#11015;"
-emoji.red <- "&#128721;"
-emoji.orange <- "&#128999;"
-emoji.yellow <- "&#128993;"
-emoji.green <- "&#9989;"
-emoji.new <- "&#128165;"
+
+# set emoji's for unix and windows
+emoji.up <- intToUtf8(0x2B06)
+emoji.down <- intToUtf8(0x2B07)
+emoji.purple <- intToUtf8(0x1F7E3)
+emoji.red <- intToUtf8(0x1F6D1)
+emoji.orange <- intToUtf8(0x1F7E7)
+emoji.yellow <- intToUtf8(0x1F7E1)
+emoji.green <- intToUtf8(0x2705)
+emoji.new <- intToUtf8(0x1F4A5)
+
+if (.Platform$OS.type == "windows") {
+  emoji.up <- "&#11014;"
+  emoji.down <- "&#11015;"
+  emoji.purple <- "&#x1F7E3;"
+  emoji.red <- "&#128721;"
+  emoji.orange <- "&#128999;"
+  emoji.yellow <- "&#128993;"
+  emoji.green <- "&#9989;"
+  emoji.new <- "&#128165;"
+}
+
+emoji.up_double = paste(emoji.up, emoji.up, sep="")
+emoji.down_double = paste(emoji.down, emoji.down, sep="")
+  
 
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
+    ifelse( rel_increase >= 150, emoji.purple,
     ifelse( rel_increase >= 50, emoji.red,
     ifelse( rel_increase > 5,   emoji.orange,
     ifelse( rel_increase > 0,   emoji.yellow,
                                 emoji.green
-    )))
+    ))))
   return(trafficlight)
 }
 
@@ -37,9 +56,9 @@ calc_growth_increase <- function(increase_7d, increase_14d){
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth > 100,   paste(emoji.up,emoji.up),
+    ifelse( increase_growth > 100,   emoji.up_double,
     ifelse( increase_growth > 1,     emoji.up,
-   #ifelse( increase_growth <= -100, paste(emoji.down, emoji.down),
+   #ifelse( increase_growth <= -100, emoji.down_double,
     ifelse( increase_growth < -1,    emoji.down,
                                      "-"
   )))#)
@@ -191,10 +210,10 @@ dat.cases.today <-transmute(dat.cases,
   d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
   d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
   d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
-  aug1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.cases.lowest$`Total_reported`,
-  lowest_since_aug1_date = dat.cases.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  sep1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.cases.lowest$`Total_reported`,
+  lowest_since_sep1_date = dat.cases.lowest$`date`,
+  current = d0-lowest_since_sep1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -203,6 +222,7 @@ dat.cases.today <-transmute(dat.cases,
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000,
   color = convert_to_trafficlight(rel_increase_7d),
   color_incl_new = ifelse(
       ((d1 - d8) <= 0 & (d0 - d1) > 0)
@@ -233,10 +253,10 @@ dat.hosp.today <- transmute(dat.hosp,
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
   d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
   d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
-  aug1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.hosp.lowest$`Hospital_admission`,
-  lowest_since_aug1_date = dat.hosp.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  sep1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.hosp.lowest$`Hospital_admission`,
+  lowest_since_sep1_date = dat.hosp.lowest$`date`,
+  current = d0-lowest_since_sep1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -244,7 +264,8 @@ dat.hosp.today <- transmute(dat.hosp,
   growth = increase_growth_to_arrows(increase_growth),
   population,
   rel_increase_1d = increase_1d / population * 100000,
-  rel_increase_7d = increase_7d / population * 100000
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
 )
 
 dat.hosp.today.simple <- dat.hosp.today %>%
@@ -267,9 +288,9 @@ dat.deaths.today <- transmute(dat.deaths,
   d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
   d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
   d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
-  aug1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.deaths.lowest$`Deceased`,
-  lowest_since_aug1_date = dat.deaths.lowest$`date`,
+  sep1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.deaths.lowest$`Deceased`,
+  lowest_since_sep1_date = dat.deaths.lowest$`date`,
   current = d0,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
@@ -278,7 +299,8 @@ dat.deaths.today <- transmute(dat.deaths,
   growth = increase_growth_to_arrows(increase_growth),
   population,
   rel_increase_1d = increase_1d / population * 100000,
-  rel_increase_7d = increase_7d / population * 100000
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
 )
 
 dat.deaths.today.simple <- dat.deaths.today %>%
@@ -298,7 +320,7 @@ dat.cases.totals.growth <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(growth) %>%
   summarise(d0 = n(), .groups = 'drop_last') %>%
-  arrange(match(growth, c(paste(emoji.up, emoji.up), emoji.up, "-", paste(emoji.down ,emoji.down), emoji.down)))
+  arrange(match(growth, c(emoji.up_double, emoji.up, "-", emoji.down_double, emoji.down)))
 
 dat.cases.totals.color <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
@@ -320,7 +342,7 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
 dat.cases.totals.color <- dat.cases.totals.color %>%
   merge(dat.cases.totals.color_yesterday, by = "color", all.y=TRUE) %>%
   merge(dat.cases.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red)))
+  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple)))
 
 rm(dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
@@ -329,7 +351,33 @@ dat.cases.totals.color <- mutate(dat.cases.totals.color,
   increase_7d = d0-d7, # Calculate increase in 7 days
 )
 
+dat.cases_per_death <-transmute(dat.cases,
+  municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
+  date = const.date,
+  population = population,
+  cases_d0  = dat.cases[,ncol(dat.cases)-date_diff],
+  cases_d7 = dat.cases[,ncol(dat.cases)-date_diff-7], 
+  rel_cases_7d = (cases_d0 - cases_d7) / population * 100000,
+  rel_cases_total = cases_d0 / population * 100000,
+  color = convert_to_trafficlight(rel_cases_7d),
+  hosp_d0  = dat.hosp[,ncol(dat.hosp)-date_diff], 
+  hosp_d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], 
+  rel_hosp_7d = (hosp_d0 - hosp_d7) / population * 100000,
+  rel_hosp_total = hosp_d0 / population * 100000,
+  deaths_d0  = dat.deaths[,ncol(dat.deaths)-date_diff],
+  deaths_d7  = dat.deaths[,ncol(dat.deaths)-date_diff-7],
+  rel_deaths_7d = (deaths_d0 - deaths_d7) / population * 100000,
+  rel_deaths_total = deaths_d0 / population * 100000,
+  perc_cases = cases_d0 / population * 100,
+  perc_hosp = hosp_d0 / population * 100,
+  perc_deaths = deaths_d0 / population * 100, 
+  perc_deaths_per_case = deaths_d0 / cases_d0 * 100
+) %>% mutate(across(where(is.numeric), round, 1))
+  
+
 # Write to csv
+write.csv(dat.cases_per_death,    file = "data/municipality-combined.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.today,        file = "data/municipality-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.today.simple, file = "data/municipality-today.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.hosp.today,         file = "data/municipality-hospitalisations-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
