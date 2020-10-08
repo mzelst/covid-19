@@ -274,7 +274,6 @@ print_municipality_data(dat.cases.today.highest)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
-  <main>
 "))
 
 ```
@@ -291,7 +290,6 @@ print_municipality_data(dat.cases.today.all)
 
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-  </main>
 </section>
 <section class='hosp'>
   <header>
@@ -369,7 +367,6 @@ print_municipality_data(dat.hosp.today.highest, "", FALSE, TRUE)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
-  <main>
 "))
 
 ```
@@ -386,7 +383,6 @@ print_municipality_data(dat.hosp.today.all, "", FALSE, TRUE)
 
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-  </main>
 </section>
 <section class='deaths'>
   <header>
@@ -465,7 +461,6 @@ print_municipality_data(dat.deaths.today.highest, "", FALSE, TRUE)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
-  <main>
 "))
 
 ```
@@ -483,7 +478,6 @@ print_municipality_data(dat.deaths.today.all, "", FALSE, TRUE)
 
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-  </main>
 </section>
 "))
 
