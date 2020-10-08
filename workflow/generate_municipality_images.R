@@ -10,13 +10,13 @@ rmarkdown::render(
 
 screenshots = c(
   "section" = "full",
-  "section.cases header" = "cases-head",
+  "section.cases > header" = "cases-head",
   "section.cases #section-hoogste-besmettingsgraad" = "cases-bottom-20",
-  "section.cases main" = "cases-all",
-  "section.hosp header" = "hosp-head",
-  "section.hosp main" = "hosp-all",
-  "section.deaths header" = "deaths-head",
-  "section.deaths main" = "deaths-all"
+  "section.cases > .section" = "cases-all",
+  "section.hosp > header" = "hosp-head",
+  "section.hosp > .section" = "hosp-all",
+  "section.deaths > header" = "deaths-head",
+  "section.deaths > .section" = "deaths-all"
 )
 
 for (i in seq_along(screenshots)) {
@@ -30,7 +30,7 @@ for (i in seq_along(screenshots)) {
     expand = c(5, 5, 5, 5)
   )
   
-  if (grepl("main", selector, fixed=TRUE)) {
+  if (grepl("-all", file, fixed=TRUE)) {
     image.list <- image_read(file)
     image.list.width <- image_info(image.list)["width"]
     image.list.height <- image_info(image.list)["height"]
