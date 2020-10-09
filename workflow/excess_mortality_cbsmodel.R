@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- isoweek(Sys.Date())-2
+week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
 
@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I30', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I32', col_names = F))
 
 
 ##

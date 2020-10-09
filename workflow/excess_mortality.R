@@ -4,7 +4,7 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 
-weeknumber <- isoweek(ymd(Sys.Date()))-2
+weeknumber <- isoweek(ymd(Sys.Date()))-1
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
@@ -96,7 +96,7 @@ deaths_2020 <- mortality_wide %>%
 
 deaths_weekly <- merge(deaths_2020, excess_deaths_wide, by = "Week")
 
-week.now <- week(Sys.Date())-2 ## Which week?
+week.now <- week(Sys.Date())-1 ## Which week?
 
 excess_cbsmodel <- read.csv(paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
