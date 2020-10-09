@@ -132,7 +132,7 @@ tweet.municipality.tweet <- "Geconstateerde besmettingen per gemeente %s
 
 Zie de eerste afbeelding voor een uitgebreide uitleg
 
-Let op: vrijwel alle gemeentes minder dan +15 passen niet meer op de eerste afbeelding
+Let op: vrijwel alle gemeentes minder dan +20 passen niet meer op de eerste afbeelding
 
 [@edwinveldhuizen - %s]"
 
