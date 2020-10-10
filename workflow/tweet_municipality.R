@@ -1,5 +1,6 @@
 library(tidyverse)
 
+source("workflow/twitter/token_edwinveldhuizen.R")
 source("workflow/twitter/token_spamedwin.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
@@ -20,9 +21,13 @@ format_custom_number <- function(data, plus = FALSE, format = "%s") {
   }))
 }
 
+counter <- 0
+
 tweet_detailed <- function(data){
-  more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
+  counter <<- counter + 1
+  cat(paste('tweet', counter, '/ 355 :', data$municipality, "\n"))
   
+  more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
   tweet <- sprintf("%s %s %s %s ( w: %s ) %s
   
 %s sinds gisteren
@@ -31,7 +36,7 @@ tweet_detailed <- function(data){
 Wat %s is dan de %s in de 7 dagen ervoor
 %s inwoners maakt dat %s %.1f / 100.000 / 7d
                    
-[%s]",
+[#COVID19NL %s]",
     format_custom_number(data$increase_1d, TRUE),
     data$color, 
     data$municipality,
@@ -71,17 +76,22 @@ used_date <- as.Date(last(dat.cases$date))
 
 tweet <- sprintf("Gedetailleerd overzicht van alle gemeentes %s
 
+Zoeken kan in uw Twitter zoekbalk:
+'from:spamedwin Schiermonnikoog'
+
 [%s]", 
   intToUtf8(0x1F447), 
   tweet.date
 )
 Encoding(tweet) <- "UTF-8"
 
-posted_tweet <- post_tweet(tweet, token = token.spamedwin)
+posted_tweet <- post_tweet(tweet, token = token.edwinveldhuizen)
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 reply_id <- posted_tweet$id_str
 
-by(dat.cases, 1:nrow(dat.cases), tweet_detailed)
+by(slice(dat.cases,(0:300)), 1:300, tweet_detailed)
+
+by(slice(dat.cases,(300:355)), 1:56, tweet_detailed)
 
 
 
