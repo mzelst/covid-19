@@ -122,7 +122,7 @@ print_detailed <- function(data){
 
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-<section class='cases'>
+<article class='cases'>
   <header>
 "))
 
@@ -274,6 +274,8 @@ print_municipality_data(dat.cases.today.highest)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
+  <main>
+    <section class='municipalities-a-g'>
 "))
 
 ```
@@ -285,13 +287,27 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.cases.today.all <- dat.cases %>%
   filter(Municipality_code != "")
 
-print_municipality_data(dat.cases.today.all)
-```
+print_municipality_data(slice(dat.cases.today.all,(0:115)))
 
-```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-</section>
-<section class='hosp'>
+    </section>
+    <section class='municipalities-h-p'>
+"))
+
+print_municipality_data(slice(dat.cases.today.all,(116:240)))
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+    <section class='municipalities-r-z'>
+"))
+
+print_municipality_data(slice(dat.cases.today.all,(241:355)))
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+  </main>
+</article>
+<article class='hosp'>
   <header>
 "))
 
@@ -367,6 +383,8 @@ print_municipality_data(dat.hosp.today.highest, "", FALSE, TRUE)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
+  <main>
+    <section class='municipalities-a-g'>
 "))
 
 ```
@@ -377,14 +395,27 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.hosp.today.all <- dat.hosp %>%
   filter(Municipality_code != "")
 
-print_municipality_data(dat.hosp.today.all, "", FALSE, TRUE)
+print_municipality_data(slice(dat.hosp.today.all,(0:115)), "", FALSE, TRUE)
 
-```
-
-```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-</section>
-<section class='deaths'>
+    </section>
+    <section class='municipalities-h-p'>
+"))
+
+print_municipality_data(slice(dat.hosp.today.all,(116:240)), "", FALSE, TRUE)
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+    <section class='municipalities-r-z'>
+"))
+
+print_municipality_data(slice(dat.hosp.today.all,(241:355)), "", FALSE, TRUE)
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+  </main>
+</article>
+<article class='deaths'>
   <header>
 "))
 
@@ -461,6 +492,8 @@ print_municipality_data(dat.deaths.today.highest, "", FALSE, TRUE)
 ```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
   </header>
+  <main>
+    <section class='municipalities-a-g'>
 "))
 
 ```
@@ -472,13 +505,26 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.deaths.today.all <- dat.deaths %>%
   filter(Municipality_code != "")
 
-print_municipality_data(dat.deaths.today.all, "", FALSE, TRUE)
+print_municipality_data(slice(dat.deaths.today.all,(0:115)), "", FALSE, TRUE)
 
-```
-
-```{r echo=FALSE}
 knitr::asis_output(htmltools::htmlPreserve("
-</section>
+    </section>
+    <section class='municipalities-h-p'>
+"))
+
+print_municipality_data(slice(dat.deaths.today.all,(116:240)), "", FALSE, TRUE)
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+    <section class='municipalities-r-z'>
+"))
+
+print_municipality_data(slice(dat.deaths.today.all,(241:355)), "", FALSE, TRUE)
+
+knitr::asis_output(htmltools::htmlPreserve("
+    </section>
+  </main>
+</article>
 "))
 
 rm(list=ls())
