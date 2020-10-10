@@ -1,17 +1,13 @@
 library(tidyverse)
 
+source("workflow/twitter/token_spamedwin.R")
+
 Sys.setlocale("LC_TIME", "nl_NL")
 
 tweet.date <- Sys.Date() %>%
   format('%d %b') %>%
   str_to_title()  %>%
   str_replace( '^0', '')
-
-get_reply_id <- function(rel_increase) {
-  my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-  reply_id <- my_timeline$status_id[1] ## Status ID for reply
-  return(reply_id)
-}
 
 format_custom_number <- function(data, plus = FALSE, format = "%s") {
   return( sapply(data, function(value){
@@ -46,11 +42,12 @@ Wat %s is dan de %s in de 7 dagen ervoor
     format_custom_number(data$current, TRUE),
     format_custom_number(data$increase_7d, TRUE),
     format(used_date - 7, '%d-%m-%Y'), 
-    ifelse(    more_or_less >= 2, "fors meer", 
-       ifelse( more_or_less >= 1, "meer",  
+    ifelse(    more_or_less >= 2, "fors meer",
+       ifelse( more_or_less >= 1, "meer",
+       ifelse( more_or_less == 1, "evenveel",  
        ifelse( more_or_less < 0.4, "fors minder", 
                                    "minder" 
-       ))),
+       )))),
     format_custom_number(data$d7 - data$d14, TRUE),
     format_custom_number(data$population),
     data$color, 
@@ -58,20 +55,31 @@ Wat %s is dan de %s in de 7 dagen ervoor
     tweet.date
   )
   Encoding(tweet) <- "UTF-8"
-  post_tweet(tweet, 
-    in_reply_to_status_id = get_reply_id() ## Post reply
-  ) 
+  posted_tweet <<- post_tweet(tweet, 
+    in_reply_to_status_id = reply_id, ## Post reply
+    token = token.spamedwin
+  )
+  posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
+  reply_id <<- posted_tweet$id_str
 }
 
 dat.cases <- read.csv("data/municipality-today-detailed.csv", fileEncoding = "UTF-8") %>%
+  filter(Municipality_code != "") %>%
   arrange(municipality)
 
 used_date <- as.Date(last(dat.cases$date))
 
-tweet <- "Gedetailleerd overzicht van alle gemeentes %s"
-tweet <- sprintf(tweet, intToUtf8(0x1F447))
+tweet <- sprintf("Gedetailleerd overzicht van alle gemeentes %s
+
+[%s]", 
+  intToUtf8(0x1F447), 
+  tweet.date
+)
 Encoding(tweet) <- "UTF-8"
-post_tweet(tweet)
+
+posted_tweet <- post_tweet(tweet, token = token.spamedwin)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+reply_id <- posted_tweet$id_str
 
 by(dat.cases, 1:nrow(dat.cases), tweet_detailed)
 
