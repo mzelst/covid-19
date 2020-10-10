@@ -9,14 +9,23 @@ rmarkdown::render(
   output_format = "all")
 
 screenshots = c(
-  "section" = "full",
-  "section.cases > header" = "cases-head",
-  "section.cases #section-hoogste-besmettingsgraad" = "cases-bottom-20",
-  "section.cases > .section" = "cases-all",
-  "section.hosp > header" = "hosp-head",
-  "section.hosp > .section" = "hosp-all",
-  "section.deaths > header" = "deaths-head",
-  "section.deaths > .section" = "deaths-all"
+  "article" = "full",
+  "article.cases > header" = "cases-head",
+  "article.cases #section-hoogste-besmettingsgraad" = "cases-bottom-20",
+  "article.cases main" = "cases-all",
+  "article.cases section.municipalities-a-g" = "cases-all-part1",
+  "article.cases section.municipalities-h-p" = "cases-all-part2",
+  "article.cases section.municipalities-r-z" = "cases-all-part3",
+  "article.hosp > header" = "hosp-head",
+  "article.hosp main" = "hosp-all",
+  "article.hosp section.municipalities-a-g" = "hosp-all-part1",
+  "article.hosp section.municipalities-h-p" = "hosp-all-part2",
+  "article.hosp section.municipalities-r-z" = "hosp-all-part3",
+  "article.deaths > header" = "deaths-head",
+  "article.deaths main" = "deaths-all",
+  "article.deaths section.municipalities-a-g" = "deaths-all-part1",
+  "article.deaths section.municipalities-h-p" = "deaths-all-part2",
+  "article.deaths section.municipalities-r-z" = "deaths-all-part3"
 )
 
 for (i in seq_along(screenshots)) {
@@ -29,20 +38,6 @@ for (i in seq_along(screenshots)) {
     selector = selector, 
     expand = c(5, 5, 5, 5)
   )
-  
-  if (grepl("-all", file, fixed=TRUE)) {
-    image.list <- image_read(file)
-    image.list.width <- image_info(image.list)["width"]
-    image.list.height <- image_info(image.list)["height"]
-    image_crop(image.list, geometry_area(image.list.width, 2830, 0, 0)) %>%
-      image_write(paste(getwd(), '/plots/list-', screenshots[i], '-part1.png', sep=''))
-    
-    image_crop(image.list, geometry_area(image.list.width, 3020, 0, 2840)) %>%
-      image_write(paste(getwd(), '/plots/list-', screenshots[i], '-part2.png', sep=''))
-    
-    image_crop(image.list, geometry_area(image.list.width, image.list.height - 5875, 0, 5875)) %>%
-      image_write(paste(getwd(), '/plots/list-', screenshots[i], '-part3.png', sep=''))
-  }
 }
 
 rm(list=ls())

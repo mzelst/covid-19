@@ -4,9 +4,15 @@ body{
   font-size: 0.9em;
 }
 
-section{
+article{
   float: left;
   margin: 2em;
+}
+
+main section{
+  padding-top: 2em;
+  float: left;
+  clear: left;
 }
 
 h1,
@@ -26,6 +32,10 @@ h3{
 
 h4{
   font-size: 1.5em;
+}
+
+main section h3{
+  margin-top: 0;
 }
 
 td{
@@ -48,11 +58,6 @@ td .municipality + hr {
   border-top-style: dashed;
   border-top-color: rgb(56, 68, 77);
 } 
-
-tr:nth-child(115) td,
-tr:nth-child(240) td{
-  padding-bottom: 2em;
-}
 
 td .none{
   display: inline-block;
