@@ -17,7 +17,7 @@ require(data.table)
 require(xtable)
 require(shiny)
 
-const.toplist_minimum = 15
+const.toplist_minimum = 20
 
 setwd('../')
 
