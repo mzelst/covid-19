@@ -9,12 +9,9 @@ source("workflow/parse_rivm-data.R")
 #source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
-
-get_reply_id <- function(rel_increase) {
-  my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-  reply_id <- my_timeline$status_id[1] ## Status ID for reply
-  return(reply_id)
-}
+# get tokens
+source("workflow/twitter/token_mzelst.R")
+source("workflow/twitter/token_edwinveldhuizen.R")
 
 ## Merge RIVM, NICE and corrections data
 
@@ -47,7 +44,7 @@ text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (
 text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
 
 ## Build tweets
-tweet <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
+tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
@@ -64,9 +61,16 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
 
-tweet
 
-post_tweet (status = tweet,media = (paste0("banners/",Sys.Date(),".png"))) ## Post tweet
+
+posted_tweet <- post_tweet (
+  tweet.main,
+  token = token.mzelst,
+  media = (paste0("banners/",Sys.Date(),".png"))
+) ## Post tweet
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.main.id <- posted_tweet$id_str
+tweet.last_id <- tweet.main.id
 
 # Tweet for hospital numbers - Data NICE ####
 
@@ -92,7 +96,7 @@ hospital.cumulative <- rjson::fromJSON(file = "https://www.stichting-nice.nl/cov
 sign.hosp.nice <- paste0(ifelse(Verpleeg_Huidig_Toename>=0," (+"," ("))
 sign.ic.nice <- paste0(ifelse(IC_Huidig_Toename>=0," (+"," ("))
 
-tweet2 <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
+tweet.nice <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
 
 Patiënten verpleegafdeling 
 Bevestigd: ",Verpleeg_Opname_Bevestigd,"
@@ -106,11 +110,27 @@ Verdacht: ",IC_Opname_Verdacht,"
 Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
 Totaal: ",last(dat.today$IC_Cumulative))
 
-tweet2
-
 # Tweet for report ####
-post_tweet(tweet2, media = "plots/plot_daily.png",
-           in_reply_to_status_id = get_reply_id()) ## Post reply
+posted_tweet <- post_tweet (
+  tweet.nice,
+  token = token.mzelst,
+  media = "plots/plot_daily.png",
+  in_reply_to_status_id = tweet.last_id
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+########
+# report
+########
+tweet.report = "Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf"
+posted_tweet <- post_tweet (
+  tweet.report,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.last_id
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
 
 ########
 # Municipality tweet - cases
@@ -124,7 +144,7 @@ tweet.municipality.date <- Sys.Date() %>%
   str_replace( '^0', '')
 
 tweet.municipality.colors <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
-tweet.municipality.tweet <- "Geconstateerde besmettingen per gemeente %s
+tweet.municipality.cases <- "Geconstateerde besmettingen per gemeente %s
 
 %s %d / 355 gemeentes
 
@@ -136,7 +156,7 @@ Let op: vrijwel alle gemeentes minder dan +20 passen niet meer op de eerste afbe
 
 [@edwinveldhuizen - %s]"
 
-tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   intToUtf8(0x1F447),
   intToUtf8(0x1F6D1),
   tweet.municipality.colors$d0[[4]],
@@ -145,62 +165,68 @@ tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
   tweet.municipality.date
 )
 
-Encoding(tweet.municipality.tweet) <- "UTF-8"
+Encoding(tweet.municipality.cases) <- "UTF-8"
 
-post_tweet(tweet.municipality.tweet, 
+posted_tweet <- post_tweet (
+  tweet.municipality.cases,
+  token = token.edwinveldhuizen,
   media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
-  in_reply_to_status_id = get_reply_id() ## Post reply
-) 
+  in_reply_to_status_id = tweet.main.id
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
 
 
 ########
 # Municipality tweet - hospital admissions
 ########
-tweet.municipality.tweet <- "Positief geteste patiënten per gemeente die zijn opgenomen met specifiek COVID-19 als reden v. opname
+tweet.municipality.hosp <- "Positief geteste patiënten per gemeente die zijn opgenomen met specifiek COVID-19 als reden v. opname
 
 [@edwinveldhuizen - %s]"
 
-tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+tweet.municipality.hosp <- sprintf(tweet.municipality.hosp,
   tweet.municipality.date
 )
 
-Encoding(tweet.municipality.tweet) <- "UTF-8"
+Encoding(tweet.municipality.hosp) <- "UTF-8"
 
-post_tweet(tweet.municipality.tweet, 
+posted_tweet <- post_tweet (
+  tweet.municipality.hosp,
+  token = token.edwinveldhuizen,
   media = c("plots/list-hosp-head.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
-  in_reply_to_status_id = get_reply_id() ## Post reply
-) 
+  in_reply_to_status_id = tweet.last_id
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
 
 ########
 # Municipality tweet - deaths
 ########
 
-tweet.municipality.tweet <- "Patiënten per gemeente die positief getest zijn op COVID-19 en helaas zijn overleden
+tweet.municipality.deaths <- "Patiënten per gemeente die positief getest zijn op COVID-19 en helaas zijn overleden
 
 [@edwinveldhuizen - %s]
 
 Onze condoleance en veel sterkte aan alle nabestaanden. %s"
 
-tweet.municipality.tweet <- sprintf(tweet.municipality.tweet,
+tweet.municipality.deaths <- sprintf(tweet.municipality.deaths,
   tweet.municipality.date,
   intToUtf8(0x1F339)
 )
 
-Encoding(tweet.municipality.tweet) <- "UTF-8"
+Encoding(tweet.municipality.deaths) <- "UTF-8"
 
-post_tweet(tweet.municipality.tweet, 
+posted_tweet <- post_tweet (
+  tweet.municipality.deaths,
+  token = token.edwinveldhuizen,
   media = c("plots/list-deaths-head.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
-  in_reply_to_status_id = get_reply_id() ## Post reply
-) 
+  in_reply_to_status_id = tweet.last_id
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
 
-rm(tweet.municipality.tweet, tweet.municipality.colors, tweet.municipality.date)
+rm(tweet.municipality.cases, tweet.municipality.hosp, tweet.municipality.deaths, tweet.municipality.colors, tweet.municipality.date)
 
-
-########
-# report
-########
-post_tweet("Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf",
-          in_reply_to_status_id = get_reply_id()) ## Post reply
 
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
   #         in_reply_to_status_id = get_reply_id()) ## Post reply
