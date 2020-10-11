@@ -22,6 +22,18 @@ tweet_detailed <- function(data){
   counter <<- counter + 1
   cat(paste('tweet', counter, '/ 300 :', data$municipality, "\n"))
   
+  int.hosp <- dat.hosp[dat.hosp$Municipality_code==data$Municipality_code, "increase_14d"]
+  int.deaths <- dat.deaths[dat.deaths$Municipality_code==data$Municipality_code, "increase_14d"]
+  
+  text.hosp <- sprintf(ifelse(int.hosp == 1, "%s opname\n", "%s opnames\n"), format_custom_number(int.hosp, TRUE) )
+  text.deaths <- sprintf(ifelse(int.deaths == 1, "%s overlijden\n", "%s overlijdens\n"), format_custom_number(int.deaths, TRUE))
+  
+  text.twoweeks <- sprintf("\nDaarbij in de laatste 2 weken:\n%s%s",
+     ifelse(int.hosp > 0, text.hosp, ''),
+     ifelse(int.deaths > 0, text.deaths, '')
+  )
+  text.twoweeks <- ifelse(int.hosp > 0 || int.deaths > 0, text.twoweeks, '')
+  
   more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
   tweet <- sprintf("%s %s %s
 
@@ -29,13 +41,10 @@ tweet_detailed <- function(data){
 %s sinds 1 sep
 %s sinds 7 dagen (%s)
 Wat %s is dan de %s in de 7d ervoor
+
 %s inwoners maakt dat
 %s %.1f / 100.000 / 7d
-
-Daarbij in de laatste 2 weken:
-Opnames: %s
-Overlijdens: %s
-
+%s
 [#COVID19NL %s]",
     data$color, 
     data$municipality,
@@ -54,8 +63,7 @@ Overlijdens: %s
     format_custom_number(data$population),
     data$color, 
     data$rel_increase_7d,
-    format_custom_number(dat.hosp[dat.hosp$Municipality_code==data$Municipality_code, "increase_14d"], TRUE),
-    format_custom_number(dat.deaths[dat.deaths$Municipality_code==data$Municipality_code, "increase_14d"], TRUE),
+    text.twoweeks,
     tweet.date
   )
   Encoding(tweet) <- "UTF-8"
