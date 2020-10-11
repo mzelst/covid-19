@@ -5,10 +5,7 @@ source("workflow/twitter/token_spamedwin.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
 
-tweet.date <- Sys.Date() %>%
-  format('%d %b') %>%
-  str_to_title()  %>%
-  str_replace( '^0', '')
+counter <- 0
 
 format_custom_number <- function(data, plus = FALSE, format = "%s") {
   return( sapply(data, function(value){
@@ -20,8 +17,6 @@ format_custom_number <- function(data, plus = FALSE, format = "%s") {
     return(formatted_value)
   }))
 }
-
-counter <- 0
 
 tweet_detailed <- function(data){
   counter <<- counter + 1
@@ -62,7 +57,8 @@ Wat %s is dan de %s in de 7 dagen ervoor
   Encoding(tweet) <- "UTF-8"
   posted_tweet <<- post_tweet(tweet, 
     in_reply_to_status_id = reply_id, ## Post reply
-    token = token.spamedwin
+    token = token.spamedwin,
+    auto_populate_reply_metadata = TRUE
   )
   posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
   reply_id <<- posted_tweet$id_str
@@ -70,9 +66,15 @@ Wat %s is dan de %s in de 7 dagen ervoor
 
 dat.cases <- read.csv("data/municipality-today-detailed.csv", fileEncoding = "UTF-8") %>%
   filter(Municipality_code != "") %>%
+  arrange(desc(population)) %>%
+  head(300) %>%
   arrange(municipality)
 
 used_date <- as.Date(last(dat.cases$date))
+tweet.date <- used_date %>%
+  format('%d %b') %>%
+  str_to_title()  %>%
+  str_replace( '^0', '')
 
 tweet <- sprintf("Gedetailleerd overzicht van alle gemeentes %s
 
@@ -89,10 +91,4 @@ posted_tweet <- post_tweet(tweet, token = token.edwinveldhuizen)
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 reply_id <- posted_tweet$id_str
 
-by(slice(dat.cases,(0:300)), 1:300, tweet_detailed)
-
-by(slice(dat.cases,(300:355)), 1:56, tweet_detailed)
-
-
-
-
+by(dat.cases, 1:nrow(dat.cases), tweet_detailed)
