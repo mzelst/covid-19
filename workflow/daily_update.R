@@ -156,7 +156,7 @@ Zie de eerste afbeelding voor een uitgebreide uitleg
 
 Let op: vrijwel alle gemeentes minder dan +20 passen niet meer op de eerste afbeelding
 
-[@edwinveldhuizen - %s]"
+[%s]"
 
 tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   intToUtf8(0x1F447),
@@ -185,7 +185,7 @@ tweet.last_id <- posted_tweet$id_str
 ########
 tweet.municipality.hosp <- "Positief geteste patiënten per gemeente die zijn opgenomen met specifiek COVID-19 als reden v. opname
 
-[@edwinveldhuizen - %s]"
+[%s]"
 
 tweet.municipality.hosp <- sprintf(tweet.municipality.hosp,
   tweet.municipality.date
@@ -209,7 +209,7 @@ tweet.last_id <- posted_tweet$id_str
 
 tweet.municipality.deaths <- "Patiënten per gemeente die positief getest zijn op COVID-19 en helaas zijn overleden
 
-[@edwinveldhuizen - %s]
+[%s]
 
 Onze condoleance en veel sterkte aan alle nabestaanden. %s"
 
