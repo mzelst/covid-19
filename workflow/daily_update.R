@@ -115,7 +115,8 @@ posted_tweet <- post_tweet (
   tweet.nice,
   token = token.mzelst,
   media = "plots/plot_daily.png",
-  in_reply_to_status_id = tweet.last_id
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
@@ -127,7 +128,8 @@ tweet.report = "Ik heb een start gemaakt met een dagelijks epidemiologisch rappo
 posted_tweet <- post_tweet (
   tweet.report,
   token = token.mzelst,
-  in_reply_to_status_id = tweet.last_id
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
@@ -171,7 +173,8 @@ posted_tweet <- post_tweet (
   tweet.municipality.cases,
   token = token.edwinveldhuizen,
   media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
-  in_reply_to_status_id = tweet.main.id
+  in_reply_to_status_id = tweet.main.id,
+  auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
@@ -194,7 +197,8 @@ posted_tweet <- post_tweet (
   tweet.municipality.hosp,
   token = token.edwinveldhuizen,
   media = c("plots/list-hosp-head.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
-  in_reply_to_status_id = tweet.last_id
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
@@ -220,7 +224,8 @@ posted_tweet <- post_tweet (
   tweet.municipality.deaths,
   token = token.edwinveldhuizen,
   media = c("plots/list-deaths-head.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
-  in_reply_to_status_id = tweet.last_id
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
