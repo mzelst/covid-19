@@ -339,12 +339,15 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
   summarise(d7 = n(), .groups = 'drop_last') %>%
   rename(color = color_lastweek)
 
-dat.cases.totals.color <- dat.cases.totals.color %>%
-  merge(dat.cases.totals.color_yesterday, by = "color", all.y=TRUE) %>%
-  merge(dat.cases.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple)))
+colors <- c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple)
+dat.cases.totals.color <- data.frame("color" = colors)  %>%
+  merge(dat.cases.totals.color, by = "color", all.x = TRUE) %>%
+  merge(dat.cases.totals.color_yesterday, by = "color", all.x = TRUE) %>%
+  merge(dat.cases.totals.color_lastweek, by = "color", all.x = TRUE) %>%
+  arrange(match(color, colors))
+dat.cases.totals.color[is.na(dat.cases.totals.color)] <- 0
 
-rm(dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
+rm(colors, dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
 dat.cases.totals.color <- mutate(dat.cases.totals.color,
   increase_1d = d0-d1, # Calculate increase since last day
