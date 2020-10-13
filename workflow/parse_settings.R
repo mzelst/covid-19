@@ -3,17 +3,17 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-report <- "https://www.rivm.nl/sites/default/files/2020-09/COVID-19_WebSite_rapport_wekelijks_20200929_1157.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-10/COVID-19_WebSite_rapport_wekelijks_20201013_1159_0.pdf"
 
 
 ## Totaal - settings
 
 area.table.settings.total <- locate_areas(report,
-             pages=c(22))
+             pages=c(23))
 
 settings <- extract_tables(report,
                            output = "data.frame",
-                           pages = c(22),
+                           pages = c(23),
                            area = area.table.settings.total,
                            guess=FALSE)
 settings <- do.call(rbind,settings)
@@ -22,11 +22,11 @@ write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
 
 ## Alle settings
 area.table.settings.specific <- locate_areas(report,
-             pages=c(23))
+             pages=c(24))
 
 dat <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(23),
+                      pages = c(24),
                       area = area.table.settings.specific,
                       guess=FALSE)
 df <- do.call(rbind,dat)
@@ -69,11 +69,11 @@ perc.priv_extend.known <- round((perc.home+perc.family+perc.friends+perc.parties
 ## GGD Positive rate
 
 area.table.ggdpos.rate <- locate_areas(report,
-                           pages=c(22))
+                           pages=c(29))
 
 ggd_tests <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(22),
+                             pages = c(29),
                              area = area.table.ggdpos.rate,
                              guess=FALSE, )
 ggd_tests <- do.call(rbind,ggd_tests)
@@ -85,12 +85,12 @@ ggd_tests$Week <- ggd_tests$Weeknummer
 ## Tests door labs
 
 area.table.testlabs <- locate_areas(report,
-                           pages=c(31))
+                           pages=c(43))
 
 
 tests.labs <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(31),
+                             pages = c(43),
                              area = area.table.testlabs,
                              guess=FALSE)
 tests.labs <- do.call(rbind,tests.labs)
@@ -98,18 +98,18 @@ tests.labs <- do.call(rbind,tests.labs)
 colnames(tests.labs) <- c("Datum","Aantal_labs","Tests","Aantal_positief","Perc_positief")
 
 tests.labs <- tests.labs[c(2:(nrow(tests.labs))),]
-tests.labs$Week <- c(13:weeknumber)
+tests.labs$Week <- c(11:weeknumber)
 
 
 ## Contactinventarisatie
 
 area.table.contacts <- locate_areas(report,
-             pages=c(20))
+             pages=c(27))
 
 
 contactinv <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(20),
+                      pages = c(27),
                       area = area.table.contacts,
                       guess=FALSE)
 contactinv <- do.call(rbind,contactinv)
@@ -132,3 +132,26 @@ colnames(all.data) <- c("Week","Datum-weken","Aantal_Labs","Tests_Labs","Positie
                         "Percentage_via_BCO","Contactinventarisaties","Perc_inven_uitgevoerd")
 
 write.csv(all.data, file = "data-dashboards/report_data.csv")
+
+
+## Plots
+str(all.data)
+
+perc_pos <- all.data %>%
+  filter(Week > 22) %>%
+  ggplot(aes(x=Week, y=Percentage_GGD)) + 
+  geom_line(aes(y = Percentage_GGD, color = "Percentage Positief (GGD)"), lwd=1.2) +
+  geom_text(aes(label=Percentage_GGD),hjust=1, vjust=-1) +
+  geom_point(size = 2,alpha = 0.6) +
+  geom_line(aes(y = Percentage_Labs, color = "Percentage Positief (Labs)"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 2), limits = c(0, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "vertical",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Besmettingen per dag",
+       color = "Legend") +
+  ggtitle("Percentage Tests Positief") +
+  ggsave("plots/percentage_positief.png",width=12, height = 10)
