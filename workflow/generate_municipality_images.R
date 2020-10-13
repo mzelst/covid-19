@@ -9,20 +9,16 @@ rmarkdown::render(
   output_format = "all")
 
 screenshots = c(
-  "article" = "full",
   "article.cases > header" = "cases-head",
   "article.cases #section-hoogste-besmettingsgraad" = "cases-bottom-20",
-  "article.cases main section`" = "cases-all",
   "article.cases section.municipalities-a-g" = "cases-all-part1",
   "article.cases section.municipalities-h-p" = "cases-all-part2",
   "article.cases section.municipalities-r-z" = "cases-all-part3",
   "article.hosp > header" = "hosp-head",
-  "article.hosp main section" = "hosp-all",
   "article.hosp section.municipalities-a-g" = "hosp-all-part1",
   "article.hosp section.municipalities-h-p" = "hosp-all-part2",
   "article.hosp section.municipalities-r-z" = "hosp-all-part3",
   "article.deaths > header" = "deaths-head",
-  "article.deaths main section" = "deaths-all",
   "article.deaths section.municipalities-a-g" = "deaths-all-part1",
   "article.deaths section.municipalities-h-p" = "deaths-all-part2",
   "article.deaths section.municipalities-r-z" = "deaths-all-part3"

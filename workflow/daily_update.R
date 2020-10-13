@@ -152,6 +152,8 @@ tweet.municipality.cases <- "Geconstateerde besmettingen per gemeente %s
 
 %s %d / 355 gemeentes
 
+%s %d / 355 gemeentes
+
 Zie de eerste afbeelding voor een uitgebreide uitleg
 
 Let op: vrijwel alle gemeentes minder dan +30 passen niet meer op de eerste afbeelding
@@ -164,6 +166,8 @@ tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   tweet.municipality.colors$d0[[4]],
   intToUtf8(0x1F7E3),
   tweet.municipality.colors$d0[[5]],
+  intToUtf8(0x26A1),
+  tweet.municipality.colors$d0[[6]],
   tweet.municipality.date
 )
 

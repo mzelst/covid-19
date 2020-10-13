@@ -10,6 +10,7 @@ require(data.table)
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x2B06)
 emoji.down <- intToUtf8(0x2B07)
+emoji.black <- intToUtf8(0x26A1)
 emoji.purple <- intToUtf8(0x1F7E3)
 emoji.red <- intToUtf8(0x1F6D1)
 emoji.orange <- intToUtf8(0x1F7E7)
@@ -20,6 +21,7 @@ emoji.new <- intToUtf8(0x1F4A5)
 if (.Platform$OS.type == "windows") {
   emoji.up <- "&#11014;"
   emoji.down <- "&#11015;"
+  emoji.black <- "&#x26a1;"
   emoji.purple <- "&#x1F7E3;"
   emoji.red <- "&#128721;"
   emoji.orange <- "&#128999;"
@@ -35,12 +37,13 @@ emoji.down_double = paste(emoji.down, emoji.down, sep="")
 # methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
+    ifelse( rel_increase >= 250, emoji.black,
     ifelse( rel_increase >= 150, emoji.purple,
     ifelse( rel_increase >= 50, emoji.red,
     ifelse( rel_increase > 5,   emoji.orange,
     ifelse( rel_increase > 0,   emoji.yellow,
                                 emoji.green
-    ))))
+    )))))
   return(trafficlight)
 }
 
@@ -339,7 +342,7 @@ dat.cases.totals.color_lastweek <- dat.cases.today %>%
   summarise(d7 = n(), .groups = 'drop_last') %>%
   rename(color = color_lastweek)
 
-colors <- c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple)
+colors <- c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple, emoji.black)
 dat.cases.totals.color <- data.frame("color" = colors)  %>%
   merge(dat.cases.totals.color, by = "color", all.x = TRUE) %>%
   merge(dat.cases.totals.color_yesterday, by = "color", all.x = TRUE) %>%

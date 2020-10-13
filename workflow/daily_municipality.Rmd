@@ -135,7 +135,8 @@ knitr::asis_output(htmltools::htmlPreserve("
 🟡   Gerustellend ( 1-5 / 100.000 inwoners / 7 dagen )  
 🟧   Waakzaam ( 5-50 / 100.000 inwoners / 7 dagen )   
 🛑   Zorgelijk ( 50-150 / 100.000 inwoners / 7 dagen )  
-🟣   Ernstig ( >= 150 / 100.000 inwoners / 7 dagen )
+🟣   Ernstig ( 150-250 / 100.000 inwoners / 7 dagen )   
+⚡️   Zeer Ernstig ( >= 250 / 100.000 inwoners / 7 dagen )   
 
 ⬆⬆ Fors stijgende trend ( > 100% )  
 ⬆ Stijgende trend ( 0 - 100% )  
