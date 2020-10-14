@@ -89,15 +89,15 @@ reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_r
 reproduction <- reproduction %>%
   mutate(Date = Date %>% as.Date)
 
-#prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
-#  map(as.data.table) %>%
-#  rbindlist(fill = TRUE)
+prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
 
-#prevalence <- prevalence %>%
-#  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
-#  mutate(Date = Date %>% as.Date)
+prevalence <- prevalence %>%
+  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
+  mutate(Date = Date %>% as.Date)
 
-#prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
+prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 reproduction <- reproduction %>%
   ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
@@ -119,31 +119,30 @@ reproduction <- reproduction %>%
 
 filter.date <- Sys.Date()-56 # Set filter date for last 8 weeks
 
-#prevalence %>%
-#  filter(Date > filter.date) %>%
-#  ggplot(aes(x=Date, y=prev_avg, group = 1)) + 
-#  geom_line(aes(y = prev_low), lwd=0.6) +
-#  geom_line(aes(y = prev_up), lwd=0.6) +
-#  geom_ribbon(aes(ymin=prev_low,ymax=prev_up), fill="lightblue") +
-#  geom_line(aes(y = prev_avg, color = "Aantal besmettelijke mensen"), color = "blue",lwd=1) +
-#  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
-#  theme(axis.title.x=element_blank(),
-#        axis.title.y=element_blank(),
-#        legend.pos = "bottom",
-#        legend.direction = "vertical",
-#        legend.title = element_blank(),
-#        panel.background = element_rect(fill = "white",
-#                                        colour = "white",
-#                                        size = 0.5, linetype = "solid"),
-#        panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
-#                                        colour = "grey"), 
-#        panel.grid.minor.y = element_line(size = 0.25, linetype = 'solid',
-#                                        colour = "grey")) +
-#  labs(x = "Datum",
-#       y = "Aantal besmettelijke mensen",
-#       color = "Legend") +
-#  ggtitle("Aantal besmettelijke mensen in Nederland") + 
-#  ggsave("plots/prevalentie_overzicht.png",width=15, height = 4)
+prevalence %>%
+  ggplot(aes(x=Date, y=prev_avg, group = 1)) + 
+  geom_line(aes(y = prev_low), lwd=0.6) +
+  geom_line(aes(y = prev_up), lwd=0.6) +
+  geom_ribbon(aes(ymin=prev_low,ymax=prev_up), fill="lightblue") +
+  geom_line(aes(y = prev_avg, color = "Aantal besmettelijke mensen"), color = "blue",lwd=1) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "vertical",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        size = 0.5, linetype = "solid"),
+        panel.grid.major.y = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "grey"), 
+        panel.grid.minor.y = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "grey")) +
+  labs(x = "Datum",
+       y = "Aantal besmettelijke mensen",
+       color = "Legend") +
+  ggtitle("Aantal besmettelijke mensen in Nederland") + 
+  ggsave("plots/prevalentie_overzicht.png",width=15, height = 4)
 
 # Merge plots into grid
 plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),

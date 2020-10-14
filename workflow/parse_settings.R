@@ -150,8 +150,27 @@ perc_pos <- all.data %>%
         legend.pos = "bottom",
         legend.direction = "vertical",
         legend.title = element_blank()) +
-  labs(x = "Datum",
-       y = "Besmettingen per dag",
+  labs(x = "Week",
+       y = "Percentage",
        color = "Legend") +
   ggtitle("Percentage Tests Positief") +
   ggsave("plots/percentage_positief.png",width=12, height = 10)
+
+
+perc_inventarisatie <- all.data %>%
+  filter(Week > 26) %>%
+  ggplot(aes(x=Week, y=Perc_inven_uitgevoerd)) + 
+  geom_line(aes(y = Perc_inven_uitgevoerd, color = "Percentage Contactinventarisatie (%)"), lwd=1.2) +
+  geom_text(aes(label=Perc_inven_uitgevoerd),hjust=1, vjust=-1) +
+  geom_point(size = 2,alpha = 0.6) +
+  scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "vertical",
+        legend.title = element_blank()) +
+  labs(x = "Week",
+       y = "Percentage",
+       color = "Legend") +
+  ggtitle("Percentage Contactinventarisatie Afgerond") +
+  ggsave("plots/percentage_inventarisatie.png",width=12, height = 10)
