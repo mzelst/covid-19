@@ -6,7 +6,7 @@ source("workflow/generate_banner.R")
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
-#source("workflow/parse_municipalities.R")
+source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
 # get tokens
@@ -48,8 +48,8 @@ text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",last(all.data$new.infection),"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
+Positief getest: ",8141,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-27," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
