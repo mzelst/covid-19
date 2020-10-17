@@ -102,10 +102,11 @@ tweet <- sprintf("Gedetailleerd overzicht van alle gemeentes %s
 
 Zoeken kan in uw Twitter zoekbalk:
 'from:spamedwin Schiermonnikoog'
-https://twitter.com/search?q=from%3A%40spamedwin%20Schiermonnikoog&src=typed_query&f=live
+%s
 
 [%s]", 
   intToUtf8(0x1F447), 
+  "https://twitter.com/search?q=from%3A%40spamedwin%20Schiermonnikoog&src=typed_query&f=live",
   tweet.date
 )
 Encoding(tweet) <- "UTF-8"
