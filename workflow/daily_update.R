@@ -236,7 +236,7 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
-rm(tweet.municipality.deaths, tweet.municipality.colors, tweet.municipality.date, posted_tweet)
+rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
 
 
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
