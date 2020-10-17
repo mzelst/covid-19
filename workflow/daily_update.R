@@ -13,6 +13,7 @@ source("workflow/parse_corrections.R")
 source("workflow/twitter/token_mzelst.R")
 source("workflow/twitter/token_edwinveldhuizen.R")
 
+Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
 
 rivm_by_day <- read.csv("data/rivm_by_day.csv")
@@ -33,6 +34,7 @@ write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
 source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
+source("workflow/generate_municipality_images.R")
 
 rm(list=ls()) # Clean environment
 
@@ -137,8 +139,6 @@ tweet.last_id <- posted_tweet$id_str
 ########
 # Municipality tweet - cases
 ########
-source("workflow/generate_municipality_images.R")
-Sys.setlocale("LC_TIME", "nl_NL")
 
 tweet.municipality.date <- Sys.Date() %>%
   format('%d %b') %>%
@@ -182,7 +182,7 @@ posted_tweet <- post_tweet (
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
-
+rm(tweet.municipality.cases, tweet.municipality.colors, posted_tweet)
 
 ########
 # Municipality tweet - hospital admissions
@@ -206,6 +206,8 @@ posted_tweet <- post_tweet (
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
+
+rm(tweet.municipality.hosp, posted_tweet)
 
 ########
 # Municipality tweet - deaths
@@ -234,7 +236,7 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
-rm(tweet.municipality.cases, tweet.municipality.hosp, tweet.municipality.deaths, tweet.municipality.colors, tweet.municipality.date)
+rm(tweet.municipality.deaths, tweet.municipality.colors, tweet.municipality.date, posted_tweet)
 
 
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
