@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- isoweek(Sys.Date())-15
+week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
 
@@ -545,6 +545,6 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   xlab('') +
   ylab('Totale oversterfte') + 
   theme_bw()
-ggsave('plots/fig4.2.2.png')
+ggsave('plots/fig4.2.2_week27.png')
 
 ## end of script
