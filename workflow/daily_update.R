@@ -9,10 +9,6 @@ source("workflow/parse_rivm-data.R")
 source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
-# get tokens
-source("workflow/twitter/token_mzelst.R")
-source("workflow/twitter/token_edwinveldhuizen.R")
-
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
 
@@ -40,6 +36,10 @@ rm(list=ls()) # Clean environment
 
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
+
+# get tokens
+source("workflow/twitter/token_mzelst.R")
+source("workflow/twitter/token_edwinveldhuizen.R")
 
 ## Corrections or not?
 text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)")
