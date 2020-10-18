@@ -16,3 +16,5 @@
 /c19redteam_website/
 /corrections/nice_correction-day.csv
 /plots/municipal_plots/*
+/workflow/twitter/token_*.R
+!/workflow/twitter/token_*.dist.R
