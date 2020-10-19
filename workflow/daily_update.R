@@ -37,13 +37,13 @@ rm(list=ls()) # Clean environment
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
-# get tokens
-source("workflow/twitter/token_mzelst.R")
-source("workflow/twitter/token_edwinveldhuizen.R")
-
 ## Corrections or not?
 text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)")
 text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
+
+# get tokens
+source("workflow/twitter/token_mzelst.R")
+source("workflow/twitter/token_edwinveldhuizen.R")
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
@@ -73,6 +73,11 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
+
+# Retweet for @edwinveldhuizen
+post_tweet (
+  token.edwinveldhuizen,
+  retweet_id = tweet.main.id)
 
 # Tweet for hospital numbers - Data NICE ####
 
@@ -183,6 +188,10 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 rm(tweet.municipality.cases, tweet.municipality.colors, posted_tweet)
+
+post_tweet (
+  token.mzelst,
+  retweet_id = tweet.last_id)
 
 ########
 # Municipality tweet - hospital admissions
