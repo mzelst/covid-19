@@ -48,8 +48,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",8141,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-27," corr.)
+Positief getest: ",8015,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-23," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -203,8 +203,6 @@ tweet.municipality.hosp <- "Positief geteste patiënten per gemeente die zijn op
 tweet.municipality.hosp <- sprintf(tweet.municipality.hosp,
   tweet.municipality.date
 )
-
-Encoding(tweet.municipality.hosp) <- "UTF-8"
 
 posted_tweet <- post_tweet (
   tweet.municipality.hosp,
