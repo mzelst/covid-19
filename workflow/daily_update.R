@@ -48,8 +48,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",8015,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-23," corr.)
+Positief getest: ",8182,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-17," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -75,8 +75,7 @@ tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
 
 # Retweet for @edwinveldhuizen
-post_tweet (
-  token.edwinveldhuizen,
+post_tweet (token = token.edwinveldhuizen,
   retweet_id = tweet.main.id)
 
 # Tweet for hospital numbers - Data NICE ####
