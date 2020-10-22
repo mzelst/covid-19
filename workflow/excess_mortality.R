@@ -4,7 +4,7 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 
-weeknumber <- isoweek(ymd(Sys.Date()))-2
+weeknumber <- isoweek(ymd(Sys.Date()))-1
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
@@ -28,11 +28,6 @@ bevolking2020 <- data.frame(c("2020","17414600","14015030", "2570467", "822088")
 
 bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
 
-
-test <- cbs_get_data("03759ned", Perioden = has_substring(c("2020JJ00")), Geslacht = has_substring(c("T001038")),
-                     BurgerlijkeStaat = has_substring(c("T001019")), RegioS = has_substring(c("NL01")), typed = T)
-test$Leeftijd <- as.numeric(test$Leeftijd)
-test$Leeftijd <- (test$Leeftijd-10000)
 
 bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
 
@@ -73,7 +68,6 @@ excess_flu <- aggregate(excess_flu ~ LeeftijdOp31December, data = griep, FUN = s
 hittegolf2006 <- subset(mortality_wide, Week > 26 & Week < 31)
 excess_heatwave <- aggregate(excess_heatwave ~ LeeftijdOp31December, data = hittegolf2006, FUN = sum)
 
-write.csv(mortality_wide, file = "mortality.csv")
 
 #alleen_ondersterfte <- subset(mortality_wide, Week > 19)
 #less_deaths <- aggregate(excess_death ~ LeeftijdOp31December + Week, data = alleen_ondersterfte, FUN = sum)
@@ -85,16 +79,25 @@ write.csv(mortality_wide, file = "mortality.csv")
 #week.2020 <- round(mortality_wide[which(mortality_wide$Week == weeknumber & mortality_wide$LeeftijdOp31December == "Totaal"),"2020"],0)
 
 ## Calculate official death numbers
-rivm.data <- read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep=";")
-rivm.data <- rivm.data %>%
-  dplyr::filter(Deceased == "Yes")
-rivm.data$Week <- substr(rivm.data$Week_of_death, 5, 6)
-rivm.data$deaths_rivm <- 1
 
-rivm_deaths <- aggregate(deaths_rivm ~ Week, data = rivm.data, FUN = sum)
-rivm_thisweek <- rivm_deaths[which(rivm_deaths$Week == weeknumber),"deaths_rivm"]
+if(file.exists('/data/covid_deaths_dt.rds')) {
+  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-3,".csv")
+  )[,
+    Datum := as.IDate(Datum)
+  ][,
+    week := week(Datum + 1)
+  ]
+  saveRDS(rivm_dt, '/data/covid_deaths_dt.rds')
+} else {
+  rivm_dt <- readRDS('/data/covid_deaths_dt.rds')
+}
 
-excess_deaths_wide <- merge(excess_deaths_wide, rivm_deaths, by = "Week", all.x=T)
+nl_dt <- rivm_dt[Type == 'Overleden',
+                 .(year = 2020, covid_deaths = sum(Aantal)),
+                 by = week
+]
+
+excess_deaths_wide <- merge(excess_deaths_wide, nl_dt[,c("week","covid_deaths")], by.x = "Week", by.y="week", all.x=T)
 
 deaths_2020 <- mortality_wide %>%
   select(LeeftijdOp31December,Week,`2020`) %>%
@@ -102,7 +105,7 @@ deaths_2020 <- mortality_wide %>%
 
 deaths_weekly <- merge(deaths_2020, excess_deaths_wide, by = "Week")
 
-week.now <- week(Sys.Date())-2 ## Which week?
+week.now <- week(Sys.Date())-1 ## Which week?
 
 excess_cbsmodel <- read.csv(paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
