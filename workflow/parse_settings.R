@@ -69,11 +69,11 @@ perc.priv_extend.known <- round((perc.home+perc.family+perc.friends+perc.parties
 ## GGD Positive rate
 
 area.table.ggdpos.rate <- locate_areas(report,
-                           pages=c(29))
+                           pages=c(30))
 
 ggd_tests <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(29),
+                             pages = c(30),
                              area = area.table.ggdpos.rate,
                              guess=FALSE, )
 ggd_tests <- do.call(rbind,ggd_tests)
@@ -85,12 +85,12 @@ ggd_tests$Week <- ggd_tests$Weeknummer
 ## Tests door labs
 
 area.table.testlabs <- locate_areas(report,
-                           pages=c(43))
+                           pages=c(44))
 
 
 tests.labs <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(43),
+                             pages = c(44),
                              area = area.table.testlabs,
                              guess=FALSE)
 tests.labs <- do.call(rbind,tests.labs)
@@ -104,12 +104,12 @@ tests.labs$Week <- c(11:weeknumber)
 ## Contactinventarisatie
 
 area.table.contacts <- locate_areas(report,
-             pages=c(27))
+             pages=c(28))
 
 
 contactinv <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(27),
+                      pages = c(28),
                       area = area.table.contacts,
                       guess=FALSE)
 contactinv <- do.call(rbind,contactinv)
