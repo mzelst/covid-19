@@ -33,7 +33,8 @@ gemlftdb<-gemlftdb[!is.na(gemlftdb$Aantalinwoners),]
 
 
 #Casusdata lezen, datum omzetten + weeknummers
-voorheat<-read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv",sep=";")
+temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),1)
+voorheat <- read.csv(temp)
 voorheat$datum<-as.Date(voorheat$Date_statistics)
 voorheat$week<-strftime(voorheat$datum,format = "%V")
 
