@@ -162,6 +162,13 @@ Zie de eerste afbeelding voor een uitgebreide uitleg
 
 Let op: vrijwel alle gemeentes minder dan +30 passen niet meer op de eerste afbeelding
 
+<<<<<<< HEAD
+# Tweet for graph
+my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
+reply_id <- my_timeline$status_id[1] ## Status ID for reply
+post_tweet(tweet2, media = "plots/plot_daily.png",
+          in_reply_to_status_id = reply_id) ## Post reply
+=======
 [%s]"
 
 tweet.municipality.cases <- sprintf(tweet.municipality.cases,
@@ -243,6 +250,7 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
+>>>>>>> 5b9eaab0334e6c06a82cf82b892a3e99c7341e30
 
 
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",

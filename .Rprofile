@@ -11,3 +11,7 @@ require(git2r)
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 repo <- init()
+<<<<<<< HEAD
+source("workflow/daily_update.R")
+=======
+>>>>>>> 5b9eaab0334e6c06a82cf82b892a3e99c7341e30
