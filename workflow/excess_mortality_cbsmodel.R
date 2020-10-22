@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- week(Sys.Date())-2
+week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
 
@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I26', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I33', col_names = F))
 
 
 ##
@@ -84,7 +84,7 @@ nl_dt <- rivm_dt[Type == 'Overleden',
                  by = week
 ]
 
-nl_dt <- nl_dt[c(1:(week.now-8)),] ## Only use data up to week 30
+nl_dt <- nl_dt[c(1:19),] ## Only use data up to week 30
 
 ## ts objects assume 52 weeks per year. Adjust the CBS data for 52 week/year 
 
@@ -545,6 +545,6 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   xlab('') +
   ylab('Totale oversterfte') + 
   theme_bw()
-ggsave('plots/fig4.2.2.png')
+ggsave('plots/fig4.2.2_week27.png')
 
 ## end of script

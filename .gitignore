@@ -14,3 +14,7 @@
 /git_auth.txt
 /workflow/excess_mortality/src/corona_script_Brabant.R
 /c19redteam_website/
+/corrections/nice_correction-day.csv
+/plots/municipal_plots/*
+/workflow/twitter/token_*.R
+!/workflow/twitter/token_*.dist.R

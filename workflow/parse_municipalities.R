@@ -1,70 +1,49 @@
+# For emo:ji please install the following
+# install.packages("devtools")
+# devtools::install_github("hadley/emo")
+
 require(tidyverse)
 require(data.table)
 
-temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+# const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 
-dat <- read.csv(last(temp), ) ## Take last filename from the folder, load csv
-dat$date <- as.Date(dat$Date_of_report) ## character into Date class
-used_date <- as.Date(last(dat$Date_of_report))
+# set emoji's for unix and windows
+emoji.up <- intToUtf8(0x2B06)
+emoji.down <- intToUtf8(0x2B07)
+emoji.black <- intToUtf8(0x26A1)
+emoji.purple <- intToUtf8(0x1F7E3)
+emoji.red <- intToUtf8(0x1F6D1)
+emoji.orange <- intToUtf8(0x1F7E7)
+emoji.yellow <- intToUtf8(0x1F7E1)
+emoji.green <- intToUtf8(0x2705)
+emoji.new <- intToUtf8(0x1F4A5)
 
-dat.unknown <- dat %>%
-  filter(Municipality_code == "")  %>%
-  group_by(date) %>%
-  summarise(
-    Municipality_name = 'Unknown',
-    Municipality_code = '',
-    Total_reported = sum(Total_reported),
-    .groups = 'drop_last'
-  )
+if (.Platform$OS.type == "windows") {
+  emoji.up <- "&#11014;"
+  emoji.down <- "&#11015;"
+  emoji.black <- "&#x26a1;"
+  emoji.purple <- "&#x1F7E3;"
+  emoji.red <- "&#128721;"
+  emoji.orange <- "&#128999;"
+  emoji.yellow <- "&#128993;"
+  emoji.green <- "&#9989;"
+  emoji.new <- "&#128165;"
+}
 
-dat.total <- dat %>%
-  group_by(date) %>%
-  summarise(
-    Municipality_name = 'Netherlands',
-    Municipality_code = '',
-    Total_reported = sum(Total_reported),
-    .groups = 'drop_last'
-  )
-
-dat <- dat %>%
-  filter(Municipality_code != "") %>% # Filter observations without municipal name
-  select(Municipality_name, Municipality_code,date, Total_reported) %>% # Select municipality, cases reported
-  rbind(dat.total) %>%
-  rbind(dat.unknown)
+emoji.up_double = paste(emoji.up, emoji.up, sep="")
+emoji.down_double = paste(emoji.down, emoji.down, sep="")
   
 
-rm(dat.unknown, dat.total)
-
-dat$Municipality_name <- recode(dat$Municipality_name, 
-  "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
-  "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
-)
-
-dat.wide <- reshape(dat, direction="wide", # Reshape file into wide format -- columns will be dates which report total cases on date
-                    timevar="date",
-                    idvar=c("Municipality_name","Municipality_code"))
-
-mun.pop <- read.csv("misc/municipalities-population.csv") %>%
-  select(Municipality_code, population)
-
-dat.wide <- merge(mun.pop, dat.wide, by = "Municipality_code", all.y=TRUE)
-dat.wide[dat.wide$Municipality_name=="Netherlands", "population"] <- 17445629
-write.csv(dat.wide, file = "data/municipality-totals.csv")
-
-dat.lowest <- dat %>%
-  filter(date >= as.Date('2020-08-01')) %>%
-  group_by(Municipality_name) %>%
-  slice(which.min(Total_reported)) %>%
-  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
-
-# create method to convert a rel_increase to traffic light
+# methods
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
-    ifelse( rel_increase >= 50, "🛑",
-    ifelse( rel_increase > 5,   "🟧",
-    ifelse( rel_increase > 0,   "🟡",
-                                "✅"
-  )))
+    ifelse( rel_increase >= 250, emoji.black,
+    ifelse( rel_increase >= 150, emoji.purple,
+    ifelse( rel_increase >= 50, emoji.red,
+    ifelse( rel_increase > 5,   emoji.orange,
+    ifelse( rel_increase > 0,   emoji.yellow,
+                                emoji.green
+    )))))
   return(trafficlight)
 }
 
@@ -74,34 +53,170 @@ calc_growth_increase <- function(increase_7d, increase_14d){
       increase_14d-increase_7d <= 0,
       increase_7d * 100,
       ((increase_7d / (increase_14d - increase_7d)) - 1 ) * 100
-  )
+    )
   return(growth) 
 }
 
 increase_growth_to_arrows <- function(increase_growth) {
   arrows <- 
-    ifelse( increase_growth > 100,  "⬆️⬆️",
-    ifelse( increase_growth > 1,     "⬆️",
-    #ifelse( increase_growth <= -100, "⬇️⬇️",
-    ifelse( increase_growth < -1,    "⬇️",
-    "-"
+    ifelse( increase_growth > 100,   emoji.up_double,
+    ifelse( increase_growth > 1,     emoji.up,
+   #ifelse( increase_growth <= -100, emoji.down_double,
+    ifelse( increase_growth < -1,    emoji.down,
+                                     "-"
   )))#)
   return(arrows)
 }
 
-dat.today.wide <- transmute(dat.wide,
+# Parse and cleanup data
+temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+dat$date <- as.Date(dat$Date_of_report) ## character into Date class
+last_date <- as.Date(last(dat$Date_of_report))
+if(!exists("const.date")){ 
+  const.date <- last_date
+}
+
+rm(temp)
+
+dat.unknown <- dat %>%
+  filter(Municipality_code == "")  %>%
+  group_by(date) %>%
+  summarise(
+    Municipality_name = 'Unknown',
+    Municipality_code = '',
+    Total_reported = sum(Total_reported),
+    Hospital_admission = sum(Hospital_admission),
+    Deceased = sum(Deceased),
+    .groups = 'drop_last'
+  )
+
+dat.total <- dat %>%
+  group_by(date) %>%
+  summarise(
+    Municipality_name = 'Netherlands',
+    Municipality_code = '',
+    Total_reported = sum(Total_reported),
+    Hospital_admission = sum(Hospital_admission),
+    Deceased = sum(Deceased),
+    .groups = 'drop_last'
+  )
+
+dat <- dat %>%
+  filter(Municipality_code != "") %>% # Filter observations without municipal name
+  select(
+      Municipality_name, 
+      Municipality_code,
+      date, 
+      Total_reported,
+      Hospital_admission,
+      Deceased
+  ) %>% 
+  rbind(dat.total) %>%
+  rbind(dat.unknown)
+
+rm(dat.unknown, dat.total)
+
+# dat$Municipality_name <- recode(dat$Municipality_name, 
+#   "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
+#   "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
+# )
+
+dat.cases <- dat %>%
+  select(
+    Municipality_name, 
+    Municipality_code,
+    date, 
+    Total_reported
+  )
+
+dat.hosp <- dat %>%
+  select(
+    Municipality_name, 
+    Municipality_code,
+    date, 
+    Hospital_admission
+  )
+
+dat.deaths <- dat %>%
+  select(
+    Municipality_name, 
+    Municipality_code,
+    date, 
+    Deceased
+  )
+
+# Reshape file into wide format -- columns will be dates which report total cases on date
+dat.cases <- reshape(dat.cases, 
+  direction="wide", 
+  timevar="date",
+  idvar=c("Municipality_name","Municipality_code"))
+
+dat.hosp <- reshape(dat.hosp, 
+  direction="wide",
+  timevar="date",
+  idvar=c("Municipality_name","Municipality_code"))
+
+dat.deaths <- reshape(dat.deaths, 
+  direction="wide",
+  timevar="date",
+  idvar=c("Municipality_name","Municipality_code"))
+
+date_diff <- ncol(dat.cases)-grep(paste("Total_reported.",const.date, sep=''), colnames(dat.cases))
+
+# Add population
+dat.pop <- read.csv("misc/municipalities-population.csv",
+                    encoding = "UTF-8") %>%
+  select(Municipality_code, population)
+
+dat.cases <- merge(dat.pop, dat.cases, by = "Municipality_code", all.y=TRUE)
+dat.cases[dat.cases$Municipality_name=="Netherlands", "population"] <- 17443797
+write.csv(dat.cases, file = "data/municipality-totals.csv",
+          fileEncoding = "UTF-8")
+
+dat.hosp <- merge(dat.pop, dat.hosp, by = "Municipality_code", all.y=TRUE)
+dat.hosp[dat.hosp$Municipality_name=="Netherlands", "population"] <- 17443797
+write.csv(dat.hosp, file = "data/municipality-hospitalisations.csv",
+          fileEncoding = "UTF-8")
+
+dat.deaths <- merge(dat.pop, dat.deaths, by = "Municipality_code", all.y=TRUE)
+dat.deaths[dat.deaths$Municipality_name=="Netherlands", "population"] <- 17443797
+write.csv(dat.deaths, file = "data/municipality-deaths.csv",
+          fileEncoding = "UTF-8")
+
+# Calculate zero point
+dat.zeropoint <- dat %>%
+  filter(date >= as.Date('2020-08-01')) %>%
+  group_by(Municipality_name)
+
+dat.cases.lowest <- dat.zeropoint %>%
+  slice(which.min(Total_reported)) %>%
+  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+
+dat.hosp.lowest <- dat.zeropoint %>%
+  slice(which.min(Hospital_admission)) %>%
+  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+
+dat.deaths.lowest <- dat.zeropoint %>%
+  slice(which.min(Deceased)) %>%
+  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+
+rm(dat.zeropoint)
+
+# Parse today lists
+dat.cases.today <-transmute(dat.cases,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
-  date = used_date,
-  d0 = dat.wide[,ncol(dat.wide)], # today
-  d1 = dat.wide[,ncol(dat.wide)-1], # yesterday
-  d7 = dat.wide[,ncol(dat.wide)-7], # last week
-  d8 = dat.wide[,ncol(dat.wide)-8], # yesterday's last week
-  d14 = dat.wide[,ncol(dat.wide)-14], # 2 weeks back
-  aug1 = dat.wide$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_aug1 = dat.lowest$`Total_reported`,
-  lowest_since_aug1_date = dat.lowest$`date`,
-  current = d0-lowest_since_aug1,
+  date = const.date,
+  d0  = dat.cases[,ncol(dat.cases)-date_diff], # today
+  d1  = dat.cases[,ncol(dat.cases)-date_diff-1], # yesterday
+  d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
+  d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
+  d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
+  sep1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.cases.lowest$`Total_reported`,
+  lowest_since_sep1_date = dat.cases.lowest$`date`,
+  current = d0-lowest_since_sep1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -110,13 +225,17 @@ dat.today.wide <- transmute(dat.wide,
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000,
   color = convert_to_trafficlight(rel_increase_7d),
-  color_incl_new = ifelse( (d1 - d8) <= 0 & (d0 - d7) > 0, "💥", color),
+  color_incl_new = ifelse(
+      ((d1 - d8) <= 0 & (d0 - d1) > 0)
+    | ((d0 - d7) <= 0 & (d0 - d1) > 0),  
+    emoji.new, color),
   color_yesterday = convert_to_trafficlight( (d1 - d8)/ population * 100000),
   color_lastweek = convert_to_trafficlight( (d7 - d14)/ population * 100000)
 )
 
-dat.today <- dat.today.wide %>%
+dat.cases.today.simple <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   arrange(municipality) %>%
   select(
@@ -128,48 +247,154 @@ dat.today <- dat.today.wide %>%
     growth,
   )
 
-dat.totals.growth <- dat.today.wide %>%
+dat.hosp.today <- transmute(dat.hosp,
+  municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
+  date = const.date,
+  d0  = dat.hosp[,ncol(dat.hosp)-date_diff], # today
+  d1  = dat.hosp[,ncol(dat.hosp)-date_diff-1], # yesterday
+  d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
+  d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
+  d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
+  sep1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.hosp.lowest$`Hospital_admission`,
+  lowest_since_sep1_date = dat.hosp.lowest$`date`,
+  current = d0-lowest_since_sep1,
+  increase_1d = d0-d1, # Calculate increase since last day
+  increase_7d = d0-d7, # Calculate increase in 7 days
+  increase_14d = d0-d14, # Calculate increase in 14 days
+  increase_growth = calc_growth_increase(increase_7d, increase_14d), # Compare growth of last 7 days vs 7 days before,
+  growth = increase_growth_to_arrows(increase_growth),
+  population,
+  rel_increase_1d = increase_1d / population * 100000,
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
+)
+
+dat.hosp.today.simple <- dat.hosp.today %>%
+  filter(Municipality_code != "") %>%
+  arrange(municipality) %>%
+  select(
+    current,
+    municipality,
+    increase_1d,
+    increase_7d,
+    growth,
+  )
+
+dat.deaths.today <- transmute(dat.deaths,
+  municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
+  date = const.date,
+  d0 = dat.deaths[,ncol(dat.deaths)-date_diff], # today
+  d1 = dat.deaths[,ncol(dat.deaths)-date_diff-1], # yesterday
+  d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
+  d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
+  d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
+  sep1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
+  lowest_since_sep1 = dat.deaths.lowest$`Deceased`,
+  lowest_since_sep1_date = dat.deaths.lowest$`date`,
+  current = d0,
+  increase_1d = d0-d1, # Calculate increase since last day
+  increase_7d = d0-d7, # Calculate increase in 7 days
+  increase_14d = d0-d14, # Calculate increase in 14 days
+  increase_growth = calc_growth_increase(increase_7d, increase_14d), # Compare growth of last 7 days vs 7 days before,
+  growth = increase_growth_to_arrows(increase_growth),
+  population,
+  rel_increase_1d = increase_1d / population * 100000,
+  rel_increase_7d = increase_7d / population * 100000,
+  rel_increase_14d = increase_14d / population * 100000
+)
+
+dat.deaths.today.simple <- dat.deaths.today %>%
+  filter(Municipality_code != "") %>%
+  arrange(municipality) %>%
+  select(
+    current,
+    municipality,
+    increase_1d,
+    increase_7d,
+    growth,
+  )
+
+
+# Calculate totals
+dat.cases.totals.growth <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(growth) %>%
   summarise(d0 = n(), .groups = 'drop_last') %>%
-  arrange(match(growth, c("⬆️⬆️","⬆️","-","⬇️⬇️","⬇️")))
-  
-dat.totals.color <- dat.today.wide %>%
+  arrange(match(growth, c(emoji.up_double, emoji.up, "-", emoji.down_double, emoji.down)))
+
+dat.cases.totals.color <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(color) %>%
   summarise(d0 = n(), .groups = 'drop_last')
 
-dat.totals.color_yesterday <- dat.today.wide %>%
+dat.cases.totals.color_yesterday <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(color_yesterday) %>%
   summarise(d1 = n(), .groups = 'drop_last') %>%
   rename(color = color_yesterday)
 
-dat.totals.color_lastweek <- dat.today.wide %>%
+dat.cases.totals.color_lastweek <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(color_lastweek) %>%
   summarise(d7 = n(), .groups = 'drop_last') %>%
   rename(color = color_lastweek)
 
-dat.totals.color <- dat.totals.color %>%
-  merge(dat.totals.color_yesterday, by = "color", all.y=TRUE) %>%
-  merge(dat.totals.color_lastweek, by = "color", all.y=TRUE) %>%
-  arrange(match(color, c("✅","🟡","🟧","🛑")))
+colors <- c(emoji.green, emoji.yellow, emoji.orange, emoji.red, emoji.purple, emoji.black)
+dat.cases.totals.color <- data.frame("color" = colors)  %>%
+  merge(dat.cases.totals.color, by = "color", all.x = TRUE) %>%
+  merge(dat.cases.totals.color_yesterday, by = "color", all.x = TRUE) %>%
+  merge(dat.cases.totals.color_lastweek, by = "color", all.x = TRUE) %>%
+  arrange(match(color, colors))
+dat.cases.totals.color[is.na(dat.cases.totals.color)] <- 0
 
-rm(dat.totals.color_yesterday, dat.totals.color_lastweek)
+rm(colors, dat.cases.totals.color_yesterday, dat.cases.totals.color_lastweek)
 
-dat.totals.color <- mutate(dat.totals.color,
+dat.cases.totals.color <- mutate(dat.cases.totals.color,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
 )
 
-write.csv(dat.today.wide, file = "data/municipality-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
-write.csv(dat.today, file = "data/municipality-today.csv",row.names = F, fileEncoding = "UTF-8")
-write.csv(dat.totals.growth, file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
-write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
+dat.cases_per_death <-transmute(dat.cases,
+  municipality = Municipality_name,
+  Municipality_code = Municipality_code, 
+  date = const.date,
+  population = population,
+  cases_d0  = dat.cases[,ncol(dat.cases)-date_diff],
+  cases_d7 = dat.cases[,ncol(dat.cases)-date_diff-7], 
+  rel_cases_7d = (cases_d0 - cases_d7) / population * 100000,
+  rel_cases_total = cases_d0 / population * 100000,
+  color = convert_to_trafficlight(rel_cases_7d),
+  hosp_d0  = dat.hosp[,ncol(dat.hosp)-date_diff], 
+  hosp_d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], 
+  rel_hosp_7d = (hosp_d0 - hosp_d7) / population * 100000,
+  rel_hosp_total = hosp_d0 / population * 100000,
+  deaths_d0  = dat.deaths[,ncol(dat.deaths)-date_diff],
+  deaths_d7  = dat.deaths[,ncol(dat.deaths)-date_diff-7],
+  rel_deaths_7d = (deaths_d0 - deaths_d7) / population * 100000,
+  rel_deaths_total = deaths_d0 / population * 100000,
+  perc_cases = cases_d0 / population * 100,
+  perc_hosp = hosp_d0 / population * 100,
+  perc_deaths = deaths_d0 / population * 100, 
+  perc_deaths_per_case = deaths_d0 / cases_d0 * 100
+) %>% mutate(across(where(is.numeric), round, 1))
+  
 
+# Write to csv
+write.csv(dat.cases_per_death,    file = "data/municipality-combined.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.cases.today,        file = "data/municipality-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.cases.today.simple, file = "data/municipality-today.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.hosp.today,         file = "data/municipality-hospitalisations-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.hosp.today.simple,  file = "data/municipality-hospitalisations-today.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.deaths.today,       file = "data/municipality-deaths-today-detailed.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.deaths.today.simple,file = "data/municipality-deaths-today.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.cases.totals.growth,file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
+write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
 
-# rmdshot("workflow/daily_municipality.Rmd", "plots/list_municipality_1.png", delay = 1)
+rm(const.date)
+rm(list=ls())
 
 ## Pull municipal data from CBS
 
@@ -236,4 +461,4 @@ write.csv(dat.totals.color, file = "data/municipality-totals-color.csv",row.name
 
 #data_wide$weeksum <- rowSums(data_wide[,week])
 
-# rm(list=ls())
+
