@@ -1,0 +1,368 @@
+"Date_of_report","Municipality_code","Municipality_name","Province","Total_reported","Hospital_admission","Deceased"
+"2020-10-23 10:00:00","GM0003","Appingedam","Groningen",45,7,0
+"2020-10-23 10:00:00","GM0010","Delfzijl","Groningen",114,7,0
+"2020-10-23 10:00:00","GM0014","Groningen","Groningen",3078,31,4
+"2020-10-23 10:00:00","GM0024","Loppersum","Groningen",32,0,0
+"2020-10-23 10:00:00","GM0034","Almere","Flevoland",3029,163,39
+"2020-10-23 10:00:00","GM0037","Stadskanaal","Groningen",192,5,2
+"2020-10-23 10:00:00","GM0047","Veendam","Groningen",152,2,1
+"2020-10-23 10:00:00","GM0050","Zeewolde","Flevoland",215,13,6
+"2020-10-23 10:00:00","GM0059","Achtkarspelen","Friesland",157,0,0
+"2020-10-23 10:00:00","GM0060","Ameland","Friesland",32,0,0
+"2020-10-23 10:00:00","GM0072","Harlingen","Friesland",78,4,1
+"2020-10-23 10:00:00","GM0074","Heerenveen","Friesland",347,16,22
+"2020-10-23 10:00:00","GM0080","Leeuwarden","Friesland",1229,45,8
+"2020-10-23 10:00:00","GM0085","Ooststellingwerf","Friesland",127,5,1
+"2020-10-23 10:00:00","GM0086","Opsterland","Friesland",156,8,0
+"2020-10-23 10:00:00","GM0088","Schiermonnikoog","Friesland",2,1,0
+"2020-10-23 10:00:00","GM0090","Smallingerland","Friesland",319,12,7
+"2020-10-23 10:00:00","GM0093","Terschelling","Friesland",54,1,0
+"2020-10-23 10:00:00","GM0096","Vlieland","Friesland",15,0,0
+"2020-10-23 10:00:00","GM0098","Weststellingwerf","Friesland",171,3,4
+"2020-10-23 10:00:00","GM0106","Assen","Drenthe",506,14,3
+"2020-10-23 10:00:00","GM0109","Coevorden","Drenthe",268,14,2
+"2020-10-23 10:00:00","GM0114","Emmen","Drenthe",1223,46,20
+"2020-10-23 10:00:00","GM0118","Hoogeveen","Drenthe",488,27,12
+"2020-10-23 10:00:00","GM0119","Meppel","Drenthe",228,11,5
+"2020-10-23 10:00:00","GM0141","Almelo","Overijssel",849,32,14
+"2020-10-23 10:00:00","GM0147","Borne","Overijssel",287,15,6
+"2020-10-23 10:00:00","GM0148","Dalfsen","Overijssel",361,17,7
+"2020-10-23 10:00:00","GM0150","Deventer","Overijssel",1152,50,38
+"2020-10-23 10:00:00","GM0153","Enschede","Overijssel",1896,68,33
+"2020-10-23 10:00:00","GM0158","Haaksbergen","Overijssel",404,17,10
+"2020-10-23 10:00:00","GM0160","Hardenberg","Overijssel",530,24,10
+"2020-10-23 10:00:00","GM0163","Hellendoorn","Overijssel",358,13,13
+"2020-10-23 10:00:00","GM0164","Hengelo","Overijssel",1132,38,24
+"2020-10-23 10:00:00","GM0166","Kampen","Overijssel",612,60,37
+"2020-10-23 10:00:00","GM0168","Losser","Overijssel",282,11,2
+"2020-10-23 10:00:00","GM0171","Noordoostpolder","Flevoland",361,19,11
+"2020-10-23 10:00:00","GM0173","Oldenzaal","Overijssel",511,16,14
+"2020-10-23 10:00:00","GM0175","Ommen","Overijssel",155,9,4
+"2020-10-23 10:00:00","GM0177","Raalte","Overijssel",453,25,23
+"2020-10-23 10:00:00","GM0180","Staphorst","Overijssel",257,8,4
+"2020-10-23 10:00:00","GM0183","Tubbergen","Overijssel",512,12,6
+"2020-10-23 10:00:00","GM0184","Urk","Flevoland",126,23,4
+"2020-10-23 10:00:00","GM0189","Wierden","Overijssel",372,7,6
+"2020-10-23 10:00:00","GM0193","Zwolle","Overijssel",1216,54,50
+"2020-10-23 10:00:00","GM0197","Aalten","Gelderland",315,13,7
+"2020-10-23 10:00:00","GM0200","Apeldoorn","Gelderland",1539,112,54
+"2020-10-23 10:00:00","GM0202","Arnhem","Gelderland",1916,83,34
+"2020-10-23 10:00:00","GM0203","Barneveld","Gelderland",652,24,11
+"2020-10-23 10:00:00","GM0209","Beuningen","Gelderland",315,20,6
+"2020-10-23 10:00:00","GM0213","Brummen","Gelderland",151,19,6
+"2020-10-23 10:00:00","GM0214","Buren","Gelderland",288,23,8
+"2020-10-23 10:00:00","GM0216","Culemborg","Gelderland",462,25,9
+"2020-10-23 10:00:00","GM0221","Doesburg","Gelderland",154,11,7
+"2020-10-23 10:00:00","GM0222","Doetinchem","Gelderland",623,30,16
+"2020-10-23 10:00:00","GM0225","Druten","Gelderland",254,28,9
+"2020-10-23 10:00:00","GM0226","Duiven","Gelderland",292,16,6
+"2020-10-23 10:00:00","GM0228","Ede","Gelderland",1537,71,27
+"2020-10-23 10:00:00","GM0230","Elburg","Gelderland",267,28,8
+"2020-10-23 10:00:00","GM0232","Epe","Gelderland",340,52,23
+"2020-10-23 10:00:00","GM0233","Ermelo","Gelderland",313,33,23
+"2020-10-23 10:00:00","GM0243","Harderwijk","Gelderland",603,47,21
+"2020-10-23 10:00:00","GM0244","Hattem","Gelderland",122,18,5
+"2020-10-23 10:00:00","GM0246","Heerde","Gelderland",292,55,28
+"2020-10-23 10:00:00","GM0252","Heumen","Gelderland",317,19,13
+"2020-10-23 10:00:00","GM0262","Lochem","Gelderland",352,16,15
+"2020-10-23 10:00:00","GM0263","Maasdriel","Gelderland",295,17,8
+"2020-10-23 10:00:00","GM0267","Nijkerk","Gelderland",623,26,4
+"2020-10-23 10:00:00","GM0268","Nijmegen","Gelderland",3124,170,78
+"2020-10-23 10:00:00","GM0269","Oldebroek","Gelderland",262,40,19
+"2020-10-23 10:00:00","GM0273","Putten","Gelderland",208,11,1
+"2020-10-23 10:00:00","GM0274","Renkum","Gelderland",408,16,10
+"2020-10-23 10:00:00","GM0275","Rheden","Gelderland",423,35,15
+"2020-10-23 10:00:00","GM0277","Rozendaal","Gelderland",11,1,0
+"2020-10-23 10:00:00","GM0279","Scherpenzeel","Gelderland",126,5,2
+"2020-10-23 10:00:00","GM0281","Tiel","Gelderland",627,46,22
+"2020-10-23 10:00:00","GM0285","Voorst","Gelderland",229,17,11
+"2020-10-23 10:00:00","GM0289","Wageningen","Gelderland",536,22,19
+"2020-10-23 10:00:00","GM0293","Westervoort","Gelderland",132,12,6
+"2020-10-23 10:00:00","GM0294","Winterswijk","Gelderland",213,8,4
+"2020-10-23 10:00:00","GM0296","Wijchen","Gelderland",554,50,15
+"2020-10-23 10:00:00","GM0297","Zaltbommel","Gelderland",361,23,10
+"2020-10-23 10:00:00","GM0299","Zevenaar","Gelderland",442,54,17
+"2020-10-23 10:00:00","GM0301","Zutphen","Gelderland",386,33,13
+"2020-10-23 10:00:00","GM0302","Nunspeet","Gelderland",385,61,21
+"2020-10-23 10:00:00","GM0303","Dronten","Flevoland",312,39,14
+"2020-10-23 10:00:00","GM0307","Amersfoort","Utrecht",2190,90,28
+"2020-10-23 10:00:00","GM0308","Baarn","Utrecht",337,15,9
+"2020-10-23 10:00:00","GM0310","De Bilt","Utrecht",775,31,24
+"2020-10-23 10:00:00","GM0312","Bunnik","Utrecht",195,12,1
+"2020-10-23 10:00:00","GM0313","Bunschoten","Utrecht",407,15,7
+"2020-10-23 10:00:00","GM0317","Eemnes","Utrecht",105,2,1
+"2020-10-23 10:00:00","GM0321","Houten","Utrecht",697,33,17
+"2020-10-23 10:00:00","GM0327","Leusden","Utrecht",382,11,9
+"2020-10-23 10:00:00","GM0331","Lopik","Utrecht",256,22,8
+"2020-10-23 10:00:00","GM0335","Montfoort","Utrecht",202,15,7
+"2020-10-23 10:00:00","GM0339","Renswoude","Utrecht",56,5,5
+"2020-10-23 10:00:00","GM0340","Rhenen","Utrecht",274,12,6
+"2020-10-23 10:00:00","GM0342","Soest","Utrecht",828,33,14
+"2020-10-23 10:00:00","GM0344","Utrecht","Utrecht",8413,347,124
+"2020-10-23 10:00:00","GM0345","Veenendaal","Utrecht",1150,53,16
+"2020-10-23 10:00:00","GM0351","Woudenberg","Utrecht",164,9,2
+"2020-10-23 10:00:00","GM0352","Wijk bij Duurstede","Utrecht",271,12,3
+"2020-10-23 10:00:00","GM0353","IJsselstein","Utrecht",593,41,35
+"2020-10-23 10:00:00","GM0355","Zeist","Utrecht",1057,42,27
+"2020-10-23 10:00:00","GM0356","Nieuwegein","Utrecht",908,54,14
+"2020-10-23 10:00:00","GM0358","Aalsmeer","Noord-Holland",500,11,6
+"2020-10-23 10:00:00","GM0361","Alkmaar","Noord-Holland",1156,62,31
+"2020-10-23 10:00:00","GM0362","Amstelveen","Noord-Holland",1852,74,44
+"2020-10-23 10:00:00","GM0363","Amsterdam","Noord-Holland",25936,953,314
+"2020-10-23 10:00:00","GM0370","Beemster","Noord-Holland",104,4,1
+"2020-10-23 10:00:00","GM0373","Bergen (NH.)","Noord-Holland",465,22,10
+"2020-10-23 10:00:00","GM0375","Beverwijk","Noord-Holland",576,20,13
+"2020-10-23 10:00:00","GM0376","Blaricum","Noord-Holland",155,8,2
+"2020-10-23 10:00:00","GM0377","Bloemendaal","Noord-Holland",325,9,6
+"2020-10-23 10:00:00","GM0383","Castricum","Noord-Holland",342,18,10
+"2020-10-23 10:00:00","GM0384","Diemen","Noord-Holland",875,23,14
+"2020-10-23 10:00:00","GM0385","Edam-Volendam","Noord-Holland",786,36,4
+"2020-10-23 10:00:00","GM0388","Enkhuizen","Noord-Holland",131,20,4
+"2020-10-23 10:00:00","GM0392","Haarlem","Noord-Holland",2354,99,72
+"2020-10-23 10:00:00","GM0394","Haarlemmermeer","Noord-Holland",2583,92,38
+"2020-10-23 10:00:00","GM0396","Heemskerk","Noord-Holland",522,34,14
+"2020-10-23 10:00:00","GM0397","Heemstede","Noord-Holland",377,15,35
+"2020-10-23 10:00:00","GM0398","Heerhugowaard","Noord-Holland",573,29,9
+"2020-10-23 10:00:00","GM0399","Heiloo","Noord-Holland",213,12,9
+"2020-10-23 10:00:00","GM0400","Den Helder","Noord-Holland",303,15,2
+"2020-10-23 10:00:00","GM0402","Hilversum","Noord-Holland",1285,38,26
+"2020-10-23 10:00:00","GM0405","Hoorn","Noord-Holland",744,38,13
+"2020-10-23 10:00:00","GM0406","Huizen","Noord-Holland",714,27,10
+"2020-10-23 10:00:00","GM0415","Landsmeer","Noord-Holland",187,5,3
+"2020-10-23 10:00:00","GM0416","Langedijk","Noord-Holland",312,21,7
+"2020-10-23 10:00:00","GM0417","Laren","Noord-Holland",167,9,3
+"2020-10-23 10:00:00","GM0420","Medemblik","Noord-Holland",358,19,6
+"2020-10-23 10:00:00","GM0431","Oostzaan","Noord-Holland",216,12,2
+"2020-10-23 10:00:00","GM0432","Opmeer","Noord-Holland",75,1,1
+"2020-10-23 10:00:00","GM0437","Ouder-Amstel","Noord-Holland",340,7,0
+"2020-10-23 10:00:00","GM0439","Purmerend","Noord-Holland",1100,80,38
+"2020-10-23 10:00:00","GM0441","Schagen","Noord-Holland",401,20,10
+"2020-10-23 10:00:00","GM0448","Texel","Noord-Holland",69,6,2
+"2020-10-23 10:00:00","GM0450","Uitgeest","Noord-Holland",179,6,1
+"2020-10-23 10:00:00","GM0451","Uithoorn","Noord-Holland",486,21,2
+"2020-10-23 10:00:00","GM0453","Velsen","Noord-Holland",991,46,44
+"2020-10-23 10:00:00","GM0457","Weesp","Noord-Holland",475,10,14
+"2020-10-23 10:00:00","GM0473","Zandvoort","Noord-Holland",218,12,9
+"2020-10-23 10:00:00","GM0479","Zaanstad","Noord-Holland",2784,151,58
+"2020-10-23 10:00:00","GM0482","Alblasserdam","Zuid-Holland",438,11,6
+"2020-10-23 10:00:00","GM0484","Alphen aan den Rijn","Zuid-Holland",1789,79,32
+"2020-10-23 10:00:00","GM0489","Barendrecht","Zuid-Holland",1185,46,15
+"2020-10-23 10:00:00","GM0498","Drechterland","Noord-Holland",218,5,8
+"2020-10-23 10:00:00","GM0501","Brielle","Zuid-Holland",275,15,0
+"2020-10-23 10:00:00","GM0502","Capelle aan den IJssel","Zuid-Holland",1571,67,65
+"2020-10-23 10:00:00","GM0503","Delft","Zuid-Holland",2169,45,15
+"2020-10-23 10:00:00","GM0505","Dordrecht","Zuid-Holland",2331,97,76
+"2020-10-23 10:00:00","GM0512","Gorinchem","Zuid-Holland",637,19,16
+"2020-10-23 10:00:00","GM0513","Gouda","Zuid-Holland",1568,56,46
+"2020-10-23 10:00:00","GM0518","'s-Gravenhage","Zuid-Holland",13981,547,314
+"2020-10-23 10:00:00","GM0523","Hardinxveld-Giessendam","Zuid-Holland",255,2,2
+"2020-10-23 10:00:00","GM0530","Hellevoetsluis","Zuid-Holland",556,21,6
+"2020-10-23 10:00:00","GM0531","Hendrik-Ido-Ambacht","Zuid-Holland",608,13,6
+"2020-10-23 10:00:00","GM0532","Stede Broec","Noord-Holland",177,19,5
+"2020-10-23 10:00:00","GM0534","Hillegom","Zuid-Holland",319,8,2
+"2020-10-23 10:00:00","GM0537","Katwijk","Zuid-Holland",1278,41,18
+"2020-10-23 10:00:00","GM0542","Krimpen aan den IJssel","Zuid-Holland",645,18,10
+"2020-10-23 10:00:00","GM0546","Leiden","Zuid-Holland",2308,57,25
+"2020-10-23 10:00:00","GM0547","Leiderdorp","Zuid-Holland",443,21,7
+"2020-10-23 10:00:00","GM0553","Lisse","Zuid-Holland",270,11,3
+"2020-10-23 10:00:00","GM0556","Maassluis","Zuid-Holland",731,28,9
+"2020-10-23 10:00:00","GM0569","Nieuwkoop","Zuid-Holland",358,12,6
+"2020-10-23 10:00:00","GM0575","Noordwijk","Zuid-Holland",631,27,4
+"2020-10-23 10:00:00","GM0579","Oegstgeest","Zuid-Holland",364,11,3
+"2020-10-23 10:00:00","GM0589","Oudewater","Utrecht",182,28,10
+"2020-10-23 10:00:00","GM0590","Papendrecht","Zuid-Holland",475,9,9
+"2020-10-23 10:00:00","GM0597","Ridderkerk","Zuid-Holland",979,43,19
+"2020-10-23 10:00:00","GM0599","Rotterdam","Zuid-Holland",19612,777,410
+"2020-10-23 10:00:00","GM0603","Rijswijk","Zuid-Holland",1132,59,34
+"2020-10-23 10:00:00","GM0606","Schiedam","Zuid-Holland",1995,73,25
+"2020-10-23 10:00:00","GM0610","Sliedrecht","Zuid-Holland",337,9,5
+"2020-10-23 10:00:00","GM0613","Albrandswaard","Zuid-Holland",607,17,8
+"2020-10-23 10:00:00","GM0614","Westvoorne","Zuid-Holland",250,6,0
+"2020-10-23 10:00:00","GM0622","Vlaardingen","Zuid-Holland",1811,55,32
+"2020-10-23 10:00:00","GM0626","Voorschoten","Zuid-Holland",342,11,11
+"2020-10-23 10:00:00","GM0627","Waddinxveen","Zuid-Holland",508,25,7
+"2020-10-23 10:00:00","GM0629","Wassenaar","Zuid-Holland",410,10,13
+"2020-10-23 10:00:00","GM0632","Woerden","Utrecht",778,61,22
+"2020-10-23 10:00:00","GM0637","Zoetermeer","Zuid-Holland",2140,66,18
+"2020-10-23 10:00:00","GM0638","Zoeterwoude","Zuid-Holland",114,4,1
+"2020-10-23 10:00:00","GM0642","Zwijndrecht","Zuid-Holland",942,29,30
+"2020-10-23 10:00:00","GM0654","Borsele","Zeeland",126,5,1
+"2020-10-23 10:00:00","GM0664","Goes","Zeeland",345,13,13
+"2020-10-23 10:00:00","GM0668","West Maas en Waal","Gelderland",237,23,10
+"2020-10-23 10:00:00","GM0677","Hulst","Zeeland",195,10,5
+"2020-10-23 10:00:00","GM0678","Kapelle","Zeeland",76,3,1
+"2020-10-23 10:00:00","GM0687","Middelburg","Zeeland",272,19,10
+"2020-10-23 10:00:00","GM0703","Reimerswaal","Zeeland",169,6,2
+"2020-10-23 10:00:00","GM0715","Terneuzen","Zeeland",368,25,4
+"2020-10-23 10:00:00","GM0716","Tholen","Zeeland",335,43,18
+"2020-10-23 10:00:00","GM0717","Veere","Zeeland",106,8,2
+"2020-10-23 10:00:00","GM0718","Vlissingen","Zeeland",255,9,5
+"2020-10-23 10:00:00","GM0736","De Ronde Venen","Utrecht",708,45,14
+"2020-10-23 10:00:00","GM0737","Tytsjerksteradiel","Friesland",199,7,1
+"2020-10-23 10:00:00","GM0743","Asten","Noord-Brabant",215,18,12
+"2020-10-23 10:00:00","GM0744","Baarle-Nassau","Noord-Brabant",76,9,2
+"2020-10-23 10:00:00","GM0748","Bergen op Zoom","Noord-Brabant",1371,42,15
+"2020-10-23 10:00:00","GM0753","Best","Noord-Brabant",364,33,12
+"2020-10-23 10:00:00","GM0755","Boekel","Noord-Brabant",163,36,20
+"2020-10-23 10:00:00","GM0756","Boxmeer","Noord-Brabant",404,20,28
+"2020-10-23 10:00:00","GM0757","Boxtel","Noord-Brabant",378,24,26
+"2020-10-23 10:00:00","GM0758","Breda","Noord-Brabant",2903,170,74
+"2020-10-23 10:00:00","GM0762","Deurne","Noord-Brabant",564,58,26
+"2020-10-23 10:00:00","GM0765","Pekela","Groningen",58,5,0
+"2020-10-23 10:00:00","GM0766","Dongen","Noord-Brabant",349,24,13
+"2020-10-23 10:00:00","GM0770","Eersel","Noord-Brabant",387,29,10
+"2020-10-23 10:00:00","GM0772","Eindhoven","Noord-Brabant",3230,198,99
+"2020-10-23 10:00:00","GM0777","Etten-Leur","Noord-Brabant",742,47,30
+"2020-10-23 10:00:00","GM0779","Geertruidenberg","Noord-Brabant",238,13,6
+"2020-10-23 10:00:00","GM0784","Gilze en Rijen","Noord-Brabant",368,21,15
+"2020-10-23 10:00:00","GM0785","Goirle","Noord-Brabant",367,32,20
+"2020-10-23 10:00:00","GM0786","Grave","Noord-Brabant",213,21,11
+"2020-10-23 10:00:00","GM0788","Haaren","Noord-Brabant",196,20,8
+"2020-10-23 10:00:00","GM0794","Helmond","Noord-Brabant",1796,123,46
+"2020-10-23 10:00:00","GM0796","'s-Hertogenbosch","Noord-Brabant",2243,144,85
+"2020-10-23 10:00:00","GM0797","Heusden","Noord-Brabant",653,48,26
+"2020-10-23 10:00:00","GM0798","Hilvarenbeek","Noord-Brabant",234,12,8
+"2020-10-23 10:00:00","GM0809","Loon op Zand","Noord-Brabant",327,29,16
+"2020-10-23 10:00:00","GM0815","Mill en Sint Hubert","Noord-Brabant",191,9,5
+"2020-10-23 10:00:00","GM0820","Nuenen, Gerwen en Nederwetten","Noord-Brabant",309,19,10
+"2020-10-23 10:00:00","GM0823","Oirschot","Noord-Brabant",334,17,9
+"2020-10-23 10:00:00","GM0824","Oisterwijk","Noord-Brabant",312,27,12
+"2020-10-23 10:00:00","GM0826","Oosterhout","Noord-Brabant",752,52,17
+"2020-10-23 10:00:00","GM0828","Oss","Noord-Brabant",1775,175,93
+"2020-10-23 10:00:00","GM0840","Rucphen","Noord-Brabant",396,14,10
+"2020-10-23 10:00:00","GM0845","Sint-Michielsgestel","Noord-Brabant",467,37,19
+"2020-10-23 10:00:00","GM0847","Someren","Noord-Brabant",230,34,8
+"2020-10-23 10:00:00","GM0848","Son en Breugel","Noord-Brabant",230,31,14
+"2020-10-23 10:00:00","GM0851","Steenbergen","Noord-Brabant",381,18,13
+"2020-10-23 10:00:00","GM0852","Waterland","Noord-Holland",300,19,6
+"2020-10-23 10:00:00","GM0855","Tilburg","Noord-Brabant",3403,264,172
+"2020-10-23 10:00:00","GM0856","Uden","Noord-Brabant",565,115,63
+"2020-10-23 10:00:00","GM0858","Valkenswaard","Noord-Brabant",548,22,37
+"2020-10-23 10:00:00","GM0861","Veldhoven","Noord-Brabant",697,36,18
+"2020-10-23 10:00:00","GM0865","Vught","Noord-Brabant",375,43,17
+"2020-10-23 10:00:00","GM0866","Waalre","Noord-Brabant",232,8,5
+"2020-10-23 10:00:00","GM0867","Waalwijk","Noord-Brabant",706,42,39
+"2020-10-23 10:00:00","GM0873","Woensdrecht","Noord-Brabant",325,8,9
+"2020-10-23 10:00:00","GM0879","Zundert","Noord-Brabant",347,24,11
+"2020-10-23 10:00:00","GM0880","Wormerland","Noord-Holland",237,21,12
+"2020-10-23 10:00:00","GM0882","Landgraaf","Limburg",279,54,14
+"2020-10-23 10:00:00","GM0888","Beek","Limburg",132,17,7
+"2020-10-23 10:00:00","GM0889","Beesel","Limburg",147,20,8
+"2020-10-23 10:00:00","GM0893","Bergen (L.)","Limburg",131,9,2
+"2020-10-23 10:00:00","GM0899","Brunssum","Limburg",277,50,19
+"2020-10-23 10:00:00","GM0907","Gennep","Limburg",179,17,10
+"2020-10-23 10:00:00","GM0917","Heerlen","Limburg",789,128,54
+"2020-10-23 10:00:00","GM0928","Kerkrade","Limburg",440,66,36
+"2020-10-23 10:00:00","GM0935","Maastricht","Limburg",1715,197,140
+"2020-10-23 10:00:00","GM0938","Meerssen","Limburg",202,23,13
+"2020-10-23 10:00:00","GM0944","Mook en Middelaar","Limburg",137,7,5
+"2020-10-23 10:00:00","GM0946","Nederweert","Limburg",190,33,7
+"2020-10-23 10:00:00","GM0957","Roermond","Limburg",515,65,24
+"2020-10-23 10:00:00","GM0965","Simpelveld","Limburg",78,19,5
+"2020-10-23 10:00:00","GM0971","Stein","Limburg",219,46,15
+"2020-10-23 10:00:00","GM0981","Vaals","Limburg",59,10,2
+"2020-10-23 10:00:00","GM0983","Venlo","Limburg",1447,139,69
+"2020-10-23 10:00:00","GM0984","Venray","Limburg",610,38,19
+"2020-10-23 10:00:00","GM0986","Voerendaal","Limburg",97,17,8
+"2020-10-23 10:00:00","GM0988","Weert","Limburg",561,69,16
+"2020-10-23 10:00:00","GM0994","Valkenburg aan de Geul","Limburg",186,20,7
+"2020-10-23 10:00:00","GM0995","Lelystad","Flevoland",838,80,32
+"2020-10-23 10:00:00","GM1507","Horst aan de Maas","Limburg",523,41,28
+"2020-10-23 10:00:00","GM1509","Oude IJsselstreek","Gelderland",343,23,9
+"2020-10-23 10:00:00","GM1525","Teylingen","Zuid-Holland",558,18,4
+"2020-10-23 10:00:00","GM1581","Utrechtse Heuvelrug","Utrecht",772,31,17
+"2020-10-23 10:00:00","GM1586","Oost Gelre","Gelderland",408,21,11
+"2020-10-23 10:00:00","GM1598","Koggenland","Noord-Holland",226,8,8
+"2020-10-23 10:00:00","GM1621","Lansingerland","Zuid-Holland",1305,49,32
+"2020-10-23 10:00:00","GM1640","Leudal","Limburg",371,54,33
+"2020-10-23 10:00:00","GM1641","Maasgouw","Limburg",215,28,15
+"2020-10-23 10:00:00","GM1652","Gemert-Bakel","Noord-Brabant",458,79,32
+"2020-10-23 10:00:00","GM1655","Halderberge","Noord-Brabant",470,23,12
+"2020-10-23 10:00:00","GM1658","Heeze-Leende","Noord-Brabant",253,17,8
+"2020-10-23 10:00:00","GM1659","Laarbeek","Noord-Brabant",339,41,26
+"2020-10-23 10:00:00","GM1667","Reusel-De Mierden","Noord-Brabant",336,15,2
+"2020-10-23 10:00:00","GM1669","Roerdalen","Limburg",122,27,8
+"2020-10-23 10:00:00","GM1674","Roosendaal","Noord-Brabant",1282,44,26
+"2020-10-23 10:00:00","GM1676","Schouwen-Duiveland","Zeeland",288,12,13
+"2020-10-23 10:00:00","GM1680","Aa en Hunze","Drenthe",196,1,1
+"2020-10-23 10:00:00","GM1681","Borger-Odoorn","Drenthe",226,8,5
+"2020-10-23 10:00:00","GM1684","Cuijk","Noord-Brabant",325,13,10
+"2020-10-23 10:00:00","GM1685","Landerd","Noord-Brabant",353,42,21
+"2020-10-23 10:00:00","GM1690","De Wolden","Drenthe",195,14,5
+"2020-10-23 10:00:00","GM1695","Noord-Beveland","Zeeland",50,1,0
+"2020-10-23 10:00:00","GM1696","Wijdemeren","Noord-Holland",357,11,1
+"2020-10-23 10:00:00","GM1699","Noordenveld","Drenthe",221,6,14
+"2020-10-23 10:00:00","GM1700","Twenterand","Overijssel",303,12,2
+"2020-10-23 10:00:00","GM1701","Westerveld","Drenthe",98,9,4
+"2020-10-23 10:00:00","GM1702","Sint Anthonis","Noord-Brabant",183,21,11
+"2020-10-23 10:00:00","GM1705","Lingewaard","Gelderland",616,38,12
+"2020-10-23 10:00:00","GM1706","Cranendonck","Noord-Brabant",409,63,36
+"2020-10-23 10:00:00","GM1708","Steenwijkerland","Overijssel",341,15,8
+"2020-10-23 10:00:00","GM1709","Moerdijk","Noord-Brabant",510,19,10
+"2020-10-23 10:00:00","GM1711","Echt-Susteren","Limburg",214,43,19
+"2020-10-23 10:00:00","GM1714","Sluis","Zeeland",63,9,4
+"2020-10-23 10:00:00","GM1719","Drimmelen","Noord-Brabant",305,21,9
+"2020-10-23 10:00:00","GM1721","Bernheze","Noord-Brabant",599,96,66
+"2020-10-23 10:00:00","GM1723","Alphen-Chaam","Noord-Brabant",141,18,5
+"2020-10-23 10:00:00","GM1724","Bergeijk","Noord-Brabant",343,19,5
+"2020-10-23 10:00:00","GM1728","Bladel","Noord-Brabant",588,23,9
+"2020-10-23 10:00:00","GM1729","Gulpen-Wittem","Limburg",201,23,15
+"2020-10-23 10:00:00","GM1730","Tynaarlo","Drenthe",240,11,0
+"2020-10-23 10:00:00","GM1731","Midden-Drenthe","Drenthe",231,6,0
+"2020-10-23 10:00:00","GM1734","Overbetuwe","Gelderland",573,60,17
+"2020-10-23 10:00:00","GM1735","Hof van Twente","Overijssel",428,18,6
+"2020-10-23 10:00:00","GM1740","Neder-Betuwe","Gelderland",368,42,22
+"2020-10-23 10:00:00","GM1742","Rijssen-Holten","Overijssel",484,30,26
+"2020-10-23 10:00:00","GM1771","Geldrop-Mierlo","Noord-Brabant",485,35,16
+"2020-10-23 10:00:00","GM1773","Olst-Wijhe","Overijssel",172,12,8
+"2020-10-23 10:00:00","GM1774","Dinkelland","Overijssel",461,21,10
+"2020-10-23 10:00:00","GM1783","Westland","Zuid-Holland",1932,69,30
+"2020-10-23 10:00:00","GM1842","Midden-Delfland","Zuid-Holland",312,5,0
+"2020-10-23 10:00:00","GM1859","Berkelland","Gelderland",488,18,9
+"2020-10-23 10:00:00","GM1876","Bronckhorst","Gelderland",423,18,7
+"2020-10-23 10:00:00","GM1883","Sittard-Geleen","Limburg",847,124,65
+"2020-10-23 10:00:00","GM1884","Kaag en Braassem","Zuid-Holland",357,8,3
+"2020-10-23 10:00:00","GM1891","Dantumadiel","Friesland",109,2,0
+"2020-10-23 10:00:00","GM1892","Zuidplas","Zuid-Holland",905,31,23
+"2020-10-23 10:00:00","GM1894","Peel en Maas","Limburg",656,145,65
+"2020-10-23 10:00:00","GM1895","Oldambt","Groningen",192,10,4
+"2020-10-23 10:00:00","GM1896","Zwartewaterland","Overijssel",303,35,22
+"2020-10-23 10:00:00","GM1900","Súdwest-Fryslân","Friesland",711,21,6
+"2020-10-23 10:00:00","GM1901","Bodegraven-Reeuwijk","Zuid-Holland",541,11,9
+"2020-10-23 10:00:00","GM1903","Eijsden-Margraten","Limburg",363,57,28
+"2020-10-23 10:00:00","GM1904","Stichtse Vecht","Utrecht",995,46,14
+"2020-10-23 10:00:00","GM1911","Hollands Kroon","Noord-Holland",320,26,6
+"2020-10-23 10:00:00","GM1916","Leidschendam-Voorburg","Zuid-Holland",1302,36,28
+"2020-10-23 10:00:00","GM1924","Goeree-Overflakkee","Zuid-Holland",759,57,35
+"2020-10-23 10:00:00","GM1926","Pijnacker-Nootdorp","Zuid-Holland",1030,31,18
+"2020-10-23 10:00:00","GM1930","Nissewaard","Zuid-Holland",1478,68,23
+"2020-10-23 10:00:00","GM1931","Krimpenerwaard","Zuid-Holland",1030,52,37
+"2020-10-23 10:00:00","GM1940","De Fryske Marren","Friesland",407,22,7
+"2020-10-23 10:00:00","GM1942","Gooise Meren","Noord-Holland",887,27,15
+"2020-10-23 10:00:00","GM1945","Berg en Dal","Gelderland",624,36,22
+"2020-10-23 10:00:00","GM1948","Meierijstad","Noord-Brabant",1290,213,134
+"2020-10-23 10:00:00","GM1949","Waadhoeke","Friesland",364,14,16
+"2020-10-23 10:00:00","GM1950","Westerwolde","Groningen",156,11,2
+"2020-10-23 10:00:00","GM1952","Midden-Groningen","Groningen",319,10,5
+"2020-10-23 10:00:00","GM1954","Beekdaelen","Limburg",347,52,25
+"2020-10-23 10:00:00","GM1955","Montferland","Gelderland",354,24,9
+"2020-10-23 10:00:00","GM1959","Altena","Noord-Brabant",717,38,12
+"2020-10-23 10:00:00","GM1960","West Betuwe","Gelderland",654,49,30
+"2020-10-23 10:00:00","GM1961","Vijfheerenlanden","Utrecht",1008,45,43
+"2020-10-23 10:00:00","GM1963","Hoeksche Waard","Zuid-Holland",1566,82,25
+"2020-10-23 10:00:00","GM1966","Het Hogeland","Groningen",324,7,5
+"2020-10-23 10:00:00","GM1969","Westerkwartier","Groningen",369,19,4
+"2020-10-23 10:00:00","GM1970","Noardeast-Fryslân","Friesland",233,7,4
+"2020-10-23 10:00:00","GM1978","Molenlanden","Zuid-Holland",591,20,10
+"2020-10-23 10:00:00","","","Groningen",12,1,0
+"2020-10-23 10:00:00","","","Friesland",8,1,0
+"2020-10-23 10:00:00","","","Drenthe",10,0,0
+"2020-10-23 10:00:00","","","Overijssel",151,1,1
+"2020-10-23 10:00:00","","","Flevoland",5,1,0
+"2020-10-23 10:00:00","","","Gelderland",189,12,2
+"2020-10-23 10:00:00","","","Utrecht",150,8,0
+"2020-10-23 10:00:00","","","Noord-Holland",243,17,3
+"2020-10-23 10:00:00","","","Zuid-Holland",746,19,9
+"2020-10-23 10:00:00","","","Zeeland",7,2,2
+"2020-10-23 10:00:00","","","Noord-Brabant",396,16,3
+"2020-10-23 10:00:00","","","Limburg",51,7,3
