@@ -48,8 +48,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",8182,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-17," corr.)
+Positief getest: ",9283,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-12," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -62,8 +62,6 @@ Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
-
-
 
 posted_tweet <- post_tweet (
   tweet.main,
@@ -162,13 +160,6 @@ Zie de eerste afbeelding voor een uitgebreide uitleg
 
 Let op: vrijwel alle gemeentes minder dan +30 passen niet meer op de eerste afbeelding
 
-<<<<<<< HEAD
-# Tweet for graph
-my_timeline <- get_timeline(rtweet:::home_user()) ## Pull my own tweets
-reply_id <- my_timeline$status_id[1] ## Status ID for reply
-post_tweet(tweet2, media = "plots/plot_daily.png",
-          in_reply_to_status_id = reply_id) ## Post reply
-=======
 [%s]"
 
 tweet.municipality.cases <- sprintf(tweet.municipality.cases,
@@ -250,7 +241,7 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
->>>>>>> 5b9eaab0334e6c06a82cf82b892a3e99c7341e30
+
 
 
 #post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
