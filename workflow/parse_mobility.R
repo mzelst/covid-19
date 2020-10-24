@@ -85,9 +85,9 @@ addSmallLegend(google.plot) +
 
 
 ## Apple mobility
-
+apple.date <- Sys.Date()-2
 temp <- tempfile()
-download.file("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev16/v3/en-us/applemobilitytrends-2020-10-22.csv",temp)
+download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev16/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
 apple.mobility <- read.csv(temp, sep=",")
 
 apple.mobility <- apple.mobility[which(apple.mobility$region == "Netherlands"),]
