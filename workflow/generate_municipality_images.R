@@ -30,7 +30,7 @@ for (i in seq_along(screenshots)) {
   webshot2::webshot(
     url = paste("file://", getwd(), "/workflow/daily_municipality.html", sep=''),
     file = file,
-    zoom = 2,
+    zoom = 3,
     selector = selector, 
     expand = c(5, 5, 5, 5)
   )
