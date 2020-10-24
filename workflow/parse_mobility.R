@@ -1,10 +1,5 @@
-require(emo)
-require(ggtext)
-require(emojifont)
-library(ggplot2)
-library(extrafont)
-loadfonts(device = "win")
-
+require(tidyverse)
+require(ggplot2)
 
 addSmallLegend <- function(myPlot, pointSize = 1, textSize = 18, spaceLegend = 1) {
   myPlot +
