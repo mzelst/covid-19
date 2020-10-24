@@ -1,10 +1,12 @@
 library(tidyverse)
 
+tweets.enabled <- TRUE
+filter.municipality <- ""
+
 source("workflow/twitter/token_edwinveldhuizen.R")
 source("workflow/twitter/token_spamedwin.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
-
 counter <- 0
 
 format_custom_number <- function(data, plus = FALSE, format = "%s") {
@@ -68,25 +70,36 @@ Wat %s is dan de %s in de 7d ervoor
   )
   Encoding(tweet) <- "UTF-8"
   cat(paste(tweet, "\n"))
-  posted_tweet <<- post_tweet(tweet, 
-    in_reply_to_status_id = reply_id, ## Post reply
-    token = token.spamedwin,
-    auto_populate_reply_metadata = TRUE
-  )
-  posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
-  reply_id <<- posted_tweet$id_str
+  
+  if (tweets.enabled == TRUE) { 
+    posted_tweet <<- post_tweet(tweet, 
+      in_reply_to_status_id = reply_id, ## Post reply
+      token = token.spamedwin,
+      auto_populate_reply_metadata = TRUE
+    )
+    posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
+    reply_id <<- posted_tweet$id_str
+  }
 }
 
 dat.deaths <- read.csv("data/municipality-deaths-today-detailed.csv", fileEncoding = "UTF-8")
 dat.hosp <- read.csv("data/municipality-hospitalisations-today-detailed.csv", fileEncoding = "UTF-8")
 dat.cases <- read.csv("data/municipality-today-detailed.csv", fileEncoding = "UTF-8") %>%
-  filter(Municipality_code != "") %>%
-  arrange(
-    match(Municipality_code, c("GM0088", "GM0096", "GM0060", "GM0093", "GM0448", "GM0180", "GM0744", "GM0244", "GM0946")),
-    desc(population)
-  ) %>%
-  head(300) %>%
-  arrange(municipality)
+  filter(Municipality_code != "")
+
+if (filter.municipality != "") {
+  dat.cases <- filter(dat.cases, municipality == filter.municipality)
+}else{
+  dat.cases <- dat.cases %>%
+    arrange(
+      match(Municipality_code, c("GM0088", "GM0096", "GM0060", "GM0093", "GM0448", "GM0180", "GM0744", "GM0244", "GM0946")),
+      desc(population)
+    ) %>%
+    head(300) %>%
+    arrange(municipality)
+}
+
+
 
 used_date <- as.Date(last(dat.cases$date))
 tweet.date <- used_date %>%
@@ -111,8 +124,10 @@ Zoeken kan in uw Twitter zoekbalk:
 )
 Encoding(tweet) <- "UTF-8"
 
-posted_tweet <- post_tweet(tweet, token = token.edwinveldhuizen)
-posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
-reply_id <- posted_tweet$id_str
+if (tweets.enabled == TRUE) { 
+  posted_tweet <- post_tweet(tweet, token = token.edwinveldhuizen)
+  posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+  reply_id <- posted_tweet$id_str
+}
 
 by(dat.cases, 1:nrow(dat.cases), tweet_detailed)
