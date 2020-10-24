@@ -17,7 +17,7 @@ require(data.table)
 require(xtable)
 require(shiny)
 
-const.toplist_minimum = 30
+const.toplist_minimum = 50
 
 setwd('../')
 
@@ -138,9 +138,9 @@ knitr::asis_output(htmltools::htmlPreserve("
 🟣   Ernstig ( 150-250 / 100.000 inwoners / 7 dagen )   
 ⚡️   Zeer Ernstig ( >= 250 / 100.000 inwoners / 7 dagen )   
 
-⬆⬆ Fors stijgende trend ( > 100% )  
-⬆ Stijgende trend ( 0 - 100% )  
-⬇ Dalende trend   
+➚➚ Fors stijgende trend ( > 100% )  
+➚  Stijgende trend ( 0 - 100% )  
+➘  Dalende trend   
 
 Bovenstaande zijn berekend op laatste  
 7 dagen t.o.v. de 7 dagen daarvoor  

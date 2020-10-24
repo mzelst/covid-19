@@ -8,8 +8,8 @@ require(data.table)
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 
 # set emoji's for unix and windows
-emoji.up <- intToUtf8(0x2B06)
-emoji.down <- intToUtf8(0x2B07)
+emoji.up <- intToUtf8(0x279A)
+emoji.down <- intToUtf8(0x2798)
 emoji.black <- intToUtf8(0x26A1)
 emoji.purple <- intToUtf8(0x1F7E3)
 emoji.red <- intToUtf8(0x1F6D1)
@@ -19,8 +19,8 @@ emoji.green <- intToUtf8(0x2705)
 emoji.new <- intToUtf8(0x1F4A5)
 
 if (.Platform$OS.type == "windows") {
-  emoji.up <- "&#11014;"
-  emoji.down <- "&#11015;"
+  emoji.up <- "&#x279A;"
+  emoji.down <- "&#x2798;"
   emoji.black <- "&#x26a1;"
   emoji.purple <- "&#x1F7E3;"
   emoji.red <- "&#128721;"
