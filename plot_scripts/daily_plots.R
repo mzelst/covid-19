@@ -34,17 +34,7 @@ cases <- all.data %>%
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 10)
 
 # Plot for #patients in hospital per day
-nice.today <- read.csv("data-nice/nice-today.csv")
-nice.today$date <- as.Date(nice.today$date)
-
-lcps.dat <- read.csv("https://lcps.nu/wp-content/uploads/covid-19.csv")
-lcps.dat$date <- as.Date(lcps.dat$Datum, format = "%d-%m-%y")
-lcps.dat <- lcps.dat %>%
-  arrange(date)
-
-nice.today <- merge(nice.today, lcps.dat, by = "date")
-
-aanwezig <- nice.today %>%
+aanwezig <- all.data %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=Hospital_Currently)) + 
   geom_line(aes(y = Hospital_Currently, color = "Aanwezig op verpleegafdeling (NICE)"), lwd=1.2) +
@@ -52,6 +42,8 @@ aanwezig <- nice.today %>%
   geom_line(aes(y = Kliniek_Bedden, color = "Aanwezig op verpleegafdeling (LCPS)"), lwd=1.2) +
   geom_line(aes(y = IC_Bedden_COVID, color = "Aanwezig op IC (LCPS)"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
+  scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
+  guides(colour = guide_legend(reverse=T)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -64,13 +56,17 @@ aanwezig <- nice.today %>%
   ggsave("plots/overview_aanwezig_zkh.png", width = 15, height=4)
 
 # Plot for #patients intake per day
-
 opnames <- all.data %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
-  geom_line(aes(y = new.hospitals, color = "Opname op verpleegafdeling (RIVM)"), lwd=1.2) +
-  geom_line(aes(y = ic_intake_nice, color = "Opname op IC (NICE)"), lwd=1.2) +
+  geom_line(aes(y = hospital_intake_rivm, color = "Opname op verpleegafdeling (GGDs)"), lwd=1.2) +
+  geom_line(aes(y = Kliniek_Nieuwe_Opnames_COVID, color = "Opname op verpleegafdeling (LCPS)"), lwd=1.2) +
+  geom_line(aes(y = Hospital_Intake, color = "Opname op verpleegafdeling (NICE)"), lwd=1.2) +
+  geom_line(aes(y = IC_Intake, color = "Opname op IC (NICE)"), lwd=1.2) +
+  geom_line(aes(y = IC_Nieuwe_Opnames_COVID, color = "Opname op IC (LCPS)"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
+  scale_color_manual(values = c("#F58121", "#228AC7", "#F9E11E", "#f79a4d", "#7ab9dd")) +
+  guides(colour = guide_legend(reverse=T)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
