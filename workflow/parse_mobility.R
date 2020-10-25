@@ -37,44 +37,42 @@ google.plot <- google.mobility %>%
   scale_y_continuous(expand = c(0,10), limits = c(-40, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
-        axis.text.x.bottom = element_text(size=24),
-        axis.text.y = element_text(size=24),
+        axis.text.x.bottom = element_text(size=10),
+        axis.text.y = element_text(size=10),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 40),
-        plot.subtitle = element_text(hjust = 0.5, size = 20),
+        plot.title = element_text(hjust = 0.5, size = 16),
+        plot.subtitle = element_text(hjust = 0.5, size = 10),
         plot.title.position = "plot",
-        plot.caption = element_text(size = 16),
+        plot.caption = element_text(size = 6),
         legend.direction = "vertical",
         legend.title = element_blank(),
-        legend.text = element_text(size=20, color = "black"),
-        legend.position = c(.12,.16),
-        legend.margin = margin(3, 3, 3, 3)) + 
+        legend.text = element_text(size=5, color = "black"),
+        legend.margin = margin(2,2,2,2),
+        legend.position = c(.11,.18)) +
   labs(x = "Datum",
        y = "Mobiliteit",
-       subtitle = "18-sep: kroeg uurtje eerder dicht \n28-sep: we gaan voor een R van 0.9 \n13-okt: gedeeltelijke lockdown",
+       subtitle = "18-sep: kroeg uurtje eerder dicht \n28-sep: we gaan voor een R van 0.9 \n14-okt (22:00): gedeeltelijke lockdown",
        caption = "Bron: Google Mobility | Plot: @mzelst",
        color = "Legend") +
   geom_hline(yintercept=0) +
   geom_vline(xintercept = as.Date("2020-09-18"), linetype = "dotted") + 
   geom_vline(xintercept = as.Date("2020-09-28"), linetype = "dotted") + 
-  geom_vline(xintercept = as.Date("2020-10-13"), linetype = "dotted") + 
+  geom_vline(xintercept = as.Date("2020-10-14"), linetype = "dotted") + 
   annotate("curve", x = as.Date("2020-10-15"), xend = as.Date("2020-10-17"), 
                        y = -32, yend = -18, curvature = 1.0,
-           colour = "black", size=1.0, alpha=0.8, arrow =arrow(type = "open",length = unit(2,"mm")))
+           colour = "black", size=0.6, alpha=0.8, arrow =arrow(type = "open",length = unit(2,"mm")))
   
 
 annotation <- data.frame(
-  x = as.Date("2020-10-05"),
-  y = c(-35),
-  label = c("'Laatste biertje' effect")
+  x = as.Date("2020-10-13"),
+  y = c(-38),
+  label = c("'Laatste rondje'")
 )
 
 google.plot <- google.plot + geom_text(data=annotation, aes( x=x, y=y, label=label), 
                color="black", 
-               size=10,angle=0, family="serif",fontface="bold" ) 
-
-addSmallLegend(google.plot) + 
+               size=4,angle=0, family="serif",fontface="bold" ) + 
   ggsave("plots/mobiliteit/google_mobility.png",
          width = 16, height = 10, units = "cm", device='png')
 
@@ -140,5 +138,92 @@ apple.plot <- apple.mobility %>%
 addSmallLegend(apple.plot) + 
   ggsave("plots/mobiliteit/apple_mobility.png",
          width = 16, height = 10, units = "cm", device='png')
+
+
+
+#### Mobility per province ####
+
+
+data <- read.csv(unz(temp, "2020_NL_Region_Mobility_Report.csv"),sep=",")
+
+google.mobility <- data[which(data$sub_region_1 != "" & data$sub_region_2 ==""),]
+google.mobility$date <- as.Date(google.mobility$date)
+
+#provincies <- c("Groningen","Friesland","Drenthe","Overijssel")
+#provincies <- c("Gelderland","Utrecht","Zuid-Holland")
+#provincies <- c("Limburg","North Brabant")
+provincies <- c("Limburg","North Brabant","Groningen", "North Holland")
+
+google.mobility <- google.mobility[google.mobility$sub_region_1 %in% provincies,]
+google.mobility$sub_region_1 <- str_replace_all(google.mobility$sub_region_1, c("North Brabant" = "Noord-Brabant", "North Holland"= "Noord-Holland"))
+
+google.mobility$sub_region_1 <- factor(google.mobility$sub_region_1, levels = c("Groningen","Noord-Holland","Limburg","Noord-Brabant"))
+
+google.mobility <- google.mobility %>%
+  mutate(retail_recreatie = round(frollmean(google.mobility[,"retail_and_recreation_percent_change_from_baseline"],7),1)) %>%
+  mutate(supermarkt_apotheek = round(frollmean(google.mobility[,"grocery_and_pharmacy_percent_change_from_baseline"],7),1)) %>%
+  mutate(parken = round(frollmean(google.mobility[,"parks_percent_change_from_baseline"],7),1)) %>%
+  mutate(openbaar_vervoer = round(frollmean(google.mobility[,"transit_stations_percent_change_from_baseline"],7),1)) %>%
+  mutate(werk = round(frollmean(google.mobility[,"workplaces_percent_change_from_baseline"],7),1)) %>%
+  mutate(thuis = round(frollmean(google.mobility[,"residential_percent_change_from_baseline"],7),1))
+
+
+
+google.plot <- google.mobility %>%
+  filter(date > "2020-08-31") %>%
+  ggplot(aes(x=date, y=retail_recreatie, group = 1)) + 
+  geom_line(aes(y = retail_recreatie, color = "Retail en Recreatie"), lwd=0.8) +
+  geom_line(aes(y = supermarkt_apotheek, color = "Supermarkten en Apotheken"), lwd=0.8) +
+  geom_line(aes(y = werk, color = "Werk"), lwd=0.8) +
+  ggtitle("Mobiliteit - Afwijking t.o.v. 2019 (%)") + 
+  theme_bw() + 
+  scale_y_continuous(expand = c(0,10), limits = c(-40, NA)) +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank(),
+        legend.text = element_text(size=8, color = "black"),
+        plot.title = element_text(hjust = 0.5, size = 12),
+        plot.subtitle = element_text(hjust = 0.5, size = 8),
+        plot.title.position = "plot",
+        plot.caption = element_text(size = 4),
+        strip.text = element_text(size=6)) + 
+  labs(x = "Datum",
+       y = "Mobiliteit",
+       subtitle = "\n10-okt: vakantie Noord \n14-okt (22:00): gedeeltelijke lockdown \n17-okt: vakantie Zuid & Midden | vakantie Noord voorbij",
+       caption = "Bron: Google Mobility | Plot: @mzelst",
+       color = "Legend") + 
+  geom_vline(xintercept = as.Date("2020-10-10"), linetype = "dashed") + 
+  geom_vline(xintercept = as.Date("2020-10-14"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-10-17"), linetype = "dashed")
+
+
+google.plot + facet_wrap(~sub_region_1) + 
+  ggsave("plots/mobiliteit/google_mobility_south.png",
+         width = 16, height = 10, units = "cm", device='png')
+
+
+
+theme(axis.title.x=element_blank(),
+      axis.title.y=element_blank(),
+      axis.text.x.bottom = element_text(size=10),
+      axis.text.y = element_text(size=10),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(hjust = 0.5, size = 16),
+      plot.subtitle = element_text(hjust = 0.5, size = 10),
+      plot.title.position = "plot",
+      plot.caption = element_text(size = 6),
+      legend.direction = "vertical",
+      legend.title = element_blank(),
+      legend.text = element_text(size=5, color = "black"),
+      legend.margin = margin(2,2,2,2),
+      legend.position = c(.11,.18)) +
+
 
 
