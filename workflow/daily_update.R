@@ -32,6 +32,7 @@ write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
 source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
+source("workflow/generate_municipality_images.R")
 
 rm(list=ls()) # Clean environment
 
@@ -49,8 +50,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",8669,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-18," corr.)
+Positief getest: ",10211,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-9," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -128,9 +129,6 @@ posted_tweet <- post_tweet (
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
-
-
-source("workflow/generate_municipality_images.R")
 
 ########
 # report

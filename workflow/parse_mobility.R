@@ -80,7 +80,7 @@ google.plot <- google.plot + geom_text(data=annotation, aes( x=x, y=y, label=lab
 ## Apple mobility
 apple.date <- Sys.Date()-2
 temp <- tempfile()
-download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev16/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
+download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev19/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
 apple.mobility <- read.csv(temp, sep=",")
 
 apple.mobility <- apple.mobility[which(apple.mobility$region == "Netherlands"),]
@@ -112,17 +112,17 @@ apple.plot <- apple.mobility %>%
   scale_y_continuous(expand = c(0,10), limits = c(-100, NA)) +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
-        axis.text.x.bottom = element_text(size=24),
-        axis.text.y = element_text(size=24),
+        axis.text.x.bottom = element_text(size=8),
+        axis.text.y = element_text(size=8),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 40),
-        plot.subtitle = element_text(hjust = 0.5, size = 20),
+        plot.title = element_text(hjust = 0.5, size = 12),
+        plot.subtitle = element_text(hjust = 0.5, size = 8),
         plot.title.position = "plot",
-        plot.caption = element_text(size = 16),
+        plot.caption = element_text(size = 4),
         legend.direction = "vertical",
         legend.title = element_blank(),
-        legend.text = element_text(size=20, color = "black"),
+        legend.text = element_text(size=8, color = "black"),
         legend.position = c(.12,.20),
         legend.margin = margin(3, 3, 3, 3)) + 
   labs(x = "Datum",
@@ -133,9 +133,7 @@ apple.plot <- apple.mobility %>%
   geom_hline(yintercept=0) +
   geom_vline(xintercept = as.Date("2020-09-18"), linetype = "dotted") + 
   geom_vline(xintercept = as.Date("2020-09-28"), linetype = "dotted") + 
-  geom_vline(xintercept = as.Date("2020-10-13"), linetype = "dotted")
-
-addSmallLegend(apple.plot) + 
+  geom_vline(xintercept = as.Date("2020-10-13"), linetype = "dotted") + 
   ggsave("plots/mobiliteit/apple_mobility.png",
          width = 16, height = 10, units = "cm", device='png')
 

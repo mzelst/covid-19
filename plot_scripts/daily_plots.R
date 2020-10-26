@@ -31,7 +31,7 @@ cases <- all.data %>%
        y = "Besmettingen per dag",
        color = "Legend") +
   ggtitle("Meldingen van geconstateerde besmettingen") +
-  ggsave("plots/positieve_tests_per_dag.png",width=12, height = 10)
+  ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
 # Plot for #patients in hospital per day
 aanwezig <- all.data %>%
@@ -53,7 +53,7 @@ aanwezig <- all.data %>%
        y = "Totaal aanwezig",
        color = "Legend") +
   ggtitle("Aanwezig op de verpleegafdeling vs. IC (NICE & LCPS)") +
-  ggsave("plots/overview_aanwezig_zkh.png", width = 15, height=4)
+  ggsave("plots/overview_aanwezig_zkh.png", width = 12, height=8)
 
 # Plot for #patients intake per day
 opnames <- all.data %>%
@@ -76,7 +76,7 @@ opnames <- all.data %>%
        y = "Opnames per dag",
        color = "Legend") +
   ggtitle("Opnames op de verpleegafdeling en IC") +
-  ggsave("plots/overview_opnames_zkh.png", width = 15, height=4)
+  ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
 reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
   map(as.data.table) %>%
@@ -144,7 +144,6 @@ prevalence %>%
 plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
                          opnames + theme(legend.position="bottom"),
                          cases + theme(legend.position = "bottom", legend.direction = "vertical"),
-                         reproduction + theme(legend.position="bottom"),
                          align = 'hv',
                          nrow = 2,
                          hjust = -1
