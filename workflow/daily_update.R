@@ -53,14 +53,12 @@ tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
 Positief getest: ",10211,"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-9," corr.)
 
-Opgenomen: ",last(all.data$new.hospitals),"
-Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
+Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$Kliniek_Bedden),"
 
-Opgenomen op IC*: ",tail(diff(nice_by_day$IC_Cumulative),n=1),"
-Huidig: ",last(nice_by_day$IC_Current),"
-Totaal: ",tail(nice_by_day$IC_Cumulative,n=1),"
-* bewezen of verdacht
-(www.stichting-nice.nl)
+Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$IC_Bedden_COVID),"
+* LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
