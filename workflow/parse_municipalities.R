@@ -71,13 +71,15 @@ increase_growth_to_arrows <- function(increase_growth) {
 # Parse and cleanup data
 temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+rm(temp)
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
   const.date <- last_date
 }
 
-rm(temp)
+dat.new <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", encoding = "UTF-8")
+
 
 dat.unknown <- dat %>%
   filter(Municipality_code == "")  %>%
