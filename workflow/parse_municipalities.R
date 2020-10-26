@@ -6,6 +6,7 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
+const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
@@ -69,17 +70,36 @@ increase_growth_to_arrows <- function(increase_growth) {
 }
 
 # Parse and cleanup data
-temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
-dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
-rm(temp)
+if (const.use_daily_dataset) {
+  dat <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", encoding = "UTF-8")
+  dat <- dat %>%
+    group_by(
+      Municipality_code, 
+      Province, 
+      Date_of_publication
+    ) %>%
+    summarise(
+      Date_of_report = Date_of_publication,
+      Municipality_code = Municipality_code,
+      Municipality_name = Municipality_name,
+      Province = Province,
+      Total_reported = sum(Total_reported_cum),
+      Hospital_admission = sum(Hospital_admission_cum),
+      Deceased = sum(Deceased_cum),
+      .groups = 'drop'
+    ) %>%
+    arrange(Date_of_report, Municipality_code == "", Municipality_code, Province)
+} else {
+  temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+  dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+  rm(temp)
+}
+
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
   const.date <- last_date
 }
-
-dat.new <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", encoding = "UTF-8")
-
 
 dat.unknown <- dat %>%
   filter(Municipality_code == "")  %>%
