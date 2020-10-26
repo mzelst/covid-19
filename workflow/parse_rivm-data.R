@@ -2,7 +2,6 @@ require(cowplot)
 require(tidyverse)
 require(rjson)
 require(data.table)
-require(crunch)
 
 rm(list=ls())
 
@@ -72,6 +71,5 @@ rivm.mun.cum <- rivm.mun.perday %>%
     .after = Deceased
   )
 write.csv(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", row.names = F)
-write.csv.gz(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz", row.names = F)
 
 rm(list=ls())
