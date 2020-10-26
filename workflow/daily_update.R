@@ -6,17 +6,19 @@ source("workflow/generate_banner.R")
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
+source("workflow/parse_lcps-data.R")
 source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
 
-rivm_by_day <- read.csv("data/rivm_by_day.csv")
-nice_today <- read.csv("data/nice_by_day.csv")
-corrections.perday <- read.csv("corrections/corrections_perday.csv")
+rivm.by_day <- read.csv("data/rivm_by_day.csv")
+nice.by_day <- read.csv("data-nice/nice-today.csv")
+lcps.by_day <- read.csv("data/lcps_by_day.csv")
+corr.by_day <- read.csv("corrections/corrections_perday.csv")
 
-daily_datalist <- list(rivm_by_day,nice_today,corrections.perday)
+daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day)
 
 all.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -47,8 +49,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",10007,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-11," corr.)
+Positief getest: ",8669,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-18," corr.)
 
 Opgenomen: ",last(all.data$new.hospitals),"
 Totaal: ",last(all.data$hospitalization),ifelse(last(all.data$corrections.hospitals)<0,text.hosp.corrections,""),"
@@ -117,7 +119,10 @@ Totaal: ",last(dat.today$IC_Cumulative))
 posted_tweet <- post_tweet (
   tweet.nice,
   token = token.mzelst,
-  media = "plots/plot_daily.png",
+  media = c("plots/positieve_tests_per_dag.png",
+            "plots/overview_aanwezig_zkh.png",
+            "plots/overview_opnames_zkh.png"
+  ),
   in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
 )
