@@ -91,7 +91,7 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE, t
 print_detailed <- function(data){
   template.example <- "
   %s sinds gisteren   
-  %s sinds 1 september   
+  %s sinds 1 oktober   
   %s sinds 7 dagen ( %s )   
   Wat %s is dan de %s in de 7 dagen ervoor   
   %s inwoners maakt dat %s %.1f / 100.000 / 7d
