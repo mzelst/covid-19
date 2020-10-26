@@ -6,6 +6,7 @@ require(tidyverse)
 require(data.table)
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
+const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
@@ -69,15 +70,36 @@ increase_growth_to_arrows <- function(increase_growth) {
 }
 
 # Parse and cleanup data
-temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
-dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+if (const.use_daily_dataset) {
+  dat <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", encoding = "UTF-8")
+  dat <- dat %>%
+    group_by(
+      Municipality_code, 
+      Province, 
+      Date_of_publication
+    ) %>%
+    summarise(
+      Date_of_report = Date_of_publication,
+      Municipality_code = Municipality_code,
+      Municipality_name = Municipality_name,
+      Province = Province,
+      Total_reported = sum(Total_reported_cum),
+      Hospital_admission = sum(Hospital_admission_cum),
+      Deceased = sum(Deceased_cum),
+      .groups = 'drop'
+    ) %>%
+    arrange(Date_of_report, Municipality_code == "", Municipality_code, Province)
+} else {
+  temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+  dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+  rm(temp)
+}
+
 dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
   const.date <- last_date
 }
-
-rm(temp)
 
 dat.unknown <- dat %>%
   filter(Municipality_code == "")  %>%
@@ -186,7 +208,7 @@ write.csv(dat.deaths, file = "data/municipality-deaths.csv",
 
 # Calculate zero point
 dat.zeropoint <- dat %>%
-  filter(date >= as.Date('2020-08-01')) %>%
+  filter(date >= as.Date('2020-10-01')) %>%
   group_by(Municipality_name)
 
 dat.cases.lowest <- dat.zeropoint %>%
@@ -213,10 +235,10 @@ dat.cases.today <-transmute(dat.cases,
   d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
   d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
   d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
-  sep1 = dat.cases$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_sep1 = dat.cases.lowest$`Total_reported`,
-  lowest_since_sep1_date = dat.cases.lowest$`date`,
-  current = d0-lowest_since_sep1,
+  okt1 = dat.cases$`Total_reported.2020-10-01`, # October 1st
+  lowest_since_okt1 = dat.cases.lowest$`Total_reported`,
+  lowest_since_okt1_date = dat.cases.lowest$`date`,
+  current = d0-lowest_since_okt1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -256,10 +278,10 @@ dat.hosp.today <- transmute(dat.hosp,
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
   d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
   d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
-  sep1 = dat.hosp$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_sep1 = dat.hosp.lowest$`Hospital_admission`,
-  lowest_since_sep1_date = dat.hosp.lowest$`date`,
-  current = d0-lowest_since_sep1,
+  okt1 = dat.hosp$`Total_reported.2020-10-01`, # October 1st
+  lowest_since_okt1 = dat.hosp.lowest$`Hospital_admission`,
+  lowest_since_okt1_date = dat.hosp.lowest$`date`,
+  current = d0-lowest_since_okt1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -291,9 +313,9 @@ dat.deaths.today <- transmute(dat.deaths,
   d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
   d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
   d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
-  sep1 = dat.deaths$`Total_reported.2020-08-01`, # august 1st
-  lowest_since_sep1 = dat.deaths.lowest$`Deceased`,
-  lowest_since_sep1_date = dat.deaths.lowest$`date`,
+  okt1 = dat.deaths$`Total_reported.2020-10-01`, # October 1st
+  lowest_since_okt1 = dat.deaths.lowest$`Deceased`,
+  lowest_since_okt1_date = dat.deaths.lowest$`date`,
   current = d0,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days

@@ -40,7 +40,7 @@ tweet_detailed <- function(data){
   tweet <- sprintf("%s %s %s
 
 %s sinds gisteren
-%s sinds 1 sep
+%s sinds 1 okt
 %s sinds 7 dagen (%s)
 Wat %s is dan de %s in de 7d ervoor
 
