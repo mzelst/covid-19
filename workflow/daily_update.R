@@ -266,12 +266,6 @@ add(repo, path = "*")
 commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
 push(repo, credentials = git.auth)
 
-# Data municipalities per day
-
-rivm.municipalities.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv",sep=";")
-filename.municipality.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_",Sys.Date(),".csv") ## Filename for daily data municipalities
-
-write.csv(rivm.municipalities.perday, file=filename.municipality.perday,row.names = F)
 
 ## Push data municipalities per day to repo
 add(repo, path = "*")
