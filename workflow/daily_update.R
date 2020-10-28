@@ -50,14 +50,14 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",10315,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-23," corr.)
+Positief getest: ",8135,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-33," corr.)
 
-Opgenomen*: ",311,"
-Huidig*: ",1829,"
+Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$Kliniek_Bedden),"
 
-Opgenomen op IC*: ",53,"
-Huidig*: ",529,"
+Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$IC_Bedden_COVID),"
 * LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
@@ -182,7 +182,7 @@ posted_tweet <- post_tweet (
   tweet.municipality.cases,
   token = token.edwinveldhuizen,
   media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
-  in_reply_to_status_id = "1321078963024863232",
+  in_reply_to_status_id = "1321477754567774210",
   auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
