@@ -80,7 +80,7 @@ google.plot <- google.plot + geom_text(data=annotation, aes( x=x, y=y, label=lab
 ## Apple mobility
 apple.date <- Sys.Date()-2
 temp <- tempfile()
-download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev19/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
+download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev21/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
 apple.mobility <- read.csv(temp, sep=",")
 
 apple.mobility <- apple.mobility[which(apple.mobility$region == "Netherlands"),]
@@ -204,24 +204,3 @@ google.plot <- google.mobility %>%
 google.plot + facet_wrap(~sub_region_1) + 
   ggsave("plots/mobiliteit/google_mobility_south.png",
          width = 16, height = 10, units = "cm", device='png')
-
-
-
-theme(axis.title.x=element_blank(),
-      axis.title.y=element_blank(),
-      axis.text.x.bottom = element_text(size=10),
-      axis.text.y = element_text(size=10),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      plot.title = element_text(hjust = 0.5, size = 16),
-      plot.subtitle = element_text(hjust = 0.5, size = 10),
-      plot.title.position = "plot",
-      plot.caption = element_text(size = 6),
-      legend.direction = "vertical",
-      legend.title = element_blank(),
-      legend.text = element_text(size=5, color = "black"),
-      legend.margin = margin(2,2,2,2),
-      legend.position = c(.11,.18)) +
-
-
-
