@@ -80,7 +80,7 @@ google.plot <- google.plot + geom_text(data=annotation, aes( x=x, y=y, label=lab
 ## Apple mobility
 apple.date <- Sys.Date()-2
 temp <- tempfile()
-download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev21/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
+download.file(paste0("https://covid19-static.cdn-apple.com/covid19-mobility-data/2019HotfixDev22/v3/en-us/applemobilitytrends-",apple.date,".csv"),temp)
 apple.mobility <- read.csv(temp, sep=",")
 
 apple.mobility <- apple.mobility[which(apple.mobility$region == "Netherlands"),]
