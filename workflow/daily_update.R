@@ -50,14 +50,14 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",8135,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-33," corr.)
+Positief getest: ",10280,"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-16," corr.)
 
-Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$Kliniek_Bedden),"
+Opgenomen*: ",,"
+Huidig*: ",1831,"
 
-Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$IC_Bedden_COVID),"
+Opgenomen op IC*: ",47,"
+Huidig*: ",553,"
 * LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
@@ -182,7 +182,7 @@ posted_tweet <- post_tweet (
   tweet.municipality.cases,
   token = token.edwinveldhuizen,
   media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
-  in_reply_to_status_id = "1321477754567774210",
+  in_reply_to_status_id = tweet.main.id,
   auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
@@ -262,12 +262,6 @@ git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 repo <- init()
 add(repo, path = "*")
 commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
-push(repo, credentials = git.auth)
-
-
-## Push data municipalities per day to repo
-add(repo, path = "*")
-commit(repo, all = T, paste0("Data municipalities per day ",Sys.Date()))
 push(repo, credentials = git.auth)
 
 ## Workflows for databases
