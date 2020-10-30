@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I34', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I35', col_names = F))
 
 
 ##
@@ -83,8 +83,13 @@ nl_dt <- rivm_dt[Type == 'Overleden',
                  .(year = 2020, covid_deaths = sum(Aantal)),
                  by = week
 ]
+write.csv(nl_dt, file = "covid_deaths.csv",row.names=F)
 
-nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
+nl_dt <- read.csv("covid_deaths.csv")
+nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
+nl_dt$year <- as.numeric(nl_dt$year)
+
+#nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
 
 ## ts objects assume 52 weeks per year. Adjust the CBS data for 52 week/year 
 
