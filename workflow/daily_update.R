@@ -40,7 +40,6 @@ all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 
 ## Corrections or not?
-text.hosp.corrections <- paste0(ifelse(last(all.data$net.hospitals)>=0," (+"," (-"),abs(last(all.data$net.hospitals))," ivm ",last(all.data$corrections.hospitals)," corr.)")
 text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
 
 # get tokens
@@ -53,15 +52,15 @@ tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
 Positief getest: ",10280,"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-16," corr.)
 
-Opgenomen*: ",,"
-Huidig*: ",1831,"
+Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$Kliniek_Bedden),"
 
-Opgenomen op IC*: ",47,"
-Huidig*: ",553,"
+Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
+Huidig*: ",last(all.data$IC_Bedden_COVID),"
 * LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),ifelse(last(all.data$corrections.deaths)<0,text.deaths.corrections,""))
+Totaal: ",last(all.data$deaths),"")
 
 posted_tweet <- post_tweet (
   tweet.main,

@@ -3,6 +3,8 @@ require(tidyverse)
 rm(list=ls())
 
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
+#lcps.data.original[nrow(lcps.data.original)+1,] <- c("30-10-2020", 567, 447, 1818, 250, 37)
+# Order numbers: IC_Bedden_COVID, IC_Bedden_Non_COVID, Kliniek_Bedden, IC_Nieuwe_Opnames_COVID, Kliniek_Nieuwe_Opnames_COVID
 lcps.data <- lcps.data.original %>%
   mutate(
     date = as.Date(Datum, tryFormats = c('%d-%m-%Y')),
