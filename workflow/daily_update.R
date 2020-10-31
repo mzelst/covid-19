@@ -49,7 +49,7 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",11141,"
+Positief getest: ",9839,"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-22," corr.)
 
 Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
