@@ -36,4 +36,3 @@ for (i in seq_along(screenshots)) {
   )
 }
 
-rm(list=ls())

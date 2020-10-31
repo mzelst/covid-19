@@ -32,9 +32,6 @@ write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
 source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
-source("workflow/generate_municipality_images.R")
-
-rm(list=ls()) # Clean environment
 
 all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
@@ -140,6 +137,10 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
+##### Generate municipality images
+source("workflow/generate_municipality_images.R")
+#####
+
 ########
 # Municipality tweet - cases
 ########
@@ -244,10 +245,11 @@ tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
 
-
-
-#post_tweet("Vergeet ook niet de tweets hieronder van @edwinveldhuizen te checken voor de regionale verschillen en trends.",
-  #         in_reply_to_status_id = get_reply_id()) ## Post reply
+##### Download case file
+rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+filename <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+write.csv(rivm.data, file=filename,row.names = F) ## Write file with all cases until today
+#####
 
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
