@@ -1,10 +1,12 @@
 pull(repo)
 
+Sys.time()
+
 # Generate Banner
 source("workflow/generate_banner.R")
 
 # Parse RIVM, NICE and corrections data
-source("workflow/parse_nice-data.R")
+#source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_municipalities.R")
@@ -46,8 +48,8 @@ source("workflow/twitter/token_edwinveldhuizen.R")
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
-Positief getest: ",9839,"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",-22," corr.)
+Positief getest: ",last(all.data$new.infection),"
+Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
 Huidig*: ",last(all.data$Kliniek_Bedden),"
