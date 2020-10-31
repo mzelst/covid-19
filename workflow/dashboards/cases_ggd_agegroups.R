@@ -1,7 +1,6 @@
 require(tidyverse)
 require(git2r)
 
-
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
 dat <- read.csv(last(temp), )
 dat$value <- 1
