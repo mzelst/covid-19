@@ -6,7 +6,7 @@ Sys.time()
 source("workflow/generate_banner.R")
 
 # Parse RIVM, NICE and corrections data
-#source("workflow/parse_nice-data.R")
+source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_municipalities.R")
@@ -270,6 +270,7 @@ push(repo, credentials = git.auth)
 
 ## Workflows for databases
 
+source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
