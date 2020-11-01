@@ -16,6 +16,7 @@ require(tidyverse)
 require(data.table)
 require(xtable)
 require(shiny)
+require(metathis)
 
 const.toplist_minimum = 50
 
@@ -118,6 +119,22 @@ print_detailed <- function(data){
     0
   ))
 }
+
+meta() %>%
+  meta_description(
+    "Uitgebreide #COVID-19 statistieken op gemeente niveau"
+  ) %>% 
+  meta_name("github-repo" = "mzelst/covid-19") %>% 
+  meta_viewport() %>% 
+  meta_social(
+    title = "COVID-19 update van @edwinveldhuizen en @mzelst",
+    url = "https://github.com/mzelst/covid-19/",
+    image = sprintf("https://github.com/mzelst/covid-19/raw/master/banners/%s.png", used_date),
+    image_alt = "COVID-19 update van @edwinveldhuizen en @mzelst",
+    og_author = c("Edwin Veldhuizen"),
+    twitter_card_type = "summary",
+    twitter_creator = "@edwinveldhuizen",
+  )
 ```
 
 ```{r echo=FALSE}

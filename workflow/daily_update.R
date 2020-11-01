@@ -161,11 +161,11 @@ tweet.municipality.cases <- "Geconstateerde besmettingen per gemeente %s
 
 %s %d / 355 gemeentes
 
-Zie de eerste afbeelding voor een uitgebreide uitleg
+Zie de eerste afbeelding voor een uitgebreide legenda
 
-Let op: vrijwel alle gemeentes minder dan +50 passen niet meer op de eerste afbeelding
+[%s]
 
-[%s]"
+%s"
 
 tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   intToUtf8(0x1F447),
@@ -175,7 +175,8 @@ tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   tweet.municipality.colors$d0[[5]],
   intToUtf8(0x26A1),
   tweet.municipality.colors$d0[[6]],
-  tweet.municipality.date
+  tweet.municipality.date,
+  'https://htmlpreview.github.io/?https://raw.githubusercontent.com/mzelst/covid-19/master/workflow/daily_municipality.html'
 )
 
 Encoding(tweet.municipality.cases) <- "UTF-8"
