@@ -176,7 +176,7 @@ tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   intToUtf8(0x26A1),
   tweet.municipality.colors$d0[[6]],
   tweet.municipality.date,
-  'https://htmlpreview.github.io/?https://raw.githubusercontent.com/mzelst/covid-19/master/workflow/daily_municipality.html'
+  'https://raw.githack.com/mzelst/covid-19/master/workflow/daily_municipality.html'
 )
 
 Encoding(tweet.municipality.cases) <- "UTF-8"
