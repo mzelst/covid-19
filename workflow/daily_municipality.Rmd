@@ -128,7 +128,7 @@ meta() %>%
   meta_viewport() %>% 
   meta_social(
     title = "COVID-19 update van @edwinveldhuizen en @mzelst",
-    url = "https://github.com/mzelst/covid-19/",
+    url = "https://htmlpreview.github.io/?https://raw.githubusercontent.com/mzelst/covid-19/master/workflow/daily_municipality.html",
     image = sprintf("https://github.com/mzelst/covid-19/raw/master/banners/%s.png", used_date),
     image_alt = "COVID-19 update van @edwinveldhuizen en @mzelst",
     og_author = c("Edwin Veldhuizen"),
