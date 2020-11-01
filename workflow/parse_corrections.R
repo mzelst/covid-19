@@ -1,144 +1,55 @@
-require(tidyverse)
-require(data.table)
-rm(list=ls())
-#### Corrections scripts
 
-temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
-myfiles = lapply(temp, read.csv)
-
-df <- map_dfr(myfiles, ~{
-  .x
-})
-
-df$date <- as.Date(df$Date_file)
-df.cases <- as.data.frame(table(df$Date_statistics,df$date)) ## Success
-
-df.cases <- spread(df.cases, key = Var2, value = Freq)
-
-col.start.diff <- ncol(df.cases)+1
-
-dates.lead <- names(df.cases)[3:ncol(df.cases)] ## Set lead colnames for diff
-dates.trail <- names(df.cases)[2:(ncol(df.cases)-1)] ## Set trail colnames for diff
-
-# Calculate moving difference between cases per day
-df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
-
-write.csv(df.cases, file = "corrections/cases_perday.csv")
-
-neg.values <- c()
-for(i in col.start.diff:ncol(df.cases)) {
-  neg.values[i] <- sum(df.cases[,i][df.cases[,i]<0], na.rm=TRUE)
-  neg.values <- c(neg.values)
-}
-
-neg.counts <- neg.values[col.start.diff:ncol(df.cases)]
-corrections.cases <- neg.values[col.start.diff:ncol(df.cases)]
-
-cases.perday <- apply(df.cases[,c(2:(col.start.diff-1))],2,sum,na.rm = T)
-net.diff <- cases.perday - lag(cases.perday,1)
-net.diff <- net.diff[2:length(net.diff)]
-
-new.infection <- neg.counts*-1+net.diff ## Calculate new cases
-net.infection <- new.infection + corrections.cases
-
-## Hospital
-df.hospital <- df %>%
-  dplyr::filter(Hospital_admission == "Yes")
-
-df.hospitals <- as.data.frame(table(df.hospital$Date_statistics,df.hospital$date)) ## Success
-
-hospitals.wide <- spread(df.hospitals, key = Var2, value = Freq)
-
-# Calculate moving difference between cases per day
-hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
-
-write.csv(hospitals.wide, file = "corrections/hospital_perday.csv")
-
-neg.values <- c()
-for(i in col.start.diff:ncol(hospitals.wide)) {
-  neg.values[i] <- sum(hospitals.wide[,i][hospitals.wide[,i]<0], na.rm=TRUE)
-  neg.values <- c(neg.values)
-}
-
-neg.counts <- neg.values[col.start.diff:ncol(hospitals.wide)]
-corrections.hospitals <- neg.values[col.start.diff:ncol(hospitals.wide)]
-
-cases.perday <- apply(hospitals.wide[,c(2:(col.start.diff-1))],2,sum,na.rm = T)
-net.diff <- cases.perday - lag(cases.perday,1)
-net.diff <- net.diff[2:length(net.diff)]
-
-new.hospitals <- neg.counts*-1+net.diff ## Calculate new cases
-net.hospitals <- new.hospitals + corrections.hospitals
-
-## Deaths
-df.death <- df %>%
-  dplyr::filter(Deceased == "Yes")
-
-df.deaths <- as.data.frame(table(df.death$Date_statistics,df.death$date)) ## Success
-
-deaths.wide <- spread(df.deaths, key = Var2, value = Freq)
-
-# Calculate moving difference between cases per day
-deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
-
-write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
-
-neg.values <- c()
-for(i in col.start.diff:ncol(deaths.wide)) {
-  neg.values[i] <- sum(deaths.wide[,i][deaths.wide[,i]<0], na.rm=TRUE)
-  neg.values <- c(neg.values)
-}
-
-neg.counts <- neg.values[col.start.diff:ncol(deaths.wide)]
-corrections.deaths <- neg.values[col.start.diff:ncol(deaths.wide)]
-
-cases.perday <- apply(deaths.wide[,c(2:(col.start.diff-1))],2,sum,na.rm = T)
-net.diff <- cases.perday - lag(cases.perday,1)
-net.diff <- net.diff[2:length(net.diff)]
-
-new.deaths <- neg.counts*-1+net.diff ## Calculate new cases
-net.deaths <- new.deaths + corrections.deaths
-
-## Week of death - diff file
-
-temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
+temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv", full.names = T),2)
 myfiles = lapply(temp, read.csv)
 
 dat.today <- as.data.frame(myfiles[2])
 dat.yesterday <- as.data.frame(myfiles[1])
 
-dat.today$Week <- substr(dat.today$Week_of_death, 5, 6)
-dat.yesterday$Week <- substr(dat.yesterday$Week_of_death, 5, 6)
-today.weekdeath <- count(dat.today,Week)
-yesterday.weekdeath <- count(dat.yesterday,Week)
+# Positive tests
+net.infection <- sum(dat.today$Total_reported) - sum(dat.yesterday$Total_reported)
 
-df.weekdeath <- merge(today.weekdeath,yesterday.weekdeath,by="Week",all.X=T)
-df.weekdeath$diff <- df.weekdeath$n.x - df.weekdeath$n.y
-colnames(df.weekdeath) <- c("Week","weekdeath_today","weekdeath_yesterday","diff")
-df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
+cases.today <- aggregate(Total_reported ~ Date_of_publication, data = dat.today, FUN = sum)
+cases.yesterday <- aggregate(Total_reported ~ Date_of_publication, data = dat.yesterday, FUN = sum)
+df.cases.new <- merge(cases.today,cases.yesterday,by="Date_of_publication")
+df.cases.new$diff <- df.cases.new$Total_reported.x - df.cases.new$Total_reported.y
 
-write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv")
+new.infection <- last(cases.today$Total_reported)
+corrections.cases <- sum(df.cases.new$diff)
 
-## Merge all correction data
+## Hospitals
+net.hospitals <- sum(dat.today$Hospital_admission) - sum(dat.yesterday$Hospital_admission)
+
+hospital.today <- aggregate(Hospital_admission ~ Date_of_publication, data = dat.today, FUN = sum)
+hospital.yesterday <- aggregate(Hospital_admission ~ Date_of_publication, data = dat.yesterday, FUN = sum)
+df.hospital.new <- merge(hospital.today,hospital.yesterday,by="Date_of_publication")
+df.hospital.new$diff <- df.hospital.new$Hospital_admission.x-df.hospital.new$Hospital_admission.y
+
+new.hospitals <- last(hospital.today$Hospital_admission)
+corrections.hospitals <- sum(df.hospital.new$diff)
+
+## Deaths
+net.deaths <- sum(dat.today$Deceased) - sum(dat.yesterday$Deceased)
+
+death.today <- aggregate(Deceased ~ Date_of_publication, data = dat.today, FUN = sum)
+death.yesterday <- aggregate(Deceased ~ Date_of_publication, data = dat.yesterday, FUN = sum)
+df.death.new <- merge(death.today,death.yesterday,by="Date_of_publication")
+df.death.new$diff <- df.death.new$Deceased.x-df.death.new$Deceased.y
+
+new.deaths <- last(death.today$Deceased)
+corrections.deaths <- sum(df.death.new$diff)
+
+
 corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infection,new.hospitals,corrections.hospitals, 
                                        net.hospitals,new.deaths,corrections.deaths,net.deaths))
 
-corrections.all$date <- as.Date(rownames(corrections.all))
+corrections.all$date <- as.Date(Sys.Date())
 
 filename <- paste0("corrections/corrections_per_day/corrections-",Sys.Date(),'.csv')
 write.csv(corrections.all, file = filename)
-rm(list=ls())
 
 temp = list.files(path = "corrections/corrections_per_day/",pattern="*.csv", full.names = T)
 myfiles = lapply(temp, read.csv)
-
-corrections.perday <- map_dfr(myfiles, ~{
-  .x
-})
-corrections.perday$date <- corrections.perday$X
-
+corrections.perday <- dplyr::bind_rows(myfiles)
 corrections.perday$positive_7daverage <- round(frollmean(corrections.perday[,"new.infection"],7),0) # Calculate 7-day average (based on newly reported infections, gross number)
 
 write.csv(corrections.perday, file = "corrections/corrections_perday.csv")
-
-
