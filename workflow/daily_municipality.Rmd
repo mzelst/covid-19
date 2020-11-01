@@ -545,5 +545,4 @@ knitr::asis_output(htmltools::htmlPreserve("
 </article>
 "))
 
-rm(list=ls())
 ```
