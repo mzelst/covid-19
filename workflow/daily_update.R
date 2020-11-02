@@ -268,8 +268,8 @@ push(repo, credentials = git.auth)
 
 ## Workflows for databases
 
-source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
 source("workflow/dashboards/heatmap-age-week.R")
+source("workflow/dashboards/rivm-date-corrections.R")

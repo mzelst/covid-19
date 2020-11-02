@@ -4,7 +4,7 @@ rm(list=ls())
 
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
 #lcps.data.original[154,] <- c("1-11-2020", 583, 446, 1910, 58, 237)
-lcps.data.original[154,] <- c("2-11-2020", 587, 415, 1958, 47, 239)
+#lcps.data.original[155,] <- c("2-11-2020", 587, 415, 1958, 47, 239)
 # Order numbers: IC_Bedden_COVID, IC_Bedden_Non_COVID, Kliniek_Bedden, IC_Nieuwe_Opnames_COVID, Kliniek_Nieuwe_Opnames_COVID
 lcps.data <- lcps.data.original %>%
   mutate(
