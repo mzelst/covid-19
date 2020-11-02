@@ -1,7 +1,5 @@
 pull(repo)
 
-Sys.time()
-
 # Generate Banner
 source("workflow/generate_banner.R")
 
