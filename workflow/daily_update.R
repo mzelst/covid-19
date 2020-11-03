@@ -43,6 +43,14 @@ text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-
 source("workflow/twitter/token_mzelst.R")
 source("workflow/twitter/token_edwinveldhuizen.R")
 
+LCPS_klinisch_two_days <- last(all.data$Kliniek_Bedden,2)
+LCPS_Verpleeg_Huidig_Toename <- LCPS_klinisch_two_days[2] - LCPS_klinisch_two_days[1]
+LCPS_IC_two_days <- last(all.data$IC_Bedden_COVID,2)
+LCPS_IC_Huidig_Toename <- LCPS_IC_two_days[2] - LCPS_IC_two_days[1]
+ 
+sign.hosp.lcps <- paste0(ifelse(LCPS_Verpleeg_Huidig_Toename>=0," (+"," ("))
+sign.ic.lcps <- paste0(ifelse(LCPS_IC_Huidig_Toename>=0," (+"," ("))
+
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren: 
 
@@ -50,14 +58,16 @@ Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
 Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$Kliniek_Bedden),"
+Huidig*: ",last(all.data$Kliniek_Bedden),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toename,")
 
 Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$IC_Bedden_COVID),"
+Huidig*: ",last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename,")
 * LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),"")
+
+tweet.main
 
 posted_tweet <- post_tweet (
   tweet.main,
