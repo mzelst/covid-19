@@ -103,3 +103,51 @@ nice_by_day <- nice_by_day %>%
 write.csv(nice_by_day, file = "data/nice_by_day.csv", row.names = F)
 
 rm(list=ls())
+
+## Leeftijd op IC
+
+leeftijd.ic <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/age-distribution-status/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+leeftijd.ic <- as.data.frame(t(leeftijd.ic[c(1,2,4,6,8),]))
+
+leeftijd.ic$V1 <- unlist(leeftijd.ic$V1)
+leeftijd.ic$V2 <- unlist(leeftijd.ic$V2)
+leeftijd.ic$V3 <- unlist(leeftijd.ic$V3)
+leeftijd.ic$V4 <- unlist(leeftijd.ic$V4)
+leeftijd.ic$V5 <- unlist(leeftijd.ic$V5)
+
+colnames(leeftijd.ic) <- c("Leeftijd","IC_naar_Klinisch","IC_aanwezig","Verlaten_Levend","Verlaten_Overleden")
+
+leeftijd.ic$Totaal <- rowSums(leeftijd.ic[,c(2:5)])
+leeftijd.ic$Datum <- as.Date(Sys.Date())
+
+filename.IC <- paste0("data-nice/age/IC/nice_daily_age_IC_",Sys.Date(),".csv")
+
+write.csv(leeftijd.ic, file = filename.IC, row.names = F)
+
+## Leeftijd op Klinische afdeling
+
+leeftijd.klinisch <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/age-distribution-status/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+leeftijd.klinisch <- as.data.frame(t(leeftijd.klinisch[c(1,2,4,6),]))
+
+leeftijd.klinisch$V1 <- unlist(leeftijd.klinisch$V1)
+leeftijd.klinisch$V2 <- unlist(leeftijd.klinisch$V2)
+leeftijd.klinisch$V3 <- unlist(leeftijd.klinisch$V3)
+leeftijd.klinisch$V4 <- unlist(leeftijd.klinisch$V4)
+
+
+colnames(leeftijd.klinisch) <- c("Leeftijd","Klinisch_aanwezig","Verlaten_Levend","Verlaten_Overleden")
+
+leeftijd.klinisch$Totaal <- rowSums(leeftijd.klinisch[,c(2:4)])
+leeftijd.klinisch$Datum <- as.Date(Sys.Date())
+
+filename.klinisch <- paste0("data-nice/age/Clinical_Beds/nice_daily_age_clinical_",Sys.Date(),".csv")
+
+write.csv(leeftijd.klinisch, file = filename.klinisch, row.names = F)
+
+rm(list=ls())
