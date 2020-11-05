@@ -74,3 +74,14 @@ colnames(df.weekdeath) <- c("Week","weekdeath_today","weekdeath_yesterday","diff
 df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
 
 write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv")
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Daily (automated) update date trackers ",Sys.Date()))
+push(repo, credentials = git.auth)
+
+
+rm(list=ls())
