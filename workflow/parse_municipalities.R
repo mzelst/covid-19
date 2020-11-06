@@ -420,10 +420,10 @@ rm(list=ls())
 
 ## Pull municipal data from CBS
 
-#require(cbsodataR)
-#require(geojsonio)
+require(cbsodataR)
+require(geojsonio)
 
-#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM06")))
+#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM09")))
 #dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
 #colnames(dat.mun) <- c("statcode","populatie")
 
