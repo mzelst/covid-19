@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I35', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I36', col_names = F))
 
 
 ##
@@ -432,6 +432,8 @@ fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
 ][year >= 2020,
 ]
 
+write.csv(fig2.1_dt,file = "workflow/excess_mortality/output/fig2.1_dt.csv")
+
 ## create plot
 ggplot(fig2.1_dt, aes(factor(week), cbs_deaths, group = 1)) +
   geom_ribbon(aes(ymin = 0, ymax = as.numeric(cbs_deaths) - covid_sterfte),
@@ -458,6 +460,8 @@ ggsave('plots/fig2.1.png')
 ## data for figure
 fig2.2_dt <- totals[model == 'Dynamisch']
 
+write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
+
 ## create plot
 ggplot(fig2.2_dt, aes(factor(week), Gemiddeld)) +
   geom_col(alpha = 0.4) +
@@ -477,6 +481,7 @@ fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 11,
                          by = week
 ]
 
+write.csv(fig4.1.1_dt,file = "workflow/excess_mortality/output/fig4.1.1_dt.csv")
 
 ## create plot
 ggplot(fig4.1.1_dt, aes(factor(week), mid, group = 1)) +
@@ -501,6 +506,7 @@ fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
 ][year > 2009 & week <= week.now,
 ]
 
+write.csv(fig4.1.2_dt,file = "workflow/excess_mortality/output/fig4.1.2_dt.csv")
 
 ## plot
 ggplot(fig4.1.2_dt,
@@ -521,6 +527,8 @@ fig4.2.1_dt <-beta_long[t >= 2020 & week >= 11,
                         .SDcols = c('mid', 'lwr', 'upr'),
                         by = c('week', 'model')
 ]
+
+write.csv(fig4.2.1_dt,file = "workflow/excess_mortality/output/fig4.2.1_dt.csv")
 
 fig4.2.1_dt <- fig4.2.1_dt %>%
   dplyr::filter(model == "Dynamisch")
@@ -543,6 +551,8 @@ ggsave('plots/fig4.2.1.png')
 fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
 fig4.2.2_dt <- fig4.2.2_dt %>%
   dplyr::filter(model == "Dynamisch")
+
+write.csv(fig4.2.2_dt,file = "workflow/excess_mortality/output/fig4.2.2_dt.csv")
 
 ## plot
 ggplot(fig4.2.2_dt, aes(variable, value)) +

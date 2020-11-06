@@ -80,22 +80,13 @@ excess_heatwave <- aggregate(excess_heatwave ~ LeeftijdOp31December, data = hitt
 
 ## Calculate official death numbers
 
-if(file.exists('/data/covid_deaths_dt.rds')) {
-  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-3,".csv")
-  )[,
-    Datum := as.IDate(Datum)
-  ][,
-    week := week(Datum + 1)
-  ]
-  saveRDS(rivm_dt, '/data/covid_deaths_dt.rds')
-} else {
-  rivm_dt <- readRDS('/data/covid_deaths_dt.rds')
-}
-
-nl_dt <- rivm_dt[Type == 'Overleden',
-                 .(year = 2020, covid_deaths = sum(Aantal)),
-                 by = week
-]
+nl_dt <- read.csv("corrections/deaths_perweek.csv")[,c("Week","weekdeath_today","year")]
+nl_dt <- data.table(nl_dt)
+nl_dt <- nl_dt[,c(1,3,2)]
+colnames(nl_dt) <- c("week","year","covid_deaths")
+nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
+nl_dt$year <- as.numeric(nl_dt$year)
+nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
 
 excess_deaths_wide <- merge(excess_deaths_wide, nl_dt[,c("week","covid_deaths")], by.x = "Week", by.y="week", all.x=T)
 
