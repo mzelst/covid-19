@@ -76,6 +76,22 @@ df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
 df.weekdeath$year <- 2020
 write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv", row.names = F)
 
+## Date of death - per GGD - diff file
+
+dat.today$death.today <- ifelse(dat.today$Deceased=="Yes",1,0)
+dat.yesterday$death.yesterday <- ifelse(dat.yesterday$Deceased=="Yes",1,0)
+
+death.today <- aggregate(death.today ~ Date_statistics + Municipal_health_service, data = dat.today, FUN = sum)
+death.yesterday <- aggregate(death.yesterday ~ Date_statistics + Municipal_health_service, data = dat.yesterday, FUN = sum)
+
+df.death.new <- merge(death.today,death.yesterday,by=c("Date_statistics","Municipal_health_service"))
+df.death.new$diff <- df.death.new$death.today-df.death.new$death.yesterday
+
+df.death.new.corr <- df.death.new %>%
+  filter(diff > 0 | diff < 0)
+
+write.csv(df.death.new.corr, file = "corrections/deaths_perggd.csv", row.names = F)
+
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 

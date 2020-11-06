@@ -74,4 +74,8 @@ rivm_by_day <- rivm_by_day %>%
 
 write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
 
+nursing.homes <- read.csv("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
+filename.nursinghomes <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(nursing.homes, file = filename.nursinghomes,row.names = F) 
+
 rm(list=ls())
