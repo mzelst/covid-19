@@ -45,7 +45,7 @@ find_week <- function(var) {
 ## registered corona deaths
 ## data from RIVM: downloaded 08.06.2020
 if(file.exists('/data/covid_deaths_dt.rds')) {
-  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-3,".csv")
+  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-16,".csv")
   )[,
     Datum := as.IDate(Datum)
   ][,
@@ -83,13 +83,14 @@ nl_dt <- rivm_dt[Type == 'Overleden',
                  .(year = 2020, covid_deaths = sum(Aantal)),
                  by = week
 ]
-write.csv(nl_dt, file = "covid_deaths.csv",row.names=F)
 
-nl_dt <- read.csv("covid_deaths.csv")
+nl_dt <- read.csv("corrections/deaths_perweek.csv")[,c("Week","weekdeath_today","year")]
+nl_dt <- data.table(nl_dt)
+nl_dt <- nl_dt[,c(1,3,2)]
+colnames(nl_dt) <- c("week","year","covid_deaths")
 nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
 nl_dt$year <- as.numeric(nl_dt$year)
-
-#nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
+nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
 
 ## ts objects assume 52 weeks per year. Adjust the CBS data for 52 week/year 
 
