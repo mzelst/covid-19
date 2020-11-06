@@ -73,7 +73,8 @@ df.weekdeath$diff <- df.weekdeath$n.x - df.weekdeath$n.y
 colnames(df.weekdeath) <- c("Week","weekdeath_today","weekdeath_yesterday","diff")
 df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
 
-write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv")
+df.weekdeath$year <- 2020
+write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv", row.names = F)
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
