@@ -5,8 +5,8 @@ source("workflow/generate_banner.R")
 
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_nice-data.R")
-source("workflow/parse_rivm-data.R")
 source("workflow/parse_lcps-data.R")
+source("workflow/parse_rivm-data.R")
 source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
