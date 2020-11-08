@@ -58,8 +58,8 @@ all.data <- read.csv("data/all_data.csv")
 nice_by_day <- read.csv("data/nice_by_day.csv")
 ```
 
-**Samenvatting**  
-Tot en met `r Sys.Date()` zijn er in Nederland in totaal `r last(all.data$cases)` COVID-19 patiënten gemeld aan het RIVM. Van alle gemelde patiënten is de helft 55 jaar of ouder. Tot nu toe zijn `r last(all.data$hospitalization)` van de gemelde patiënten opgenomen in het ziekenhuis en `r last(all.data$deaths)` mensen overleden.
+**Samenvatting (op basis van GGD cijfers)**  
+Tot en met `r Sys.Date()` zijn er in Nederland in totaal `r last(all.data$cases)` COVID-19 patiënten gemeld aan het RIVM. Tot nu toe zijn `r last(all.data$hospitalization)` van de gemelde patiënten opgenomen in het ziekenhuis en `r last(all.data$deaths)` mensen overleden.
 
 **Gegevens t. o. v. gisteren**  
 Positief getest: `r last(all.data$new.infection)`
