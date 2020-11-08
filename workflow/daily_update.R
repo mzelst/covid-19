@@ -7,6 +7,7 @@ source("workflow/generate_banner.R")
 source("workflow/parse_nice-data.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_rivm-data.R")
+source("workflow/parse_nursing-homes.R")
 source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
@@ -17,8 +18,9 @@ rivm.by_day <- read.csv("data/rivm_by_day.csv")
 nice.by_day <- read.csv("data-nice/nice-today.csv")
 lcps.by_day <- read.csv("data/lcps_by_day.csv")
 corr.by_day <- read.csv("corrections/corrections_perday.csv")
+nursery.by_day <- read.csv("data/nursery_by_day.csv")
 
-daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day)
+daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day)
 
 all.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -120,7 +122,7 @@ Verdacht: ",IC_Opname_Verdacht,"
 Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
 Totaal: ",last(dat.today$IC_Cumulative))
 
-# Tweet for report ####
+# Tweet for NICE ####
 posted_tweet <- post_tweet (
   tweet.nice,
   token = token.mzelst,
@@ -128,6 +130,37 @@ posted_tweet <- post_tweet (
             "plots/overview_aanwezig_zkh.png",
             "plots/overview_opnames_zkh.png"
   ),
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+########
+# Tweet - nursery homes
+########
+
+tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
+
+Positief getest: ",last(all.data$infections_today),"
+Totaal: ",last(all.data$infections_total),"
+
+Overleden: ",last(all.data$deaths_today),"
+Totaal: ",last(all.data$deaths_total),"
+
+Nieuwe locaties met besmettingen: ",last(all.data$mutations_locations),"
+Huidig aantal locaties met besmettingen:* ",last(all.data$total_current_locations),"
+*Locaties waar in de afgelopen 28 dagen minstens één COVID-19 besmetting is gemeld.")
+
+
+# Tweet for nursery homes ####
+posted_tweet <- post_tweet (
+  tweet.nurseryhomes,
+  token = token.mzelst,
+  media = c("plots/nursery_homes_vr_map.png",
+            "plots/verpleeghuizen_bewoners.png",
+            "plots/verpleeghuizen_locaties.png",
+            ),
   in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
 )
