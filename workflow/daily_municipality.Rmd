@@ -18,7 +18,7 @@ require(xtable)
 require(shiny)
 require(metathis)
 
-const.toplist_minimum = 50
+const.toplist_minimum = 30
 
 setwd('../')
 
@@ -156,8 +156,9 @@ knitr::asis_output(htmltools::htmlPreserve("
 ⚡️   Zeer Ernstig ( >= 250 / 100.000 inwoners / 7 dagen )   
 
 ➚➚ Fors stijgende trend ( > 100% )  
-➚  Stijgende trend ( 0 - 100% )  
-➘  Dalende trend   
+➚  Stijgende trend ( 5 - 100% )  
+➘  Dalende trend ( 5 - 50% )   
+➘➘ Fors Dalende trend  ( > 50% )   
 
 Bovenstaande zijn berekend op laatste  
 7 dagen t.o.v. de 7 dagen daarvoor  
@@ -191,11 +192,12 @@ unknown <- first(dat.unknown)
 cat(sprintf("
 
 %s / 355 gemeentes met nieuwe besmettingen (w: %s )   
-%s Gemeente Onbekend (%s)",
+%s Gemeente Onbekend %s (w:%s)",
   format_custom_number(int.count.municipality.today),
   format_custom_number(int.count.municipality.week),
+  format_custom_number(unknown$increase_1d, TRUE),
   format_custom_number(unknown$current),
-  format_custom_number(unknown$increase_1d, TRUE)
+  format_custom_number(unknown$increase_7d, TRUE)
 ))
 
 rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
@@ -279,7 +281,7 @@ dat.cases.today.highest <- dat.cases %>%
   filter( 
     Municipality_code != ""
       & (increase_1d >= const.toplist_minimum
-         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c("💥"))
+         | (increase_1d > 0 & increase_1d < const.toplist_minimum & color_incl_new %in% c(intToUtf8(0x1F4A5), "&#128165;"))
       )
   ) %>%
   arrange(desc(increase_1d), current)

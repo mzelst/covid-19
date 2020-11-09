@@ -58,14 +58,14 @@ calc_growth_increase <- function(increase_7d, increase_14d){
   return(growth) 
 }
 
-increase_growth_to_arrows <- function(increase_growth) {
+increase_growth_to_arrows <- function(increase_growth, allow_double = TRUE) {
   arrows <- 
-    ifelse( increase_growth > 100,   emoji.up_double,
-    ifelse( increase_growth > 1,     emoji.up,
-   #ifelse( increase_growth <= -100, emoji.down_double,
-    ifelse( increase_growth < -1,    emoji.down,
+    ifelse( allow_double & increase_growth > 100, emoji.up_double,
+    ifelse( increase_growth >= 5, emoji.up,
+    ifelse( allow_double & increase_growth <= -50, emoji.down_double,
+    ifelse( increase_growth <= -5, emoji.down,
                                      "-"
-  )))#)
+  ))))
   return(arrows)
 }
 
@@ -286,7 +286,7 @@ dat.hosp.today <- transmute(dat.hosp,
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
   increase_growth = calc_growth_increase(increase_7d, increase_14d), # Compare growth of last 7 days vs 7 days before,
-  growth = increase_growth_to_arrows(increase_growth),
+  growth = increase_growth_to_arrows(increase_growth, FALSE),
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
@@ -321,7 +321,7 @@ dat.deaths.today <- transmute(dat.deaths,
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
   increase_growth = calc_growth_increase(increase_7d, increase_14d), # Compare growth of last 7 days vs 7 days before,
-  growth = increase_growth_to_arrows(increase_growth),
+  growth = increase_growth_to_arrows(increase_growth, FALSE),
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
@@ -345,7 +345,7 @@ dat.cases.totals.growth <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
   group_by(growth) %>%
   summarise(d0 = n(), .groups = 'drop_last') %>%
-  arrange(match(growth, c(emoji.up_double, emoji.up, "-", emoji.down_double, emoji.down)))
+  arrange(match(growth, c(emoji.up_double, emoji.up, "-", emoji.down, emoji.down_double)))
 
 dat.cases.totals.color <- dat.cases.today %>%
   filter(Municipality_code != "") %>%
