@@ -4,8 +4,10 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 
+week.now <- isoweek(Sys.Date())
 
-dat <- read.csv("workflow/excess_mortality/data/province_week_mortality_week43.csv")
+
+dat <- read.csv("workflow/excess_mortality/data/province_week_mortality_week45.csv")
 province.population <- read.csv('misc/provinces-population-year.csv')
 province.population <- province.population %>%
   mutate(Province=recode(Province,
@@ -40,7 +42,7 @@ mortality_wide$excess_death_perc <- round(mortality_wide$`2020`/mortality_wide$A
 excess_deaths <- aggregate(excess_death ~ Province + Week, data = mortality_wide, FUN = sum)
 excess_deaths_wide <- spread(excess_deaths, key = Province, value = excess_death)
 
-excess_mort_stripped <- subset(excess_deaths_wide, Week < 44)
+excess_mort_stripped <- subset(excess_deaths_wide, Week < week.now)
 excess_mort_long <- gather(excess_mort_stripped, key="Province", value="deaths", Drenthe:`Zuid-Holland`)
 
 # Excess deaths - percentage
@@ -48,7 +50,7 @@ excess_mort_long <- gather(excess_mort_stripped, key="Province", value="deaths",
 excess_deaths_perc <- aggregate(excess_death_perc ~ Province + Week, data = mortality_wide, FUN = sum)
 excess_deaths_perc_wide <- spread(excess_deaths_perc, key = Province, value = excess_death_perc)
 
-excess_mort_perc_stripped <- subset(excess_deaths_perc_wide, Week < 44)
+excess_mort_perc_stripped <- subset(excess_deaths_perc_wide, Week < week.now)
 excess_mort_perc_long <- gather(excess_mort_perc_stripped, key="Province", value="deaths", Drenthe:`Zuid-Holland`)
 
 
@@ -88,8 +90,11 @@ excess_mort_perc_plot <- excess_mort_perc_long %>%
   geom_hline(yintercept=0) +
   ggtitle("Oversterfte per provincie (%)")
 
-excess_mort_perc_plot + facet_wrap(~Province) + 
+excess_mort_perc_plot + facet_wrap(~Province, scales="free_x") + 
   ggsave("plots/excess_mortality_province.png",
          width = 16, height = 10, units = "cm", device='png')
 
 
+
+excess_mort_perc_long_test <- excess_mort_perc_long %>%
+  filter(Week >38)
