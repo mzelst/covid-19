@@ -7,8 +7,8 @@ rm(list=ls())
 
 # Data municipalities per day
 rivm.mun.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
-sum(rivm.mun.perday$Total_reported)-424819
-sum(rivm.mun.perday$Deceased)-8215
+sum(rivm.mun.perday$Total_reported)-430453
+sum(rivm.mun.perday$Deceased)-8304
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
