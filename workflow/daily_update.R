@@ -7,8 +7,6 @@ source("workflow/generate_banner.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
-source("workflow/parse_nursing-homes.R")
-source("workflow/parse_municipalities.R")
 source("workflow/parse_corrections.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
@@ -85,6 +83,7 @@ post_tweet (token = token.edwinveldhuizen,
   retweet_id = tweet.main.id)
 
 ##### Generate municipality images
+source("workflow/parse_municipalities.R")
 source("workflow/generate_municipality_images.R")
 #####
 
@@ -193,28 +192,7 @@ tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
 
-##### Download case file
-rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
-filename <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-write.csv(rivm.data, file=filename,row.names = F) ## Write file with all cases until today
-#####
-
-Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
-file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
-          to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
-                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
-
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-## Push to git
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
-push(repo, credentials = git.auth)
-
 # Tweet for hospital numbers - Data NICE ####
-
 temp = tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),2)
 myfiles = lapply(temp, read.csv)
 
@@ -269,6 +247,8 @@ tweet.last_id <- posted_tweet$id_str
 # Tweet - nursery homes
 ########
 
+source("workflow/parse_nursing-homes.R")
+
 tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
 
 Positief getest: ",last(all.data$infections_today),"
@@ -296,10 +276,30 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
+##### Download case file
+rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+filename <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+write.csv(rivm.data, file=filename,row.names = F) ## Write file with all cases until today
+#####
+
+Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
+file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
+          to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
+                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
+push(repo, credentials = git.auth)
+
 ########
 # report
 ########
-tweet.report = "Ik heb een start gemaakt met een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf"
+tweet.report = "Wij maken ook een dagelijks epidemiologisch rapport (work in progress). Hierin vindt u kaarten en tabellen met gegevens per leeftijdsgroep, provincie, en GGD: https://github.com/mzelst/covid-19/raw/master/reports/daily_report.pdf"
 posted_tweet <- post_tweet (
   tweet.report,
   token = token.mzelst,

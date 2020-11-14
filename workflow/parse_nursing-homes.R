@@ -95,5 +95,3 @@ colnames(nursing.homes.all) <- c("infections_today","infections_total","deaths_t
 write.csv(nursing.homes.all, file = "data/nursery_by_day.csv",row.names = F)
 
 source("plot_scripts/nursery_homes.R")
-
-rm(list=ls())
