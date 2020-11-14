@@ -45,7 +45,7 @@ corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infe
 corrections.all$date <- as.Date(Sys.Date())
 
 filename <- paste0("corrections/corrections_per_day/corrections-",Sys.Date(),'.csv')
-write.csv(corrections.all, file = filename)
+write.csv(corrections.all, file = filename, row.names=F)
 
 temp = list.files(path = "corrections/corrections_per_day/",pattern="*.csv", full.names = T)
 myfiles = lapply(temp, read.csv)

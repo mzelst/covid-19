@@ -92,6 +92,23 @@ df.death.new.corr <- df.death.new %>%
 
 write.csv(df.death.new.corr, file = "corrections/deaths_perggd.csv", row.names = F)
 
+## Date of cases - per GGD - diff file
+
+dat.today$cases.today <- 1
+dat.yesterday$cases.yesterday <- 1
+
+cases.today <- aggregate(cases.today ~ Date_statistics + Municipal_health_service, data = dat.today, FUN = sum)
+cases.yesterday <- aggregate(cases.yesterday ~ Date_statistics + Municipal_health_service, data = dat.yesterday, FUN = sum)
+
+df.cases.new <- merge(cases.today,cases.yesterday,by=c("Date_statistics","Municipal_health_service"))
+df.cases.new$diff <- df.cases.new$cases.today-df.cases.new$cases.yesterday
+
+df.cases.new.corr <- df.cases.new %>%
+  filter(diff > 0 | diff < 0)
+
+write.csv(df.cases.new.corr, file = "corrections/cases_perggd.csv", row.names = F)
+
+# Git
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
