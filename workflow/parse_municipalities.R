@@ -416,12 +416,11 @@ write.csv(dat.cases.totals.growth,file = "data/municipality-totals-growth.csv",r
 write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
 
 rm(const.date)
-rm(list=ls())
 
 ## Pull municipal data from CBS
 
-require(cbsodataR)
-require(geojsonio)
+#require(cbsodataR)
+#require(geojsonio)
 
 #dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM09")))
 #dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
