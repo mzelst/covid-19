@@ -92,6 +92,18 @@ nursing.homes.all <- as.data.frame(cbind(nursing.homes.infection,sum(dat.today$T
 nursing.homes.all$date <- as.Date(Sys.Date())
 
 colnames(nursing.homes.all) <- c("infections_today","infections_total","deaths_today","deaths_total","mutations_locations","total_current_locations","date")
-write.csv(nursing.homes.all, file = "data/nursery_by_day.csv",row.names = F)
+write.csv(nursing.homes.all, file = paste0("data-rivm/nursing-homes-per-day/nursery_daily_",Sys.Date(),".csv"),row.names = F)
+
+## Merge all daily files
+temp = list.files(path = "data-rivm/nursing-homes-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
+myfiles = lapply(temp, read.csv) ## Load all day files
+
+nursery_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
+  .x
+})
+
+nursery_by_day$date <- as.Date(nursery_by_day$date)
+nursery_by_day <- nursery_by_day[order(nursery_by_day$date),]
+write.csv(nursery_by_day, file = "data/nursery_by_day.csv",row.names = F) ## Write file with aggregate data per day
 
 source("plot_scripts/nursery_homes.R")
