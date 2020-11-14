@@ -7,6 +7,7 @@ source("workflow/generate_banner.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
+source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
@@ -34,10 +35,6 @@ source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
 all.data <- read.csv("data/all_data.csv")
-nice_by_day <- read.csv("data/nice_by_day.csv")
-
-## Corrections or not?
-text.deaths.corrections <- paste0(ifelse(last(all.data$net.deaths)>=0," (+"," (-"),abs(last(all.data$net.deaths))," ivm ",last(all.data$corrections.deaths)," corr.)")
 
 # get tokens
 source("workflow/twitter/token_mzelst.R")
@@ -247,18 +244,18 @@ tweet.last_id <- posted_tweet$id_str
 # Tweet - nursery homes
 ########
 
-source("workflow/parse_nursing-homes.R")
+source("plot_scripts/nursery_homes.R")
 
 tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
 
-Positief getest: ",last(all.data$infections_today),"
-Totaal: ",last(all.data$infections_total),"
+Positief getest: ",last(all.data$infections.today.nursery),"
+Totaal: ",last(all.data$infections.total.nursery),"
 
-Overleden: ",last(all.data$deaths_today),"
-Totaal: ",last(all.data$deaths_total),"
+Overleden: ",last(all.data$deaths.today.nursery),"
+Totaal: ",last(all.data$deaths.total.nursery),"
 
-Nieuwe locaties met besmettingen: ",last(all.data$mutations_locations),"
-Huidig aantal locaties met besmettingen:* ",last(all.data$total_current_locations),"
+Nieuwe locaties met besmettingen: ",last(all.data$mutations.locations.nursery),"
+Huidig aantal locaties met besmettingen:* ",last(all.data$total.current.locations.nursery),"
 *Locaties waar in de afgelopen 28 dagen minstens één COVID-19 besmetting is gemeld.")
 
 
