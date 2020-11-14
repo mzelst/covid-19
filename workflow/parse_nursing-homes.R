@@ -104,6 +104,7 @@ nursery_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
 
 nursery_by_day$date <- as.Date(nursery_by_day$date)
 nursery_by_day <- nursery_by_day[order(nursery_by_day$date),]
+colnames(nursery_by_day) <- c("infections.today.nursery","infections.total.nursery","deaths.today.nursery",
+                              "deaths.total.nursery","mutations.locations.nursery","total.current.locations.nursery","date")
 write.csv(nursery_by_day, file = "data/nursery_by_day.csv",row.names = F) ## Write file with aggregate data per day
 
-source("plot_scripts/nursery_homes.R")

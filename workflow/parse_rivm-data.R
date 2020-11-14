@@ -63,8 +63,6 @@ rivm_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
   .x
 })
 
-rivm_by_day <- rivm_by_day[,c("date","cases","hospitalization","deaths")]
-
 rivm_by_day$date <- as.Date(rivm_by_day$date)
 rivm_by_day <- rivm_by_day[order(rivm_by_day$date),]
 
