@@ -84,6 +84,12 @@ source("workflow/parse_municipalities.R")
 source("workflow/generate_municipality_images.R")
 #####
 
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
+push(repo, credentials = git.auth)
+
 ########
 # Municipality tweet - cases
 ########
@@ -290,7 +296,7 @@ git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 ## Push to git
 repo <- init()
 add(repo, path = "*")
-commit(repo, all = T, paste0("Daily (automated) update RIVM and NICE data ",Sys.Date()))
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 2/2"))
 push(repo, credentials = git.auth)
 
 ########
