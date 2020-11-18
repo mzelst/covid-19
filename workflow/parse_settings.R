@@ -3,17 +3,17 @@ require(tidyverse)
 
 weeknumber <- isoweek(Sys.Date())-1
 
-report <- "https://www.rivm.nl/sites/default/files/2020-10/COVID-19_WebSite_rapport_wekelijks_20201020_1141.pdf"
+report <- "https://www.rivm.nl/sites/default/files/2020-11/COVID-19_WebSite_rapport_wekelijks_20201117_1237.pdf"
 
 
 ## Totaal - settings
 
 area.table.settings.total <- locate_areas(report,
-             pages=c(23))
+             pages=c(21))
 
 settings <- extract_tables(report,
                            output = "data.frame",
-                           pages = c(23),
+                           pages = c(21),
                            area = area.table.settings.total,
                            guess=FALSE)
 settings <- do.call(rbind,settings)
@@ -22,11 +22,11 @@ write.csv(settings,file = "data-dashboards/settings-total.csv", row.names = F)
 
 ## Alle settings
 area.table.settings.specific <- locate_areas(report,
-             pages=c(24))
+             pages=c(22))
 
 dat <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(24),
+                      pages = c(22),
                       area = area.table.settings.specific,
                       guess=FALSE)
 df <- do.call(rbind,dat)
@@ -69,28 +69,26 @@ perc.priv_extend.known <- round((perc.home+perc.family+perc.friends+perc.parties
 ## GGD Positive rate
 
 area.table.ggdpos.rate <- locate_areas(report,
-                           pages=c(30))
+                           pages=c(28))
 
 ggd_tests <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(30),
+                             pages = c(28),
                              area = area.table.ggdpos.rate,
                              guess=FALSE, )
 ggd_tests <- do.call(rbind,ggd_tests)
-
 ggd_tests <- ggd_tests[c(2:(nrow(ggd_tests)-1)),]
-ggd_tests[nrow(ggd_tests),1] <- weeknumber
-ggd_tests$Week <- ggd_tests$Weeknummer
+ggd_tests$Week <- c(23:weeknumber)
 
 ## Tests door labs
 
 area.table.testlabs <- locate_areas(report,
-                           pages=c(44))
+                           pages=c(43))
 
 
 tests.labs <- extract_tables(report,
                              output = "data.frame",
-                             pages = c(44),
+                             pages = c(43),
                              area = area.table.testlabs,
                              guess=FALSE)
 tests.labs <- do.call(rbind,tests.labs)
@@ -104,12 +102,12 @@ tests.labs$Week <- c(11:weeknumber)
 ## Contactinventarisatie
 
 area.table.contacts <- locate_areas(report,
-             pages=c(28))
+             pages=c(26))
 
 
 contactinv <- extract_tables(report,
                       output = "data.frame",
-                      pages = c(28),
+                      pages = c(26),
                       area = area.table.contacts,
                       guess=FALSE)
 contactinv <- do.call(rbind,contactinv)
@@ -131,11 +129,12 @@ colnames(all.data) <- c("Week","Datum-weken","Aantal_Labs","Tests_Labs","Positie
                         "Weeknummer","Tests_GGD","Positief_GGD","Percentage_GGD","Meldingen_BCO","Positief_via_BCO",
                         "Percentage_via_BCO","Contactinventarisaties","Perc_inven_uitgevoerd")
 
+all.data$Weeknummer <- c(11:weeknumber)
+
 write.csv(all.data, file = "data-dashboards/report_data.csv")
 
 
-## Plots
-str(all.data)
+all.data <- read.csv("data-dashboards/report_data.csv")
 
 perc_pos <- all.data %>%
   filter(Week > 22) %>%
