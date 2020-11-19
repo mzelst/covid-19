@@ -49,9 +49,9 @@ sign.hosp.lcps <- paste0(ifelse(LCPS_Verpleeg_Huidig_Toename>=0," (+"," ("))
 sign.ic.lcps <- paste0(ifelse(LCPS_IC_Huidig_Toename>=0," (+"," ("))
 
 ## Build tweets
-tweet.main <- paste0("#COVID19NL update: 
+tweet.main <- paste0("#COVID19NL update:
 
-Let op! Door een storing zijn er vandaag 1000 tests minder gemeld: https://nos.nl/liveblog/2357010-coronacijfers-weer-incompleet-door-storing-pfizer-vaccin-werkt-voor-95-procent#UPDATE-container-49082039
+Let op! Aantal positieve tests vandaag naar verwachting hoger door de storing van gisteren.
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
@@ -61,6 +61,7 @@ Huidig*: ",last(all.data$Kliniek_Bedden),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toe
 
 Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
 Huidig*: ",last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename,")
+* LCPS cijfers - www.lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),"")
