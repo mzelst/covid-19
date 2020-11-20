@@ -5,9 +5,9 @@ require(reshape2)
 require(lubridate)
 
 week.now <- isoweek(Sys.Date())
+week.readfile <- isoweek(Sys.Date())-1
 
-
-dat <- read.csv("workflow/excess_mortality/data/province_week_mortality_week45.csv")
+dat <- read.csv(paste0("workflow/excess_mortality/data/province_week_mortality_week",week.readfile,".csv"))
 province.population <- read.csv('misc/provinces-population-year.csv')
 province.population <- province.population %>%
   mutate(Province=recode(Province,
