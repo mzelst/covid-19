@@ -3,7 +3,7 @@ require(tidyverse)
 rm(list=ls())
 
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
-lcps.data.original[1,4] <- 1339
+#lcps.data.original[1,4] <- 1432
 lcps.data.original[39,] <- c("16-10-2020",345,524,1208,35,219)
 lcps.data.original[40,] <- c("15-10-2020",313,503,1213,30,201)
 lcps.data.original[41,] <- c("14-10-2020",301,527,1174,27,225)
