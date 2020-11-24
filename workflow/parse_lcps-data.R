@@ -4,10 +4,10 @@ rm(list=ls())
 
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
 #lcps.data.original[1,4] <- 1432
-lcps.data.original[39,] <- c("16-10-2020",345,524,1208,35,219)
-lcps.data.original[40,] <- c("15-10-2020",313,503,1213,30,201)
-lcps.data.original[41,] <- c("14-10-2020",301,527,1174,27,225)
-lcps.data.original[42,6] <- 236
+#lcps.data.original[40,] <- c("16-10-2020",345,524,1208,35,219)
+#lcps.data.original[41,] <- c("15-10-2020",313,503,1213,30,201)
+#lcps.data.original[42,] <- c("14-10-2020",301,527,1174,27,225)
+#lcps.data.original[43,6] <- 236
 
 # Order numbers: IC_Bedden_COVID, IC_Bedden_Non_COVID, Kliniek_Bedden, IC_Nieuwe_Opnames_COVID, Kliniek_Nieuwe_Opnames_COVID
 lcps.data <- lcps.data.original %>%
