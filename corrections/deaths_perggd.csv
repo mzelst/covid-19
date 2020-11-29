@@ -1,68 +1,38 @@
 "Date_statistics","Municipal_health_service","death.today","death.yesterday","diff"
-"2020-09-30","GGD Rotterdam Rijnmond",3,2,1
-"2020-10-03","GGD Rotterdam Rijnmond",12,11,1
-"2020-10-12","GGD Gelderland-Zuid",8,7,1
-"2020-10-19","GGD West Brabant",3,2,1
-"2020-10-20","GGD Haaglanden",8,7,1
-"2020-10-20","GGD Rotterdam Rijnmond",18,17,1
-"2020-10-21","GGD regio Utrecht",9,8,1
-"2020-10-22","GGD Limburg Noord",2,1,1
-"2020-10-22","GGD regio Utrecht",11,9,2
-"2020-10-22","GGD Rotterdam Rijnmond",11,12,-1
-"2020-10-24","GGD Brabant Zuid-Oost ",4,3,1
-"2020-10-25","GGD Drenthe",2,1,1
-"2020-10-25","GGD regio Utrecht",8,7,1
-"2020-10-27","GGD regio Utrecht",7,5,2
-"2020-10-27","GGD Rotterdam Rijnmond",15,14,1
-"2020-10-28","GGD regio Utrecht",5,6,-1
-"2020-10-29","GGD Rotterdam Rijnmond",12,10,2
-"2020-10-30","GGD Haaglanden",3,2,1
-"2020-10-30","GGD Rotterdam Rijnmond",7,6,1
-"2020-10-31","GGD Gelderland-Midden",2,1,1
-"2020-10-31","GGD Rotterdam Rijnmond",11,10,1
-"2020-11-01","GGD Rotterdam Rijnmond",7,8,-1
-"2020-11-02","GGD Rotterdam Rijnmond",12,13,-1
-"2020-11-03","GGD Rotterdam Rijnmond",3,4,-1
-"2020-11-06","GGD Hollands Midden",5,4,1
-"2020-11-07","GGD Haaglanden",3,2,1
-"2020-11-08","GGD Regio Twente",3,2,1
-"2020-11-09","GGD Amsterdam",2,1,1
-"2020-11-09","GGD Brabant Zuid-Oost ",3,2,1
-"2020-11-09","GGD Rotterdam Rijnmond",8,7,1
-"2020-11-09","GGD West Brabant",3,2,1
-"2020-11-10","GGD Gelderland-Midden",4,3,1
-"2020-11-10","GGD Noord en Oost Gelderland",2,1,1
-"2020-11-10","GGD regio Utrecht",3,2,1
-"2020-11-10","GGD Rotterdam Rijnmond",2,3,-1
-"2020-11-11","GGD Zuid Limburg",1,0,1
-"2020-11-12","GGD Amsterdam",1,0,1
-"2020-11-12","GGD Drenthe",2,1,1
-"2020-11-13","GGD Kennemerland",1,0,1
-"2020-11-13","GGD Rotterdam Rijnmond",5,4,1
-"2020-11-13","GGD Zuid Limburg",2,1,1
-"2020-11-14","GGD Amsterdam",1,0,1
-"2020-11-14","GGD Haaglanden",2,1,1
-"2020-11-15","GGD Regio Twente",1,0,1
-"2020-11-15","GGD regio Utrecht",1,0,1
-"2020-11-16","GGD IJsselland",1,0,1
-"2020-11-16","GGD Regio Twente",2,1,1
-"2020-11-16","GGD Rotterdam Rijnmond",2,1,1
-"2020-11-16","GGD Zuid Limburg",2,1,1
-"2020-11-17","GGD Haaglanden",1,0,1
-"2020-11-17","GGD Rotterdam Rijnmond",4,3,1
-"2020-11-17","GGD Zuid Limburg",1,0,1
-"2020-11-18","GGD Brabant Zuid-Oost ",1,0,1
-"2020-11-18","GGD Drenthe",2,1,1
-"2020-11-18","GGD Kennemerland",1,0,1
-"2020-11-18","GGD Zuid Limburg",1,0,1
-"2020-11-19","GGD Brabant Zuid-Oost ",1,0,1
-"2020-11-19","GGD Gelderland-Midden",1,0,1
-"2020-11-19","GGD IJsselland",1,0,1
-"2020-11-19","GGD Limburg Noord",1,0,1
-"2020-11-19","GGD Zuid Limburg",1,0,1
-"2020-11-21","GGD Gelderland-Midden",1,0,1
-"2020-11-22","GGD Limburg Noord",2,1,1
-"2020-11-23","GGD Rotterdam Rijnmond",2,0,2
-"2020-11-24","GGD Limburg Noord",2,1,1
-"2020-11-26","GGD Amsterdam",1,0,1
-"2020-11-26","GGD Regio Twente",1,0,1
+"2020-09-23","Dienst Gezondheid & Jeugd ZHZ",1,0,1
+"2020-09-24","Dienst Gezondheid & Jeugd ZHZ",0,1,-1
+"2020-10-12","GGD Hart voor Brabant",8,7,1
+"2020-10-22","GGD Hart voor Brabant",8,7,1
+"2020-10-23","GGD Hart voor Brabant",6,5,1
+"2020-10-23","GGD regio Utrecht",9,8,1
+"2020-10-24","GGD regio Utrecht",9,10,-1
+"2020-10-27","GGD regio Utrecht",8,7,1
+"2020-10-29","GGD Brabant Zuid-Oost ",2,3,-1
+"2020-10-29","GGD Hollands Midden",3,2,1
+"2020-10-29","GGD regio Utrecht",3,2,1
+"2020-10-30","GGD Hollands Midden",4,5,-1
+"2020-10-30","GGD regio Utrecht",9,10,-1
+"2020-11-01","GGD Gooi en Vechtstreek",2,3,-1
+"2020-11-01","GGD regio Utrecht",7,6,1
+"2020-11-04","GGD Gooi en Vechtstreek",2,3,-1
+"2020-11-05","GGD Haaglanden",2,1,1
+"2020-11-05","GGD regio Utrecht",2,1,1
+"2020-11-06","GGD Gooi en Vechtstreek",2,1,1
+"2020-11-06","GGD Hart voor Brabant",8,7,1
+"2020-11-06","GGD Rotterdam Rijnmond",5,4,1
+"2020-11-10","GGD Hart voor Brabant",4,3,1
+"2020-11-11","GGD regio Utrecht",5,3,2
+"2020-11-15","GGD Amsterdam",1,0,1
+"2020-11-17","GGD Rotterdam Rijnmond",5,4,1
+"2020-11-17","GGD Zaanstreek-Waterland",1,0,1
+"2020-11-18","GGD Hollands Midden",1,0,1
+"2020-11-18","GGD Rotterdam Rijnmond",3,2,1
+"2020-11-19","Dienst Gezondheid & Jeugd ZHZ",2,1,1
+"2020-11-19","GGD Hart voor Brabant",2,1,1
+"2020-11-20","GGD Hart voor Brabant",1,0,1
+"2020-11-21","GGD Limburg Noord",2,1,1
+"2020-11-24","GGD regio Utrecht",1,0,1
+"2020-11-25","Dienst Gezondheid & Jeugd ZHZ",1,0,1
+"2020-11-25","GGD Regio Twente",1,0,1
+"2020-11-26","GGD Hart voor Brabant",1,0,1
+"2020-11-26","GGD Regio Twente",0,1,-1
