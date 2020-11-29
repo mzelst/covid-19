@@ -19,10 +19,10 @@ nursing.homes.wide$deaths_7daverage <- round(frollmean(nursing.homes.wide[,"Tota
 #nursing.homes.long <- gather(nursing.homes.wide, key = "Type",value = "Aantal",Total_cases_reported:Total_deceased_reported)
 nursing.homes.long <- gather(nursing.homes.wide, key = "Type",value = "Aantal",cases_7daverage:deaths_7daverage)
 
-date.homes <- as.Date(Sys.Date()-1)
+date.nursery.homes <- as.Date(Sys.Date()-1)
 
 nursing.homes.wide %>%
-  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < date.homes) %>%
+  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < date.nursery.homes) %>%
   ggplot(aes(x = Date_of_statistic_reported, y = Total_cases_reported)) +
   geom_line(aes(y = Total_deceased_reported, color = "Sterfte per dag"), lwd=1.0) +
   geom_line(aes(y = Total_cases_reported, color = "Geconstateerde besmettingen"),lwd=1.0) +
@@ -69,7 +69,7 @@ locations <- merge(locations, locations.today, by = "Date_of_statistic_reported"
 ## Plot locaties
 
 locations %>%
-  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < "2020-11-16") %>%
+  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < date.nursery.homes) %>%
   ggplot(aes(x = Date_of_statistic_reported, y = Total_infected_locations_reported, group = 1)) +
   geom_line(aes(y = Total_infected_locations_reported, color = "Aantal locaties"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
