@@ -77,8 +77,8 @@ Wat %s is dan de %s in de 7d ervoor
       token = token.spamedwin,
       auto_populate_reply_metadata = TRUE
     )
-    posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
-    reply_id <<- posted_tweet$id_str
+    # posted_tweet <<- fromJSON(rawToChar(posted_tweet$content))
+    # reply_id <<- posted_tweet$id_str
   }
 }
 
@@ -114,12 +114,12 @@ tweet.date7d <- (used_date - 7) %>%
 tweet <- sprintf("Gedetailleerd overzicht van alle gemeentes %s
 
 Zoeken kan in uw Twitter zoekbalk:
-'from:spamedwin Schiermonnikoog'
+'from:spamedwin Urk'
 %s
 
 [%s]", 
   intToUtf8(0x1F447), 
-  "https://twitter.com/search?q=from%3A%40spamedwin%20Schiermonnikoog&src=typed_query&f=live",
+  "https://twitter.com/search?q=from%3A%40spamedwin%20Urk&src=typed_query&f=live",
   tweet.date
 )
 Encoding(tweet) <- "UTF-8"
