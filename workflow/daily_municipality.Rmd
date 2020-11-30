@@ -67,7 +67,9 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE, t
     increase_1d = format_custom_number(increase_1d, TRUE),
     color = color_incl_new,
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
+    # percentage = paste0(formatC(d0 / population * 100, format="f", big.mark=".", decimal.mark=",", digits=2), '%'),
     current = format_custom_number(current),
+    # total = format_custom_number(d0),
     increase_7d = format_custom_number(increase_7d, TRUE, "( *w: %s * )"),
     increase_14d = format_custom_number(increase_14d, TRUE, "( *2w: %s * )"),
     growth = ifelse( growth == "-", str.none, growth)
@@ -89,16 +91,17 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE, t
   print_table(data.printable, alignment, cssClass)
 }
 
-print_detailed <- function(data){
+print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE){
   template.example <- "
+  \n
   %s sinds gisteren   
-  %s sinds 1 oktober   
+  %s sinds 1 november   
   %s sinds 7 dagen ( %s )   
   Wat %s is dan de %s in de 7 dagen ervoor   
-  %s inwoners maakt dat %s %.1f / 100.000 / 7d
+  %s inwoners maakt dat %s %.1f / 100.000 / %s
   "
   
-  print_municipality_data(data, "example align-left")
+  print_municipality_data(data, "example align-left", include_color, two_weeks)
   
   data <- first(data)
   more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
@@ -114,8 +117,9 @@ print_detailed <- function(data){
     ))),
     format_custom_number(data$d7 - data$d14, TRUE),
     format_custom_number(data$population),
-    data$color, 
-    data$rel_increase_7d, 
+    ifelse( include_color, data$color, ''), 
+    ifelse( two_weeks, data$rel_increase_14d, data$rel_increase_7d), 
+    ifelse( two_weeks, '14d', '7d'), 
     0
   ))
 }
@@ -343,8 +347,7 @@ dat.total <- dat.hosp %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 opnames"
 
-print_municipality_data(dat.total, 'align-left', FALSE, TRUE)
-
+print_detailed(dat.total, FALSE, TRUE)
 rm(dat.total)
 ```
 
@@ -362,12 +365,14 @@ dat.unknown <- dat.hosp %>%
 unknown <- first(dat.unknown)
 
 cat(sprintf("
+
 %s / 355 gemeentes met nieuwe meldingen (w: %s )   
-%s Gemeente Onbekend (%s)",
+%s Gemeente Onbekend %s (2w:%s)",
   format_custom_number(int.count.municipality.today),
   format_custom_number(int.count.municipality.week),
+  format_custom_number(unknown$increase_1d, TRUE),
   format_custom_number(unknown$current),
-  format_custom_number(unknown$increase_1d, TRUE)
+  format_custom_number(unknown$increase_14d, TRUE)
 ))
 
 rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
@@ -451,7 +456,7 @@ dat.total <- dat.deaths %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 overlijdens"
 
-print_municipality_data(dat.total, 'align-left', FALSE, TRUE)
+print_detailed(dat.total, FALSE, TRUE)
 
 rm(dat.total)
 ```
@@ -470,12 +475,14 @@ dat.unknown <- dat.deaths %>%
 unknown <- first(dat.unknown)
 
 cat(sprintf("
+
 %s / 355 gemeentes met nieuwe meldingen (w: %s )   
-%s Gemeente Onbekend (%s)",
+%s Gemeente Onbekend %s (2w:%s)",
   format_custom_number(int.count.municipality.today),
   format_custom_number(int.count.municipality.week),
+  format_custom_number(unknown$increase_1d, TRUE),
   format_custom_number(unknown$current),
-  format_custom_number(unknown$increase_1d, TRUE)
+  format_custom_number(unknown$increase_14d, TRUE)
 ))
 
 rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unknown)
