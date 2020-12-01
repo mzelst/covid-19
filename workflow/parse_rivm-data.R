@@ -7,6 +7,14 @@ rm(list=ls())
 
 # Data municipalities per day
 rivm.mun.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
+
+# Verify that new data has been uploaded
+condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
+
+if (condition) {stop("The value is TRUE, so the script must end here")    
+} else {
+
+# Parse data municipality per day 
 sum(rivm.mun.perday$Total_reported)-518910
 sum(rivm.mun.perday$Deceased)-9349
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
@@ -74,5 +82,10 @@ rivm_by_day <- rivm_by_day %>%
   mutate(hospital_intake_rivm = replace(hospital_intake_rivm, hospital_intake_rivm<0, 0)) # Calculate number of hospitalizations per day
 
 write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
+
+#continue the script
+print("Script did NOT end!")   
+}
+
 
 rm(list=ls())
