@@ -19,7 +19,10 @@ lcps.data <- lcps.data.original %>%
     Datum = NULL
   )
 
-
+lcps.condition <- head(lcps.data$Kliniek_Nieuwe_Opnames_COVID,1) < head(lcps.data$IC_Nieuwe_Opnames_COVID,1)
+# Verify clinical beds and IC beds are correctly reported (not swapped around)
+if (lcps.condition) {stop("The value is TRUE, so the script must end here")    
+} else {
 
 lcps.dailydata <- lcps.data %>%
   head(1)
@@ -33,4 +36,5 @@ write.csv(lcps.data.original, file=filename, row.names = F)
 write.csv(lcps.dailydata, file = filename.daily, row.names = F)
 write.csv(lcps.data, file = filename.common, row.names = F)
 
+}
 rm(list=ls())
