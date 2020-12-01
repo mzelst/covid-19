@@ -48,17 +48,22 @@ LCPS_IC_Huidig_Toename <- LCPS_IC_two_days[2] - LCPS_IC_two_days[1]
 sign.hosp.lcps <- paste0(ifelse(LCPS_Verpleeg_Huidig_Toename>=0," (+"," ("))
 sign.ic.lcps <- paste0(ifelse(LCPS_IC_Huidig_Toename>=0," (+"," ("))
 
+Kliniek_Nieuwe_Opnames <- ifelse(is.na(last(all.data$Kliniek_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$Kliniek_Nieuwe_Opnames_COVID))
+Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste0(last(all.data$Kliniek_Bedden),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toename))
+IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$IC_Nieuwe_Opnames_COVID))
+IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
+
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
-Opgenomen*: ",last(all.data$Kliniek_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$Kliniek_Bedden),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toename,")
+Opgenomen*: ",Kliniek_Nieuwe_Opnames,"
+Huidig*: ",Kliniek_Aanwezig,")
 
-Opgenomen op IC*: ",last(all.data$IC_Nieuwe_Opnames_COVID),"
-Huidig*: ",last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename,")
+Opgenomen op IC*: ",IC_Nieuwe_Opnames,"
+Huidig*: ",IC_Aanwezig,")
 * LCPS cijfers - http://lcps.nu
 
 Overleden: ",last(all.data$new.deaths),"
