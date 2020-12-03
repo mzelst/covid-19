@@ -15,8 +15,8 @@ if (condition) {stop("The value is TRUE, so the script must end here")
 } else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-518910
-sum(rivm.mun.perday$Deceased)-9349
+sum(rivm.mun.perday$Total_reported)-532444
+sum(rivm.mun.perday$Deceased)-9504
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
