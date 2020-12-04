@@ -4,20 +4,10 @@ write.csv(nursing.homes, file = filename.nursinghomes,row.names = F)
 
 nursing.homes$Date_of_statistic_reported <- as.Date(nursing.homes$Date_of_statistic_reported)
 
-#safety_regions <- c("Brabant-Noord","Brabant-Zuidoost","Midden- en West-Brabant","Limburg-Noord","Limburg-Zuid","Zeeland")
-
-#nursing.homes <- nursing.homes[nursing.homes$Security_region_name %in% safety_regions,]
-
 nursing.homes.cases.wide <- aggregate(Total_cases_reported ~ Date_of_statistic_reported, data = nursing.homes, FUN = sum)
 nursing.homes.deaths.wide <- aggregate(Total_deceased_reported ~ Date_of_statistic_reported, data = nursing.homes, FUN = sum)
 
 nursing.homes.wide <- merge(nursing.homes.cases.wide,nursing.homes.deaths.wide, by = c("Date_of_statistic_reported"))
-
-nursing.homes.wide$cases_7daverage <- round(frollmean(nursing.homes.wide[,"Total_cases_reported"],7),0)
-nursing.homes.wide$deaths_7daverage <- round(frollmean(nursing.homes.wide[,"Total_deceased_reported"],7),0)
-
-#nursing.homes.long <- gather(nursing.homes.wide, key = "Type",value = "Aantal",Total_cases_reported:Total_deceased_reported)
-nursing.homes.long <- gather(nursing.homes.wide, key = "Type",value = "Aantal",cases_7daverage:deaths_7daverage)
 
 date.nursery.homes <- as.Date(Sys.Date()-1)
 
