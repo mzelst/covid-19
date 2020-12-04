@@ -1,5 +1,6 @@
 require(tidyverse)
 require(data.table)
+require(rjson)
 rm(list=ls())
 #### Corrections scripts
 
@@ -107,6 +108,109 @@ df.cases.new.corr <- df.cases.new %>%
   filter(diff > 0 | diff < 0)
 
 write.csv(df.cases.new.corr, file = "corrections/cases_perggd.csv", row.names = F)
+
+## Leeftijd op IC
+
+leeftijd.ic <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/age-distribution-status/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+leeftijd.ic <- as.data.frame(t(leeftijd.ic[c(1,2,4,6,8),]))
+
+leeftijd.ic$V1 <- unlist(leeftijd.ic$V1)
+leeftijd.ic$V2 <- unlist(leeftijd.ic$V2)
+leeftijd.ic$V3 <- unlist(leeftijd.ic$V3)
+leeftijd.ic$V4 <- unlist(leeftijd.ic$V4)
+leeftijd.ic$V5 <- unlist(leeftijd.ic$V5)
+
+colnames(leeftijd.ic) <- c("Leeftijd","IC_naar_Klinisch","IC_aanwezig","Verlaten_Levend","Verlaten_Overleden")
+
+leeftijd.ic$Totaal <- rowSums(leeftijd.ic[,c(2:5)])
+leeftijd.ic$Datum <- as.Date(Sys.Date())
+
+filename.IC <- paste0("data-nice/age/IC/nice_daily_age_IC_",Sys.Date(),".csv")
+
+write.csv(leeftijd.ic, file = filename.IC, row.names = F)
+
+## Leeftijd op Klinische afdeling
+
+leeftijd.klinisch <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/age-distribution-status/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+leeftijd.klinisch <- as.data.frame(t(leeftijd.klinisch[c(1,2,4,6),]))
+
+leeftijd.klinisch$V1 <- unlist(leeftijd.klinisch$V1)
+leeftijd.klinisch$V2 <- unlist(leeftijd.klinisch$V2)
+leeftijd.klinisch$V3 <- unlist(leeftijd.klinisch$V3)
+leeftijd.klinisch$V4 <- unlist(leeftijd.klinisch$V4)
+
+
+colnames(leeftijd.klinisch) <- c("Leeftijd","Klinisch_aanwezig","Verlaten_Levend","Verlaten_Overleden")
+
+leeftijd.klinisch$Totaal <- rowSums(leeftijd.klinisch[,c(2:4)])
+leeftijd.klinisch$Datum <- as.Date(Sys.Date())
+
+filename.klinisch <- paste0("data-nice/age/Clinical_Beds/nice_daily_age_clinical_",Sys.Date(),".csv")
+
+write.csv(leeftijd.klinisch, file = filename.klinisch, row.names = F)
+
+## Exit IC
+
+ic.died.left <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/died-and-survivors-cumulative/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+ic.died.left <- as.data.frame(t(ic.died.left[c(1,2,4,6),]))
+ic.died.left$V1 <- unlist(ic.died.left$V1)
+ic.died.left$V2 <- unlist(ic.died.left$V2)
+ic.died.left$V3 <- unlist(ic.died.left$V3)
+ic.died.left$V4 <- unlist(ic.died.left$V4)
+
+colnames(ic.died.left) <- c("date","Overleden","Ontslagen","IC_to_Clinical_Alive")
+filename.IC.exit <- paste0("data-nice/exit/IC/nice_daily_exit_IC_",Sys.Date(),".csv")
+write.csv(ic.died.left, file = filename.IC.exit, row.names = F)
+
+## Exit Clinical beds
+
+zkh.died.left <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/died-and-survivors-cumulative/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+
+zkh.died.left <- as.data.frame(t(zkh.died.left[c(1,2,4),]))
+zkh.died.left$V1 <- unlist(zkh.died.left$V1)
+zkh.died.left$V2 <- unlist(zkh.died.left$V2)
+zkh.died.left$V3 <- unlist(zkh.died.left$V3)
+
+colnames(zkh.died.left) <- c("date","Overleden","Ontslagen")
+
+zkh.died.left <- zkh.died.left %>%
+  mutate(Overleden_pdag = c(0,diff(Overleden))) %>%
+  mutate(Ontslagen_pdag = c(0,diff(Ontslagen)))
+
+filename.klinisch.exit <- paste0("data-nice/exit/Clinical_Beds/nice_daily_exit_clinical_",Sys.Date(),".csv")
+
+write.csv(zkh.died.left, file = filename.klinisch.exit, row.names = F)
+
+#### Treatment Time IC ####
+
+ligduur.ic <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/behandelduur-distribution/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+ligduur.ic <- as.data.frame(t(ligduur.ic[c(1,2,4,6,8),]))
+colnames(ligduur.ic) <- c("dagen","IC_to_clinical","Treatment_time_hospitalized","Treatment_time_to_exit","Treatment_time_to_death")
+filename.ligduur.ic <- paste0("data-nice/treatment-time/IC/nice_daily_treatment-time_IC_",Sys.Date(),".csv")
+write.csv(ligduur.ic, file = filename.ligduur.ic, row.names = F)
+
+#### Treatment Time clinical beds ####
+
+ligduur.clinical <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/behandelduur-distribution/",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
+ligduur.clinical <- as.data.frame(t(ligduur.clinical[c(1,2,4,6),]))
+colnames(ligduur.clinical) <- c("dagen","Treatment_time_hospitalized","Treatment_time_to_exit","Treatment_time_to_death")
+filename.ligduur.clinical <- paste0("data-nice/treatment-time/Clinical_Beds/nice_daily_treatment-time_clinical_",Sys.Date(),".csv")
+write.csv(ligduur.clinical, file = filename.ligduur.clinical, row.names = F)
 
 # Git
 git.credentials <- read_lines("git_auth.txt")
