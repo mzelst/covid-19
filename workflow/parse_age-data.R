@@ -28,7 +28,7 @@ dat_besmettingen_perc <- dat_tidy %>%
 dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
 
 dat_leeftijd$Type <- c("Aantal besmettingen")
-dat_leeftijd[11:20,isoweek(Sys.Date())] <- c("Percentage")
+dat_leeftijd[11:20,"Type"] <- c("Percentage")
 
 dat_leeftijd <- dat_leeftijd %>%
   relocate(Type, .before = Leeftijd)
@@ -38,6 +38,7 @@ write.csv(dat_leeftijd, file = "data-dashboards/age-week.csv", row.names = F)
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
+repo <- init()
 add(repo, path = "data-dashboards/age-week.csv")
 commit(repo, all = T, paste0("Update data agegroups per week ",Sys.Date()))
 push(repo, credentials = git.auth)
