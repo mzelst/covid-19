@@ -11,12 +11,12 @@ rivm.mun.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_ge
 # Verify that new data has been uploaded
 condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 
-if (condition) {stop("The value is TRUE, so the script must end here")    
-} else {
+#if (condition) {stop("The value is TRUE, so the script must end here")    
+#} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-532444
-sum(rivm.mun.perday$Deceased)-9504
+sum(rivm.mun.perday$Total_reported)-557224
+sum(rivm.mun.perday$Deceased)-9687
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -74,7 +74,7 @@ write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write fil
 
 #continue the script
 print("Script did NOT end!")   
-}
+#}
 
 
 rm(list=ls())
