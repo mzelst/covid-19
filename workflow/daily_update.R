@@ -18,8 +18,8 @@ rivm.by_day <- read.csv("data/rivm_by_day.csv")
 # Verify RIVM data has been downloaded, otherwise stop script.
 condition <- Sys.Date()!=as.Date(last(rivm.by_day$date))
 
-if (condition) {stop("The value is TRUE, so the script must end here")    
-} else {
+#if (condition) {stop("The value is TRUE, so the script must end here")    
+#} else {
   
 nice.by_day <- read.csv("data-nice/nice-today.csv")
 lcps.by_day <- read.csv("data/lcps_by_day.csv")
@@ -335,4 +335,4 @@ source("workflow/parse_age-data.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 
-}
+#}
