@@ -44,17 +44,17 @@ find_week <- function(var) {
 
 ## registered corona deaths
 ## data from RIVM: downloaded 08.06.2020
-if(file.exists('/data/covid_deaths_dt.rds')) {
-  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-16,".csv")
-  )[,
-    Datum := as.IDate(Datum)
-  ][,
-    week := week(Datum + 1)
-  ]
-  saveRDS(rivm_dt, '/data/covid_deaths_dt.rds')
-} else {
-  rivm_dt <- readRDS('/data/covid_deaths_dt.rds')
-}
+#if(file.exists('/data/covid_deaths_dt.rds')) {
+#  rivm_dt <- fread(paste0("https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national_by_date/rivm_NL_covid19_national_by_date_",Sys.Date()-16,".csv")
+#  )[,
+#    Datum := as.IDate(Datum)
+#  ][,
+#    week := week(Datum + 1)
+#  ]
+#  saveRDS(rivm_dt, '/data/covid_deaths_dt.rds')
+#} else {
+#  rivm_dt <- readRDS('/data/covid_deaths_dt.rds')
+#}
 
 ## read cbsodata on weekly deaths
 if(file.exists('/data/cbs_deaths_dt.rds')) {
@@ -71,7 +71,7 @@ if(file.exists('/data/cbs_deaths_dt.rds')) {
 }
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I40', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I41', col_names = F))
 
 
 ##
@@ -79,10 +79,10 @@ cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Bereken
 ##
 
 ## aggregate corona deaths per week
-nl_dt <- rivm_dt[Type == 'Overleden',
-                 .(year = 2020, covid_deaths = sum(Aantal)),
-                 by = week
-]
+#nl_dt <- rivm_dt[Type == 'Overleden',
+#                 .(year = 2020, covid_deaths = sum(Aantal)),
+#                 by = week
+#]
 
 nl_dt <- read.csv("corrections/deaths_perweek.csv")[,c("Week","weekdeath_today","year")]
 nl_dt <- data.table(nl_dt)
