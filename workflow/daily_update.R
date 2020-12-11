@@ -345,7 +345,7 @@ living.home.70plus <- read.csv("https://data.rivm.nl/covid-19/COVID-19_thuiswone
 filename.living.home.70plus <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 write.csv(living.home.70plus, file = filename.living.home.70plus,row.names = F) 
 
-## Download data 70+ living at home 
+## Download behavior
 behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
 filename.behavior <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 write.csv(behavior, file = filename.behavior,row.names = F) 
