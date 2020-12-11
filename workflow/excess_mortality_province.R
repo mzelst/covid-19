@@ -90,7 +90,7 @@ excess_mort_perc_plot <- excess_mort_perc_long %>%
   geom_hline(yintercept=0) +
   ggtitle("Oversterfte per provincie (%)")
 
-excess_mort_perc_plot + facet_wrap(~Province, scales="free_x") + 
+excess_mort_perc_plot + facet_wrap(~Province) + 
   ggsave("plots/excess_mortality_province.png",
          width = 16, height = 10, units = "cm", device='png')
 
