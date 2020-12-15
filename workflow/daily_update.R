@@ -60,8 +60,11 @@ Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste
 IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$IC_Nieuwe_Opnames_COVID))
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
+
+
 ## Build tweets
-tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
+tweet.main <- paste0("#COVID19NL
+Storing: gisteren en vandaag minder meldingen door overbelasting meldsysteem. https://www.rivm.nl/nieuws/nieuwsbericht-corona-15-december
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
