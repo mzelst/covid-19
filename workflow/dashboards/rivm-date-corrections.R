@@ -212,6 +212,22 @@ colnames(ligduur.clinical) <- c("dagen","Treatment_time_hospitalized","Treatment
 filename.ligduur.clinical <- paste0("data-nice/treatment-time/Clinical_Beds/nice_daily_treatment-time_clinical_",Sys.Date(),".csv")
 write.csv(ligduur.clinical, file = filename.ligduur.clinical, row.names = F)
 
+
+## Download data disabled people 
+disabled.people <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
+filename.disabledpeople  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(disabled.people, file = filename.disabledpeople,row.names = F) 
+
+## Download data 70+ living at home 
+living.home.70plus <- read.csv("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
+filename.living.home.70plus <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(living.home.70plus, file = filename.living.home.70plus,row.names = F) 
+
+## Download behavior
+behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
+filename.behavior <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(behavior, file = filename.behavior,row.names = F) 
+
 # Git
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])

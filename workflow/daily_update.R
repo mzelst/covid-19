@@ -335,20 +335,4 @@ source("workflow/parse_age-data.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 
-## Download data disabled people 
-disabled.people <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
-filename.disabledpeople  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(disabled.people, file = filename.disabledpeople,row.names = F) 
-
-## Download data 70+ living at home 
-living.home.70plus <- read.csv("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
-filename.living.home.70plus <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(living.home.70plus, file = filename.living.home.70plus,row.names = F) 
-
-## Download behavior
-behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
-filename.behavior <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(behavior, file = filename.behavior,row.names = F) 
-
-
 #}
