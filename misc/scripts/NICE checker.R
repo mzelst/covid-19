@@ -11,9 +11,9 @@ dat.twodaysago <- as.data.frame(myfiles[2])
 dat.threedaysago <- as.data.frame(myfiles[1])
 
 sum(dat.today$Hospital_Intake_Proven) - sum(dat.yesterday$Hospital_Intake_Proven)
-
+last(dat.today$Hospital_Currently)
 sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
-
+last(dat.today$IC_Current)
 
 
 df <- merge(dat.today[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], dat.yesterday[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], by = "date", all.x=T)
