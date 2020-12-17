@@ -9,7 +9,7 @@ all.data <- read.csv("data/all_data.csv")
 all.data$date <- as.Date(all.data$date)
 all.data <- all.data[order(all.data$date),]
 
-filter.date <- Sys.Date()-28 # Set filter date for last 4 weeks
+filter.date <- Sys.Date()-56 # Set filter date for last 4 weeks
 
 all.data[211,27] <- 12
 all.data[212,27] <- 10
@@ -22,6 +22,7 @@ cases <- all.data %>%
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 200), limits = c(0, NA)) +
+  theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -44,6 +45,7 @@ aanwezig <- all.data %>%
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
   scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
   guides(colour = guide_legend(reverse=T)) +
+  theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -67,6 +69,7 @@ opnames <- all.data %>%
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
   scale_color_manual(values = c("#F58121", "#228AC7", "#F9E11E", "#f79a4d", "#7ab9dd")) +
   guides(colour = guide_legend(reverse=T)) +
+  theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
