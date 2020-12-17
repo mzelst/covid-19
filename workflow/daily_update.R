@@ -62,7 +62,7 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL update:
-Let op! Aantal positieve tests vandaag naar verwachting hoger door storing (eer)gisteren.
+Let op! Aantal positieve tests vandaag naar verwachting hoger door storing maandag/dinsdag.
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
