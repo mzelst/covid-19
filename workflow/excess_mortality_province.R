@@ -77,6 +77,7 @@ excess_mort_plot + facet_wrap(~Province)
 excess_mort_perc_plot <- excess_mort_perc_long %>%
   ggplot(aes(x=Week, y=deaths)) + 
   geom_line(aes(y = deaths, color ="Oversterfte (%)"), lwd=1.0) +
+  theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         panel.grid.major = element_blank(),
