@@ -95,7 +95,11 @@ excess_mort_perc_plot + facet_wrap(~Province) +
   ggsave("plots/excess_mortality_province.png",
          width = 16, height = 10, units = "cm", device='png')
 
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
-
-excess_mort_perc_long_test <- excess_mort_perc_long %>%
-  filter(Week >38)
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Excess mortality analyses - Week ", week.readfile))
+push(repo, credentials = git.auth)
