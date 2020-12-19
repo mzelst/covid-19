@@ -228,6 +228,10 @@ behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = 
 filename.behavior <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 write.csv(behavior, file = filename.behavior,row.names = F) 
 
+nice.municipality <- read.csv("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep = ";")
+filename.nice.municipality <- paste0("data-nice/data-municipalities/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(nice.municipality, file = filename.nice.municipality,row.names = F)
+
 # Git
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
