@@ -11,8 +11,14 @@ require(data.table)
 rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
 last_date <- as.Date(last(rivm.municipalities$Date_of_report))
 filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_", last_date ,".csv") ## Filename for daily data municipalities
-
 write.csv(rivm.municipalities, file=filename.municipality,row.names = F)
+rm(rivm.municipalities, last_date, filename.municipality )
+
+rivm.hospital <- read.csv("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
+last_date <- as.Date(last(rivm.hospital$Date_of_report))
+filename.hospital <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily data municipalities
+write.csv(rivm.hospital, file=filename.hospital,row.names = F)
+rm(rivm.hospital, last_date, filename.hospital )
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
