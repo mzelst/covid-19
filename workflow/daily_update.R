@@ -267,6 +267,8 @@ tweet.last_id <- posted_tweet$id_str
 
 source("plot_scripts/nursery_homes.R")
 
+new.locations.nursery <- all.data[nrow(all.data),"total.current.locations.nursery"] - all.data[nrow(all.data)-1,"total.current.locations.nursery"]
+
 tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
 
 Positief getest: ",last(all.data$infections.today.nursery),"
@@ -275,7 +277,7 @@ Totaal: ",last(all.data$infections.total.nursery),"
 Overleden: ",last(all.data$deaths.today.nursery),"
 Totaal: ",last(all.data$deaths.total.nursery),"
 
-Nieuwe locaties met besmettingen: ",last(all.data$mutations.locations.nursery),"
+Nieuwe locaties met besmettingen: ",new.locations.nursery,"
 Huidig aantal locaties met besmettingen:* ",last(all.data$total.current.locations.nursery),"
 *Locaties waar in de afgelopen 28 dagen minstens één COVID-19 besmetting is gemeld.")
 
