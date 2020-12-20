@@ -91,11 +91,11 @@ print_municipality_data <- function(data, cssClass = "", include_color = TRUE, t
   print_table(data.printable, alignment, cssClass)
 }
 
-print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE){
+print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE, since_beginning = FALSE){
   template.example <- "
   \n
   %s sinds gisteren   
-  %s sinds 1 november   
+  %s %s   
   %s sinds 7 dagen ( %s )   
   Wat %s is dan de %s in de 7 dagen ervoor   
   %s inwoners maakt dat %s %.1f / 100.000 / %s
@@ -107,7 +107,8 @@ print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE){
   more_or_less <- (data$d0 - data$d7) / (data$d7 - data$d14)
   cat(sprintf(template.example, 
     ifelse(data$increase_1d == 0, 0, format_custom_number(data$increase_1d, TRUE)),
-    format_custom_number(data$current, TRUE),
+    format_custom_number(data$current, !since_beginning),
+    ifelse(since_beginning, "in totaal<br/>", "sinds 1 november"),
     format_custom_number(data$increase_7d, TRUE),
     format(used_date - 7, '%d-%m-%Y'), 
     ifelse(   more_or_less >= 2, "fors meer", 
@@ -456,7 +457,7 @@ dat.total <- dat.deaths %>%
   filter( municipality == "Netherlands" )
 dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 overlijdens"
 
-print_detailed(dat.total, FALSE, TRUE)
+print_detailed(dat.total, FALSE, TRUE, TRUE)
 
 rm(dat.total)
 ```
@@ -493,7 +494,7 @@ rm(int.count.municipality.today, int.count.municipality.week, dat.unknown, unkno
 dat.deaths.today.top10 <- dat.deaths %>%
   arrange(desc(rel_increase_14d), current) %>%
   filter(increase_14d >= 2) %>%
-  head(10) %>%
+  head(20) %>%
   transmute(
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
     rel_increase_14d = format_custom_number(rel_increase_14d),
