@@ -22,6 +22,7 @@ rm(rivm.hospital, last_date, filename.hospital )
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
+const.use_hospital_dataset <- FALSE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
@@ -114,6 +115,25 @@ dat$date <- as.Date(dat$Date_of_report) ## character into Date class
 last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
   const.date <- last_date
+}
+
+if (const.use_hospital_dataset) {
+  temp = list.files(path = "data-rivm/municipal-hospital-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+  hosp <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
+  rm(temp)
+  hosp <- hosp %>%
+    group_by(
+      Municipality_code, 
+      Date_of_statistics
+    ) %>%
+    summarise(
+      Date_of_report = Date_of_statistics,
+      Municipality_code = Municipality_code,
+      Municipality_name = Municipality_name,
+      Hospital_admission = sum(Hospital_admission),
+      .groups = 'drop'
+    ) %>%
+    arrange(Date_of_report, Municipality_code == "", Municipality_code)
 }
 
 dat.unknown <- dat %>%
