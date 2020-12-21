@@ -188,6 +188,18 @@ temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names
 dat.today <- read.csv(last(temp)) ## Case file today
 dat.weekago <- read.csv(temp[length(temp)-14]) ## Case file week ago
 
+dat.weekago$Municipal_health_service <- recode(dat.weekago$Municipal_health_service,"GGD Zuid Limburg" = "GGD Zuid-Limburg",
+                                               "GGD Brabant Zuid-Oost " = "GGD Brabant-Zuidoost",
+                                               "GGD Hollands Midden" = "GGD Hollands-Midden",
+                                               "GGD Limburg Noord" = "GGD Limburg-Noord",
+                                               "GGD Zaanstreek-Waterland" = "GGD Zaanstreek/Waterland",
+                                               "GGD West Brabant" = "GGD West-Brabant",
+                                               "GGD Rotterdam Rijnmond" = "GGD Rotterdam-Rijnmond",
+                                               "GGD regio Utrecht" = "GGD Regio Utrecht",
+                                               "GGD Gelderland-Midden" = "Veiligheids- en Gezondheidsregio Gelderland-Midden",
+                                               "GGD Hollands Noorden" = "GGD Hollands-Noorden",
+                                               "GGD Noord en Oost Gelderland" = "GGD Noord- en Oost-Gelderland")
+
 dat.today[dat.today == "Unknown"] <- "Onbekend"
 dat.weekago[dat.weekago == "Unknown"] <- "Onbekend"
 
