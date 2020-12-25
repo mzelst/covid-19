@@ -62,16 +62,16 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
+Let op: dagelijkse meldingen kunnen sterk schommelen door de feestdagen.
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
 
-Opgenomen*: ",Kliniek_Nieuwe_Opnames,"
-Huidig*: ",Kliniek_Aanwezig,")
+Opgenomen: ",Kliniek_Nieuwe_Opnames,"
+Huidig: ",Kliniek_Aanwezig,")
 
-Opgenomen op IC*: ",IC_Nieuwe_Opnames,"
-Huidig*: ",IC_Aanwezig,")
-* LCPS cijfers - http://lcps.nu
+Opgenomen op IC: ",IC_Nieuwe_Opnames,"
+Huidig: ",IC_Aanwezig,")
 
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",last(all.data$deaths),"")
