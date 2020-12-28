@@ -11,6 +11,7 @@ dat.twodaysago <- as.data.frame(myfiles[2])
 dat.threedaysago <- as.data.frame(myfiles[1])
 
 sum(dat.today$Hospital_Intake_Proven) - sum(dat.yesterday$Hospital_Intake_Proven)
+sum(dat.today$Hospital_Intake_Suspected)
 last(dat.today$Hospital_Currently)
 sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
 last(dat.today$IC_Current)
