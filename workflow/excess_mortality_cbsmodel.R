@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- isoweek(Sys.Date())-2
+week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
 
