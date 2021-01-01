@@ -108,7 +108,7 @@ print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE, since_
   cat(sprintf(template.example, 
     ifelse(data$increase_1d == 0, 0, format_custom_number(data$increase_1d, TRUE)),
     format_custom_number(data$current, !since_beginning),
-    ifelse(since_beginning, "in totaal<br/>", "sinds 1 november"),
+    ifelse(since_beginning, "in totaal<br/>", "sinds 1 december"),
     format_custom_number(data$increase_7d, TRUE),
     format(used_date - 7, '%d-%m-%Y'), 
     ifelse(   more_or_less >= 2, "fors meer", 
