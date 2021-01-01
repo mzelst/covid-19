@@ -305,7 +305,7 @@ write.csv(rivm.data, file=filename,row.names = F) ## Write file with all cases u
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
           to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
-                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B'),".pdf")) ## Save daily file in archive
+                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B')," 2021.pdf")) ## Save daily file in archive
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
