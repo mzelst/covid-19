@@ -14,15 +14,10 @@ filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_
 write.csv(rivm.municipalities, file=filename.municipality,row.names = F)
 rm(rivm.municipalities, last_date, filename.municipality )
 
-rivm.hospital <- read.csv("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
-last_date <- as.Date(last(rivm.hospital$Date_of_report))
-filename.hospital <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily data municipalities
-write.csv(rivm.hospital, file=filename.hospital,row.names = F)
-rm(rivm.hospital, last_date, filename.hospital )
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
-const.use_hospital_dataset <- FALSE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
+const.use_hospital_dataset <- TRUE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
@@ -117,25 +112,6 @@ if(!exists("const.date")){
   const.date <- last_date
 }
 
-if (const.use_hospital_dataset) {
-  temp = list.files(path = "data-rivm/municipal-hospital-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
-  hosp <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
-  rm(temp)
-  hosp <- hosp %>%
-    group_by(
-      Municipality_code, 
-      Date_of_statistics
-    ) %>%
-    summarise(
-      Date_of_report = Date_of_statistics,
-      Municipality_code = Municipality_code,
-      Municipality_name = Municipality_name,
-      Hospital_admission = sum(Hospital_admission),
-      .groups = 'drop'
-    ) %>%
-    arrange(Date_of_report, Municipality_code == "", Municipality_code)
-}
-
 dat.unknown <- dat %>%
   filter(Municipality_code == "")  %>%
   group_by(date) %>%
@@ -204,22 +180,41 @@ dat.deaths <- dat %>%
   )
 
 # Reshape file into wide format -- columns will be dates which report total cases on date
-dat.cases <- reshape(dat.cases, 
-  direction="wide", 
-  timevar="date",
-  idvar=c("Municipality_name","Municipality_code"))
+dat.cases <- pivot_wider(dat.cases,
+  values_from = Total_reported,
+  names_from = date,
+  values_fill = 0
+)
 
-dat.hosp <- reshape(dat.hosp, 
-  direction="wide",
-  timevar="date",
-  idvar=c("Municipality_name","Municipality_code"))
+dat.hosp <- pivot_wider(dat.hosp,
+  values_from = Hospital_admission,
+  names_from = date,
+  values_fill = 0
+)
 
-dat.deaths <- reshape(dat.deaths, 
-  direction="wide",
-  timevar="date",
-  idvar=c("Municipality_name","Municipality_code"))
+dat.deaths <- pivot_wider(dat.deaths,
+  values_from = Deceased,
+  names_from = date,
+  values_fill = 0
+)
 
-date_diff <- ncol(dat.cases)-grep(paste("Total_reported.",const.date, sep=''), colnames(dat.cases))
+date_diff <- ncol(dat.cases)-grep(const.date, colnames(dat.cases))
+
+if (const.use_hospital_dataset) {
+  dat.hosp <- read.csv("data/nice_by_municipality.csv", fileEncoding = "UTF-8", check.names = FALSE) ## Take last filename from the folder, load csv
+  dat.hosp[dat.hosp$Municipality_code=="", "Municipality_name"] <- "Unknown"
+  
+  dat.total <- dat.hosp %>%
+    summarise_if(
+      is.numeric, 
+      sum, 
+      na.rm = TRUE)
+  dat.total$Municipality_code <- ""
+  dat.total$Municipality_name <- "Netherlands"
+  
+  dat.hosp <- dat.hosp %>%
+    rbind(dat.total)
+}
 
 # Add population
 dat.pop <- read.csv("misc/municipalities-population.csv",
@@ -254,6 +249,21 @@ dat.hosp.lowest <- dat.zeropoint %>%
   slice(which.min(Hospital_admission)) %>%
   arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
 
+if (const.use_hospital_dataset){
+  dat.hosp.lowest <- dat.hosp %>%
+    pivot_longer( 
+      !Municipality_name & !Municipality_code & !population,
+      names_to = "date",
+      values_to = "Hospital_admission",
+    )
+  dat.hosp.lowest$date <- as.Date(dat.hosp.lowest$date)
+  dat.hosp.lowest <- dat.hosp.lowest %>%
+    group_by(Municipality_name) %>%
+    filter(date >= as.Date('2020-12-01')) %>%
+    slice(which.min(Hospital_admission)) %>%
+    arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+}
+
 dat.deaths.lowest <- dat.zeropoint %>%
   slice(which.min(Deceased)) %>%
   arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
@@ -270,7 +280,7 @@ dat.cases.today <-transmute(dat.cases,
   d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
   d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
   d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
-  dec1 = dat.cases$`Total_reported.2020-12-01`, # Dec 1st
+  dec1 = dat.cases$`2020-12-01`, # Dec 1st
   lowest_since_dec1 = dat.cases.lowest$`Total_reported`,
   lowest_since_dec1_date = dat.cases.lowest$`date`,
   current = d0-lowest_since_dec1,
@@ -313,7 +323,7 @@ dat.hosp.today <- transmute(dat.hosp,
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
   d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
   d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
-  dec1 = dat.hosp$`Total_reported.2020-12-01`, # Dec 1st
+  dec1 = dat.hosp$`2020-12-01`, # Dec 1st
   lowest_since_dec1 = dat.hosp.lowest$`Hospital_admission`,
   lowest_since_dec1_date = dat.hosp.lowest$`date`,
   current = d0-lowest_since_dec1,
@@ -348,7 +358,7 @@ dat.deaths.today <- transmute(dat.deaths,
   d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
   d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
   d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
-  dec1 = dat.deaths$`Total_reported.2020-12-01`, # Dec 1st
+  dec1 = dat.deaths$`2020-12-01`, # Dec 1st
   lowest_since_dec1 = dat.deaths.lowest$`Deceased`,
   lowest_since_dec1_date = dat.deaths.lowest$`date`,
   current = d0,
