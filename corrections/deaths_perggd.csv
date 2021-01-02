@@ -1,93 +1,47 @@
 "Date_statistics","Municipal_health_service","death.today","death.yesterday","diff"
-"2020-10-21","GGD Kennemerland",1,0,1
-"2020-10-29","GGD Rotterdam-Rijnmond",16,15,1
-"2020-10-30","GGD Amsterdam",3,2,1
-"2020-11-13","GGD Limburg-Noord",3,2,1
-"2020-11-13","GGD Rotterdam-Rijnmond",10,9,1
-"2020-12-03","GGD Groningen",2,1,1
-"2020-12-03","GGD Zeeland",2,1,1
-"2020-12-04","GGD Hart voor Brabant",7,6,1
-"2020-12-05","GGD Hart voor Brabant",4,3,1
-"2020-12-08","GGD Brabant-Zuidoost",2,1,1
-"2020-12-09","GGD Fryslân",1,0,1
-"2020-12-09","GGD Rotterdam-Rijnmond",5,4,1
-"2020-12-11","GGD Groningen",3,2,1
-"2020-12-11","GGD Haaglanden",7,6,1
-"2020-12-11","GGD Rotterdam-Rijnmond",4,2,2
-"2020-12-12","GGD Drenthe",2,1,1
-"2020-12-12","GGD Groningen",4,3,1
-"2020-12-12","GGD West-Brabant",5,4,1
-"2020-12-13","GGD Brabant-Zuidoost",2,1,1
-"2020-12-13","GGD Hollands-Noorden",2,1,1
-"2020-12-13","GGD Noord- en Oost-Gelderland",3,2,1
-"2020-12-14","GGD Amsterdam",5,3,2
-"2020-12-14","GGD Gelderland-Zuid",3,2,1
-"2020-12-14","GGD Rotterdam-Rijnmond",7,5,2
-"2020-12-15","GGD Groningen",2,1,1
-"2020-12-15","GGD Haaglanden",5,4,1
-"2020-12-15","GGD Hollands-Noorden",3,2,1
-"2020-12-15","GGD Rotterdam-Rijnmond",4,3,1
-"2020-12-16","GGD Groningen",3,1,2
-"2020-12-16","GGD Hollands-Noorden",2,1,1
-"2020-12-16","GGD Noord- en Oost-Gelderland",4,3,1
-"2020-12-16","GGD Regio Utrecht",6,5,1
-"2020-12-16","GGD West-Brabant",3,2,1
-"2020-12-17","GGD Amsterdam",7,5,2
-"2020-12-17","GGD Drenthe",1,0,1
-"2020-12-17","GGD Fryslân",1,0,1
-"2020-12-18","GGD Amsterdam",5,4,1
-"2020-12-18","GGD Brabant-Zuidoost",3,2,1
-"2020-12-18","GGD Hollands-Midden",3,2,1
-"2020-12-18","GGD Hollands-Noorden",3,0,3
-"2020-12-18","GGD IJsselland",3,1,2
-"2020-12-18","GGD Noord- en Oost-Gelderland",5,4,1
-"2020-12-18","GGD Rotterdam-Rijnmond",3,2,1
-"2020-12-19","GGD Brabant-Zuidoost",1,0,1
-"2020-12-19","GGD Gooi en Vechtstreek",2,1,1
-"2020-12-19","GGD Noord- en Oost-Gelderland",1,2,-1
-"2020-12-20","GGD Fryslân",1,0,1
-"2020-12-20","GGD Groningen",1,0,1
-"2020-12-20","GGD IJsselland",2,1,1
-"2020-12-20","GGD Regio Twente",5,4,1
-"2020-12-20","Veiligheids- en Gezondheidsregio Gelderland-Midden",1,0,1
-"2020-12-21","GGD Haaglanden",9,7,2
-"2020-12-21","GGD Hart voor Brabant",3,2,1
-"2020-12-21","GGD Hollands-Noorden",1,0,1
-"2020-12-21","GGD Noord- en Oost-Gelderland",4,3,1
-"2020-12-21","GGD Regio Twente",2,1,1
-"2020-12-21","GGD Rotterdam-Rijnmond",4,3,1
-"2020-12-21","Veiligheids- en Gezondheidsregio Gelderland-Midden",3,4,-1
-"2020-12-22","GGD Amsterdam",3,2,1
-"2020-12-22","GGD Brabant-Zuidoost",2,1,1
-"2020-12-22","GGD Hart voor Brabant",2,1,1
-"2020-12-22","GGD Hollands-Midden",2,1,1
-"2020-12-22","GGD Noord- en Oost-Gelderland",3,2,1
-"2020-12-23","GGD Amsterdam",1,0,1
-"2020-12-23","GGD Flevoland",1,0,1
-"2020-12-23","GGD Gooi en Vechtstreek",2,1,1
-"2020-12-23","GGD Hollands-Noorden",2,1,1
-"2020-12-23","GGD IJsselland",4,2,2
-"2020-12-23","GGD Noord- en Oost-Gelderland",6,4,2
-"2020-12-23","GGD Zuid-Limburg",2,1,1
-"2020-12-24","GGD Amsterdam",1,0,1
-"2020-12-24","GGD Hollands-Midden",3,2,1
-"2020-12-24","GGD Rotterdam-Rijnmond",2,1,1
-"2020-12-24","GGD Zeeland",1,0,1
-"2020-12-24","Veiligheids- en Gezondheidsregio Gelderland-Midden",1,0,1
-"2020-12-25","GGD Fryslân",1,0,1
-"2020-12-25","GGD Hollands-Midden",1,0,1
-"2020-12-25","GGD Hollands-Noorden",1,0,1
-"2020-12-25","GGD Noord- en Oost-Gelderland",1,0,1
-"2020-12-25","GGD Zaanstreek/Waterland",1,0,1
-"2020-12-26","GGD Fryslân",1,0,1
-"2020-12-26","GGD Rotterdam-Rijnmond",1,0,1
-"2020-12-27","GGD Gooi en Vechtstreek",1,0,1
-"2020-12-27","GGD Hollands-Noorden",1,0,1
-"2020-12-27","GGD Noord- en Oost-Gelderland",1,0,1
-"2020-12-27","GGD Regio Twente",1,0,1
-"2020-12-28","GGD Limburg-Noord",2,1,1
-"2020-12-28","GGD Regio Twente",1,0,1
-"2020-12-29","GGD Gelderland-Zuid",1,0,1
-"2020-12-29","GGD Regio Utrecht",1,0,1
-"2020-12-30","GGD Hollands-Noorden",1,0,1
-"2020-12-30","GGD Regio Twente",0,1,-1
+"2020-10-07","GGD Rotterdam-Rijnmond",7,6,1
+"2020-10-13","GGD Rotterdam-Rijnmond",10,9,1
+"2020-10-14","GGD Rotterdam-Rijnmond",16,17,-1
+"2020-10-21","GGD Rotterdam-Rijnmond",12,13,-1
+"2020-11-03","GGD Rotterdam-Rijnmond",6,7,-1
+"2020-11-05","Dienst Gezondheid & Jeugd ZHZ",1,2,-1
+"2020-11-05","GGD Rotterdam-Rijnmond",8,7,1
+"2020-11-21","GGD Hollands-Midden",4,3,1
+"2020-11-25","GGD Hollands-Midden",1,2,-1
+"2020-12-09","GGD Regio Utrecht",12,11,1
+"2020-12-10","GGD Fryslân",3,2,1
+"2020-12-11","GGD Gelderland-Zuid",5,4,1
+"2020-12-11","GGD Hart voor Brabant",8,7,1
+"2020-12-15","GGD Noord- en Oost-Gelderland",5,3,2
+"2020-12-17","GGD Fryslân",2,1,1
+"2020-12-18","GGD Regio Twente",5,4,1
+"2020-12-18","Veiligheids- en Gezondheidsregio Gelderland-Midden",2,3,-1
+"2020-12-19","GGD Regio Utrecht",1,0,1
+"2020-12-20","GGD Hollands-Midden",4,3,1
+"2020-12-21","GGD Fryslân",4,3,1
+"2020-12-21","GGD Limburg-Noord",1,0,1
+"2020-12-22","GGD Gelderland-Zuid",1,0,1
+"2020-12-22","GGD Hart voor Brabant",3,2,1
+"2020-12-22","GGD Limburg-Noord",4,3,1
+"2020-12-22","GGD Regio Twente",2,1,1
+"2020-12-22","GGD West-Brabant",1,0,1
+"2020-12-23","GGD Gooi en Vechtstreek",3,2,1
+"2020-12-23","GGD Groningen",1,0,1
+"2020-12-23","GGD IJsselland",5,4,1
+"2020-12-23","GGD Noord- en Oost-Gelderland",8,6,2
+"2020-12-23","GGD Regio Utrecht",2,1,1
+"2020-12-24","GGD Amsterdam",2,1,1
+"2020-12-24","GGD Fryslân",1,0,1
+"2020-12-24","GGD Gelderland-Zuid",2,1,1
+"2020-12-24","GGD Kennemerland",1,0,1
+"2020-12-25","GGD Regio Twente",1,0,1
+"2020-12-26","GGD Gelderland-Zuid",2,1,1
+"2020-12-26","GGD Gooi en Vechtstreek",1,0,1
+"2020-12-26","GGD Zuid-Limburg",2,1,1
+"2020-12-27","GGD Groningen",1,0,1
+"2020-12-28","GGD Brabant-Zuidoost",1,0,1
+"2020-12-28","GGD Hollands-Noorden",1,0,1
+"2020-12-28","GGD Regio Twente",2,1,1
+"2020-12-28","GGD Regio Utrecht",2,1,1
+"2020-12-29","GGD West-Brabant",2,1,1
+"2020-12-30","GGD Zuid-Limburg",1,0,1
