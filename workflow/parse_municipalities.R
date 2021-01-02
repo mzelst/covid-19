@@ -213,7 +213,8 @@ if (const.use_hospital_dataset) {
   dat.total$Municipality_name <- "Netherlands"
   
   dat.hosp <- dat.hosp %>%
-    rbind(dat.total)
+    rbind(dat.total) %>%
+    arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 }
 
 # Add population
@@ -243,11 +244,11 @@ dat.zeropoint <- dat %>%
 
 dat.cases.lowest <- dat.zeropoint %>%
   slice(which.min(Total_reported)) %>%
-  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+  arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 
 dat.hosp.lowest <- dat.zeropoint %>%
   slice(which.min(Hospital_admission)) %>%
-  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+  arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 
 if (const.use_hospital_dataset){
   dat.hosp.lowest <- dat.hosp %>%
@@ -261,12 +262,12 @@ if (const.use_hospital_dataset){
     group_by(Municipality_name) %>%
     filter(date >= as.Date('2020-12-01')) %>%
     slice(which.min(Hospital_admission)) %>%
-    arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+    arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 }
 
 dat.deaths.lowest <- dat.zeropoint %>%
   slice(which.min(Deceased)) %>%
-  arrange(match(Municipality_name, c("Total", "Nederland")), Municipality_code)
+  arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 
 rm(dat.zeropoint)
 
