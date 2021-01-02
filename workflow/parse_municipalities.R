@@ -180,23 +180,29 @@ dat.deaths <- dat %>%
   )
 
 # Reshape file into wide format -- columns will be dates which report total cases on date
-dat.cases <- pivot_wider(dat.cases,
-  values_from = Total_reported,
-  names_from = date,
-  values_fill = 0
-)
+dat.cases <- dat.cases %>%
+  distinct() %>%
+  pivot_wider(
+    values_from = Total_reported,
+    names_from = date,
+    values_fill = 0
+  )
 
-dat.hosp <- pivot_wider(dat.hosp,
-  values_from = Hospital_admission,
-  names_from = date,
-  values_fill = 0
-)
+dat.hosp <- dat.hosp %>%
+  distinct() %>%
+  pivot_wider(
+    values_from = Hospital_admission,
+    names_from = date,
+    values_fill = 0
+  )
 
-dat.deaths <- pivot_wider(dat.deaths,
-  values_from = Deceased,
-  names_from = date,
-  values_fill = 0
-)
+dat.deaths <- dat.deaths %>%
+  distinct() %>%
+  pivot_wider(
+    values_from = Deceased,
+    names_from = date,
+    values_fill = 0
+  )
 
 date_diff <- ncol(dat.cases)-grep(const.date, colnames(dat.cases))
 
