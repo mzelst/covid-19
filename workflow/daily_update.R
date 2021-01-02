@@ -162,7 +162,9 @@ post_tweet (
 ########
 # Municipality tweet - hospital admissions
 ########
-tweet.municipality.hosp <- "Positief geteste patiënten per gemeente die zijn opgenomen met specifiek COVID-19 als reden v. opname
+tweet.municipality.hosp <- "Positief geteste patiënten per gemeente
+
+(bron: Stichting NICE / RIVM)
 
 [%s]"
 
@@ -186,7 +188,9 @@ rm(tweet.municipality.hosp, posted_tweet)
 # Municipality tweet - deaths
 ########
 
-tweet.municipality.deaths <- "Patiënten per gemeente die positief getest zijn op COVID-19 en helaas zijn overleden
+tweet.municipality.deaths <- "Positief geteste patiënten per gemeente welke helaas zijn overleden
+
+(bron: GGD / RIVM)
 
 [%s]
 
