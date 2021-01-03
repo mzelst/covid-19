@@ -14,6 +14,12 @@ filter.date <- Sys.Date()-56 # Set filter date for last 4 weeks
 all.data[211,27] <- 12
 all.data[212,27] <- 10
 
+# Remove most recent NICE entry, since it's incomplete
+last_date = last(all.data$date)
+all.data[all.data$date == last_date, "Hospital_Intake"] <- NA
+all.data[all.data$date == last_date, "IC_Intake"] <- NA
+rm(last_date)
+
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
@@ -62,10 +68,10 @@ opnames <- all.data %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=new.hospitals, group = 1)) + 
   geom_line(aes(y = hospital_intake_rivm, color = "Opname op verpleegafdeling (GGDs)"), lwd=1.2) +
-  geom_line(aes(y = Kliniek_Nieuwe_Opnames_COVID, color = "Opname op verpleegafdeling (LCPS)"), lwd=1.2) +
-  geom_line(aes(y = Hospital_Intake, color = "Opname op verpleegafdeling (NICE)"), lwd=1.2) +
-  geom_line(aes(y = IC_Intake, color = "Opname op IC (NICE)"), lwd=1.2) +
-  geom_line(aes(y = IC_Nieuwe_Opnames_COVID, color = "Opname op IC (LCPS)"), lwd=1.2) +
+  geom_line(aes(y = Kliniek_Nieuwe_Opnames_COVID, color = "Opname op verpleegafdeling (LCPS)"), lwd=1.2, position = position_nudge(x=-1)) +
+  geom_line(aes(y = Hospital_Intake, color = "Opname op verpleegafdeling (NICE)"), lwd=1.2, na.rm = TRUE) +
+  geom_line(aes(y = IC_Intake, color = "Opname op IC (NICE)"), lwd=1.2, na.rm = TRUE) +
+  geom_line(aes(y = IC_Nieuwe_Opnames_COVID, color = "Opname op IC (LCPS)"), lwd=1.2, position = position_nudge(x=-1)) +
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
   scale_color_manual(values = c("#F58121", "#228AC7", "#F9E11E", "#f79a4d", "#7ab9dd")) +
   guides(colour = guide_legend(reverse=T)) +
