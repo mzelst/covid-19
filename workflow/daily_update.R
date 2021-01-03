@@ -126,7 +126,7 @@ tweet.municipality.cases <- "Geconstateerde besmettingen per gemeente %s
 
 Zie de eerste afbeelding voor een uitgebreide legenda
 
-[%s]
+[%s] #COVID19NL
 
 %s"
 
@@ -166,7 +166,7 @@ tweet.municipality.hosp <- "Opgenomen patiënten met positieve test per (woon) g
 
 (bron: Stichting NICE / RIVM)
 
-[%s]"
+[%s] #COVID19NL"
 
 tweet.municipality.hosp <- sprintf(tweet.municipality.hosp,
   tweet.municipality.date
@@ -192,7 +192,7 @@ tweet.municipality.deaths <- "Positief geteste patiënten welke helaas zijn over
 
 (bron: GGD / RIVM)
 
-[%s]
+[%s] #COVID19NL
 
 Onze condoleance en veel sterkte aan alle nabestaanden. %s"
 
