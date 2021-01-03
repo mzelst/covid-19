@@ -162,7 +162,7 @@ post_tweet (
 ########
 # Municipality tweet - hospital admissions
 ########
-tweet.municipality.hosp <- "Positief geteste patiënten per gemeente
+tweet.municipality.hosp <- "Opgenomen patiënten met positieve test per (woon) gemeente
 
 (bron: Stichting NICE / RIVM)
 
@@ -188,7 +188,7 @@ rm(tweet.municipality.hosp, posted_tweet)
 # Municipality tweet - deaths
 ########
 
-tweet.municipality.deaths <- "Positief geteste patiënten per gemeente welke helaas zijn overleden
+tweet.municipality.deaths <- "Positief geteste patiënten welke helaas zijn overleden per (woon) gemeente
 
 (bron: GGD / RIVM)
 
