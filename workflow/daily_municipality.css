@@ -10,6 +10,13 @@ article{
   margin: 2em;
 }
 
+article.intro{
+  float: none;
+  margin-bottom: 0;
+  text-align: center;
+  max-width: 95em;
+}
+
 main section{
   padding-top: 2em;
   float: left;
