@@ -22,6 +22,8 @@ const.toplist_minimum = 50
 
 setwd('../')
 
+Sys.setlocale("LC_TIME", "nl_NL")
+
 dat.totals.color <- read.csv("data/municipality-totals-color.csv", fileEncoding = "UTF-8")
 dat.totals.growth <- read.csv("data/municipality-totals-growth.csv", fileEncoding = "UTF-8")
 dat.cases <- read.csv("data/municipality-today-detailed.csv", fileEncoding = "UTF-8") %>%
@@ -31,6 +33,11 @@ dat.hosp <- read.csv("data/municipality-hospitalisations-today-detailed.csv", fi
 dat.deaths <- read.csv("data/municipality-deaths-today-detailed.csv", fileEncoding = "UTF-8") %>%
   arrange(municipality)
 used_date <- as.Date(last(dat.cases$date))
+
+formatted_date <- used_date %>%
+  format('%d %b') %>%
+  str_to_title()  %>%
+  str_replace( '^0', '')
 
 str.none <- '<span class="none">&nbsp;-&nbsp;</span>'
 
@@ -108,7 +115,7 @@ print_detailed <- function(data, include_color = TRUE, two_weeks = FALSE, since_
   cat(sprintf(template.example, 
     ifelse(data$increase_1d == 0, 0, format_custom_number(data$increase_1d, TRUE)),
     format_custom_number(data$current, !since_beginning),
-    ifelse(since_beginning, "in totaal<br/>", "sinds 1 december"),
+    ifelse(since_beginning, 'in totaal<br/>', 'sinds 1 december'),
     format_custom_number(data$increase_7d, TRUE),
     format(used_date - 7, '%d-%m-%Y'), 
     ifelse(   more_or_less >= 2, "fors meer", 
@@ -143,10 +150,15 @@ meta() %>%
 ```
 
 ```{r echo=FALSE}
-knitr::asis_output(htmltools::htmlPreserve("
-<article class='cases'>
-  <header>
-"))
+
+knitr::asis_output(htmltools::htmlPreserve(paste0(
+  "<article class='intro'>",
+    sprintf("<h3>[ %s ] COVID-19 Statistieken</h3>", formatted_date),
+    "<h4><a href='https://twitter.com/edwinveldhuizen'>@edwinveldhuizen</a></h4>",
+  "</article>
+  <article class='cases'>
+    <header>
+")))
 
 ```
 
