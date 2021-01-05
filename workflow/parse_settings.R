@@ -173,3 +173,90 @@ perc_inventarisatie <- all.data %>%
        color = "Legend") +
   ggtitle("Percentage Contactinventarisatie Afgerond") +
   ggsave("plots/percentage_inventarisatie.png",width=12, height = 10)
+
+
+
+
+## Healthcare employees
+
+
+dat.healthcare <- read.csv("data-misc/healthcare_employees.csv")
+dat.healthcare$cases_log <- log(dat.healthcare$cases_new)
+dat.healthcare$hospital_log <- log(dat.healthcare$hospital_new)
+dat.healthcare$deaths_log <- log(dat.healthcare$deaths_new)
+
+
+dat.healthcare %>%
+  ggplot(aes(x = Week, y = cases_new)) +
+  geom_line(aes(y = cases_new, color = "Besmettingen per week"), lwd=1.5) +
+  scale_y_continuous(expand = c(0, 500), limits = c(0, NA)) +
+  theme_bw() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face="bold"),
+        plot.title.position = "plot",
+        plot.caption = element_text(size = 6),
+        legend.position = "none",
+        axis.ticks.length = unit(0.5, "cm"),
+        axis.text.y = element_text(face="bold", color="black", size=14),  #, angle=45),
+        axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid")) +
+  labs(x = "Datum",
+       y = "Aantal",
+       color = "Legenda") +
+  ggtitle("Besmettingen per week") +
+  ggsave("plots/healthcare_emp_cases.png",
+         width = 16, height = 10, units = "cm", device='png')
+
+dat.healthcare %>%
+  ggplot(aes(x = Week, y = hospital_new)) +
+  geom_line(aes(y = hospital_new, color = "Opnames per week"), lwd=1.5) +
+  scale_y_continuous(expand = c(0, 1), limits = c(0, NA)) +
+  theme_bw() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face="bold"),
+        plot.title.position = "plot",
+        plot.caption = element_text(size = 6),
+        legend.position = "none",
+        axis.ticks.length = unit(0.5, "cm"),
+        axis.text.y = element_text(face="bold", color="black", size=14),  #, angle=45),
+        axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid")) +
+  labs(x = "Datum",
+       y = "Aantal",
+       color = "Legenda") +
+  ggtitle("Opnames per week") +
+  ggsave("plots/healthcare_emp_hospital.png",
+         width = 16, height = 10, units = "cm", device='png')
+
+dat.healthcare %>%
+  ggplot(aes(x = Week, y = deaths_new)) +
+  geom_line(aes(y = deaths_new, color = "Sterfte per week"), lwd=1.5) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  theme_bw() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=10),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face="bold"),
+        plot.title.position = "plot",
+        plot.caption = element_text(size = 6),
+        legend.position = "none",
+        axis.ticks.length = unit(0.5, "cm"),
+        axis.text.y = element_text(face="bold", color="black", size=14),  #, angle=45),
+        axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid")) +
+  labs(x = "Datum",
+       y = "Aantal",
+       color = "Legenda") +
+  ggtitle("Sterfte per week") +
+  ggsave("plots/healthcare_emp_deaths.png",
+         width = 16, height = 10, units = "cm", device='png')
+
+
+
