@@ -9,13 +9,16 @@ nursing.homes.deaths.wide <- aggregate(Total_deceased_reported ~ Date_of_statist
 
 nursing.homes.wide <- merge(nursing.homes.cases.wide,nursing.homes.deaths.wide, by = c("Date_of_statistic_reported"))
 
+nursing.homes.wide$cases_7daverage_nursinghomes <- round(frollmean(nursing.homes.wide[,"Total_cases_reported"],7),0)
+nursing.homes.wide$deceased_7daverage_nursinghomes <- round(frollmean(nursing.homes.wide[,"Total_deceased_reported"],7),0)
+
 date.nursery.homes <- as.Date(Sys.Date()-1)
 
 nursing.homes.wide %>%
-  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < date.nursery.homes) %>%
-  ggplot(aes(x = Date_of_statistic_reported, y = Total_cases_reported)) +
-  geom_line(aes(y = Total_deceased_reported, color = "Sterfte per dag"), lwd=1.0) +
-  geom_line(aes(y = Total_cases_reported, color = "Geconstateerde besmettingen"),lwd=1.0) +
+  filter(Date_of_statistic_reported > "2020-01-01" & Date_of_statistic_reported < date.nursery.homes) %>%
+  ggplot(aes(x = Date_of_statistic_reported, y = cases_7daverage_nursinghomes)) +
+  geom_line(aes(y = deceased_7daverage_nursinghomes, color = "Sterfte per dag"), lwd=1.0) +
+  geom_line(aes(y = cases_7daverage_nursinghomes, color = "Geconstateerde besmettingen"),lwd=1.0) +
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
   theme_minimal() +
   theme(axis.title.x=element_blank(),
@@ -27,7 +30,7 @@ nursing.homes.wide %>%
   labs(x = "Datum",
        y = "Aantal",
        color = "Legend") +
-  ggtitle("Toename positief geteste en overleden verpleeghuis bewoners (vanaf 1 juli)") +
+  ggtitle("Toename positief geteste en overleden verpleeghuis bewoners (7-daags gem.)") +
   ggsave("plots/verpleeghuizen_bewoners.png",width=12, height = 8)
 
 ## Counts for nursing homes
@@ -59,21 +62,21 @@ locations <- merge(locations, locations.today, by = "Date_of_statistic_reported"
 ## Plot locaties
 
 locations %>%
-  filter(Date_of_statistic_reported > "2020-06-30" & Date_of_statistic_reported < date.nursery.homes) %>%
+  filter(Date_of_statistic_reported > "2020-01-01" & Date_of_statistic_reported < date.nursery.homes) %>%
   ggplot(aes(x = Date_of_statistic_reported, y = Total_infected_locations_reported, group = 1)) +
   geom_line(aes(y = Total_infected_locations_reported, color = "Aantal locaties"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
   theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
-        legend.pos = "bottom",
+        legend.pos = "none",
         plot.title = element_text(hjust = 0.5),
         plot.subtitle=element_text(size=11, hjust=0.5),
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Aantal",
        color = "Legend") +
-  ggtitle("Aantal locaties met geconstateerde besmettingen (vanaf 1 juli)") +
+  ggtitle("Aantal locaties met geconstateerde besmettingen") +
   ggsave("plots/verpleeghuizen_locaties.png",width=12, height = 8)
 
 
