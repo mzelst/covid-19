@@ -19,7 +19,8 @@ colnames(nice_by_day) <- c("Leeftijd","Datum","Klinisch_aanwezig")
 Klinisch_aanwezig <- nice_by_day %>%
   spread(Datum,value = Klinisch_aanwezig)
 
-write.csv(Klinisch_aanwezig, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch.csv")
+write.csv(Klinisch_aanwezig, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch.csv", row.names = F)
+
 
 
 ## Age distribution - IC
@@ -44,4 +45,4 @@ IC_Aanwezig <- nice_by_day %>%
   spread(Datum,value = IC_Aanwezig)
 
 
-write.csv(IC_Aanwezig, file = "data-nice/age/leeftijdsverdeling_datum_IC.csv")
+write.csv(IC_Aanwezig, file = "data-nice/age/leeftijdsverdeling_datum_IC.csv", row.names = F)
