@@ -185,9 +185,10 @@ dat.healthcare$cases_log <- log(dat.healthcare$cases_new)
 dat.healthcare$hospital_log <- log(dat.healthcare$hospital_new)
 dat.healthcare$deaths_log <- log(dat.healthcare$deaths_new)
 
+dat.healthcare$date <- as.Date(dat.healthcare$date, format = "%d-%m-%Y")
 
 dat.healthcare %>%
-  ggplot(aes(x = Week, y = cases_new)) +
+  ggplot(aes(x = date, y = cases_new)) +
   geom_line(aes(y = cases_new, color = "Besmettingen per week"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 500), limits = c(0, NA)) +
   theme_bw() +
@@ -211,7 +212,7 @@ dat.healthcare %>%
          width = 16, height = 10, units = "cm", device='png')
 
 dat.healthcare %>%
-  ggplot(aes(x = Week, y = hospital_new)) +
+  ggplot(aes(x = date, y = hospital_new)) +
   geom_line(aes(y = hospital_new, color = "Opnames per week"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 1), limits = c(0, NA)) +
   theme_bw() +
@@ -235,7 +236,7 @@ dat.healthcare %>%
          width = 16, height = 10, units = "cm", device='png')
 
 dat.healthcare %>%
-  ggplot(aes(x = Week, y = deaths_new)) +
+  ggplot(aes(x = date, y = deaths_new)) +
   geom_line(aes(y = deaths_new, color = "Sterfte per week"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
   theme_bw() +
