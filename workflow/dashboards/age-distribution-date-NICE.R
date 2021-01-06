@@ -46,3 +46,7 @@ IC_Aanwezig <- nice_by_day %>%
 
 
 write.csv(IC_Aanwezig, file = "data-nice/age/leeftijdsverdeling_datum_IC.csv", row.names = F)
+
+add(repo, path = "*")
+commit(repo, all = T, paste0("Update NICE age-distribution in hospital",Sys.Date()))
+push(repo, credentials = git.auth)
