@@ -240,6 +240,3 @@ repo <- init()
 add(repo, path = "*")
 commit(repo, all = T, paste0("Daily (automated) update date trackers ",Sys.Date()))
 push(repo, credentials = git.auth)
-
-
-rm(list=ls())
