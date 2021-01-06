@@ -375,7 +375,7 @@ footnote.leeftijd <- paste0("Leeftijdsverdeling van bij de GGD’en gemelde COVI
 kable(agegroup.data.table, "latex", booktabs = T, linesep="") %>%
 kable_styling(font_size = 11) %>%
 add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overleden" = 2)) %>%
-  footnote(number = c(footnote.leeftijd,"Let op: Het rapport wijkt op een punt af van de de wekelijkse RIVM rapportage. Het RIVM meldde in week 46 een sterfgeval in de leeftijdscategorie 15-19. Deze casus wordt niet gemeld in de casus dataset en dit overlijden is waarschijnlijk gemeld in de categorie '<50' (die we hier niet tonen)."),threeparttable = T)
+  footnote(number = c(footnote.leeftijd,"Let op: Het rapport wijkt op een punt af van de de wekelijkse RIVM rapportage. Het RIVM meldde in week 1 van 2021 een sterfgeval in de leeftijdscategorie 0-4. Deze casus wordt niet gemeld in de casus dataset en dit overlijden is gemeld in de categorie '<50' (die we hier niet tonen)."),threeparttable = T)
 ``` 
 
 \newpage
