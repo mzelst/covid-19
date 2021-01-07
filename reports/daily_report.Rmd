@@ -127,7 +127,7 @@ library(jsonlite)
 library(geojsonio)
 library(sp)
 
-gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
+gemeentegrenzen <- geojson_read("misc/maps/Gemeentegrenzen2021RD.geojson", what = "sp")
 dat.wide <- read.csv("data/municipality-today-detailed.csv")
 
 cbs.data.plot <- dat.wide[,c("Municipality_code","rel_increase_1d","rel_increase_7d")]
