@@ -5,15 +5,16 @@ temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names
 dat <- read.csv(last(temp), )%>%
   dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
 
-dat$week <- strftime(dat$Date_statistics, format = "%V")
+dat$week <- strftime(dat$Date_statistics, format = "%Y-%V")
 dat$value <- 1
-
+str(dat_tidy)
 dat_tidy <- aggregate(dat$value, by = list(Leeftijd = dat$Agegroup, Week = dat$week), FUN = sum)
-dat_tidy$Week <- as.numeric(dat_tidy$Week)
+
+#dat_tidy$Week <- as.numeric(dat_tidy$Week)
 colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
 
 dat_besmettingen_abs <- dat_tidy %>%
-  spread(Week,value = Besmettingen)
+  spread(Leeftijd,value = Besmettingen)
 
 
 perc <- dat_tidy %>% 
@@ -23,15 +24,12 @@ dat_tidy <- cbind(dat_tidy[,c("Leeftijd","Week")],as.numeric(perc$value))
 colnames(dat_tidy) <- c("Leeftijd","Week","Besmettingen")
 
 dat_besmettingen_perc <- dat_tidy %>%
-  spread(Week,value = Besmettingen)
+  spread(Leeftijd,value = Besmettingen)
 
-dat_leeftijd <- rbind(dat_besmettingen_abs,dat_besmettingen_perc)
+dat_leeftijd <- cbind(dat_besmettingen_abs,dat_besmettingen_perc)
 
-dat_leeftijd$Type <- c("Aantal besmettingen")
-dat_leeftijd[11:20,"Type"] <- c("Percentage")
-
-dat_leeftijd <- dat_leeftijd %>%
-  relocate(Type, .before = Leeftijd)
+dat_leeftijd <- rbind(dat_leeftijd,c("Aantal besmettingen"))
+dat_leeftijd[last(nrow(dat_leeftijd)),13:22] <- c("Percentage")
 
 write.csv(dat_leeftijd, file = "data-dashboards/age-week.csv", row.names = F)
 
