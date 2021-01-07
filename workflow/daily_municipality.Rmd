@@ -18,7 +18,8 @@ require(xtable)
 require(shiny)
 require(metathis)
 
-const.toplist_minimum = 50
+const.toplist_minimum <- 50
+const.hosp_toplist_minimum <- 2
 
 setwd('../')
 
@@ -410,7 +411,7 @@ print_table(dat.hosp.today.top10, "llrl", "")
 ```{r echo = FALSE, results = "asis"}
 dat.hosp.today.highest <- dat.hosp %>%
   filter( 
-    Municipality_code != "" & increase_1d != 0
+    Municipality_code != "" & increase_1d >= const.hosp_toplist_minimum
   ) %>%
   arrange(desc(increase_1d), current)
 
