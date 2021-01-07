@@ -156,6 +156,10 @@ tweet.last_id <- posted_tweet$id_str
 rm(tweet.municipality.cases, tweet.municipality.colors, posted_tweet)
 
 post_tweet (
+  token.edwinveldhuizen,
+  retweet_id = tweet.last_id)
+
+post_tweet (
   token.mzelst,
   retweet_id = tweet.last_id)
 
