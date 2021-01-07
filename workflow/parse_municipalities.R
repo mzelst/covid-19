@@ -17,7 +17,7 @@ rm(rivm.municipalities, last_date, filename.municipality )
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
-const.use_hospital_dataset <- FALSE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
+const.use_hospital_dataset <- TRUE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
