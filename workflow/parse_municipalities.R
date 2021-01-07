@@ -135,6 +135,27 @@ dat.total <- dat %>%
     .groups = 'drop_last'
   )
 
+# FIXME: Fix historic data
+dat[dat$Municipality_code=="GM0164", "Municipality_name"] <- "Hengelo"
+dat.eemsdelta.codes <- c("GM0010", "GM0003", "GM0024", "GM1979")
+dat.eemsdelta <- dat %>%
+  filter(Municipality_code %in% dat.eemsdelta.codes) %>%
+  group_by(date) %>%
+  mutate(
+    Municipality_name = "Eemsdelta", 
+    Municipality_code = "GM1979",
+    Total_reported = sum(Total_reported),
+    Hospital_admission = sum(Hospital_admission),
+    Deceased = sum(Deceased),
+  )
+
+dat <- dat %>%
+  filter(!Municipality_code %in% dat.eemsdelta.codes) %>%
+  filter(Municipality_code != "GM0788") %>%
+  rbind(dat.eemsdelta)
+
+rm(dat.eemsdelta.codes, dat.eemsdelta)
+
 dat <- dat %>%
   filter(Municipality_code != "") %>% # Filter observations without municipal name
   select(
@@ -149,11 +170,6 @@ dat <- dat %>%
   rbind(dat.unknown)
 
 rm(dat.unknown, dat.total)
-
-# dat$Municipality_name <- recode(dat$Municipality_name, 
-#   "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
-#   "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
-# )
 
 dat.cases <- dat %>%
   select(
