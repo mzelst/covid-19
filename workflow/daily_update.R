@@ -64,7 +64,6 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
-Let op: dagelijkse meldingen kunnen sterk schommelen door de feestdagen.
 
 Positief getest: ",last(all.data$new.infection),"
 Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
@@ -262,10 +261,9 @@ posted_tweet <- post_tweet (
   tweet.nice,
   token = token.mzelst,
   media = c("plots/positieve_tests_per_dag.png",
-            "plots/percentage_positief_per_dag",
+            "plots/percentage_positief_per_dag.png",
             "plots/overview_aanwezig_zkh.png",
-            "plots/overview_opnames_zkh.png",
-            ),
+            "plots/overview_opnames_zkh.png"),
   in_reply_to_status_id = tweet.main.id,
   auto_populate_reply_metadata = TRUE
 )
