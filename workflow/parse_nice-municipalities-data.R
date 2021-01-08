@@ -44,6 +44,8 @@ dat <- dat %>%
     Municipality_code
   )
 
+dat[dat$Municipality_code=="GM0164", "Municipality_name"] <- "Hengelo"
+
 if (!const.regenerate){
   current <- read.csv(const.filename, fileEncoding = "UTF-8", check.names = FALSE)
   current[, last_date] <- dat[, last_date]
