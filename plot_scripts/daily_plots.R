@@ -11,6 +11,7 @@ all.data <- all.data[order(all.data$date),]
 
 testdata <- read.csv("data-dashboards/percentage-positive-daily-national.csv")
 testdata$date <- as.Date(testdata$date)
+testdata$values.infected_percentage <- testdata$values.infected_percentage/100
 
 filter.date <- Sys.Date()-56 # Set filter date for last 4 weeks
 
@@ -43,21 +44,38 @@ cases <- all.data %>%
   ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
+
+testplot.subtitle <- paste0("Let op: percentage is bekend t/m ",Sys.Date()-4," \n\n Maandagen")
+
 # Plot for positive tests per day
-testdata <- testdata %>%
+testplot <- testdata %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=values.infected_percentage)) + 
   geom_line(aes(y = values.infected_percentage, color = "Percentage positief per dag"), lwd=1.2) +
-  scale_y_continuous(expand = c(0, 1), limits = c(0, NA)) +
+  scale_y_continuous(limits = c(0, 0.2), labels = scales::percent, breaks = seq(0,0.2,0.02)) +
   theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=12),
+        axis.text.y = element_text(size=12, face="bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
         legend.pos = "none",
         legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Percentage positief per dag",
+       subtitle = testplot.subtitle,
        color = "Legend") +
+  geom_vline(xintercept = as.Date("2020-11-23"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-11-30"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-12-07"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-12-14"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-12-21"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2020-12-28"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-01-04"), linetype = "dotted") +
   ggtitle("Percentage positief per dag") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
