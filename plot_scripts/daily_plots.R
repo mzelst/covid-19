@@ -9,6 +9,9 @@ all.data <- read.csv("data/all_data.csv")
 all.data$date <- as.Date(all.data$date)
 all.data <- all.data[order(all.data$date),]
 
+testdata <- read.csv("data-dashboards/percentage-positive-daily-national.csv")
+testdata$date <- as.Date(testdata$date)
+
 filter.date <- Sys.Date()-56 # Set filter date for last 4 weeks
 
 all.data[211,27] <- 12
@@ -39,6 +42,24 @@ cases <- all.data %>%
        color = "Legend") +
   ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
+
+# Plot for positive tests per day
+testdata <- testdata %>%
+  filter(date > filter.date) %>%
+  ggplot(aes(x=date, y=values.infected_percentage)) + 
+  geom_line(aes(y = values.infected_percentage, color = "Percentage positief per dag"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 1), limits = c(0, NA)) +
+  theme_minimal() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "none",
+        legend.direction = "vertical",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Percentage positief per dag",
+       color = "Legend") +
+  ggtitle("Percentage positief per dag") +
+  ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
 # Plot for #patients in hospital per day
 aanwezig <- all.data %>%
