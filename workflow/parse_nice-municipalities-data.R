@@ -41,13 +41,24 @@ dat <- dat %>%
   ) %>%
   arrange(
     Municipality_code == "", 
-    Municipality_code
+    Municipality_code,
+    Municipality_name
   )
 
 dat[dat$Municipality_code=="GM0164", "Municipality_name"] <- "Hengelo"
 
 if (!const.regenerate){
-  current <- read.csv(const.filename, fileEncoding = "UTF-8", check.names = FALSE)
+  current <- read.csv(
+      const.filename, 
+      fileEncoding = "UTF-8", 
+      check.names = FALSE
+    ) %>%
+    arrange(
+      Municipality_code == "", 
+      Municipality_code,
+      Municipality_name
+    )
+  
   current[, last_date] <- dat[, last_date]
   dat <- current
 }
