@@ -2,6 +2,7 @@ require(cowplot)
 require(tidyverse)
 require(rjson)
 require(data.table)
+require(jsonlite)
 
 rm(list=ls())
 
@@ -71,6 +72,30 @@ rivm_by_day <- rivm_by_day %>%
   mutate(hospital_intake_rivm = replace(hospital_intake_rivm, hospital_intake_rivm<0, 0)) # Calculate number of hospitalizations per day
 
 write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
+
+## Parse daily percentage positive tests - national ##
+
+dat <- fromJSON(txt = "https://coronadashboard.rijksoverheid.nl/json/NL.json")
+tested_daily <- as.data.frame(dat$tested_ggd_daily[1])
+tested_daily$date <- as.Date(as.POSIXct(tested_daily$values.date_unix, origin="1970-01-01"))
+write.csv(tested_daily, file = "data-dashboards/percentage-positive-daily-national.csv")
+
+## Parse daily percentage positive tests - safety region ##
+
+df.vr.dailytests <- data.frame()
+
+for (i in 1:25) {
+  if(i<10){
+    db <- fromJSON(txt=paste0("https://coronadashboard.rijksoverheid.nl/json/VR0",i,".json"))
+  }else{
+    db <- fromJSON(txt=paste0("https://coronadashboard.rijksoverheid.nl/json/VR",i,".json"))
+  }
+  db <- as.data.frame(db$tested_ggd_daily[1])
+  df.vr.dailytests <- rbind(df.vr.dailytests,db)
+}
+df.vr.dailytests$date <- as.Date(as.POSIXct(df.vr.dailytests$values.date_unix, origin="1970-01-01"))
+
+write.csv(df.vr.dailytests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv")
 
 #continue the script
 print("Script did NOT end!")   
