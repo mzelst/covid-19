@@ -16,8 +16,8 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-841163
-sum(rivm.mun.perday$Deceased)-11999
+sum(rivm.mun.perday$Total_reported)-850790
+sum(rivm.mun.perday$Deceased)-12084
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -78,7 +78,9 @@ write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write fil
 dat <- fromJSON(txt = "https://coronadashboard.rijksoverheid.nl/json/NL.json")
 tested_daily <- as.data.frame(dat$tested_ggd_daily[1])
 tested_daily$date <- as.Date(as.POSIXct(tested_daily$values.date_unix, origin="1970-01-01"))
-write.csv(tested_daily, file = "data-dashboards/percentage-positive-daily-national.csv")
+tested_daily$pos.rate.3d.avg <- round(frollmean(tested_daily[,"values.infected_percentage"],3),1)
+
+write.csv(tested_daily, file = "data-dashboards/percentage-positive-daily-national.csv",row.names = F)
 
 ## Parse daily percentage positive tests - safety region ##
 
@@ -94,8 +96,9 @@ for (i in 1:25) {
   df.vr.dailytests <- rbind(df.vr.dailytests,db)
 }
 df.vr.dailytests$date <- as.Date(as.POSIXct(df.vr.dailytests$values.date_unix, origin="1970-01-01"))
+df.vr.dailytests$pos.rate.3d.avg <- round(frollmean(df.vr.dailytests[,"values.infected_percentage"],3),1)
 
-write.csv(df.vr.dailytests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv")
+write.csv(df.vr.dailytests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv",row.names = F)
 
 #continue the script
 print("Script did NOT end!")   
