@@ -11,6 +11,7 @@ all.data <- all.data[order(all.data$date),]
 
 testdata <- read.csv("data-dashboards/percentage-positive-daily-national.csv")
 testdata$date <- as.Date(testdata$date)
+
 testdata$values.infected_percentage <- testdata$values.infected_percentage/100
 
 filter.date <- Sys.Date()-56 # Set filter date for last 4 weeks
@@ -51,6 +52,7 @@ testplot <- testdata %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=values.infected_percentage)) + 
   geom_line(aes(y = values.infected_percentage, color = "Percentage positief per dag (GGD)"), lwd=1.2) +
+  scale_x_date(breaks = "1 weeks") + 
   scale_y_continuous(limits = c(0, 0.2), labels = scales::percent, breaks = seq(0,0.2,0.02)) +
   theme_minimal() +
   theme(axis.title.x=element_blank(),
