@@ -17,7 +17,7 @@ rm(rivm.municipalities, last_date, filename.municipality )
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
 const.use_daily_dataset <- FALSE # Use COVID-19_aantallen_gemeente_per_dag.csv instead of COVID-19_aantallen_gemeente_cumulatief.csv
-const.use_hospital_dataset <- FALSE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
+const.use_hospital_dataset <- TRUE # Use the dedicated COVID-19_ziekenhuisopnames.csv instead of the combined set
 
 # set emoji's for unix and windows
 emoji.up <- intToUtf8(0x279A)
@@ -135,6 +135,27 @@ dat.total <- dat %>%
     .groups = 'drop_last'
   )
 
+# FIXME: Fix historic data
+dat[dat$Municipality_code=="GM0164", "Municipality_name"] <- "Hengelo"
+dat.eemsdelta.codes <- c("GM0010", "GM0003", "GM0024", "GM1979")
+dat.eemsdelta <- dat %>%
+  filter(Municipality_code %in% dat.eemsdelta.codes) %>%
+  group_by(date) %>%
+  mutate(
+    Municipality_name = "Eemsdelta", 
+    Municipality_code = "GM1979",
+    Total_reported = sum(Total_reported),
+    Hospital_admission = sum(Hospital_admission),
+    Deceased = sum(Deceased),
+  )
+
+dat <- dat %>%
+  filter(!Municipality_code %in% dat.eemsdelta.codes) %>%
+  filter(Municipality_code != "GM0788") %>%
+  rbind(dat.eemsdelta)
+
+rm(dat.eemsdelta.codes, dat.eemsdelta)
+
 dat <- dat %>%
   filter(Municipality_code != "") %>% # Filter observations without municipal name
   select(
@@ -149,11 +170,6 @@ dat <- dat %>%
   rbind(dat.unknown)
 
 rm(dat.unknown, dat.total)
-
-# dat$Municipality_name <- recode(dat$Municipality_name, 
-#   "SÃºdwest-FryslÃ¢n" = "Súdwest-Fryslân", 
-#   "Noardeast-FryslÃ¢n" = "Noardeast-Fryslân"
-# )
 
 dat.cases <- dat %>%
   select(
