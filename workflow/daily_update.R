@@ -58,15 +58,17 @@ sign.hosp.lcps <- paste0(ifelse(LCPS_Verpleeg_Huidig_Toename>=0," (+"," ("))
 sign.ic.lcps <- paste0(ifelse(LCPS_IC_Huidig_Toename>=0," (+"," ("))
 
 Kliniek_Nieuwe_Opnames <- ifelse(is.na(last(all.data$Kliniek_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$Kliniek_Nieuwe_Opnames_COVID))
-Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste0(last(all.data$Kliniek_Bedden),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toename))
+Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste0(format(last(all.data$Kliniek_Bedden),decimal.mark = ",",big.mark =".",big.interval = 3),sign.hosp.lcps,LCPS_Verpleeg_Huidig_Toename))
 IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$IC_Nieuwe_Opnames_COVID))
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
 
-Positief getest: ",last(all.data$new.infection),"
-Totaal: ",last(all.data$cases)," (+",last(all.data$net.infection)," ivm ",last(all.data$corrections.cases)," corr.)
+Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
+Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
+
+% positief (gem. ",format(as.Date(Sys.Date()-6), "%d %b")," - ",format(as.Date(Sys.Date()-4), "%d %b"),"): ",format(all.data[nrow(all.data)-4,"pos.rate.3d.avg"],decimal.mark = ",",big.mark =".",big.interval = 3),"%
 
 Opgenomen: ",Kliniek_Nieuwe_Opnames,"
 Huidig: ",Kliniek_Aanwezig,")
@@ -75,7 +77,7 @@ Opgenomen op IC: ",IC_Nieuwe_Opnames,"
 Huidig: ",IC_Aanwezig,")
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",last(all.data$deaths),"")
+Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
 
