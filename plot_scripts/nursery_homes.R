@@ -25,7 +25,7 @@ test.df <- test.df[-26,]
 test.df <- merge(test.df,nursery.locations[,c("Security_region_code","Aantal_locaties",by="Security_region_code")])
 
 national.perc <- paste0("\nTotaal aantal besmette locaties: ",sum(test.df$Total_infected_locations_reported)," (",
-                        round(sum(test.df$Total_infected_locations_reported/2447*100),0),"%)")
+                        round(sum(test.df$Total_infected_locations_reported/2452*100),0),"%)")
 
 test.df$Percentage <- round(test.df$Total_infected_locations_reported/test.df$Aantal_locaties*100,0)
 
