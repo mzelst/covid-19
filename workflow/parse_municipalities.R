@@ -111,6 +111,7 @@ last_date <- as.Date(last(dat$Date_of_report))
 if(!exists("const.date")){ 
   const.date <- last_date
 }
+const.date_hosp <- const.date
 
 dat.unknown <- dat %>%
   filter(Municipality_code == "")  %>%
@@ -237,6 +238,8 @@ if (const.use_hospital_dataset) {
   dat.hosp <- dat.hosp %>%
     rbind(dat.total) %>%
     arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
+  
+  const.date_hosp <- const.date_hosp - 1
 }
 
 # Add population
@@ -340,7 +343,7 @@ dat.cases.today.simple <- dat.cases.today %>%
 dat.hosp.today <- transmute(dat.hosp,
   municipality = Municipality_name,
   Municipality_code = Municipality_code, 
-  date = const.date,
+  date = const.date_hosp,
   d0  = dat.hosp[,ncol(dat.hosp)-date_diff], # today
   d1  = dat.hosp[,ncol(dat.hosp)-date_diff-1], # yesterday
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
@@ -483,7 +486,7 @@ write.csv(dat.deaths.today.simple,file = "data/municipality-deaths-today.csv",ro
 write.csv(dat.cases.totals.growth,file = "data/municipality-totals-growth.csv",row.names = F, fileEncoding = "UTF-8")
 write.csv(dat.cases.totals.color, file = "data/municipality-totals-color.csv",row.names = F, fileEncoding = "UTF-8")
 
-rm(const.date)
+rm(const.date, const.date_hosp)
 
 ## Pull municipal data from CBS
 
