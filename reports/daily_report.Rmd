@@ -200,6 +200,8 @@ dat.weekago$Municipal_health_service <- recode(dat.weekago$Municipal_health_serv
                                                "GGD Hollands Noorden" = "GGD Hollands-Noorden",
                                                "GGD Noord en Oost Gelderland" = "GGD Noord- en Oost-Gelderland")
 
+dat.weekago$Province <- recode(dat.weekago$Province,"Friesland" = "FryslÃ¢n")
+
 dat.today[dat.today == "Unknown"] <- "Onbekend"
 dat.weekago[dat.weekago == "Unknown"] <- "Onbekend"
 
