@@ -4,7 +4,7 @@ require(rjson)
 rm(list=ls())
 #### Corrections scripts
 
-temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
+temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),2)
 myfiles = lapply(temp, read.csv)
 
 df <- map_dfr(myfiles, ~{
@@ -57,10 +57,6 @@ write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
 
 
 ## Week of death - diff file
-
-temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2)
-myfiles = lapply(temp, read.csv)
-
 dat.today <- as.data.frame(myfiles[2])
 dat.yesterday <- as.data.frame(myfiles[1])
 
