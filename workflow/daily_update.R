@@ -309,8 +309,12 @@ tweet.last_id <- posted_tweet$id_str
 
 ##### Download case file
 rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
-filename <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-write.csv(rivm.data, file=filename,row.names = F) ## Write file with all cases until today
+filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+write.csv(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
+
+filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
+write.csv(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
+
 #####
 
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report

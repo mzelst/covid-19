@@ -184,7 +184,7 @@ ggplot(data = gemeentegrenzenDF) +
 ```{r province, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
 setwd('../')
 
-temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles 
+temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available datafiles 
 dat.today <- read.csv(last(temp)) ## Case file today
 dat.weekago <- read.csv(temp[length(temp)-14]) ## Case file week ago
 

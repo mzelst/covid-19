@@ -33,7 +33,7 @@ gemlftdb<-gemlftdb[!is.na(gemlftdb$Aantalinwoners),]
 
 
 #Casusdata lezen, datum omzetten + weeknummers
-temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),1)
+temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),1)
 voorheat <- read.csv(temp)
 voorheat$datum<-as.Date(voorheat$Date_statistics)
 voorheat$week<-strftime(voorheat$datum,format = "%V")

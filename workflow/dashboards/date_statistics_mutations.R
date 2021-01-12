@@ -1,4 +1,4 @@
-temp = last(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv", full.names = T),2) ## Pull names of all available datafiles
+temp = last(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),2) ## Pull names of all available datafiles
 myfiles = lapply(temp, read.csv)
 
 
