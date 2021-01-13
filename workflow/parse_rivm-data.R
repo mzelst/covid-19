@@ -19,8 +19,11 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 sum(rivm.mun.perday$Total_reported)-878263 
 sum(rivm.mun.perday$Deceased)-12411
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
-filename.mun.perday <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
+filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
+
+filename.mun.perday.compressed <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv.gz") ## Filename for daily data municipalities
+write.csv(rivm.mun.perday, file=gzfile(filename.mun.perday.compressed),row.names = F)
 
 rivm.mun.cum <- rivm.mun.perday %>%
   group_by(
@@ -41,11 +44,11 @@ rivm.mun.cum <- rivm.mun.perday %>%
     Deceased_cum = cumsum(Deceased),
     .after = Deceased
   )
-write.csv(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", row.names = F)
+write.csv(rivm.mun.cum, file = gzfile("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz"), row.names = F)
 
 ## Parse RIVM Daily data
 
-temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv", full.names = T),1)
+temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),1)
 dat <- read.csv(temp)
 
 rivm.dailydata <- data.frame(as.Date(Sys.Date()),sum(dat$Total_reported),sum(dat$Hospital_admission),sum(dat$Deceased)) ## Calculate totals for cases, hospitalizations, deaths
