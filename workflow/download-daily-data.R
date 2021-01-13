@@ -25,7 +25,7 @@ write.csv(behavior, file = gzfile(filename.behavior.compressed),row.names = F)
 ## Download nursing homes
 
 nursing.homes <- read.csv("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
-filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 write.csv(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
