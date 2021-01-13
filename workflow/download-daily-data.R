@@ -1,9 +1,3 @@
-filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-write.csv(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
-
-filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
-write.csv(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
-
 ## Download data disabled people 
 disabled.people <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
 filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
