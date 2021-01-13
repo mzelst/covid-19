@@ -62,15 +62,18 @@ dat.yesterday <- as.data.frame(myfiles[1])
 
 dat.today$Week <- substr(dat.today$Week_of_death, 5, 6)
 dat.yesterday$Week <- substr(dat.yesterday$Week_of_death, 5, 6)
-today.weekdeath <- count(dat.today,Week)
-yesterday.weekdeath <- count(dat.yesterday,Week)
 
-df.weekdeath <- merge(today.weekdeath,yesterday.weekdeath,by="Week",all.X=T)
+dat.today$Year <- substr(dat.today$Week_of_death, 1, 4)
+dat.yesterday$Year <- substr(dat.yesterday$Week_of_death, 1, 4)
+
+today.weekdeath <- count(dat.today, Week,Year)
+yesterday.weekdeath <- count(dat.yesterday, Week,Year)
+
+df.weekdeath <- merge(today.weekdeath,yesterday.weekdeath,by=c("Week","Year"),all.X=T)
 df.weekdeath$diff <- df.weekdeath$n.x - df.weekdeath$n.y
-colnames(df.weekdeath) <- c("Week","weekdeath_today","weekdeath_yesterday","diff")
+colnames(df.weekdeath) <- c("Week","Year","weekdeath_today","weekdeath_yesterday","diff")
 df.weekdeath <- df.weekdeath[1:(nrow(df.weekdeath)-1),]
-
-df.weekdeath$year <- 2020
+df.weekdeath <- df.weekdeath[order(df.weekdeath$Year),]
 write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv", row.names = F)
 
 ## Date of death - per GGD - diff file
