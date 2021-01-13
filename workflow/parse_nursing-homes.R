@@ -34,7 +34,7 @@ nursing.homes.wide %>%
 
 ## Counts for nursing homes
 
-temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv", full.names = T),2)
+temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),2)
 myfiles = lapply(temp, read.csv)
 
 dat.today <- as.data.frame(myfiles[2])
