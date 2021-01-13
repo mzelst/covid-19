@@ -13,8 +13,8 @@ vrgrenzen <- geojson_read(fileName, what = "sp") # Load veiligheidsregio map
 #vrlabelpoint <- geojson_read(fileName, what = "sp") # Load veiligheidsregio map
 
 
-temp = list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles 
-dat.today <- read.csv(last(temp)) ## Case file today
+temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),1)
+dat.today <- read.csv(temp)
 date.today <- as.Date(Sys.Date())
 
 test.df <- dat.today %>%

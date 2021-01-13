@@ -10,9 +10,13 @@ require(data.table)
 # Cumulative dataset 
 rivm.municipalities <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.csv", sep=";")
 last_date <- as.Date(last(rivm.municipalities$Date_of_report))
-filename.municipality <- paste0("data-rivm/municipal-datasets/rivm_municipality_", last_date ,".csv") ## Filename for daily data municipalities
+filename.municipality <- paste0("raw-data-archive/municipal-datasets/rivm_municipality_", last_date ,".csv") ## Filename for daily data municipalities
 write.csv(rivm.municipalities, file=filename.municipality,row.names = F)
-rm(rivm.municipalities, last_date, filename.municipality )
+
+filename.municipality.compressed <- paste0("data-rivm/municipal-datasets/rivm_municipality_", last_date ,".csv.gz") ## Filename for daily data municipalities
+write.csv(rivm.municipalities, file=gzfile(filename.municipality.compressed),row.names = F)
+
+rm(rivm.municipalities, last_date, filename.municipality,filename.municipality.compressed)
 
 
 # const.date <- as.Date('2020-09-10') ## Change when you want to see a specific date
@@ -82,7 +86,7 @@ increase_growth_to_arrows <- function(increase_growth, allow_double = TRUE) {
 
 # Parse and cleanup data
 if (const.use_daily_dataset) {
-  dat <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv", encoding = "UTF-8")
+  dat <- read.csv("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz", encoding = "UTF-8")
   dat <- dat %>%
     group_by(
       Municipality_code, 
@@ -101,7 +105,7 @@ if (const.use_daily_dataset) {
     ) %>%
     arrange(Date_of_report, Municipality_code == "", Municipality_code, Province)
 } else {
-  temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available datafiles
+  temp = list.files(path = "data-rivm/municipal-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available datafiles
   dat <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
   rm(temp)
 }

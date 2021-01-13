@@ -1,6 +1,5 @@
-nursing.homes <- read.csv("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
-filename.nursinghomes <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(nursing.homes, file = filename.nursinghomes,row.names = F) 
+temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),1)
+nursing.homes <- read.csv(temp)
 
 nursing.homes$Date_of_statistic_reported <- as.Date(nursing.homes$Date_of_statistic_reported)
 

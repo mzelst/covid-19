@@ -8,12 +8,14 @@ const.filename <- "data/nice_by_municipality.csv" ## Filename for daily data mun
 if (const.download) {
   rivm.hospital <- read.csv("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
   last_date <- as.Date(last(rivm.hospital$Date_of_report))
-  filename.hospital <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily dat.todaya municipalities
-  write.csv(rivm.hospital, file=filename.hospital,row.names = F)
-  rm(rivm.hospital, last_date, filename.hospital )
+  filename.hospital.raw <- paste0("raw-data-archive/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily dat.todaya municipalities
+  write.csv(rivm.hospital, file=filename.hospital.raw,row.names = F)
+  filename.hospital.compressed <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv.gz") ## Filename for daily dat.todaya municipalities
+  write.csv(rivm.hospital, file=gzfile(filename.hospital.compressed),row.names = F)
+  rm(rivm.hospital, last_date, filename.hospital.raw)
 }
 
-temp = list.files(path = "data-rivm/municipal-hospital-datasets/",pattern="*.csv", full.names = T) ## Pull names of all available dat.todayafiles
+temp = list.files(path = "data-rivm/municipal-hospital-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available dat.todayafiles
 dat.today <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename from the folder, load csv
 dat.yesterday <- read.csv(head(tail(temp, n=2), n=1), fileEncoding = "UTF-8")
 rm(temp)
