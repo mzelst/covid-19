@@ -6,7 +6,7 @@ GM0024,Loppersum,noord
 GM0034,Almere,noord
 GM0037,Stadskanaal,noord
 GM0047,Veendam,noord
-GM0050,Zeewolde,noord
+GM0050,Zeewolde,midden
 GM0059,Achtkarspelen,noord
 GM0060,Ameland,noord
 GM0072,Harlingen,noord
@@ -44,53 +44,53 @@ GM0183,Tubbergen,noord
 GM0184,Urk,noord
 GM0189,Wierden,noord
 GM0193,Zwolle,noord
-GM0197,Aalten,zuid
-GM0200,Apeldoorn,zuid
+GM0197,Aalten,midden
+GM0200,Apeldoorn,midden
 GM0202,Arnhem,zuid
-GM0203,Barneveld,zuid
+GM0203,Barneveld,midden
 GM0209,Beuningen,zuid
-GM0213,Brummen,zuid
-GM0214,Buren,zuid
-GM0216,Culemborg,zuid
+GM0213,Brummen,midden
+GM0214,Buren,midden
+GM0216,Culemborg,midden
 GM0221,Doesburg,zuid
-GM0222,Doetinchem,zuid
+GM0222,Doetinchem,midden
 GM0225,Druten,zuid
 GM0226,Duiven,zuid
-GM0228,Ede,zuid
-GM0230,Elburg,zuid
-GM0232,Epe,zuid
-GM0233,Ermelo,zuid
-GM0243,Harderwijk,zuid
-GM0244,Hattem,zuid
-GM0246,Heerde,zuid
+GM0228,Ede,midden
+GM0230,Elburg,midden
+GM0232,Epe,midden
+GM0233,Ermelo,midden
+GM0243,Harderwijk,midden
+GM0244,Hattem,noord
+GM0246,Heerde,midden
 GM0252,Heumen,zuid
-GM0262,Lochem,zuid
+GM0262,Lochem,midden
 GM0263,Maasdriel,zuid
-GM0267,Nijkerk,zuid
+GM0267,Nijkerk,midden
 GM0268,Nijmegen,zuid
-GM0269,Oldebroek,zuid
-GM0273,Putten,zuid
+GM0269,Oldebroek,midden
+GM0273,Putten,midden
 GM0274,Renkum,zuid
 GM0275,Rheden,zuid
 GM0277,Rozendaal,zuid
-GM0279,Scherpenzeel,zuid
-GM0281,Tiel,zuid
-GM0285,Voorst,zuid
-GM0289,Wageningen,zuid
+GM0279,Scherpenzeel,midden
+GM0281,Tiel,midden
+GM0285,Voorst,midden
+GM0289,Wageningen,midden
 GM0293,Westervoort,zuid
-GM0294,Winterswijk,zuid
+GM0294,Winterswijk,midden
 GM0296,Wijchen,zuid
 GM0297,Zaltbommel,zuid
 GM0299,Zevenaar,zuid
-GM0301,Zutphen,zuid
-GM0302,Nunspeet,zuid
+GM0301,Zutphen,midden
+GM0302,Nunspeet,midden
 GM0303,Dronten,noord
 GM0307,Amersfoort,midden
 GM0308,Baarn,midden
 GM0310,De Bilt,midden
 GM0312,Bunnik,midden
 GM0313,Bunschoten,midden
-GM0317,Eemnes,midden
+GM0317,Eemnes,noord
 GM0321,Houten,midden
 GM0327,Leusden,midden
 GM0331,Lopik,midden
@@ -268,10 +268,10 @@ GM0988,Weert,zuid
 GM0994,Valkenburg aan de Geul,zuid
 GM0995,Lelystad,noord
 GM1507,Horst aan de Maas,zuid
-GM1509,Oude IJsselstreek,zuid
+GM1509,Oude IJsselstreek,midden
 GM1525,Teylingen,midden
 GM1581,Utrechtse Heuvelrug,midden
-GM1586,Oost Gelre,zuid
+GM1586,Oost Gelre,midden
 GM1598,Koggenland,noord
 GM1621,Lansingerland,midden
 GM1640,Leudal,zuid
@@ -311,15 +311,15 @@ GM1730,Tynaarlo,noord
 GM1731,Midden-Drenthe,noord
 GM1734,Overbetuwe,zuid
 GM1735,Hof van Twente,noord
-GM1740,Neder-Betuwe,zuid
+GM1740,Neder-Betuwe,midden
 GM1742,Rijssen-Holten,noord
 GM1771,Geldrop-Mierlo,zuid
 GM1773,Olst-Wijhe,noord
 GM1774,Dinkelland,noord
 GM1783,Westland,midden
 GM1842,Midden-Delfland,midden
-GM1859,Berkelland,zuid
-GM1876,Bronckhorst,zuid
+GM1859,Berkelland,midden
+GM1876,Bronckhorst,midden
 GM1883,Sittard-Geleen,zuid
 GM1884,Kaag en Braassem,midden
 GM1891,Dantumadiel,noord
@@ -345,12 +345,13 @@ GM1949,Waadhoeke,noord
 GM1950,Westerwolde,noord
 GM1952,Midden-Groningen,noord
 GM1954,Beekdaelen,zuid
-GM1955,Montferland,zuid
+GM1955,Montferland,midden
 GM1959,Altena,zuid
-GM1960,West Betuwe,zuid
+GM1960,West Betuwe,midden
 GM1961,Vijfheerenlanden,midden
 GM1963,Hoeksche Waard,midden
 GM1966,Het Hogeland,noord
 GM1969,Westerkwartier,noord
 GM1970,Noardeast-Fryslân,noord
 GM1978,Molenlanden,midden
+GM1979,Eemsdelta,noord
