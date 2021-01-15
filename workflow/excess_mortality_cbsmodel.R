@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- 52
+week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
 
@@ -84,7 +84,7 @@ cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Bereken
 #                 by = week
 #]
 
-nl_dt <- read.csv("corrections/deaths_perweek.csv")[,c("Week","weekdeath_today","year")]
+nl_dt <- read.csv("corrections/deaths_perweek.csv")[,c("Week","weekdeath_today","Year")]
 nl_dt <- data.table(nl_dt)
 nl_dt <- nl_dt[,c(1,3,2)]
 colnames(nl_dt) <- c("week","year","covid_deaths")
@@ -121,6 +121,8 @@ cbs_dt[week_labels,
   Perioden := gsub('X', 'W', Perioden)
 ]
 
+cbs_dt <- setorder(cbs_dt, Perioden)
+
 ## move deaths from week 53 or 0 to week 52 or 1 depending on week length
 cbs_dt[, ':=' (year = as.numeric(substr(Perioden, 1, 4)),
                week = as.numeric(substr(Perioden, 7, 8))
@@ -147,7 +149,7 @@ all = T
 )[!is.na(cbs_deaths)
 ][is.na(covid_deaths),
   covid_deaths := 0
-][!(year == 2020 & week > week.now),
+][!(year == 2020 & week > 52),
 ]
 
 ## create time series objects
@@ -392,6 +394,13 @@ beta_long[,
   c('lwr', 'upr') := NA
 ]
 
+beta_long$year <- as.numeric(substr(beta_long$t, 1, 4))
+
+beta_yearend <- beta_long %>%
+  filter(year >= 2020 & model == "Dynamisch" & variable == "beta.V1")
+
+sum(beta_yearend$mid)
+
 ## calculate mean and CI interval 
 totals <- beta_long[t >= 2020 & week %in% seq(11, week.now),
                     .(week, cumsum(oversterfte)),
@@ -426,7 +435,7 @@ fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                         cbs_deaths = covid_filt$y,
                         lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
                         upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
-)[!(year == 2020 & week >= 9),
+)[!(year == 2020 & week >= 9 | year == 2021),
   ':=' (
     smooth = NA, lwr = NA, upr = NA)
 ][year >= 2020,
@@ -501,7 +510,7 @@ fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                           mid = apply(smooth_dt_dyn, 1, mean),
                           lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
                           upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
-)[!(year == 2020 & week >= 9),
+)[!(year == 2020 & week >= 9 | year == 2021),
   ':=' (smooth = NA, lwr = NA, upr = NA)
 ][year > 2009 & week <= week.now,
 ]
