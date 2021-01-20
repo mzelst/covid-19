@@ -108,6 +108,26 @@ df.cases.new.corr <- df.cases.new %>%
 
 write.csv(df.cases.new.corr, file = "corrections/cases_perggd.csv", row.names = F)
 
+## Date of cases - per municipality - diff file
+
+temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),2)
+myfiles = lapply(temp, read.csv)
+
+dat.today.mun <- as.data.frame(myfiles[2])
+dat.yesterday.mun <- as.data.frame(myfiles[1])
+
+cases.today.mun <- aggregate(Total_reported ~ Date_of_publication + Municipality_name + Municipal_health_service, data = dat.today.mun, FUN = sum)
+cases.yesterday.mun <- aggregate(Total_reported ~ Date_of_publication + Municipality_name + Municipal_health_service, data = dat.yesterday.mun, FUN = sum)
+
+
+df.cases.new.mun <- merge(cases.today.mun,cases.yesterday.mun,by=c("Date_of_publication","Municipality_name", "Municipal_health_service"))
+df.cases.new.mun$diff <- df.cases.new.mun$Total_reported.x-df.cases.new.mun$Total_reported.y
+
+df.cases.new.corr.mun <- df.cases.new.mun %>%
+  filter(diff > 0 | diff < 0)
+
+write.csv(df.cases.new.corr.mun, file = "corrections/cases_per_municipality.csv", row.names = F)
+
 ## Leeftijd op IC
 
 leeftijd.ic <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/age-distribution-status/",simplify=TRUE) %>%
