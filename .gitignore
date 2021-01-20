@@ -20,3 +20,4 @@
 /workflow/twitter/token_*.R
 !/workflow/twitter/token_*.dist.R
 /raw-data-archive/*
+/SignaalWaarde/*
