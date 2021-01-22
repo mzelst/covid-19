@@ -16,8 +16,8 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-927110    
-sum(rivm.mun.perday$Deceased)-13248
+sum(rivm.mun.perday$Total_reported)-932884     
+sum(rivm.mun.perday$Deceased)-13337
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -82,6 +82,7 @@ dat <- fromJSON(txt = "https://coronadashboard.rijksoverheid.nl/json/NL.json")
 tested_daily <- as.data.frame(dat$tested_ggd_daily[1])
 tested_daily$date <- as.Date(as.POSIXct(tested_daily$values.date_unix, origin="1970-01-01"))
 tested_daily$pos.rate.3d.avg <- round(frollmean(tested_daily[,"values.infected_percentage"],3),1)
+tested_daily$tests.7d.avg <- round(frollmean(tested_daily[,"values.tested_total"],7),1)
 
 write.csv(tested_daily, file = "data-dashboards/percentage-positive-daily-national.csv",row.names = F)
 

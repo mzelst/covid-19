@@ -75,8 +75,8 @@ testplot <- testdata %>%
   geom_vline(xintercept = as.Date("2020-12-21"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-28"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2021-01-04"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2020-01-11"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2020-01-18"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-01-11"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-01-18"), linetype = "dotted") +
   ggtitle("Percentage positief per dag (GGD)") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
