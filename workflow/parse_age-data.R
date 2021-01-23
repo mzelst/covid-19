@@ -7,7 +7,6 @@ dat <- read.csv(last(temp), )%>%
 
 dat$week <- strftime(dat$Date_statistics, format = "%Y-%V")
 dat$value <- 1
-str(dat_tidy)
 dat_tidy <- aggregate(dat$value, by = list(Leeftijd = dat$Agegroup, Week = dat$week), FUN = sum)
 
 #dat_tidy$Week <- as.numeric(dat_tidy$Week)
