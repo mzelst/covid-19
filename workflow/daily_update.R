@@ -11,6 +11,7 @@ source("workflow/download-daily-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
+source("workflow/parse_vaccines.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
@@ -28,8 +29,9 @@ lcps.by_day <- read.csv("data/lcps_by_day.csv")
 corr.by_day <- read.csv("corrections/corrections_perday.csv")
 nursery.by_day <- read.csv("data/nursery_by_day.csv")
 testrate.by_day <- read.csv("data-dashboards/percentage-positive-daily-national.csv")[,c("values.tested_total","values.infected","values.infected_percentage","date","pos.rate.3d.avg")]
+vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
 
-daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day, testrate.by_day)
+daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day, testrate.by_day, vaccines.by_day)
 
 all.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -45,6 +47,7 @@ source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
 all.data <- read.csv("data/all_data.csv")
+vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
 
 # get tokens
 source("workflow/twitter/token_mzelst.R")
@@ -64,7 +67,7 @@ IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbek
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
 ## Build tweets
-tweet.main <- paste0("#COVID19NL statistieken t.o.v. gisteren:
+tweet.main <- paste0("#COVID19NL update:
 
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
@@ -78,7 +81,10 @@ Opgenomen op IC: ",IC_Nieuwe_Opnames,"
 Huidig: ",IC_Aanwezig,")
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"")
+Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
+
+Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
+Vaccinatiegraad: ",format(round(last(vaccines.by_day$vaccines_administered)/17475000*100,3),decimal.mark = ",",big.mark =".",big.interval = 3),"%")
 
 tweet.main
 
