@@ -25,7 +25,7 @@ vaccins.ggd <- as.numeric(html_text(vaccins.per.prikker)[1])*1000
 vaccins.ziekenhuizen <- as.numeric(html_text(vaccins.per.prikker)[2])*1000
 vaccins.zorginstellingen <- as.numeric(html_text(vaccins.per.prikker)[3])*1000
 
-vaccins.dailydata <- data.frame(as.Date(Sys.Date())-1,vaccins.toegediend.totaal,vaccins.geleverd.totaal,vaccins.ggd,vaccins.ziekenhuizen,vaccins.zorginstellingen) ## Calculate totals for cases, hospitalizations, deaths
+vaccins.dailydata <- data.frame(as.Date(Sys.Date()),vaccins.toegediend.totaal,vaccins.geleverd.totaal,vaccins.ggd,vaccins.ziekenhuizen,vaccins.zorginstellingen) ## Calculate totals for cases, hospitalizations, deaths
 names(vaccins.dailydata) <- c("date","vaccines_administered","vaccines_expected_6weeks","vaccines_administered_ggd","vaccines_administered_hospital","vaccines_administered_carehomes")
 
 filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",Sys.Date(),".csv")

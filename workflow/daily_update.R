@@ -73,7 +73,7 @@ tweet.main <- paste0("#COVID19NL update:
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
 
-Perc. positief ",format(as.Date(Sys.Date()-7), "%d %b")," - ",format(as.Date(Sys.Date()-5), "%d %b"),": ",format(all.data[nrow(all.data)-5,"pos.rate.3d.avg"],decimal.mark = ",",big.mark =".",big.interval = 3),"%
+Perc. positief ",format(as.Date(Sys.Date()-6), "%d %b")," - ",format(as.Date(Sys.Date()-4), "%d %b"),": ",format(all.data[nrow(all.data)-5,"pos.rate.3d.avg"],decimal.mark = ",",big.mark =".",big.interval = 3),"%
 
 Opgenomen: ",Kliniek_Nieuwe_Opnames,"
 Huidig: ",Kliniek_Aanwezig,")
