@@ -1,2 +1,4 @@
-"date_start_unix","date_end_unix","astra_zeneca","pfizer","cure_vac","janssen","moderna","sanofi","date_of_insertion_unix","date"
-1614556800,1615075200,0,196560,0,0,0,0,1611761908,2021-01-27
+"date","vaccines_administered","vaccines_expected_6weeks","vaccines_administered_ggd","vaccines_administered_hospital","vaccines_administered_carehomes"
+2021-01-25,163931,1302750,106886,40216,16829
+2021-01-26,173638,1302750,116593,40216,16829
+2021-01-27,185356,1302750,128311,40216,16829

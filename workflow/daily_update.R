@@ -13,6 +13,7 @@ source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
 
+
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
 
@@ -66,9 +67,6 @@ Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste
 IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$IC_Nieuwe_Opnames_COVID))
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
-vaccines_used <- sum(last(vaccines.by_day[,c("pfizer","astra_zeneca","cure_vac","janssen","moderna","sanofi")]))
-vaccination_rate <- round(vaccines_used/17475000*100,3)
-
 ## Build tweets
 tweet.main <- paste0("#COVID19NL update:
 
@@ -86,8 +84,8 @@ Huidig: ",IC_Aanwezig,")
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
-Vaccins toegediend: ",format(vaccines_used,decimal.mark = ",",big.mark =".",big.interval = 3),"
-Vaccinatiegraad: ",format(vaccination_rate,decimal.mark = ",",big.mark =".",big.interval = 3),"%")
+Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
+Vaccinatiegraad: ",format(round(last(vaccines.by_day$vaccines_administered)/17475000*100,3),decimal.mark = ",",big.mark =".",big.interval = 3),"%")
 
 tweet.main
 
