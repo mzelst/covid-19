@@ -16,8 +16,8 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-961593           
-sum(rivm.mun.perday$Deceased)-13733
+sum(rivm.mun.perday$Total_reported)-966252            
+sum(rivm.mun.perday$Deceased)-13816
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -76,33 +76,55 @@ rivm_by_day <- rivm_by_day %>%
 
 write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
 
-## Parse daily percentage positive tests - national ##
+## Download data disabled people 
+disabled.people <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
+filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
 
-dat <- fromJSON(txt = "https://coronadashboard.rijksoverheid.nl/json/NL.json")
-tested_daily <- as.data.frame(dat$tested_ggd_daily[1])
-tested_daily$date <- as.Date(as.POSIXct(tested_daily$values.date_unix, origin="1970-01-01"))
-tested_daily$pos.rate.3d.avg <- round(frollmean(tested_daily[,"values.infected_percentage"],3),1)
-tested_daily$tests.7d.avg <- round(frollmean(tested_daily[,"values.tested_total"],7),1)
+filename.disabledpeople.compressed  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
+write.csv(disabled.people, file = gzfile(filename.disabledpeople.compressed),row.names = F) 
 
-write.csv(tested_daily, file = "data-dashboards/percentage-positive-daily-national.csv",row.names = F)
+## Download data 70+ living at home 
+living.home.70plus <- read.csv("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
+filename.living.home.70plus.raw <- paste0("raw-data-archive/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(living.home.70plus, file = filename.living.home.70plus.raw,row.names = F) 
 
-## Parse daily percentage positive tests - safety region ##
+filename.living.home.70plus.compressed <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
+write.csv(living.home.70plus, file = gzfile(filename.living.home.70plus.compressed),row.names = F) 
 
-df.vr.dailytests <- data.frame()
+## Download behavior
+behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
+filename.behavior.raw <- paste0("raw-data-archive/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(behavior, file = filename.behavior.raw,row.names = F) 
 
-for (i in 1:25) {
-  if(i<10){
-    db <- fromJSON(txt=paste0("https://coronadashboard.rijksoverheid.nl/json/VR0",i,".json"))
-  }else{
-    db <- fromJSON(txt=paste0("https://coronadashboard.rijksoverheid.nl/json/VR",i,".json"))
-  }
-  db <- as.data.frame(db$tested_ggd_daily[1])
-  df.vr.dailytests <- rbind(df.vr.dailytests,db)
-}
-df.vr.dailytests$date <- as.Date(as.POSIXct(df.vr.dailytests$values.date_unix, origin="1970-01-01"))
-df.vr.dailytests$pos.rate.3d.avg <- round(frollmean(df.vr.dailytests[,"values.infected_percentage"],3),1)
+filename.behavior.compressed <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
+write.csv(behavior, file = gzfile(filename.behavior.compressed),row.names = F) 
 
-write.csv(df.vr.dailytests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv",row.names = F)
+## Download nursing homes
+
+nursing.homes <- read.csv("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
+filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+write.csv(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
+
+filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
+write.csv(nursing.homes, file = gzfile(filename.nursinghomes.compressed),row.names = F)
+
+##### Download case file
+rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+write.csv(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
+
+filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
+write.csv(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
+
+# Git
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
+push(repo, credentials = git.auth)
 
 #continue the script
 print("Script did NOT end!")   

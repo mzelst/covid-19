@@ -6,13 +6,11 @@ source("workflow/generate_banner.R")
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
-source("workflow/parse_vaccines.R")
 source("workflow/parse_rivm-data.R")
-source("workflow/download-daily-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
-
+source("workflow/parse_vaccines_tests.R")
 
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
@@ -84,8 +82,7 @@ Huidig: ",IC_Aanwezig,")
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
-Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
-Vaccinatiegraad: ",format(round(last(vaccines.by_day$vaccines_administered)/17475000*100,3),decimal.mark = ",",big.mark =".",big.interval = 3),"%")
+Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
 
@@ -315,15 +312,7 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
-##### Download case file
-rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
-filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-write.csv(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
-
-filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
-write.csv(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
-
-#####
+##### Produce daily report ####
 
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
