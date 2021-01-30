@@ -10,7 +10,6 @@ source("workflow/parse_rivm-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
-source("workflow/parse_vaccines_tests.R")
 
 ##### Generate municipality images
 source("workflow/parse_municipalities.R")
@@ -35,6 +34,12 @@ source("workflow/parse_age-data.R")
 #source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
+
+## Workflow for dashboard scrape 
+
+source("workflow/parse_vaccines_tests.R")
+
+## Set locale
 
 Sys.setlocale("LC_TIME", "nl_NL")
 ## Merge RIVM, NICE and corrections data
