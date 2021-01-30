@@ -17,8 +17,8 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-966252            
-sum(rivm.mun.perday$Deceased)-13816
+sum(rivm.mun.perday$Total_reported)-970602             
+sum(rivm.mun.perday$Deceased)-13872
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -123,14 +123,13 @@ fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
-#repo <- init()
-#add(repo, path = "*")
-#commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
-#push(repo, credentials = git.auth)
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
+push(repo, credentials = git.auth)
 
 #continue the script
 print("Script did NOT end!")   
 #}
-Sys.time()-begin.time
 
 rm(list=ls())

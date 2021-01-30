@@ -1,6 +1,6 @@
 
 temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv", full.names = T),2)
-myfiles = lapply(temp, read.csv)
+myfiles = lapply(temp, fread)
 
 dat.today <- as.data.frame(myfiles[2])
 dat.yesterday <- as.data.frame(myfiles[1])

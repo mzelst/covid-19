@@ -2,7 +2,7 @@ require(tidyverse)
 require(git2r)
 
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available datafiles
-dat <- read.csv(last(temp), )
+dat <- fread(last(temp), )
 dat$value <- 1
 
 dat$Municipal_health_service <- recode(dat$Municipal_health_service, "GGD FryslÃ¢n" = "GGD Fryslân",

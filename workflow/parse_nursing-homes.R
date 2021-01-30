@@ -1,5 +1,5 @@
 temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),1)
-nursing.homes <- read.csv(temp)
+nursing.homes <- fread(temp)
 
 nursing.homes$Date_of_statistic_reported <- as.Date(nursing.homes$Date_of_statistic_reported)
 
@@ -35,7 +35,7 @@ nursing.homes.wide %>%
 ## Counts for nursing homes
 
 temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),2)
-myfiles = lapply(temp, read.csv)
+myfiles = lapply(temp, fread)
 
 dat.today <- as.data.frame(myfiles[2])
 dat.yesterday <- as.data.frame(myfiles[1])
