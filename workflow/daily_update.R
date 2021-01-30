@@ -10,9 +10,38 @@ source("workflow/parse_rivm-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
+
+##### Generate municipality images
+source("workflow/parse_municipalities.R")
+source("workflow/generate_municipality_images.R")
+
+#####
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
+push(repo, credentials = git.auth)
+
+## Workflows for databases
+
+source("workflow/dashboards/cases_ggd_agegroups.R")
+source("workflow/dashboards/date_statistics_mutations.R")
+source("workflow/parse_age-data.R")
+#source("workflow/dashboards/heatmap-age-week.R")
+source("workflow/dashboards/rivm-date-corrections.R")
+source("workflow/dashboards/age-distribution-date-NICE.R")
+
+## Workflow for dashboard scrape 
+
 source("workflow/parse_vaccines_tests.R")
 
+## Set locale
 Sys.setlocale("LC_TIME", "nl_NL")
+
 ## Merge RIVM, NICE and corrections data
 
 rivm.by_day <- read.csv("data/rivm_by_day.csv")
@@ -71,7 +100,7 @@ tweet.main <- paste0("#COVID19NL update:
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
 
-Perc. positief ",format(as.Date(Sys.Date()-6), "%d %b")," - ",format(as.Date(Sys.Date()-4), "%d %b"),": ",format(all.data[nrow(all.data)-5,"pos.rate.3d.avg"],decimal.mark = ",",big.mark =".",big.interval = 3),"%
+Perc. positief ",format(as.Date(Sys.Date()-6), "%d %b")," - ",format(as.Date(Sys.Date()-4), "%d %b"),": ",format(all.data[nrow(all.data)-4,"pos.rate.3d.avg"],decimal.mark = ",",big.mark =".",big.interval = 3),"%
 
 Opgenomen: ",Kliniek_Nieuwe_Opnames,"
 Huidig: ",Kliniek_Aanwezig,")
@@ -98,20 +127,6 @@ tweet.last_id <- tweet.main.id
 # Retweet for @edwinveldhuizen
 post_tweet (token = token.edwinveldhuizen,
   retweet_id = tweet.main.id)
-
-##### Generate municipality images
-source("workflow/parse_municipalities.R")
-source("workflow/generate_municipality_images.R")
-#####
-
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-## Push to git
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
-push(repo, credentials = git.auth)
 
 ########
 # Municipality tweet - cases
@@ -340,14 +355,5 @@ posted_tweet <- post_tweet (
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
-
-## Workflows for databases
-
-source("workflow/dashboards/cases_ggd_agegroups.R")
-source("workflow/dashboards/date_statistics_mutations.R")
-source("workflow/parse_age-data.R")
-source("workflow/dashboards/heatmap-age-week.R")
-source("workflow/dashboards/rivm-date-corrections.R")
-source("workflow/dashboards/age-distribution-date-NICE.R")
 
 #}

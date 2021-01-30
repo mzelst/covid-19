@@ -5,7 +5,7 @@ rm(list=ls())
 #### Corrections scripts
 
 temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),2)
-myfiles = lapply(temp, read.csv)
+myfiles = lapply(temp, fread)
 
 df <- map_dfr(myfiles, ~{
   .x
@@ -111,7 +111,7 @@ write.csv(df.cases.new.corr, file = "corrections/cases_perggd.csv", row.names = 
 ## Date of cases - per municipality - diff file
 
 temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),2)
-myfiles = lapply(temp, read.csv)
+myfiles = lapply(temp, fread)
 
 dat.today.mun <- as.data.frame(myfiles[2])
 dat.yesterday.mun <- as.data.frame(myfiles[1])

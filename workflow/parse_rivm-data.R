@@ -3,11 +3,12 @@ require(tidyverse)
 require(rjson)
 require(data.table)
 require(jsonlite)
+require(R.utils)
 
 rm(list=ls())
 
 # Data municipalities per day
-rivm.mun.perday <- read.csv("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
+rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
 
 # Verify that new data has been uploaded
 condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
@@ -16,14 +17,15 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-966252            
-sum(rivm.mun.perday$Deceased)-13816
+sum(rivm.mun.perday$Total_reported)-970602             
+sum(rivm.mun.perday$Deceased)-13872
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
-write.csv(rivm.mun.perday, file=filename.mun.perday,row.names = F)
+fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
 
 filename.mun.perday.compressed <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv.gz") ## Filename for daily data municipalities
-write.csv(rivm.mun.perday, file=gzfile(filename.mun.perday.compressed),row.names = F)
+fwrite(rivm.mun.perday, file=filename.mun.perday.compressed,row.names = F)
+
 
 rivm.mun.cum <- rivm.mun.perday %>%
   group_by(
@@ -44,21 +46,21 @@ rivm.mun.cum <- rivm.mun.perday %>%
     Deceased_cum = cumsum(Deceased),
     .after = Deceased
   )
-write.csv(rivm.mun.cum, file = gzfile("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz"), row.names = F)
+fwrite(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz", row.names = F)
 
 ## Parse RIVM Daily data
 
 temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),1)
-dat <- read.csv(temp)
+dat <- fread(temp)
 
 rivm.dailydata <- data.frame(as.Date(Sys.Date()),sum(dat$Total_reported),sum(dat$Hospital_admission),sum(dat$Deceased)) ## Calculate totals for cases, hospitalizations, deaths
 names(rivm.dailydata) <- c("date","cases","hospitalization","deaths")
 
 filename.daily <- paste0("data-rivm/data-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(rivm.dailydata, file = filename.daily,row.names = F) ## Write file with daily data
+fwrite(rivm.dailydata, file = filename.daily,row.names = F) ## Write file with daily data
 
 temp = list.files(path = "data-rivm/data-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
-myfiles = lapply(temp, read.csv) ## Load all day files
+myfiles = lapply(temp, fread) ## Load all day files
 
 rivm_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
   .x
@@ -74,48 +76,48 @@ rivm_by_day <- rivm_by_day %>%
   mutate(hospital_intake_rivm = c(0,diff(hospitalization))) %>%
   mutate(hospital_intake_rivm = replace(hospital_intake_rivm, hospital_intake_rivm<0, 0)) # Calculate number of hospitalizations per day
 
-write.csv(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
+fwrite(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file with aggregate data per day
 
 ## Download data disabled people 
-disabled.people <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
+disabled.people <- fread("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
 filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
+fwrite(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
 
 filename.disabledpeople.compressed  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-write.csv(disabled.people, file = gzfile(filename.disabledpeople.compressed),row.names = F) 
+fwrite(disabled.people, file = filename.disabledpeople.compressed,row.names = F) 
 
 ## Download data 70+ living at home 
-living.home.70plus <- read.csv("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
+living.home.70plus <- fread("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
 filename.living.home.70plus.raw <- paste0("raw-data-archive/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(living.home.70plus, file = filename.living.home.70plus.raw,row.names = F) 
+fwrite(living.home.70plus, file = filename.living.home.70plus.raw,row.names = F) 
 
 filename.living.home.70plus.compressed <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-write.csv(living.home.70plus, file = gzfile(filename.living.home.70plus.compressed),row.names = F) 
+fwrite(living.home.70plus, file = filename.living.home.70plus.compressed,row.names = F) 
 
 ## Download behavior
-behavior <- read.csv("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
+behavior <- fread("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
 filename.behavior.raw <- paste0("raw-data-archive/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(behavior, file = filename.behavior.raw,row.names = F) 
+fwrite(behavior, file = filename.behavior.raw,row.names = F) 
 
 filename.behavior.compressed <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-write.csv(behavior, file = gzfile(filename.behavior.compressed),row.names = F) 
+fwrite(behavior, file = filename.behavior.compressed,row.names = F) 
 
 ## Download nursing homes
 
-nursing.homes <- read.csv("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
+nursing.homes <- fread("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
 filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-write.csv(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
+fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-write.csv(nursing.homes, file = gzfile(filename.nursinghomes.compressed),row.names = F)
+fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
 
 ##### Download case file
-rivm.data <- utils::read.csv("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
 filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-write.csv(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
+fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
 
 filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
-write.csv(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
+fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all cases until today
 
 # Git
 git.credentials <- read_lines("git_auth.txt")
@@ -129,6 +131,5 @@ push(repo, credentials = git.auth)
 #continue the script
 print("Script did NOT end!")   
 #}
-
 
 rm(list=ls())

@@ -2,7 +2,7 @@ require(tidyverse)
 require(git2r)
 
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available datafiles
-dat <- read.csv(last(temp), )%>%
+dat <- fread(last(temp), )%>%
   dplyr::filter(Agegroup != "<50" & Agegroup != "Unknown")
 
 dat$week <- strftime(dat$Date_statistics, format = "%Y-%V")

@@ -6,12 +6,12 @@ const.download <- TRUE; # Download the latest csv
 const.filename <- "data/nice_by_municipality.csv" ## Filename for daily data municipalities
 
 if (const.download) {
-  rivm.hospital <- read.csv("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
+  rivm.hospital <- fread("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
   last_date <- as.Date(last(rivm.hospital$Date_of_report))
   filename.hospital.raw <- paste0("raw-data-archive/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily dat.todaya municipalities
-  write.csv(rivm.hospital, file=filename.hospital.raw,row.names = F)
+  fwrite(rivm.hospital, file=filename.hospital.raw,row.names = F)
   filename.hospital.compressed <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv.gz") ## Filename for daily dat.todaya municipalities
-  write.csv(rivm.hospital, file=gzfile(filename.hospital.compressed),row.names = F)
+  fwrite(rivm.hospital, file=filename.hospital.compressed,row.names = F)
   rm(rivm.hospital, last_date, filename.hospital.raw)
 }
 
