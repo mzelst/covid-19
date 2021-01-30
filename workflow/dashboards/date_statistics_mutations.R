@@ -6,16 +6,13 @@ df <- map_dfr(myfiles, ~{
   .x
 })
 df$value <- 1
-df$Date_file <- as.Date(df$Date_file)
+df <- df[, date := as.Date(Date_file[1], format = "%Y-%m-%d"), by = Date_file]
 
-df_date_long <- aggregate(df$value, by = list(Type_Datum = df$Date_statistics_type, Datum = df$Date_statistics, Dag = df$Date_file), FUN = sum)
+df_date_long <- aggregate(df$value, by = list(Type_Datum = df$Date_statistics_type, Datum = df$Date_statistics, Dag = df$date), FUN = sum)
 
 df_date_wide <- spread(df_date_long, key = Dag, value = x)
 
-
 df_date_wide$Verschil <- df_date_wide[,ncol(df_date_wide)] - df_date_wide[,ncol(df_date_wide)-1]
-ncol(df_date_wide)-1
-
 df_date_wide <- df_date_wide[,c("Datum","Verschil","Type_Datum")]
 
 df.final <- spread(df_date_wide, key = Type_Datum, value = Verschil, fill = 0)
