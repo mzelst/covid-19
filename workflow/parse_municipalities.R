@@ -268,7 +268,7 @@ write.csv(dat.deaths, file = "data/municipality-deaths.csv",
 
 # Calculate zero point
 dat.zeropoint <- dat %>%
-  filter(date >= as.Date('2020-12-01')) %>%
+  filter(date >= as.Date('2021-01-01')) %>%
   group_by(Municipality_name)
 
 dat.cases.lowest <- dat.zeropoint %>%
@@ -289,7 +289,7 @@ if (const.use_hospital_dataset){
   dat.hosp.lowest$date <- as.Date(dat.hosp.lowest$date)
   dat.hosp.lowest <- dat.hosp.lowest %>%
     group_by(Municipality_name) %>%
-    filter(date >= as.Date('2020-12-01')) %>%
+    filter(date >= as.Date('2021-01-01')) %>%
     slice(which.min(Hospital_admission)) %>%
     arrange(match(Municipality_name, c("Total", "Nederland", "Netherlands")), Municipality_code)
 }
@@ -310,10 +310,10 @@ dat.cases.today <-transmute(dat.cases,
   d7  = dat.cases[,ncol(dat.cases)-date_diff-7], # last week
   d8  = dat.cases[,ncol(dat.cases)-date_diff-8], # yesterday's last week
   d14 = dat.cases[,ncol(dat.cases)-date_diff-14], # 2 weeks back
-  dec1 = dat.cases$`2020-12-01`, # Dec 1st
-  lowest_since_dec1 = dat.cases.lowest$`Total_reported`,
-  lowest_since_dec1_date = dat.cases.lowest$`date`,
-  current = d0-lowest_since_dec1,
+  jan1 = dat.cases$`2021-01-01`, # Jan 1st, 2021
+  lowest_since_jan1 = dat.cases.lowest$`Total_reported`,
+  lowest_since_jan1_date = dat.cases.lowest$`date`,
+  current = d0-lowest_since_jan1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -353,10 +353,10 @@ dat.hosp.today <- transmute(dat.hosp,
   d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], # last week
   d8  = dat.hosp[,ncol(dat.hosp)-date_diff-8], # yesterday's last week
   d14 = dat.hosp[,ncol(dat.hosp)-date_diff-14], # 2 weeks back
-  dec1 = dat.hosp$`2020-12-01`, # Dec 1st
-  lowest_since_dec1 = dat.hosp.lowest$`Hospital_admission`,
-  lowest_since_dec1_date = dat.hosp.lowest$`date`,
-  current = d0-lowest_since_dec1,
+  jan = dat.hosp$`2021-01-01`, # Jan 1st, 2021
+  lowest_since_jan1 = dat.hosp.lowest$`Hospital_admission`,
+  lowest_since_jan1_date = dat.hosp.lowest$`date`,
+  current = d0-lowest_since_jan1,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
   increase_14d = d0-d14, # Calculate increase in 14 days
@@ -388,9 +388,9 @@ dat.deaths.today <- transmute(dat.deaths,
   d7 = dat.deaths[,ncol(dat.deaths)-date_diff-7], # last week
   d8 = dat.deaths[,ncol(dat.deaths)-date_diff-8], # yesterday's last week
   d14 = dat.deaths[,ncol(dat.deaths)-date_diff-14], # 2 weeks back
-  dec1 = dat.deaths$`2020-12-01`, # Dec 1st
-  lowest_since_dec1 = dat.deaths.lowest$`Deceased`,
-  lowest_since_dec1_date = dat.deaths.lowest$`date`,
+  jan1 = dat.deaths$`2021-01-01`, # Jan 1st, 2021
+  lowest_since_jan1 = dat.deaths.lowest$`Deceased`,
+  lowest_since_jan1_date = dat.deaths.lowest$`date`,
   current = d0,
   increase_1d = d0-d1, # Calculate increase since last day
   increase_7d = d0-d7, # Calculate increase in 7 days
