@@ -146,6 +146,8 @@ tweet.municipality.cases <- "Geconstateerde besmettingen per gemeente %s
 
 %s %d / 352 gemeentes
 
+%s %d / 352 gemeentes
+
 Zie de eerste afbeelding voor een uitgebreide legenda
 
 [%s] #COVID19NL
@@ -154,6 +156,8 @@ Zie de eerste afbeelding voor een uitgebreide legenda
 
 tweet.municipality.cases <- sprintf(tweet.municipality.cases,
   intToUtf8(0x1F447),
+  intToUtf8(0x1F7E7),
+  tweet.municipality.colors$d0[[3]],
   intToUtf8(0x1F6D1),
   tweet.municipality.colors$d0[[4]],
   intToUtf8(0x1F7E3),
@@ -214,7 +218,7 @@ rm(tweet.municipality.hosp, posted_tweet)
 # Municipality tweet - deaths
 ########
 
-tweet.municipality.deaths <- "Positief geteste patiënten welke helaas zijn overleden per (woon) gemeente
+tweet.municipality.deaths <- "Positief geteste patiënten die helaas zijn overleden per (woon) gemeente
 
 (bron: GGD / RIVM)
 
