@@ -3,6 +3,7 @@ require(tidyverse)
 require(rjson)
 require(data.table)
 require(jsonlite)
+require(R.utils)
 
 rm(list=ls())
 
@@ -23,7 +24,8 @@ filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
 
 filename.mun.perday.compressed <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv.gz") ## Filename for daily data municipalities
-fwrite(rivm.mun.perday, file=gzfile(filename.mun.perday.compressed),row.names = F)
+fwrite(rivm.mun.perday, file=filename.mun.perday.compressed,row.names = F)
+
 
 rivm.mun.cum <- rivm.mun.perday %>%
   group_by(
@@ -44,7 +46,7 @@ rivm.mun.cum <- rivm.mun.perday %>%
     Deceased_cum = cumsum(Deceased),
     .after = Deceased
   )
-fwrite(rivm.mun.cum, file = gzfile("data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz"), row.names = F)
+fwrite(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz", row.names = F)
 
 ## Parse RIVM Daily data
 
@@ -82,7 +84,7 @@ filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day
 fwrite(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
 
 filename.disabledpeople.compressed  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-fwrite(disabled.people, file = gzfile(filename.disabledpeople.compressed),row.names = F) 
+fwrite(disabled.people, file = filename.disabledpeople.compressed,row.names = F) 
 
 ## Download data 70+ living at home 
 living.home.70plus <- fread("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
@@ -90,7 +92,7 @@ filename.living.home.70plus.raw <- paste0("raw-data-archive/70plus-living-at-hom
 fwrite(living.home.70plus, file = filename.living.home.70plus.raw,row.names = F) 
 
 filename.living.home.70plus.compressed <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-fwrite(living.home.70plus, file = gzfile(filename.living.home.70plus.compressed),row.names = F) 
+fwrite(living.home.70plus, file = filename.living.home.70plus.compressed,row.names = F) 
 
 ## Download behavior
 behavior <- fread("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
@@ -98,7 +100,7 @@ filename.behavior.raw <- paste0("raw-data-archive/behavior/rivm_daily_",Sys.Date
 fwrite(behavior, file = filename.behavior.raw,row.names = F) 
 
 filename.behavior.compressed <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-fwrite(behavior, file = gzfile(filename.behavior.compressed),row.names = F) 
+fwrite(behavior, file = filename.behavior.compressed,row.names = F) 
 
 ## Download nursing homes
 
@@ -107,28 +109,28 @@ filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm
 fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
-fwrite(nursing.homes, file = gzfile(filename.nursinghomes.compressed),row.names = F)
+fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
 
 ##### Download case file
-rivm.data <- utils::fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
 filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
 fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
 
 filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
-fwrite(rivm.data, file=gzfile(filename.compressed),row.names = F) ## Write file with all cases until today
+fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all cases until today
 
 # Git
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
-push(repo, credentials = git.auth)
+#repo <- init()
+#add(repo, path = "*")
+#commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
+#push(repo, credentials = git.auth)
 
 #continue the script
 print("Script did NOT end!")   
 #}
-
+Sys.time()-begin.time
 
 rm(list=ls())
