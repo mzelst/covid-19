@@ -40,8 +40,8 @@ source("workflow/dashboards/age-distribution-date-NICE.R")
 source("workflow/parse_vaccines_tests.R")
 
 ## Set locale
-
 Sys.setlocale("LC_TIME", "nl_NL")
+
 ## Merge RIVM, NICE and corrections data
 
 rivm.by_day <- read.csv("data/rivm_by_day.csv")
