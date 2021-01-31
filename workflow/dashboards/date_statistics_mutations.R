@@ -6,7 +6,7 @@ df <- map_dfr(myfiles, ~{
   .x
 })
 df$value <- 1
-df <- df[, date := as.Date(Date_file[1], format = "%Y-%m-%d"), by = Date_file]
+df$date <- anydate(df$Date_file)
 
 df_date_long <- aggregate(df$value, by = list(Type_Datum = df$Date_statistics_type, Datum = df$Date_statistics, Dag = df$date), FUN = sum)
 

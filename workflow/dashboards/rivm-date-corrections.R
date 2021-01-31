@@ -11,7 +11,7 @@ df <- map_dfr(myfiles, ~{
   .x
 })
 
-df$date <- as.Date(df$Date_file)
+df$date <- anydate(df$Date_file)
 df.cases <- as.data.frame(table(df$Date_statistics,df$date)) ## Success
 
 df.cases <- spread(df.cases, key = Var2, value = Freq)

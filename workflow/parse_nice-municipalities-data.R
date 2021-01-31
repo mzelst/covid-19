@@ -20,8 +20,8 @@ dat.today <- read.csv(last(temp), fileEncoding = "UTF-8") ## Take last filename 
 dat.yesterday <- read.csv(head(tail(temp, n=2), n=1), fileEncoding = "UTF-8")
 rm(temp)
 
-dat.today$date <- as.Date(dat.today$Date_of_statistics)
-dat.yesterday$date <- as.Date(dat.yesterday$Date_of_statistics)
+dat.today$date <- anydate(dat.today$Date_of_statistics)
+dat.yesterday$date <- anydate(dat.yesterday$Date_of_statistics)
 last_date <- last(dat.today$Date_of_statistics)
 
 list(
