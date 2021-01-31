@@ -3,6 +3,14 @@ pull(repo)
 # Generate Banner
 source("workflow/generate_banner.R")
 
+rivm.by_day <- read.csv("data/rivm_by_day.csv")
+
+# Verify RIVM data has been downloaded, otherwise stop script.
+condition <- Sys.Date()!=as.Date(last(rivm.by_day$date))
+
+if (condition) {stop("The value is TRUE, so the script must end here")    
+} else {
+
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
@@ -44,14 +52,7 @@ Sys.setlocale("LC_TIME", "nl_NL")
 
 ## Merge RIVM, NICE and corrections data
 
-rivm.by_day <- read.csv("data/rivm_by_day.csv")
-
-# Verify RIVM data has been downloaded, otherwise stop script.
-condition <- Sys.Date()!=as.Date(last(rivm.by_day$date))
-
-#if (condition) {stop("The value is TRUE, so the script must end here")    
-#} else {
-  
+rivm.by_day <- read.csv("data/rivm_by_day.csv")  
 nice.by_day <- read.csv("data-nice/nice-today.csv")
 lcps.by_day <- read.csv("data/lcps_by_day.csv")
 corr.by_day <- read.csv("corrections/corrections_perday.csv")
@@ -78,8 +79,8 @@ all.data <- read.csv("data/all_data.csv")
 vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
 
 # get tokens
-source("workflow/twitter/token_mzelst.R")
-source("workflow/twitter/token_edwinveldhuizen.R")
+#source("workflow/twitter/token_mzelst.R")
+#source("workflow/twitter/token_edwinveldhuizen.R")
 
 LCPS_klinisch_two_days <- last(all.data$Kliniek_Bedden,2)
 LCPS_Verpleeg_Huidig_Toename <- LCPS_klinisch_two_days[2] - LCPS_klinisch_two_days[1]
@@ -360,4 +361,4 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
-#}
+}

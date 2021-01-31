@@ -13,8 +13,8 @@ rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemee
 # Verify that new data has been uploaded
 condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 
-#if (condition) {stop("The value is TRUE, so the script must end here")    
-#} else {
+if (condition) {stop("The value is TRUE, so the script must end here")    
+} else {
 
 # Parse data municipality per day 
 sum(rivm.mun.perday$Total_reported)-970602             
@@ -130,6 +130,6 @@ push(repo, credentials = git.auth)
 
 #continue the script
 print("Script did NOT end!")   
-#}
+}
 
 rm(list=ls())
