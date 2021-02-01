@@ -112,7 +112,7 @@ Huidig: ",IC_Aanwezig,")
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
-Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
+Vaccins geprikt: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
