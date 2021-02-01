@@ -18,8 +18,8 @@ condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-970602             
-sum(rivm.mun.perday$Deceased)-13872
+sum(rivm.mun.perday$Total_reported)-978475              
+sum(rivm.mun.perday$Deceased)-13998
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
