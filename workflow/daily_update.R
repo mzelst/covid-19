@@ -96,7 +96,7 @@ IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbek
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
 ## Build tweets
-tweet.main <- paste0("#COVID19NL update:
+tweet.main <- paste0("#COVID19NL
 
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
@@ -112,7 +112,8 @@ Huidig: ",IC_Aanwezig,")
 Overleden: ",last(all.data$new.deaths),"
 Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
-Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"")
+Vaccins toegediend: ",format(last(vaccines.by_day$vaccines_administered),decimal.mark = ",",big.mark =".",big.interval = 3),"
+Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
 

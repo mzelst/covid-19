@@ -68,7 +68,6 @@ testplot <- testdata %>%
        y = "Percentage positief per dag",
        subtitle = testplot.subtitle,
        color = "Legend") +
-  geom_vline(xintercept = as.Date("2020-11-23"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-11-30"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-07"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-14"), linetype = "dotted") +
@@ -77,6 +76,7 @@ testplot <- testdata %>%
   geom_vline(xintercept = as.Date("2021-01-04"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2021-01-11"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2021-01-18"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-01-25"), linetype = "dotted") +
   ggtitle("Percentage positief per dag (GGD)") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
@@ -144,23 +144,23 @@ prevalence <- prevalence %>%
 
 prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
-reproduction <- reproduction %>%
-  ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
-  geom_line(aes(y = Rt_low), lwd=0.6) +
-  geom_line(aes(y = Rt_up), lwd=0.6) +
-  geom_ribbon(aes(ymin=Rt_low,ymax=Rt_up), fill="lightblue") +
-  geom_line(aes(y = Rt_avg, color = "Effectieve R"), lwd=1.2) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        legend.pos = "bottom",
-        legend.direction = "vertical",
-        legend.title = element_blank()) +
-  labs(x = "Datum",
-       y = "Reproductiegetal",
-       color = "Legend") +
-  ggtitle("Reproductiegetal") + 
-  ggsave("plots/reproductie_getal.png",width=15, height = 4)
+#reproduction <- reproduction %>%
+#  ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
+#  geom_line(aes(y = Rt_low), lwd=0.6) +
+#  geom_line(aes(y = Rt_up), lwd=0.6) +
+#  geom_ribbon(aes(ymin=Rt_low,ymax=Rt_up), fill="lightblue") +
+#  geom_line(aes(y = Rt_avg, color = "Effectieve R"), lwd=1.2) +
+#  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+#  theme(axis.title.x=element_blank(),
+#        axis.title.y=element_blank(),
+#        legend.pos = "bottom",
+#        legend.direction = "vertical",
+#        legend.title = element_blank()) +
+#  labs(x = "Datum",
+#       y = "Reproductiegetal",
+#       color = "Legend") +
+#  ggtitle("Reproductiegetal") + 
+#  ggsave("plots/reproductie_getal.png",width=15, height = 4)
 
 filter.date <- Sys.Date()-56 # Set filter date for last 8 weeks
 

@@ -11,22 +11,35 @@ write.csv(vaccines_delivery, file = filename.daily.vaccins.delivered, row.names 
 
 ## Vaccines used
 
+## Locale pulled in from the dashboard repository, with most recent version in branch `develop`
+locale_u <- "https://raw.githubusercontent.com/minvws/nl-covid19-data-dashboard/develop/packages/app/src/locale/nl.json"
+
+locale_dat <- fromJSON(txt = locale_u)
+vaccinaties_data_locale <- locale_dat$vaccinaties$data
+## Vaccines delivered (dashboard webscrape)
+vaccins.geleverd.totaal <- vaccinaties_data_locale$kpi_expected_delivery$value
+
+## Vaccines used (reported)
+
 u <- "https://coronadashboard.rijksoverheid.nl/landelijk/vaccinaties"
 
 webpage <- read_html(u)
-vaccins.toegediend <- html_nodes(webpage, ".hBabwA")
-vaccins.toegediend.totaal <- parse_number(html_text(vaccins.toegediend)[1])*1000
-vaccins.geleverd.totaal.txt <- html_text(vaccins.toegediend)[2]
-vaccins.geleverd.totaal <- scan(text=vaccins.geleverd.totaal.txt, sep = ".")
-vaccins.geleverd.totaal <- as.numeric(paste0(vaccins.geleverd.totaal[1],vaccins.geleverd.totaal[2],vaccins.geleverd.totaal[3]))
+vaccins.toegediend_geschat <- html_nodes(webpage, ".hDwZKX")
+text_vaccins_dashboard <- as.data.frame(html_text(vaccins.toegediend_geschat)[20])
 
-vaccins.per.prikker <- html_nodes(webpage, ".gUeNWf")
-vaccins.ggd <- as.numeric(html_text(vaccins.per.prikker)[1])*1000
-vaccins.ziekenhuizen <- as.numeric(html_text(vaccins.per.prikker)[2])*1000
-vaccins.zorginstellingen <- as.numeric(html_text(vaccins.per.prikker)[3])*1000
+vaccins_totaal_toegediend <- parse_number(str_match(text_vaccins_dashboard, ".*cijferverantwoording.(.*?).gezet door GGD'en.*")[2])*1000
 
-vaccins.dailydata <- data.frame(as.Date(Sys.Date()),vaccins.toegediend.totaal,vaccins.geleverd.totaal,vaccins.ggd,vaccins.ziekenhuizen,vaccins.zorginstellingen) ## Calculate totals for cases, hospitalizations, deaths
-names(vaccins.dailydata) <- c("date","vaccines_administered","vaccines_expected_6weeks","vaccines_administered_ggd","vaccines_administered_hospital","vaccines_administered_carehomes")
+## Vaccines used estimated
+vaccins.toegediend_geschat <- html_nodes(webpage, ".hBabwA")
+vaccins.toegediend.totaal_geschat <- parse_number(html_text(vaccins.toegediend_geschat)[1])*1000
+
+vaccins.per.prikker <- html_nodes(webpage, ".bctkLi")
+vaccins.ggd.geschat <- as.numeric(html_text(vaccins.per.prikker)[1])*1000
+vaccins.ziekenhuizen.geschat <- as.numeric(html_text(vaccins.per.prikker)[2])*1000
+vaccins.zorginstellingen.geschat <- as.numeric(html_text(vaccins.per.prikker)[3])*1000
+
+vaccins.dailydata <- data.frame(as.Date(Sys.Date()),vaccins_totaal_toegediend,vaccins.toegediend.totaal_geschat,vaccins.geleverd.totaal,vaccins.ggd.geschat,vaccins.ziekenhuizen.geschat,vaccins.zorginstellingen.geschat) ## Calculate totals for cases, hospitalizations, deaths
+names(vaccins.dailydata) <- c("date","vaccines_administered","vaccines_administered_estimated","vaccines_expected_6weeks","vaccines_administered_ggd","vaccines_administered_estimated_hospital","vaccines_administered_estimated_carehomes")
 
 filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",Sys.Date(),".csv")
 
