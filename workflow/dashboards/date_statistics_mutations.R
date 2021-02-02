@@ -27,7 +27,7 @@ dat.today <- setDT(as.data.frame(myfiles[2]))
 dat.today$value <- 1
 
 date_type.df <- dcast.data.table(dat.today, Date_statistics + Date_statistics_type ~ value, fun.aggregate = sum)
-date_type_wide <- spread(date_type.df, key = Date_statistics_type, value = `1`)
+date_type_wide <- spread(date_type.df, key = Date_statistics_type, value = `1`, fill = 0)
 date_type_wide$Datum <- as.Date(date_type_wide$Date_statistics)
 date_type_wide <- date_type_wide[,c("DON","DOO","DPL","Datum")]
 
