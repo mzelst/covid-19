@@ -1,6 +1,7 @@
 require(tidyverse)
 require(data.table)
 require(rjson)
+require(lubridate)
 rm(list=ls())
 #### Corrections scripts
 
@@ -11,29 +12,32 @@ df <- map_dfr(myfiles, ~{
   .x
 })
 
-df$date <- anydate(df$Date_file)
-df.cases <- as.data.frame(table(df$Date_statistics,df$date)) ## Success
+df$value <- 1
+df$date <- as.Date(parse_date_time(df$Date_file, "Ymd HMS"))
 
-df.cases <- spread(df.cases, key = Var2, value = Freq)
+df.cases <- dcast.data.table(df, Date_statistics + date ~ value, fun.aggregate = sum)
+df.cases <- spread(df.cases, key = date, value = `1`)
 
 col.start.diff <- ncol(df.cases)+1
 
 dates.lead <- names(df.cases)[3:ncol(df.cases)] ## Set lead colnames for diff
 dates.trail <- names(df.cases)[2:(ncol(df.cases)-1)] ## Set trail colnames for diff
 
+setDF(df.cases)
+
 # Calculate moving difference between cases per day
 df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
 
 write.csv(df.cases, file = "corrections/cases_perday.csv")
 
-
 ## Hospital
 df.hospital <- df %>%
   dplyr::filter(Hospital_admission == "Yes")
 
-df.hospitals <- as.data.frame(table(df.hospital$Date_statistics,df.hospital$date)) ## Success
+df.hospitals <- dcast.data.table(df.hospital, Date_statistics + date ~ value, fun.aggregate = sum)
 
-hospitals.wide <- spread(df.hospitals, key = Var2, value = Freq)
+hospitals.wide <- spread(df.hospitals, key = date, value = `1`)
+setDF(hospitals.wide)
 
 # Calculate moving difference between cases per day
 hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
@@ -45,16 +49,15 @@ write.csv(hospitals.wide, file = "corrections/hospital_perday.csv")
 df.death <- df %>%
   dplyr::filter(Deceased == "Yes")
 
-df.deaths <- as.data.frame(table(df.death$Date_statistics,df.death$date)) ## Success
+df.deaths <- dcast.data.table(df.death, Date_statistics + date ~ value, fun.aggregate = sum)
 
-deaths.wide <- spread(df.deaths, key = Var2, value = Freq)
+deaths.wide <- spread(df.deaths, key = date, value = `1`)
+setDF(deaths.wide)
 
 # Calculate moving difference between cases per day
 deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
 
 write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
-
-
 
 ## Week of death - diff file
 dat.today <- as.data.frame(myfiles[2])
@@ -127,6 +130,7 @@ df.cases.new.corr.mun <- df.cases.new.mun %>%
   filter(diff > 0 | diff < 0)
 
 write.csv(df.cases.new.corr.mun, file = "corrections/cases_per_municipality.csv", row.names = F)
+
 
 ## Leeftijd op IC
 
