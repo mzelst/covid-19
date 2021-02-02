@@ -1,7 +1,3 @@
-require(cowplot)
-require(tidyverse)
-require(rjson)
-require(data.table)
 rm(list=ls())
 
 # Script plots for daily update

@@ -9,7 +9,19 @@ require(rtweet)
 require(data.table)
 require(git2r)
 require(lubridate)
+require(rvest)
+require(jsonlite)
+require(R.utils)
+require(magick)
+require(webshot2)
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 repo <- init()
+
+
+
+
+
+
+
 

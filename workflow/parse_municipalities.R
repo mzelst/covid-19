@@ -2,9 +2,6 @@
 # install.packages("devtools")
 # devtools::install_github("hadley/emo")
 
-require(tidyverse)
-require(data.table)
-
 ## Data for municipalities
 
 # Cumulative dataset 

@@ -1,7 +1,3 @@
-require(magick);
-require(rmarkdown);
-require(webshot2);
-
 rmarkdown::render(
   input = "workflow/daily_municipality.Rmd", 
   #output_file = "reports/daily_municipality/main.html",

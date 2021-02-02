@@ -1,14 +1,3 @@
-require(cowplot)
-require(tidyverse)
-require(rjson)
-require(data.table)
-require(jsonlite)
-require(R.utils)
-require(anytime)
-require(lubridate)
-
-rm(list=ls())
-
 # Data municipalities per day
 rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
 

@@ -1,6 +1,3 @@
-require(tidyverse)
-require(rjson)
-require(data.table)
 rm(list=ls())
 ## Stichting NICE data
 

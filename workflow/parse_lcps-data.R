@@ -1,7 +1,3 @@
-require(tidyverse)
-
-rm(list=ls())
-
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
 #lcps.data.original[1,4] <- 1432
 #lcps.data.original[40,] <- c("16-10-2020",345,524,1208,35,219)
