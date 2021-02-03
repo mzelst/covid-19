@@ -59,7 +59,6 @@ hospital.cumulative <- rjson::fromJSON(file = "https://www.stichting-nice.nl/cov
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
 
-
 # Merge all data
 df <- data.frame(zkh_new,ic_intake,ic_current$value,ics.used$value,ic.cumulative$value,zkh_current$value,ic.death_survive, hospital.cumulative$value)
 names(df) <- c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven","IC_Intake_Suspected","IC_Current","ICs_Used","IC_Cumulative","Hospital_Currently","IC_Deaths_Cumulative","IC_Discharge_Cumulative","IC_Discharge_InHospital","Hospital_Cumulative")
@@ -91,7 +90,6 @@ nice_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
 
 nice_by_day$date <- as.Date(nice_by_day$date)
 nice_by_day <- nice_by_day[order(nice_by_day$date),]
-
 
 nice_by_day <- nice_by_day %>%
   mutate(ic_intake_nice = c(0,diff(IC_Cumulative))) %>%

@@ -11,9 +11,11 @@ source("workflow/generate_banner.R")
 #if (condition) {stop("The value is TRUE, so the script must end here")    
 #} else {
 
+source("workflow/parse_nice-data.R")
+begin.time <- Sys.time()
+
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_lcps-data.R")
-source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
@@ -39,9 +41,11 @@ push(repo, credentials = git.auth)
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
-#source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/rivm-date-corrections.R")
+#source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
+
+Sys.time()-begin.time
 
 ## Workflow for dashboard scrape 
 
@@ -284,10 +288,6 @@ IC_Opname_Verdacht <- sum(dat.today$IC_Intake_Suspected) - sum(dat.yesterday$IC_
 Verpleeg_Huidig_Toename <- last(dat.today$Hospital_Currently) - last(dat.yesterday$Hospital_Currently)
 IC_Huidig_Toename <- last(dat.today$IC_Current) - last(dat.yesterday$IC_Current)
 
-hospital.cumulative <- rjson::fromJSON(file = "https://www.stichting-nice.nl/covid-19/public/zkh/intake-cumulative/",simplify = TRUE) %>%
-  map(as.data.table) %>%
-  rbindlist(fill = TRUE)
-
 sign.hosp.nice <- paste0(ifelse(Verpleeg_Huidig_Toename>=0," (+"," ("))
 sign.ic.nice <- paste0(ifelse(IC_Huidig_Toename>=0," (+"," ("))
 
@@ -297,7 +297,7 @@ Patiënten verpleegafdeling
 Bevestigd: ",Verpleeg_Opname_Bevestigd,"
 Verdacht: ",Verpleeg_Opname_Verdacht,"
 Huidig: ",last(dat.today$Hospital_Currently),sign.hosp.nice,Verpleeg_Huidig_Toename,")
-Totaal: ",last(hospital.cumulative$value),"
+Totaal: ",last(dat.today$Hospital_Cumulative),"
 
 Patiënten IC
 Bevestigd: ",IC_Opname_Bevestigd,"

@@ -1,9 +1,3 @@
-library(cbsodataR)
-library(sf)
-library(dplyr)
-library(extrafont)
-library(ggplot2)
-
 #windowsFonts() deze alleen de eerste keer draaien om je fonts uit windows te zoeken/importeren
 
 #leeftijdopbouw per gemeente ophalen
@@ -34,9 +28,9 @@ gemlftdb<-gemlftdb[!is.na(gemlftdb$Aantalinwoners),]
 
 #Casusdata lezen, datum omzetten + weeknummers
 temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),1)
-voorheat <- read.csv(temp)
-voorheat$datum<-as.Date(voorheat$Date_statistics)
-voorheat$week<-strftime(voorheat$datum,format = "%V")
+voorheat <- fread(temp)
+voorheat$datum <- as.Date(parse_date_time(voorheat$Date_statistics, "Ymd"))
+voorheat$week<-strftime(voorheat$datum,format = "%Y-%V")
 
 #Aantal per week per groep tellen + leeftijdverdeling landelijk pakken
 voorheat<-count(voorheat,week,Agegroup)
@@ -46,11 +40,11 @@ colnames(lftverdeling)[1]<-"Agegroup"
 #mergen + per honderduizen berekenen
 voorheat<-merge(voorheat,lftverdeling)
 voorheat$phd<-round(voorheat$n*100000/voorheat$Inwoners,0)
-
-weeknumber <- isoweek(Sys.Date())
+voorheat <- voorheat[order(voorheat$week),]
+weekstart <- unique(voorheat$week)[40]
 
 #Gewenste weken subsetten
-voorheat<-voorheat[voorheat$week>26&voorheat$week<weeknumber,]
+voorheat<-voorheat[voorheat$week>weekstart,]
 
 #De plot
 ggplot(voorheat,aes(week,Agegroup,fill=phd))+
@@ -68,7 +62,7 @@ ggplot(voorheat,aes(week,Agegroup,fill=phd))+
        caption = paste("Bron data: RIVM / CBS ",Sys.Date()))+
   theme(plot.title = element_text(hjust = 0.5,size = 20,family  = "Corbel",face = "bold"),
         plot.subtitle =  element_text(hjust=0.5,color = "black", face = "italic",family  = "Corbel"),
-        axis.text = element_text(size=14,color = "black",family  = "Corbel",face = "bold")) + 
+        axis.text = element_text(size=10,color = "black",family  = "Corbel",face = "bold")) + 
   ggsave("plots/leeftijd_heatmap.png",width=15, height = 4)
 
 
