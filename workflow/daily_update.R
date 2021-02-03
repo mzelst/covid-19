@@ -11,11 +11,9 @@ source("workflow/generate_banner.R")
 #if (condition) {stop("The value is TRUE, so the script must end here")    
 #} else {
 
-source("workflow/parse_nice-data.R")
-begin.time <- Sys.time()
-
 # Parse RIVM, NICE and corrections data
 source("workflow/parse_lcps-data.R")
+source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
@@ -42,10 +40,8 @@ source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
 source("workflow/dashboards/rivm-date-corrections.R")
-#source("workflow/dashboards/heatmap-age-week.R")
+source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
-
-Sys.time()-begin.time
 
 ## Workflow for dashboard scrape 
 
