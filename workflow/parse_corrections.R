@@ -33,7 +33,7 @@ death.yesterday <- dat.yesterday[, .(death.yesterday=sum(Deceased)), by=Date_of_
 df.death.new <- merge(death.today,death.yesterday,by="Date_of_publication")
 df.death.new$diff <- df.death.new$death.today - df.death.new$death.yesterday
 
-new.deaths <- last(death.today$Deceased)
+new.deaths <- last(death.today$death.today)
 corrections.deaths <- sum(df.death.new$diff)
 net.deaths <- new.deaths+corrections.deaths
 
