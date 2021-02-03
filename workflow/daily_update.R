@@ -72,6 +72,25 @@ all.data <- all.data[order(all.data$date),]
 
 write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
+##### Produce daily report ####
+
+Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
+file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
+          to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
+                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B')," 2021.pdf")) ## Save daily file in archive
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 2/2"))
+push(repo, credentials = git.auth)
+
+## Workflows for plots
+
+source("plot_scripts/nursery_homes.R")
 source("plot_scripts/daily_plots.R")
 #source("plot_scripts/daily_maps_plots.R")
 
@@ -303,9 +322,6 @@ tweet.last_id <- posted_tweet$id_str
 ########
 # Tweet - nursery homes
 ########
-
-source("plot_scripts/nursery_homes.R")
-
 new.locations.nursery <- all.data[nrow(all.data),"total.current.locations.nursery"] - all.data[nrow(all.data)-1,"total.current.locations.nursery"]
 
 tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
@@ -334,22 +350,6 @@ posted_tweet <- post_tweet (
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
-
-##### Produce daily report ####
-
-Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
-file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
-          to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
-                      format((Sys.Date()),'%d')," ",format((Sys.Date()),'%B')," 2021.pdf")) ## Save daily file in archive
-
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-## Push to git
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 2/2"))
-push(repo, credentials = git.auth)
 
 ########
 # report

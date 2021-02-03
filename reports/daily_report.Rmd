@@ -66,9 +66,6 @@ Opgenomen: `r last(all.data$new.hospitals)`
 Totaal: `r last(all.data$hospitalization)` `r ifelse(last(all.data$net.hospitals)>=0," (+"," (-")` 
 `r abs(last(all.data$net.hospitals))` ivm `r last(all.data$corrections.hospitals)` corr.)
 
-Opgenomen op IC: 6
-Totaal: `r tail(nice_by_day$IC_Cumulative,n=1)`
-
 Overleden: `r last(all.data$new.deaths)`
 Totaal: `r last(all.data$deaths)` `r ifelse(last(all.data$net.deaths)>=0," (+"," (-")`
 `r abs(last(all.data$net.deaths))` ivm `r last(all.data$corrections.deaths)` corr.)
@@ -218,9 +215,6 @@ death.weekago <- dat.weekago %>%
 
 province.cases.today <- as.data.frame(table(dat.today$Province)) ## Cumulative cases per GGD
 province.cases.weekago <- as.data.frame(table(dat.weekago$Province)) ## Cumulative cases per GGD - week ago
-
-province.cases.today <- as.data.frame(table(dat.today$Province)) ## Cumulative cases per province
-province.cases.weekago <- as.data.frame(table(dat.weekago$Province)) ## Cumulative cases per province - week ago
 
 province.hosp.today <- as.data.frame(table(hosp.today$Province)) ## Cumulative cases per province
 province.hosp.weekago <- as.data.frame(table(hosp.weekago$Province)) ## Cumulative cases per province - week ago

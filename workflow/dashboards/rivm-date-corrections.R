@@ -1,7 +1,3 @@
-require(tidyverse)
-require(data.table)
-require(rjson)
-require(lubridate)
 rm(list=ls())
 #### Corrections scripts
 
