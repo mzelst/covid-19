@@ -1,6 +1,3 @@
-require(tidyverse)
-require(git2r)
-
 temp = list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T) ## Pull names of all available datafiles
 dat <- fread(last(temp), )
 dat$value <- 1
@@ -18,7 +15,9 @@ dat$Municipal_health_service <- recode(dat$Municipal_health_service, "GGD FryslÃ
                                        "GGD Hollands Noorden" = "GGD Hollands-Noorden",
                                        "GGD Noord en Oost Gelderland" = "GGD Noord- en Oost-Gelderland")
 
-ggd_data_long <- aggregate(dat$value, by = list(Leeftijd = dat$Agegroup, statnaam = dat$Municipal_health_service, Datum = dat$Date_statistics), FUN = sum)
+ggd_data_long <- dcast.data.table(dat, Agegroup + Municipal_health_service + Date_statistics ~ value, fun.aggregate = sum)
+colnames(ggd_data_long) <- c("Leeftijd","statnaam","Datum","cases")
+
 
 ggd.desc.data <- read.csv("misc/ggds-population.csv")[,c("statnaam","ggd_code")]
 

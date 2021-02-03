@@ -1,42 +1,41 @@
-
 temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv", full.names = T),2)
 myfiles = lapply(temp, fread)
 
-dat.today <- as.data.frame(myfiles[2])
-dat.yesterday <- as.data.frame(myfiles[1])
+dat.today <- setDT(as.data.frame(myfiles[2]))
+dat.yesterday <- setDT(as.data.frame(myfiles[1]))
 
 # Positive tests
-net.infection <- sum(dat.today$Total_reported) - sum(dat.yesterday$Total_reported)
+cases.today <- dat.today[, .(cases.today=sum(Total_reported)), by=Date_of_publication]
+cases.yesterday <- dat.yesterday[, .(cases.yesterday=sum(Total_reported)), by=Date_of_publication]
 
-cases.today <- aggregate(Total_reported ~ Date_of_publication, data = dat.today, FUN = sum)
-cases.yesterday <- aggregate(Total_reported ~ Date_of_publication, data = dat.yesterday, FUN = sum)
 df.cases.new <- merge(cases.today,cases.yesterday,by="Date_of_publication")
-df.cases.new$diff <- df.cases.new$Total_reported.x - df.cases.new$Total_reported.y
+df.cases.new$diff <- df.cases.new$cases.today - df.cases.new$cases.yesterday
 
-new.infection <- last(cases.today$Total_reported)
+new.infection <- last(cases.today$cases.today)
 corrections.cases <- sum(df.cases.new$diff)
+net.infection <- new.infection+corrections.cases
 
 ## Hospitals
-net.hospitals <- sum(dat.today$Hospital_admission) - sum(dat.yesterday$Hospital_admission)
+hospital.today <- dat.today[, .(hospital.today=sum(Hospital_admission)), by=Date_of_publication]
+hospital.yesterday <- dat.yesterday[, .(hospital.yesterday=sum(Hospital_admission)), by=Date_of_publication]
 
-hospital.today <- aggregate(Hospital_admission ~ Date_of_publication, data = dat.today, FUN = sum)
-hospital.yesterday <- aggregate(Hospital_admission ~ Date_of_publication, data = dat.yesterday, FUN = sum)
 df.hospital.new <- merge(hospital.today,hospital.yesterday,by="Date_of_publication")
-df.hospital.new$diff <- df.hospital.new$Hospital_admission.x-df.hospital.new$Hospital_admission.y
+df.hospital.new$diff <- df.hospital.new$hospital.today - df.hospital.new$hospital.yesterday
 
-new.hospitals <- last(hospital.today$Hospital_admission)
+new.hospitals <- last(hospital.today$hospital.today)
 corrections.hospitals <- sum(df.hospital.new$diff)
+net.hospitals <- new.hospitals + corrections.hospitals
 
 ## Deaths
-net.deaths <- sum(dat.today$Deceased) - sum(dat.yesterday$Deceased)
+death.today <- dat.today[, .(death.today=sum(Deceased)), by=Date_of_publication]
+death.yesterday <- dat.yesterday[, .(death.yesterday=sum(Deceased)), by=Date_of_publication]
 
-death.today <- aggregate(Deceased ~ Date_of_publication, data = dat.today, FUN = sum)
-death.yesterday <- aggregate(Deceased ~ Date_of_publication, data = dat.yesterday, FUN = sum)
 df.death.new <- merge(death.today,death.yesterday,by="Date_of_publication")
-df.death.new$diff <- df.death.new$Deceased.x-df.death.new$Deceased.y
+df.death.new$diff <- df.death.new$death.today - df.death.new$death.yesterday
 
 new.deaths <- last(death.today$Deceased)
 corrections.deaths <- sum(df.death.new$diff)
+net.deaths <- new.deaths+corrections.deaths
 
 
 corrections.all <- as.data.frame(cbind(new.infection,corrections.cases, net.infection,new.hospitals,corrections.hospitals, 

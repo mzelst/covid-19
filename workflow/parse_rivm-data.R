@@ -2,7 +2,7 @@
 rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv", sep=";")
 
 # Verify that new data has been uploaded
-condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
+#condition <- Sys.Date()!=as.Date(last(rivm.mun.perday$Date_of_report))
 
 #if (condition) {stop("The value is TRUE, so the script must end here")    
 #} else {
@@ -16,7 +16,6 @@ fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
 
 filename.mun.perday.compressed <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv.gz") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday.compressed,row.names = F)
-
 
 rivm.mun.cum <- rivm.mun.perday %>%
   group_by(
@@ -40,11 +39,7 @@ rivm.mun.cum <- rivm.mun.perday %>%
 fwrite(rivm.mun.cum, file = "data-rivm/COVID-19_aantallen_gemeente_per_dag.csv.gz", row.names = F)
 
 ## Parse RIVM Daily data
-
-temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),1)
-dat <- fread(temp)
-
-rivm.dailydata <- data.frame(as.Date(Sys.Date()),sum(dat$Total_reported),sum(dat$Hospital_admission),sum(dat$Deceased)) ## Calculate totals for cases, hospitalizations, deaths
+rivm.dailydata <- data.frame(as.Date(Sys.Date()),sum(rivm.mun.cum$Total_reported),sum(rivm.mun.cum$Hospital_admission),sum(rivm.mun.cum$Deceased)) ## Calculate totals for cases, hospitalizations, deaths
 names(rivm.dailydata) <- c("date","cases","hospitalization","deaths")
 
 filename.daily <- paste0("data-rivm/data-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data

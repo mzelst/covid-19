@@ -81,11 +81,14 @@ write.csv(df.weekdeath, file = "corrections/deaths_perweek.csv", row.names = F)
 
 ## Date of death - per GGD - diff file
 
+dat.today <- setDT(as.data.frame(myfiles[2]))
+dat.yesterday <- setDT(as.data.frame(myfiles[1]))
+
 dat.today$death.today <- ifelse(dat.today$Deceased=="Yes",1,0)
 dat.yesterday$death.yesterday <- ifelse(dat.yesterday$Deceased=="Yes",1,0)
 
-death.today <- aggregate(death.today ~ Date_statistics + Municipal_health_service, data = dat.today, FUN = sum)
-death.yesterday <- aggregate(death.yesterday ~ Date_statistics + Municipal_health_service, data = dat.yesterday, FUN = sum)
+death.today <- dat.today[, .(death.today=sum(death.today)), by=list(Date_statistics, Municipal_health_service)]
+death.yesterday <- dat.yesterday[, .(death.yesterday=sum(death.yesterday)), by=list(Date_statistics, Municipal_health_service)]
 
 df.death.new <- merge(death.today,death.yesterday,by=c("Date_statistics","Municipal_health_service"))
 df.death.new$diff <- df.death.new$death.today-df.death.new$death.yesterday
@@ -100,8 +103,8 @@ write.csv(df.death.new.corr, file = "corrections/deaths_perggd.csv", row.names =
 dat.today$cases.today <- 1
 dat.yesterday$cases.yesterday <- 1
 
-cases.today <- aggregate(cases.today ~ Date_statistics + Municipal_health_service, data = dat.today, FUN = sum)
-cases.yesterday <- aggregate(cases.yesterday ~ Date_statistics + Municipal_health_service, data = dat.yesterday, FUN = sum)
+cases.today <- dat.today[, .(cases.today=sum(cases.today)), by=list(Date_statistics, Municipal_health_service)]
+cases.yesterday <- dat.yesterday[, .(cases.yesterday=sum(cases.yesterday)), by=list(Date_statistics, Municipal_health_service)]
 
 df.cases.new <- merge(cases.today,cases.yesterday,by=c("Date_statistics","Municipal_health_service"))
 df.cases.new$diff <- df.cases.new$cases.today-df.cases.new$cases.yesterday
@@ -116,21 +119,19 @@ write.csv(df.cases.new.corr, file = "corrections/cases_perggd.csv", row.names = 
 temp = tail(list.files(path = "data-rivm/municipal-datasets-per-day/",pattern="*.csv.gz", full.names = T),2)
 myfiles = lapply(temp, fread)
 
-dat.today.mun <- as.data.frame(myfiles[2])
-dat.yesterday.mun <- as.data.frame(myfiles[1])
+dat.today.mun <- setDT(as.data.frame(myfiles[2]))
+dat.yesterday.mun <- setDT(as.data.frame(myfiles[1]))
 
-cases.today.mun <- aggregate(Total_reported ~ Date_of_publication + Municipality_name + Municipal_health_service, data = dat.today.mun, FUN = sum)
-cases.yesterday.mun <- aggregate(Total_reported ~ Date_of_publication + Municipality_name + Municipal_health_service, data = dat.yesterday.mun, FUN = sum)
-
+cases.today.mun <- dat.today.mun[, .(cases.today.mun=sum(Total_reported)), by=list(Date_of_publication, Municipality_name,Municipal_health_service)]
+cases.yesterday.mun <- dat.yesterday.mun[, .(cases.yesterday.mun=sum(Total_reported)), by=list(Date_of_publication, Municipality_name,Municipal_health_service)]
 
 df.cases.new.mun <- merge(cases.today.mun,cases.yesterday.mun,by=c("Date_of_publication","Municipality_name", "Municipal_health_service"))
-df.cases.new.mun$diff <- df.cases.new.mun$Total_reported.x-df.cases.new.mun$Total_reported.y
+df.cases.new.mun$diff <- df.cases.new.mun$cases.today.mun-df.cases.new.mun$cases.yesterday.mun
 
 df.cases.new.corr.mun <- df.cases.new.mun %>%
   filter(diff > 0 | diff < 0)
 
 write.csv(df.cases.new.corr.mun, file = "corrections/cases_per_municipality.csv", row.names = F)
-
 
 ## Leeftijd op IC
 
