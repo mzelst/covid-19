@@ -51,12 +51,26 @@ emoji.down_double = paste(emoji.down, emoji.down, sep="")
 convert_to_trafficlight <- function(rel_increase) {
   trafficlight <- 
     ifelse( rel_increase >= 250, emoji.black,
-    ifelse( rel_increase >= 150, emoji.purple,
-    ifelse( rel_increase >= 50, emoji.red,
+    ifelse( rel_increase >= 100, emoji.purple,
+    ifelse( rel_increase >= 35, emoji.red,
     ifelse( rel_increase > 5,   emoji.orange,
     ifelse( rel_increase > 0,   emoji.yellow,
                                 emoji.green
     )))))
+  return(trafficlight)
+}
+
+convert_to_hosp_trafficlight <- function(rel_increase_1w, rel_increase_2w) {
+  trafficlight <- 
+    ifelse( rel_increase_1w >= 27/10, emoji.black,
+    ifelse( rel_increase_2w >= 27/10*2, emoji.black,
+    ifelse( rel_increase_1w >= 16/10, emoji.purple,
+    ifelse( rel_increase_2w >= 16/10*2, emoji.purple,
+    ifelse( rel_increase_1w >= 4/10, emoji.red,
+    ifelse( rel_increase_2w >= 4/10*2, emoji.red,
+    ifelse( rel_increase_2w > 0,   emoji.orange,
+                                emoji.green
+  )))))))
   return(trafficlight)
 }
 
@@ -362,7 +376,13 @@ dat.hosp.today <- transmute(dat.hosp,
   population,
   rel_increase_1d = increase_1d / population * 100000,
   rel_increase_7d = increase_7d / population * 100000,
-  rel_increase_14d = increase_14d / population * 100000
+  rel_increase_14d = increase_14d / population * 100000,
+  color = convert_to_hosp_trafficlight(rel_increase_7d, rel_increase_14d),
+  color_incl_new = ifelse(
+    ((d1 - d8) <= 0 & (d0 - d1) > 0)
+    | ((d0 - d7) <= 0 & (d0 - d1) > 0)
+    | ((d1 - d14) <= 0 & (d0 - d1) > 0),  
+    emoji.new, color)
 )
 
 dat.hosp.today.simple <- dat.hosp.today %>%
@@ -370,6 +390,7 @@ dat.hosp.today.simple <- dat.hosp.today %>%
   arrange(municipality) %>%
   select(
     current,
+    color_incl_new,
     municipality,
     increase_1d,
     increase_7d,
@@ -457,17 +478,24 @@ dat.cases_per_death <-transmute(dat.cases,
   date = const.date,
   population = population,
   cases_d0  = dat.cases[,ncol(dat.cases)-date_diff],
-  cases_d7 = dat.cases[,ncol(dat.cases)-date_diff-7], 
+  cases_d7 = dat.cases[,ncol(dat.cases)-date_diff-7],
+  cases_d14 = dat.cases[,ncol(dat.cases)-date_diff-14], 
   rel_cases_7d = (cases_d0 - cases_d7) / population * 100000,
+  rel_cases_14d = (cases_d0 - cases_d14) / population * 100000,
   rel_cases_total = cases_d0 / population * 100000,
   color = convert_to_trafficlight(rel_cases_7d),
   hosp_d0  = dat.hosp[,ncol(dat.hosp)-date_diff], 
   hosp_d7  = dat.hosp[,ncol(dat.hosp)-date_diff-7], 
+  hosp_d14  = dat.hosp[,ncol(dat.hosp)-date_diff-14], 
   rel_hosp_7d = (hosp_d0 - hosp_d7) / population * 100000,
+  rel_hosp_14d = (hosp_d0 - hosp_d14) / population * 100000,
   rel_hosp_total = hosp_d0 / population * 100000,
+  color = convert_to_hosp_trafficlight(rel_hosp_7d, rel_hosp_14d),
   deaths_d0  = dat.deaths[,ncol(dat.deaths)-date_diff],
   deaths_d7  = dat.deaths[,ncol(dat.deaths)-date_diff-7],
+  deaths_d14  = dat.deaths[,ncol(dat.deaths)-date_diff-14],
   rel_deaths_7d = (deaths_d0 - deaths_d7) / population * 100000,
+  rel_deaths_14d = (deaths_d0 - deaths_d14) / population * 100000,
   rel_deaths_total = deaths_d0 / population * 100000,
   perc_cases = cases_d0 / population * 100,
   perc_hosp = hosp_d0 / population * 100,

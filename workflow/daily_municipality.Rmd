@@ -168,9 +168,9 @@ knitr::asis_output(htmltools::htmlPreserve(paste0(
 ✅   geen geconstateerde besmettingen  in 7 dagen   
 💥   nieuwe besmettingen in een groene gemeente  
 🟡   Gerustellend ( 1-5 / 100.000 inwoners / 7 dagen )  
-🟧   Waakzaam ( 5-50 / 100.000 inwoners / 7 dagen )   
-🛑   Zorgelijk ( 50-150 / 100.000 inwoners / 7 dagen )  
-🟣   Ernstig ( 150-250 / 100.000 inwoners / 7 dagen )   
+🟧   Waakzaam ( 5-35 / 100.000 inwoners / 7 dagen )   
+🛑   Zorgelijk ( 35-100 / 100.000 inwoners / 7 dagen )  
+🟣   Ernstig ( 100-250 / 100.000 inwoners / 7 dagen )   
 ⚡️   Zeer Ernstig ( >= 250 / 100.000 inwoners / 7 dagen )   
 
 ➚➚ Fors stijgende trend ( > 100% )  
@@ -351,7 +351,20 @@ knitr::asis_output(htmltools::htmlPreserve("
 
 ```
 
-# Opnames
+# Covid-19 Opnames
+### Legenda
+✅   geen opanames in 14 dagen   
+💥   nieuwe eerste opname sinds 14 dagen    
+🟧   Waakzaam ( 1-4 / 1.000.000 inwoners / 7 dagen )   
+🛑   Zorgelijk ( 4-16 / 1.000.000 inwoners / 7 dagen )  
+🟣   Ernstig ( 16-27 / 1.000.000 inwoners / 7 dagen )   
+⚡️   Zeer Ernstig ( >= 27 / 1.000.000 inwoners / 7 dagen )   
+
+➚  Stijgende trend
+➘  Dalende trend 
+
+Bovenstaande zijn berekend op laatste  
+7 dagen t.o.v. de 7 dagen daarvoor  
 
 ### Landelijk:
 ```{r echo = FALSE, results = "asis"}
@@ -359,9 +372,9 @@ knitr::asis_output(htmltools::htmlPreserve("
 
 dat.total <- dat.hosp %>%
   filter( municipality == "Netherlands" )
-dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "COVID-19 opnames"
+dat.total[dat.total$municipality=="Netherlands", "municipality"] <- "Nederland"
 
-print_detailed(dat.total, FALSE, TRUE)
+print_detailed(dat.total, TRUE, TRUE)
 rm(dat.total)
 ```
 
@@ -399,12 +412,13 @@ dat.hosp.today.top10 <- dat.hosp %>%
   filter(increase_14d >= 3) %>%
   head(20) %>%
   transmute(
+    color = color_incl_new,
     municipality = sprintf('<span class="municipality">%s</span><hr/>', municipality),
-    rel_increase_14d = format_custom_number(rel_increase_14d),
+    rel_increase_14d = format_custom_number(rel_increase_14d * 10),
     per = "/ 100.000 / 14d"
   )
 
-print_table(dat.hosp.today.top10, "llrl", "")
+print_table(dat.hosp.today.top10, "cclrl", "")
 ```
 
 #### Absolute toenames van vandaag
@@ -415,7 +429,7 @@ dat.hosp.today.highest <- dat.hosp %>%
   ) %>%
   arrange(desc(increase_1d), current)
 
-print_municipality_data(dat.hosp.today.highest, "", FALSE, TRUE)
+print_municipality_data(dat.hosp.today.highest, "", TRUE, TRUE)
 
 ```
 
@@ -434,21 +448,21 @@ knitr::asis_output(htmltools::htmlPreserve("
 dat.hosp.today.all <- dat.hosp %>%
   filter(Municipality_code != "")
 
-print_municipality_data(slice(dat.hosp.today.all,(0:115)), "", FALSE, TRUE)
+print_municipality_data(slice(dat.hosp.today.all,(0:115)), "", TRUE, TRUE)
 
 knitr::asis_output(htmltools::htmlPreserve("
     </section>
     <section class='municipalities-h-p'>
 "))
 
-print_municipality_data(slice(dat.hosp.today.all,(116:240)), "", FALSE, TRUE)
+print_municipality_data(slice(dat.hosp.today.all,(116:240)), "", TRUE, TRUE)
 
 knitr::asis_output(htmltools::htmlPreserve("
     </section>
     <section class='municipalities-r-z'>
 "))
 
-print_municipality_data(slice(dat.hosp.today.all,(241:352)), "", FALSE, TRUE)
+print_municipality_data(slice(dat.hosp.today.all,(241:352)), "", TRUE, TRUE)
 
 knitr::asis_output(htmltools::htmlPreserve("
     </section>
