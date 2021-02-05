@@ -57,21 +57,16 @@ find_week <- function(var) {
 #}
 
 ## read cbsodata on weekly deaths
-if(file.exists('/data/cbs_deaths_dt.rds')) {
-  cbs_dt <- data.table(cbs_get_data('70895ned',
+cbs_dt <- data.table(cbs_get_data('70895ned',
                                     Geslacht = "1100",
                                     LeeftijdOp31December = "10000",
                                     Perioden = has_substring("W") | has_substring("X"))
   )[,
     timestamp := Sys.time()
   ]
-  saveRDS(cbs_dt, '/data/cbs_deaths_dt.rds')
-} else {
-  cbs_dt <- readRDS('/data/cbs_deaths_dt.rds')
-}
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I44', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I49', col_names = F))
 
 
 ##
@@ -401,9 +396,11 @@ beta_yearend <- beta_long %>%
 
 sum(beta_yearend$mid)
 
+beta_long$weekyear <- paste0(beta_long$week,beta_long$year)
+
 ## calculate mean and CI interval 
-totals <- beta_long[t >= 2020 & week %in% seq(11, week.now),
-                    .(week, cumsum(oversterfte)),
+totals2020 <- beta_long[year == 2020 & week %in% seq(11, 52),
+                    .(week,cumsum(oversterfte)),
                     by=c('variable', 'model')
 ][,
   .(Laag = ifelse(model == 'CBS/AMC',
@@ -418,6 +415,31 @@ totals <- beta_long[t >= 2020 & week %in% seq(11, week.now),
   ),
   by = c('model', 'week')
 ]
+
+totals2020$year <- 2020
+
+totals2021 <- beta_long[year == 2021 & week %in% seq(1, week.now),
+                        .(week,cumsum(oversterfte)),
+                        by=c('variable', 'model')
+][,
+  .(Laag = ifelse(model == 'CBS/AMC',
+                  0,
+                  ci_5p(V2, 'lwr')                        
+  ),
+  Gemiddeld = mean(V2),
+  Hoog = ifelse(model == 'CBS/AMC',
+                0,
+                ci_5p(V2, 'upr')
+  )
+  ),
+  by = c('model', 'week')
+]
+
+totals2021$year <- 2021
+
+totals <- rbind(totals2020,totals2021)
+totals$weekyear <- paste0(totals$year,"-",totals$week)
+
 
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
@@ -472,7 +494,7 @@ fig2.2_dt <- totals[model == 'Dynamisch']
 write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
 
 ## create plot
-ggplot(fig2.2_dt, aes(factor(week), Gemiddeld)) +
+ggplot(fig2.2_dt, aes(factor(weekyear), Gemiddeld)) +
   geom_col(alpha = 0.4) +
   geom_errorbar(aes(ymax = Hoog, ymin = Laag), col = 'red', alpha = 0.4) +
   geom_text(aes(label = round(Gemiddeld)), vjust = 3.0) +
