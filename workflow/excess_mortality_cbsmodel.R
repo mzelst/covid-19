@@ -460,7 +460,7 @@ total_dynamic$deaths_week_low_cumsum <- cumsum(total_dynamic$deaths_week_low)
 total_dynamic$deaths_week_mid_cumsum <- cumsum(total_dynamic$deaths_week_mid)
 total_dynamic$deaths_week_high_cumsum <- cumsum(total_dynamic$deaths_week_high)
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
-
+  
 ##
 ## Figures
 ##
