@@ -18,6 +18,7 @@ source("workflow/parse_rivm-data.R")
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
+source("workflow/parse_tests.R")
 
 ##### Generate municipality images
 source("workflow/parse_municipalities.R")
@@ -45,7 +46,7 @@ source("workflow/dashboards/age-distribution-date-NICE.R")
 
 ## Workflow for dashboard scrape 
 
-source("workflow/parse_vaccines_tests.R")
+source("workflow/parse_vaccines.R")
 
 ## Set locale
 Sys.setlocale("LC_TIME", "nl_NL")

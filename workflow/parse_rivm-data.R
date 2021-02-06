@@ -97,6 +97,13 @@ fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
 
+tests <- fread("https://data.rivm.nl/covid-19/COVID-19_uitgevoerde_testen.csv", sep = ";")
+filename.tests.raw <- paste0("raw-data-archive/tests/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+fwrite(tests, file = filename.tests.raw,row.names = F)
+
+filename.tests.compressed <- paste0("data-rivm/tests/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
+fwrite(tests, file = filename.tests.compressed,row.names = F)
+
 ##### Download case file
 rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
 filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")

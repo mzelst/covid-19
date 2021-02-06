@@ -446,13 +446,19 @@ totals <- totals %>%
   mutate(deaths_week_low = c(0,diff(Laag))) %>%
   mutate(deaths_week_high = c(0,diff(Hoog)))
 totals[1,"deaths_week_mid"] <- totals[1,"Gemiddeld"]
+totals[1,"deaths_week_low"] <- totals[1,"Laag"]
+totals[1,"deaths_week_high"] <- totals[1,"Hoog"]
 totals[43,"deaths_week_mid"] <- totals[43,"Gemiddeld"]
+totals[43,"deaths_week_low"] <- totals[43,"Laag"]
+totals[43,"deaths_week_high"] <- totals[43,"Hoog"]
 
 total_dynamic <- totals %>%
   filter(model == "Dynamisch") #%>%
   #filter(week < 45 & week > 10) %>%
   #filter(year == "2020")
-
+total_dynamic$deaths_week_low_cumsum <- cumsum(total_dynamic$deaths_week_low)
+total_dynamic$deaths_week_mid_cumsum <- cumsum(total_dynamic$deaths_week_mid)
+total_dynamic$deaths_week_high_cumsum <- cumsum(total_dynamic$deaths_week_high)
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
 ##

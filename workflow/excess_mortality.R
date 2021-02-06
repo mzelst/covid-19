@@ -14,7 +14,7 @@ table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
 table_mortality$LeeftijdOp31December <- factor(table_mortality$LeeftijdOp31December, levels = c(10000, 41700, 53950, 21700),
                                                labels = c("Totaal","0 tot 65", "65 tot 80", "80+"))
 
-bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2001JJ00","2002JJ00","2003JJ00","2004JJ00","2005JJ00","2006JJ00","2013JJ00","2014JJ00","2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00")))
+bevolking <- cbs_get_data("37296ned", Perioden = has_substring(c("2001JJ00","2002JJ00","2003JJ00","2004JJ00","2005JJ00","2006JJ00","2013JJ00","2014JJ00","2015JJ00", "2016JJ00","2017JJ00","2018JJ00","2019JJ00","2020JJ00")))
 bevolking <- bevolking[,c("Perioden","TotaleBevolking_1", "JongerDan20Jaar_10","k_20Tot40Jaar_11","k_40Tot65Jaar_12","k_65Tot80Jaar_13","k_80JaarOfOuder_14")]
 
 colnames(bevolking) <- c("Jaar","Totaal","Jonger20","20tot40","40tot65","65tot80","80ouder")
@@ -26,7 +26,7 @@ bevolking$Year <- substr(bevolking$Year, 1, 4)
 
 bevolking2020 <- data.frame(c("2020","17414600","14015030", "2570467", "822088"))
 
-bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
+#bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
 
 
 bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
@@ -42,10 +42,10 @@ table_mortality <- table_mortality[!table_mortality$Week == '00',]
 
 mortality_full <- merge(table_mortality, bevolking, by=c("Year","LeeftijdOp31December"), all.x=TRUE)
 
-bevolking2020 <- data.frame(Bevolking2020=c(14015030, 2570467, 822088, 17414600),
-                            LeeftijdOp31December=c("0 tot 65","65 tot 80","80+","Totaal"))
+#bevolking2020 <- data.frame(Bevolking2020=c(14015030, 2570467, 822088, 17414600),
+#                           LeeftijdOp31December=c("0 tot 65","65 tot 80","80+","Totaal"))
 
-mortality_full <- merge(mortality_full, bevolking2020, by=c("LeeftijdOp31December"))
+#mortality_full <- merge(mortality_full, bevolking2020, by=c("LeeftijdOp31December"))
 mortality_full$Overledenen_1 <- mortality_full$Overledenen_1/mortality_full$Bevolking*mortality_full$Bevolking2020
 
 mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, value.var = "Overledenen_1", sum)
