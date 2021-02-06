@@ -452,6 +452,11 @@ totals[43,"deaths_week_mid"] <- totals[43,"Gemiddeld"]
 totals[43,"deaths_week_low"] <- totals[43,"Laag"]
 totals[43,"deaths_week_high"] <- totals[43,"Hoog"]
 
+totals <- totals %>%
+  mutate(deaths_low_cumsum = cumsum(deaths_week_low)) %>%
+  mutate(deaths_mid_cumsum = cumsum(deaths_week_mid)) %>%
+  mutate(deaths_high_cumsum = cumsum(deaths_week_high)) 
+
 total_dynamic <- totals %>%
   filter(model == "Dynamisch") #%>%
   #filter(week < 45 & week > 10) %>%
@@ -466,6 +471,8 @@ write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.n
 ##
 
 ## Figure 2.1
+
+require(tsibble)
 
 ## data
 fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
@@ -508,7 +515,8 @@ ggplot(fig2.1_dt, aes(factor(weekyear), cbs_deaths, group = 1)) +
   coord_cartesian(ylim = c(2000, 5500)) +
   xlab('Week') +
   ylab('') + 
-  theme_bw()
+  theme_bw() +
+  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold"))
 ggsave('plots/fig2.1.png')
 
 
@@ -517,37 +525,46 @@ ggsave('plots/fig2.1.png')
 ## data for figure
 fig2.2_dt <- totals[model == 'Dynamisch']
 
+fig2.2_dt$weekyear <- as.Date(ifelse(fig2.2_dt$week<10,
+                                       paste0(fig2.2_dt$year,0,fig2.2_dt$week,01),
+                                       paste0(fig2.2_dt$year,fig2.2_dt$week,01)),
+                                "%Y%U%w")
+
+fig2.2_dt$weekyear_format <- yearweek(fig2.2_dt$weekyear)
+
 write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
 
-fig2.2_dt$weekyear <- as.Date(ifelse(fig2.2_dt$week<10,
-                                     paste0(fig2.2_dt$year,0,fig2.2_dt$week,01),
-                                     paste0(fig2.2_dt$year,fig2.2_dt$week,01)),
-                              "%Y%U%u")
-
-
 ## create plot
-ggplot(fig2.2_dt, aes(factor(weekyear), Gemiddeld)) +
+ggplot(fig2.2_dt, aes(factor(weekyear_format), deaths_mid_cumsum)) +
   geom_col(alpha = 0.4) +
-  geom_errorbar(aes(ymax = Hoog, ymin = Laag), col = 'red', alpha = 0.4) +
-  geom_text(aes(label = round(Gemiddeld)), vjust = 3.0) +
+  geom_errorbar(aes(ymax = deaths_high_cumsum, ymin = deaths_low_cumsum), col = 'red', alpha = 0.4) +
+  geom_text(aes(label = round(deaths_mid_cumsum)), angle = 90) +
   xlab('Week') +
   ylab('Oversterfte cumulatief') +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text.x.bottom = element_text(size=10, angle = 90))
 ggsave('plots/fig2.2.png')
 
 ## Figure 4.1.1
-fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 11,
+fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 11 | model == "Dynamisch" & t >= 2021,
                          .(mid = mean(value),
                            upr = ci_5p(value, side = 'upr'),
-                           lwr = ci_5p(value, side = 'lwr')
+                           lwr = ci_5p(value, side = 'lwr'),
+                           year = year
                          ),
                          by = week
 ]
 
+fig4.1.1_dt$weekyear <- as.Date(ifelse(fig4.1.1_dt$week<10,
+                                     paste0(fig4.1.1_dt$year,0,fig4.1.1_dt$week,01),
+                                     paste0(fig4.1.1_dt$year,fig4.1.1_dt$week,01)),
+                              "%Y%U%w")
+
+fig4.1.1_dt$weekyear_format <- yearweek(fig4.1.1_dt$weekyear)
 write.csv(fig4.1.1_dt,file = "workflow/excess_mortality/output/fig4.1.1_dt.csv")
 
 ## create plot
-ggplot(fig4.1.1_dt, aes(factor(week), mid, group = 1)) +
+#ggplot(fig4.1.1_dt, aes(factor(weekyear_format), mid, group = 1)) +
   geom_line() +
   geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
   xlab('Week') +
@@ -621,7 +638,7 @@ ggplot(fig4.2.1_dt, aes(factor(weekyear_format), mid, group = 1)) +
 ggsave('plots/fig4.2.1.png')
 
 ## figure 4.2.2
-fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
+fig4.2.2_dt <- melt(totals[week == week.now][,-c("week","Laag","Gemiddeld","Hoog","year","weekyear","deaths_week_mid","deaths_week_low","deaths_week_high")], id.vars = 'model')
 fig4.2.2_dt <- fig4.2.2_dt %>%
   dplyr::filter(model == "Dynamisch")
 
