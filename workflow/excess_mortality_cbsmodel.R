@@ -473,7 +473,14 @@ total_dynamic$deaths_week_low_cumsum <- cumsum(total_dynamic$deaths_week_low)
 total_dynamic$deaths_week_mid_cumsum <- cumsum(total_dynamic$deaths_week_mid)
 total_dynamic$deaths_week_high_cumsum <- cumsum(total_dynamic$deaths_week_high)
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
-  
+
+## Clean environment
+
+rm("begin_end_griep","begin_end_list","bestfit","beta","cbs_deaths_ts","cbs_oversterfte","combined_d","covid_bs","covid_bs_d",
+   "covid_bs_s","covid_deaths_d","covid_deaths_ts","covid_dlm","covid_dlm_d","covid_dlm_s","covid_filt_d","covid_filt_s","covid_fit",
+   "covid_fit_d","covid_fit_s","covid_mod","covid_mod_d","covid_mod_s","covid_smooth","covid_smooth_d","covid_smooth_s","fit",
+   "init_val","level0","slope0","start_yr","tmp")
+
 ##
 ## Figures
 ##
