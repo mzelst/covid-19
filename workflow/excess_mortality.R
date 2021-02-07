@@ -6,7 +6,7 @@ require(lubridate)
 
 weeknumber <- isoweek(ymd(Sys.Date()))-1
 
-table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020")), Geslacht = has_substring("1100"))
+table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020","2021")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
 
 table_mortality$Week <- str_sub(table_mortality$Perioden, start = -2)
@@ -24,9 +24,9 @@ bevolking <- bevolking[,c("Jaar","Totaal","jonger65","65tot80","80ouder")]
 colnames(bevolking) <- c("Year","Totaal","0 tot 65","65 tot 80","80+")
 bevolking$Year <- substr(bevolking$Year, 1, 4)
 
-bevolking2020 <- data.frame(c("2020","17414600","14015030", "2570467", "822088"))
+bevolking2021 <- data.frame(c("2021","17474693","14015030", "2570467", "822088"))
 
-#bevolking <- rbind(bevolking, c("2020","17414600","14015030", "2570467", "822088"))
+bevolking <- rbind(bevolking, c("2021","17474693","14015030", "2570467", "822088"))
 
 
 bevolking <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
@@ -41,20 +41,19 @@ table_mortality <- table_mortality[!table_mortality$Week == '00',]
 
 
 mortality_full <- merge(table_mortality, bevolking, by=c("Year","LeeftijdOp31December"), all.x=TRUE)
+bevolking2021 <- data.frame(Bevolking2020=c(14015030, 2570467, 822088, 17474693),
+                           LeeftijdOp31December=c("0 tot 65","65 tot 80","80+","Totaal"))
 
-#bevolking2020 <- data.frame(Bevolking2020=c(14015030, 2570467, 822088, 17414600),
-#                           LeeftijdOp31December=c("0 tot 65","65 tot 80","80+","Totaal"))
-
-#mortality_full <- merge(mortality_full, bevolking2020, by=c("LeeftijdOp31December"))
+mortality_full <- merge(mortality_full, bevolking2021, by=c("LeeftijdOp31December"))
 mortality_full$Overledenen_1 <- mortality_full$Overledenen_1/mortality_full$Bevolking*mortality_full$Bevolking2020
 
 mortality_wide <- dcast(mortality_full, LeeftijdOp31December + Week ~ Year, value.var = "Overledenen_1", sum)
 
-mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
+mortality_wide$Average20162020 <- rowMeans(mortality_wide[,c("2016","2017","2018","2019","2020")])
 mortality_wide$Average20132017 <- rowMeans(mortality_wide[,c("2013","2014","2015","2016","2017")])
 mortality_wide$Average20012005 <- rowMeans(mortality_wide[,c("2001","2002","2003","2004","2005")])
 
-mortality_wide$excess_death <- round(mortality_wide$`2020` - mortality_wide$Average20152019,0)
+mortality_wide$excess_death <- round(mortality_wide$`2021` - mortality_wide$Average20162020,0)
 mortality_wide$excess_flu <- mortality_wide$`2018` - mortality_wide$Average20132017
 mortality_wide$excess_heatwave <- mortality_wide$`2006` - mortality_wide$Average20012005
 
