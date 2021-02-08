@@ -1,5 +1,3 @@
-rm(list=ls())
-
 # Script plots for daily update
 all.data <- read.csv("data/all_data.csv")
 all.data$date <- as.Date(all.data$date)
@@ -41,7 +39,7 @@ cases <- all.data %>%
   ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
-testplot.subtitle <- paste0("Let op: percentage is bekend t/m ",Sys.Date()-4," \n\n Maandagen")
+testplot.subtitle <- paste0("Let op: percentage is bekend t/m ",Sys.Date()-2," \n\n Maandagen")
 
 # Plot for positive tests per day
 testplot <- testdata %>%
@@ -64,8 +62,6 @@ testplot <- testdata %>%
        y = "Percentage positief per dag",
        subtitle = testplot.subtitle,
        color = "Legend") +
-  geom_vline(xintercept = as.Date("2020-11-30"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2020-12-07"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-14"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-21"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2020-12-28"), linetype = "dotted") +
@@ -73,6 +69,8 @@ testplot <- testdata %>%
   geom_vline(xintercept = as.Date("2021-01-11"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2021-01-18"), linetype = "dotted") +
   geom_vline(xintercept = as.Date("2021-01-25"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-02-01"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date("2021-02-08"), linetype = "dotted") +
   ggtitle("Percentage positief per dag (GGD)") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
@@ -123,22 +121,22 @@ opnames <- all.data %>%
   ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
-reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
-  map(as.data.table) %>%
-  rbindlist(fill = TRUE)
+#reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
+#  map(as.data.table) %>%
+#  rbindlist(fill = TRUE)
 
-reproduction <- reproduction %>%
-  mutate(Date = Date %>% as.Date)
+#reproduction <- reproduction %>%
+#  mutate(Date = Date %>% as.Date)
 
-prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
-  map(as.data.table) %>%
-  rbindlist(fill = TRUE)
+#prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
+#  map(as.data.table) %>%
+#  rbindlist(fill = TRUE)
 
-prevalence <- prevalence %>%
-  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
-  mutate(Date = Date %>% as.Date)
+#prevalence <- prevalence %>%
+#  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
+#  mutate(Date = Date %>% as.Date)
 
-prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
+#prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 #reproduction <- reproduction %>%
 #  ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
@@ -158,7 +156,7 @@ prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 #  ggtitle("Reproductiegetal") + 
 #  ggsave("plots/reproductie_getal.png",width=15, height = 4)
 
-filter.date <- Sys.Date()-56 # Set filter date for last 8 weeks
+#filter.date <- Sys.Date()-56 # Set filter date for last 8 weeks
 
 prevalence %>%
   ggplot(aes(x=Date, y=prev_avg, group = 1)) + 
@@ -186,15 +184,15 @@ prevalence %>%
   ggsave("plots/prevalentie_overzicht.png",width=15, height = 4)
 
 # Merge plots into grid
-plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
-                         opnames + theme(legend.position="bottom"),
-                         cases + theme(legend.position = "bottom", legend.direction = "vertical"),
-                         align = 'hv',
-                         nrow = 2,
-                         hjust = -1
-)
+#plot.daily <- plot_grid( aanwezig + theme(legend.position="bottom"),
+#                         opnames + theme(legend.position="bottom"),
+#                         cases + theme(legend.position = "bottom", legend.direction = "vertical"),
+#                         align = 'hv',
+#                         nrow = 2,
+#                         hjust = -1
+#)
 
 # Save grid plot for daily use
-save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
+#save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
 
-rm(list=ls())
+rm(aanwezig, all.data, cases, opnames, testdata, testplot, filter.date, testplot.subtitle)

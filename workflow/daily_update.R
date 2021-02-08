@@ -15,38 +15,9 @@ source("workflow/generate_banner.R")
 source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
-source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_corrections.R")
 source("workflow/parse_tests.R")
-
-##### Generate municipality images
-source("workflow/parse_municipalities.R")
-source("workflow/generate_municipality_images.R")
-
-#####
-
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-## Push to git
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
-push(repo, credentials = git.auth)
-
-## Workflows for databases
-
-source("workflow/dashboards/cases_ggd_agegroups.R")
-source("workflow/dashboards/date_statistics_mutations.R")
-source("workflow/parse_age-data.R")
-source("workflow/dashboards/rivm-date-corrections.R")
-source("workflow/dashboards/heatmap-age-week.R")
-source("workflow/dashboards/age-distribution-date-NICE.R")
-
-## Workflow for dashboard scrape 
-
-source("workflow/parse_vaccines.R")
 
 ## Set locale
 Sys.setlocale("LC_TIME", "nl_NL")
@@ -59,9 +30,9 @@ lcps.by_day <- read.csv("data/lcps_by_day.csv")
 corr.by_day <- read.csv("corrections/corrections_perday.csv")
 nursery.by_day <- read.csv("data/nursery_by_day.csv")
 testrate.by_day <- read.csv("data-dashboards/percentage-positive-daily-national.csv")[,c("values.tested_total","values.infected","values.infected_percentage","date","pos.rate.3d.avg")]
-vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
+#vaccines.by_day <- read.csv("data/vaccines_by_day.csv") , vaccines.by_day
 
-daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day, testrate.by_day, vaccines.by_day)
+daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day, testrate.by_day)
 
 all.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -73,14 +44,8 @@ all.data <- all.data[order(all.data$date),]
 
 write.csv(all.data, file = "data/all_data.csv",row.names = F)
 
-## Workflows for plots
-
-source("plot_scripts/nursery_homes.R")
-source("plot_scripts/daily_plots.R")
-#source("plot_scripts/daily_maps_plots.R")
-
 all.data <- read.csv("data/all_data.csv")
-vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
+#vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
 
 # get tokens
 source("workflow/twitter/token_mzelst.R")
@@ -99,7 +64,7 @@ Kliniek_Aanwezig <- ifelse(is.na(last(all.data$Kliniek_Bedden)),"Onbekend",paste
 IC_Nieuwe_Opnames <- ifelse(is.na(last(all.data$IC_Nieuwe_Opnames_COVID)),"Onbekend",last(all.data$IC_Nieuwe_Opnames_COVID))
 IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(last(all.data$IC_Bedden_COVID),sign.ic.lcps,LCPS_IC_Huidig_Toename))
 
-vaccins.geprikt <- format(last(vaccines.by_day$vaccines_administered_ggd+vaccines.by_day$vaccines_administered_estimated_hospital),decimal.mark = ",",big.mark =".",big.interval = 3)
+#vaccins.geprikt <- format(last(vaccines.by_day$vaccines_administered_ggd+vaccines.by_day$vaccines_administered_estimated_hospital),decimal.mark = ",",big.mark =".",big.interval = 3)
 
 ## Build tweets
 tweet.main <- paste0("#COVID19NL
@@ -116,10 +81,7 @@ Opgenomen op IC: ",IC_Nieuwe_Opnames,"
 Huidig: ",IC_Aanwezig,")
 
 Overleden: ",last(all.data$new.deaths),"
-Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"
-
-Vaccins geprikt: ",vaccins.geprikt,"
-Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"")
+Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
 
@@ -135,6 +97,22 @@ tweet.last_id <- tweet.main.id
 # Retweet for @edwinveldhuizen
 post_tweet (token = token.edwinveldhuizen,
   retweet_id = tweet.main.id)
+
+##### Generate municipality images
+source("workflow/parse_nice-municipalities-data.R")
+source("workflow/parse_municipalities.R")
+source("workflow/generate_municipality_images.R")
+
+#####
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
+push(repo, credentials = git.auth)
 
 ########
 # Municipality tweet - cases
@@ -253,6 +231,10 @@ tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
 
+## Workflows for plots
+source("plot_scripts/daily_plots.R")
+#source("plot_scripts/daily_maps_plots.R")
+
 # Tweet for hospital numbers - Data NICE ####
 temp = tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),2)
 myfiles = lapply(temp, read.csv)
@@ -303,6 +285,7 @@ tweet.last_id <- posted_tweet$id_str
 ########
 # Tweet - nursery homes
 ########
+source("plot_scripts/nursery_homes.R")
 new.locations.nursery <- all.data[nrow(all.data),"total.current.locations.nursery"] - all.data[nrow(all.data)-1,"total.current.locations.nursery"]
 
 tweet.nurseryhomes <- paste0("#Verpleeghuis statistieken t.o.v. gisteren: 
@@ -334,6 +317,14 @@ tweet.last_id <- posted_tweet$id_str
 
 ##### Produce daily report ####
 
+##### Download case file
+rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
+filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
+
+filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
+fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all cases until today
+
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc"); rmarkdown::render('reports/daily_report.Rmd') ## Render daily report
 file.copy(from = list.files('reports', pattern="*.pdf",full.names = TRUE), 
           to = paste0("reports/daily_reports/Epidemiologische situatie COVID-19 in Nederland - ",
@@ -362,3 +353,23 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
 #}
+
+## Workflows for databases
+
+source("workflow/dashboards/cases_ggd_agegroups.R")
+source("workflow/dashboards/date_statistics_mutations.R")
+source("workflow/parse_age-data.R")
+source("workflow/dashboards/rivm-date-corrections.R")
+source("workflow/dashboards/heatmap-age-week.R")
+source("workflow/dashboards/age-distribution-date-NICE.R")
+
+
+## Vaccine tweet for history ##
+#Vaccins geprikt: ",vaccins.geprikt,"
+#Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"
+
+## Workflow for dashboard scrape 
+
+source("workflow/parse_vaccines.R")
+
+

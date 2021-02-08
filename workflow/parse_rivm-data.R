@@ -8,8 +8,8 @@ rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemee
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-1001826 
-sum(rivm.mun.perday$Deceased)-14355
+sum(rivm.mun.perday$Total_reported)-1005760 
+sum(rivm.mun.perday$Deceased)-14403
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -103,23 +103,6 @@ fwrite(tests, file = filename.tests.raw,row.names = F)
 
 filename.tests.compressed <- paste0("data-rivm/tests/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(tests, file = filename.tests.compressed,row.names = F)
-
-##### Download case file
-rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
-filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
-
-filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
-fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all cases until today
-
-# Git
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("Daily data download ",Sys.Date()))
-push(repo, credentials = git.auth)
 
 #continue the script
 print("Script did NOT end!")   
