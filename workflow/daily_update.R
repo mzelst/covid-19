@@ -370,6 +370,15 @@ source("workflow/dashboards/age-distribution-date-NICE.R")
 
 ## Workflow for dashboard scrape 
 
-#source("workflow/parse_vaccines.R")
+source("workflow/parse_vaccines.R")
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update vaccine data"))
+push(repo, credentials = git.auth)
 
 
