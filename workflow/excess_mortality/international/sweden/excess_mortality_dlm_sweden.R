@@ -152,7 +152,7 @@ all = T
 
 cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I44', col_names = F))
 
-nl_dt <- fread("meetings/deaths_sweden.csv")
+nl_dt <- fread("workflow/excess_mortality/international/sweden/deaths_sweden.csv")
 nl_dt$year <- as.numeric(nl_dt$year)
 nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
 
@@ -440,6 +440,11 @@ fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
 
 write.csv(fig2.1_dt,file = "workflow/excess_mortality/international/sweden/fig2.1_dt.csv")
 
+rm("begin_end_griep","begin_end_list","bestfit","beta","cbs_deaths_ts","cbs_oversterfte","combined_d","covid_bs","covid_bs_d",
+   "covid_bs_s","covid_deaths_d","covid_deaths_ts","covid_dlm","covid_dlm_d","covid_dlm_s","covid_filt_d","covid_filt_s","covid_fit",
+   "covid_fit_d","covid_fit_s","covid_mod","covid_mod_d","covid_mod_s","covid_smooth","covid_smooth_d","covid_smooth_s","fit",
+   "init_val","level0","slope0","start_yr","tmp")
+
 ## create plot
 ggplot(fig2.1_dt, aes(factor(week), cbs_deaths, group = 1)) +
   geom_ribbon(aes(ymin = 0, ymax = as.numeric(cbs_deaths) - covid_sterfte),
@@ -454,7 +459,7 @@ ggplot(fig2.1_dt, aes(factor(week), cbs_deaths, group = 1)) +
               fill = 'red', alpha = 0.4
   ) +    
   geom_line(aes(y=smooth), lty = 'dotted') +
-  coord_cartesian(ylim = c(1500, 5000)) +
+  coord_cartesian(ylim = c(0, 3000)) +
   xlab('Week') +
   ylab('') + 
   theme_bw()
