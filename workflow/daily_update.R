@@ -285,6 +285,8 @@ tweet.last_id <- posted_tweet$id_str
 ########
 # Tweet - nursery homes
 ########
+all.data <- read.csv("data/all_data.csv")
+
 source("plot_scripts/nursery_homes.R")
 new.locations.nursery <- all.data[nrow(all.data),"total.current.locations.nursery"] - all.data[nrow(all.data)-1,"total.current.locations.nursery"]
 
