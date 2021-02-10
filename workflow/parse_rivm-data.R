@@ -8,8 +8,8 @@ rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemee
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-1007981 
-sum(rivm.mun.perday$Deceased)-14428
+sum(rivm.mun.perday$Total_reported)-1009725 
+sum(rivm.mun.perday$Deceased)-14511
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
