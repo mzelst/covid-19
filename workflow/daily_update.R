@@ -384,7 +384,5 @@ if (vaccine.data) {
   add(repo, path = "*")
   commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update vaccine data"))
   push(repo, credentials = git.auth)
-  Sys.sleep(10)
-  
-  }
+}
 
