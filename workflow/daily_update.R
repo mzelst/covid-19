@@ -372,14 +372,19 @@ rm(list=ls())
 #Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
 ## Workflow for dashboard scrape 
+vaccine.data <- FALSE
 
-#source("workflow/parse_vaccines.R")
+if (vaccine.data) { 
+  source("workflow/parse_vaccines.R")
+  git.credentials <- read_lines("git_auth.txt")
+  git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+  
+  ##Push to git
+  repo <- init()
+  add(repo, path = "*")
+  commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update vaccine data"))
+  push(repo, credentials = git.auth)
+  Sys.sleep(10)
+  
+  }
 
-#git.credentials <- read_lines("git_auth.txt")
-#git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-
-## Push to git
-#repo <- init()
-#add(repo, path = "*")
-#commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update vaccine data"))
-#push(repo, credentials = git.auth)
