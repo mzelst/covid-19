@@ -540,14 +540,6 @@ ggsave('plots/fig2.1.png')
 ## data for figure
 fig2.2_dt <- totals[model == 'Dynamisch']
 
-str(fig2.2_dt)
-fig2.2_dt$weekyear2 <- as.Date(ifelse(fig2.2_dt$week<10,
-                                       paste0(fig2.2_dt$year,0,fig2.2_dt$week,0,1),
-                                       paste0(fig2.2_dt$year,fig2.2_dt$week,0,1)),
-                               "%Y%U%w")
-
-fig2.2_dt$weekyear_format <- yearweek(fig2.2_dt$weekyear, week_start = 7)
-
 write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
 
 ## create plot
