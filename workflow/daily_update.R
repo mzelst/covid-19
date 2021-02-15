@@ -372,6 +372,7 @@ rm(list=ls())
 #Vaccins geprikt (geschat): ",format(last(vaccines.by_day$vaccines_administered_estimated),decimal.mark = ",",big.mark =".",big.interval = 3),"
 
 ## Workflow for dashboard scrape 
+vaccine.data <- TRUE
 vaccine.data <- FALSE
 
 if (vaccine.data) { 
