@@ -231,57 +231,6 @@ tweet.last_id <- posted_tweet$id_str
 
 rm(tweet.municipality.deaths, tweet.municipality.date, posted_tweet)
 
-## Workflows for plots
-source("plot_scripts/daily_plots.R")
-#source("plot_scripts/daily_maps_plots.R")
-
-# Tweet for hospital numbers - Data NICE ####
-temp = tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),2)
-myfiles = lapply(temp, read.csv)
-
-dat.today <- as.data.frame(myfiles[2])
-dat.yesterday <- as.data.frame(myfiles[1])
-
-Verpleeg_Opname_Bevestigd <- sum(dat.today$Hospital_Intake_Proven) - sum(dat.yesterday$Hospital_Intake_Proven)
-Verpleeg_Opname_Verdacht <- sum(dat.today$Hospital_Intake_Suspected) - sum(dat.yesterday$Hospital_Intake_Suspected)
-
-IC_Opname_Bevestigd <- sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
-IC_Opname_Verdacht <- sum(dat.today$IC_Intake_Suspected) - sum(dat.yesterday$IC_Intake_Suspected)
-
-Verpleeg_Huidig_Toename <- last(dat.today$Hospital_Currently) - last(dat.yesterday$Hospital_Currently)
-IC_Huidig_Toename <- last(dat.today$IC_Current) - last(dat.yesterday$IC_Current)
-
-sign.hosp.nice <- paste0(ifelse(Verpleeg_Huidig_Toename>=0," (+"," ("))
-sign.ic.nice <- paste0(ifelse(IC_Huidig_Toename>=0," (+"," ("))
-
-tweet.nice <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
-
-Patiënten verpleegafdeling 
-Bevestigd: ",Verpleeg_Opname_Bevestigd,"
-Verdacht: ",Verpleeg_Opname_Verdacht,"
-Huidig: ",last(dat.today$Hospital_Currently),sign.hosp.nice,Verpleeg_Huidig_Toename,")
-Totaal: ",last(dat.today$Hospital_Cumulative),"
-
-Patiënten IC
-Bevestigd: ",IC_Opname_Bevestigd,"
-Verdacht: ",IC_Opname_Verdacht,"
-Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
-Totaal: ",last(dat.today$IC_Cumulative))
-
-# Tweet for NICE ####
-posted_tweet <- post_tweet (
-  tweet.nice,
-  token = token.mzelst,
-  media = c("plots/positieve_tests_per_dag.png",
-            "plots/percentage_positief_per_dag.png",
-            "plots/overview_aanwezig_zkh.png",
-            "plots/overview_opnames_zkh.png"),
-  in_reply_to_status_id = tweet.main.id,
-  auto_populate_reply_metadata = TRUE
-)
-posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
-tweet.last_id <- posted_tweet$id_str
-
 ########
 # Tweet - nursery homes
 ########
@@ -365,7 +314,66 @@ source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
 
-rm(list=ls())
+# Verify whether NICE update ran correctly
+
+dat.today = as.data.frame(lapply(tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),1),read.csv))
+nice.date <- as.Date(last(dat.today$date))
+today.date <- Sys.Date()
+
+if (nice.date == Sys.Date()){
+  ## Workflows for plots
+  source("plot_scripts/daily_plots.R")
+  #source("plot_scripts/daily_maps_plots.R")
+  
+  temp = tail(list.files(path = "data-nice/data-nice-json/",pattern="*.csv", full.names = T),2)
+  myfiles = lapply(temp, read.csv)
+  
+  dat.today <- as.data.frame(myfiles[2])
+  dat.yesterday <- as.data.frame(myfiles[1])
+  
+  Verpleeg_Opname_Bevestigd <- sum(dat.today$Hospital_Intake_Proven) - sum(dat.yesterday$Hospital_Intake_Proven)
+  Verpleeg_Opname_Verdacht <- sum(dat.today$Hospital_Intake_Suspected) - sum(dat.yesterday$Hospital_Intake_Suspected)
+  
+  IC_Opname_Bevestigd <- sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
+  IC_Opname_Verdacht <- sum(dat.today$IC_Intake_Suspected) - sum(dat.yesterday$IC_Intake_Suspected)
+  
+  Verpleeg_Huidig_Toename <- last(dat.today$Hospital_Currently) - last(dat.yesterday$Hospital_Currently)
+  IC_Huidig_Toename <- last(dat.today$IC_Current) - last(dat.yesterday$IC_Current)
+  
+  sign.hosp.nice <- paste0(ifelse(Verpleeg_Huidig_Toename>=0," (+"," ("))
+  sign.ic.nice <- paste0(ifelse(IC_Huidig_Toename>=0," (+"," ("))
+  
+  # Tweet for hospital numbers - Data NICE ####
+  
+  tweet.nice <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
+
+Patiënten verpleegafdeling 
+Bevestigd: ",Verpleeg_Opname_Bevestigd,"
+Verdacht: ",Verpleeg_Opname_Verdacht,"
+Huidig: ",last(dat.today$Hospital_Currently),sign.hosp.nice,Verpleeg_Huidig_Toename,")
+Totaal: ",last(dat.today$Hospital_Cumulative),"
+
+Patiënten IC
+Bevestigd: ",IC_Opname_Bevestigd,"
+Verdacht: ",IC_Opname_Verdacht,"
+Huidig: ",last(dat.today$IC_Current),sign.ic.nice,IC_Huidig_Toename,")
+Totaal: ",last(dat.today$IC_Cumulative))
+  
+  # Tweet for NICE ####
+  posted_tweet <- post_tweet (
+    tweet.nice,
+    token = token.mzelst,
+    media = c("plots/positieve_tests_per_dag.png",
+              "plots/percentage_positief_per_dag.png",
+              "plots/overview_aanwezig_zkh.png",
+              "plots/overview_opnames_zkh.png"),
+    in_reply_to_status_id = tweet.main.id,
+    auto_populate_reply_metadata = TRUE
+  )
+  
+} else {
+  print("NICE update failed")
+}
 
 ## Vaccine tweet for history ##
 #Vaccins geprikt: ",vaccins.geprikt,"

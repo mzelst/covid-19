@@ -1,4 +1,3 @@
-rm(list=ls())
 ## Stichting NICE data
 
 # IC patients died, discharged, discharged to other department (cumulative)
@@ -97,4 +96,6 @@ nice_by_day <- nice_by_day %>%
            
 write.csv(nice_by_day, file = "data/nice_by_day.csv", row.names = F)
 
-rm(list=ls())
+rm("df","filename.daily.nice","filename.nice.perday","hospital.cumulative","ic.cumulative","ic.death_survive",
+   "ic.died_survivors","ic_current","ic_intake","ics.used","json_zkh_df","nice.dailydata","zkh_current","zkh_new","temp","myfiles",
+   "nice_by_day")
