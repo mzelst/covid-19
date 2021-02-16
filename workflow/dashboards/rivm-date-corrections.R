@@ -1,4 +1,3 @@
-rm(list=ls())
 #### Corrections scripts
 
 temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),2)
