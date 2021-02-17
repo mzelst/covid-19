@@ -107,5 +107,3 @@ fwrite(tests, file = filename.tests.compressed,row.names = F)
 #continue the script
 print("Script did NOT end!")   
 #}
-
-rm(list=ls())

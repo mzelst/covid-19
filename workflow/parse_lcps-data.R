@@ -28,3 +28,5 @@ write.csv(lcps.dailydata, file = filename.daily, row.names = F)
 write.csv(lcps.data, file = filename.common, row.names = F)
 
 }
+
+rm(filename, filename.common, filename.daily, lcps.condition, lcps.date, lcps.dailydata, lcps.data.original)

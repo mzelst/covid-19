@@ -181,15 +181,20 @@ perc_inventarisatie <- all.data %>%
 
 
 dat.healthcare <- read.csv("data-misc/healthcare_employees.csv")
-dat.healthcare$cases_log <- log(dat.healthcare$cases_new)
-dat.healthcare$hospital_log <- log(dat.healthcare$hospital_new)
-dat.healthcare$deaths_log <- log(dat.healthcare$deaths_new)
+dat.healthcare <- dat.healthcare %>%
+  mutate(cases_new_healthcare = c(0,diff(cases_cumulative_healthcare))) %>%
+  mutate(cases_new_education = c(0,diff(cases_cumulative_education))) %>%
+  mutate(hospitalized_healthcare_new = c(0,diff(hospitalized_healthcare))) %>%
+  mutate(hospitalized_education_new = c(0,diff(hospitalized_education))) %>%
+  mutate(deaths_healthcare_new = c(0,diff(deaths_healthcare))) %>%
+  mutate(deaths_education_new = c(0,diff(deaths_education)))
 
 dat.healthcare$date <- as.Date(dat.healthcare$date, format = "%d-%m-%Y")
 
 dat.healthcare %>%
   ggplot(aes(x = date, y = cases_new)) +
-  geom_line(aes(y = cases_new, color = "Besmettingen per week"), lwd=1.5) +
+  geom_line(aes(y = cases_new_healthcare, color = "Besmettingen per week - Zorgmedewerkers"), lwd=1.5) +
+  geom_line(aes(y = cases_new_education, color = "Besmettingen per week - Onderwijsmedewerkers"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 500), limits = c(0, NA)) +
   theme_bw() +
   theme(axis.title.x=element_blank(),
@@ -200,7 +205,7 @@ dat.healthcare %>%
         plot.title = element_text(hjust = 0.5, size = 16, face="bold"),
         plot.title.position = "plot",
         plot.caption = element_text(size = 6),
-        legend.position = "none",
+        legend.position = "bottom",
         axis.ticks.length = unit(0.5, "cm"),
         axis.text.y = element_text(face="bold", color="black", size=14),  #, angle=45),
         axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid")) +
@@ -213,7 +218,8 @@ dat.healthcare %>%
 
 dat.healthcare %>%
   ggplot(aes(x = date, y = hospital_new)) +
-  geom_line(aes(y = hospital_new, color = "Opnames per week"), lwd=1.5) +
+  geom_line(aes(y = hospitalized_healthcare_new, color = "Zorgmedewerkers"), lwd=1.5) +
+  geom_line(aes(y = hospitalized_education_new, color = "Onderwijsmedewerkers"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 1), limits = c(0, NA)) +
   theme_bw() +
   theme(axis.title.x=element_blank(),
@@ -237,7 +243,8 @@ dat.healthcare %>%
 
 dat.healthcare %>%
   ggplot(aes(x = date, y = deaths_new)) +
-  geom_line(aes(y = deaths_new, color = "Sterfte per week"), lwd=1.5) +
+  geom_line(aes(y = deaths_healthcare_new, color = "Zorgmedewerkers"), lwd=1.5) +
+  geom_line(aes(y = deaths_education_new, color = "Onderwijsmedewerkers"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
   theme_bw() +
   theme(axis.title.x=element_blank(),

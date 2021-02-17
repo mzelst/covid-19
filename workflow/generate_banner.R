@@ -11,5 +11,4 @@ banner <- image_read('banners/template.png') %>%
   image_annotate( date, font = 'Cabin', weight = '600', size = 40,  location = "+0+80", gravity = "center")
 
 image_write(banner, str_c("banners/",Sys.Date(),".png") )
-
-rm(list=ls()) # Clean environment
+rm(banner,date)
