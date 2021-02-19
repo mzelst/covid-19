@@ -8,10 +8,11 @@ tests.positive.wide <- aggregate(Tested_positive ~ Date_of_statistics, data = te
 
 tests.df <- merge(tests.wide,tests.positive.wide, by = c("Date_of_statistics"))
 tests.df <- tests.df %>%
-  mutate(pos.rate = Tested_positive/Tested_with_result*100)
+  mutate(pos.rate = Tested_positive/Tested_with_result*100) %>%
+  mutate(tests_7davg = round(frollmean(Tested_with_result,7),0))
 
 tests.df$pos.rate.3d.avg <- round(frollsum(tests.df$Tested_positive,3)/frollsum(tests.df$Tested_with_result,3)*100,1)
-colnames(tests.df) <- c("date","values.tested_total","values.infected","values.infected_percentage","pos.rate.3d.avg")
+colnames(tests.df) <- c("date","values.tested_total","values.infected","values.infected_percentage","tests.7d.avg","pos.rate.3d.avg")
 
 write.csv(tests.df, file = "data-dashboards/percentage-positive-daily-national.csv",row.names = F)
 
@@ -19,3 +20,4 @@ tests$pos.rate <- tests$Tested_positive/tests$Tested_with_result*100
 colnames(tests) <- c("Version","Date_of_report","date","Security_region_code","Security_region_name","values.tested_total",
                      "values.infected","values.infected_percentage")
 write.csv(tests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv",row.names = F)
+
