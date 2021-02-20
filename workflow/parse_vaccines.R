@@ -4,50 +4,32 @@ vaccines_delivery <- as.data.frame(dat$vaccine_delivery$values)
 vaccines_delivery$date <- as.Date(as.POSIXct(vaccines_delivery$date_of_insertion_unix, origin="1970-01-01"))
 filename.daily.vaccins.delivered <- paste0("data-rivm/vaccines-delivered/rivm_daily_vaccines_",Sys.Date(),".csv")
 write.csv(vaccines_delivery, file = filename.daily.vaccins.delivered, row.names = F)
-sum(vaccines_delivery[,c("astra_zeneca","pfizer","cure_vac","janssen","moderna","sanofi")])
 
 ## Vaccines used
 
-## Locale pulled in from the dashboard repository, with most recent version in branch `develop`
-locale_u <- "https://raw.githubusercontent.com/minvws/nl-covid19-data-dashboard/develop/packages/app/src/locale/nl.json"
+df.care.institutions <- dat$vaccine_administered_care_institutions$values
+colnames(df.care.institutions) <- c("date","vaccines_administered_estimated_carehomes","report_date_carehomes")
+df.ggd <- dat$vaccine_administered_ggd$values
+colnames(df.ggd) <- c("date","vaccines_administered_ggd","report_date_ggd")
+df.hospitals <- dat$vaccine_administered_hospitals$values
+colnames(df.hospitals) <- c("date","vaccines_administered_hospital","report_date_hospitals")
+df.total <- dat$vaccine_administered_total$values
+colnames(df.total) <- c("vaccines_administered_estimated","vaccines_administered","date","report_date_total")
 
-locale_dat <- fromJSON(txt = locale_u)
-vaccinaties_data_locale <- locale_dat$vaccinaties$data
-## Vaccines delivered (dashboard webscrape)
-vaccins.geleverd.totaal <- vaccinaties_data_locale$kpi_expected_delivery$value
+daily_vaccin_datalist <- list(df.care.institutions,df.ggd,df.hospitals,df.total)
 
-## Vaccines used (reported)
+vaccine.data <- Reduce(
+  function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
+  daily_vaccin_datalist
+)
 
-u <- "https://coronadashboard.rijksoverheid.nl/landelijk/vaccinaties"
-webpage <- read_html(u)
+# Build vaccine data
+vaccine.data <- vaccine.data[,c("date","vaccines_administered_estimated_carehomes","vaccines_administered_ggd","vaccines_administered_hospital",
+                                "vaccines_administered_estimated","vaccines_administered")]
+vaccine.data$date <- as.Date(as.POSIXct(vaccine.data$date, origin="1970-01-01"))
+vaccines_by_day <- vaccine.data[order(vaccine.data$date),]
 
-## Vaccines used estimated
-vaccins.toegediend_geschat <- html_nodes(webpage, ".hBabwA")
-vaccins.toegediend.totaal_geschat <- parse_number(html_text(vaccins.toegediend_geschat)[1])*1000
-
-vaccins.per.prikker <- html_nodes(webpage, ".bctkLi")
-vaccins.ggd <- as.numeric(html_text(vaccins.per.prikker)[1])*1000
-vaccins.ziekenhuizen <- as.numeric(html_text(vaccins.per.prikker)[2])*1000
-vaccins.zorginstellingen.geschat <- as.numeric(html_text(vaccins.per.prikker)[3])*1000
-
-vaccins_totaal_toegediend <- vaccins.ggd + vaccins.ziekenhuizen
-
-vaccins.dailydata <- data.frame(as.Date(Sys.Date()),vaccins_totaal_toegediend,vaccins.toegediend.totaal_geschat,vaccins.geleverd.totaal,vaccins.ggd,vaccins.ziekenhuizen,vaccins.zorginstellingen.geschat) ## Calculate totals for cases, hospitalizations, deaths
-names(vaccins.dailydata) <- c("date","vaccines_administered","vaccines_administered_estimated","vaccines_expected_6weeks","vaccines_administered_ggd","vaccines_administered_estimated_hospital","vaccines_administered_estimated_carehomes")
-
+# Write vaccine data
 filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",Sys.Date(),".csv")
-
-write.csv(vaccins.dailydata, file = filename.daily.vaccins, row.names = F)
-
-# 
-temp = list.files(path = "data-rivm/vaccines-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
-myfiles = lapply(temp, read.csv) ## Load all day files
-
-vaccines_by_day <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
-  .x
-})
-
-vaccines_by_day$date <- as.Date(vaccines_by_day$date)
-vaccines_by_day <- vaccines_by_day[order(vaccines_by_day$date),]
-
+write.csv(vaccines_by_day, file = filename.daily.vaccins, row.names = F)
 write.csv(vaccines_by_day, file = "data/vaccines_by_day.csv",row.names = F) ## Write file with aggregate data per day
