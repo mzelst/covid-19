@@ -56,3 +56,5 @@ write.csv(IC_Aanwezig_Percentage, file = "data-nice/age/leeftijdsverdeling_datum
 add(repo, path = "*")
 commit(repo, all = T, paste0("Update NICE age-distribution in hospital ",Sys.Date()))
 push(repo, credentials = git.auth)
+
+rm(list=ls())
