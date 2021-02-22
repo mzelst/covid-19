@@ -366,7 +366,7 @@ tweet.last_id <- posted_tweet$id_str
 #}
 
 ## Workflows for databases
-
+rm(list=ls())
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
