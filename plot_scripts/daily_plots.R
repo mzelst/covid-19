@@ -30,19 +30,36 @@ cases <- all.data %>%
   theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=12),
+        axis.text.y = element_text(size=12, face="bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
         legend.pos = "bottom",
         legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Besmettingen per dag",
+       subtitle = "Maandagen",
        color = "Legend") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
   ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
 testplot.subtitle <- paste0("Let op: percentage is bekend t/m ",Sys.Date()-2," \n\n Maandagen")
 
 # Plot for positive tests per day
-testplot <- testdata %>%
+testplot <- # Plot for positive tests per day
+  testdata %>%
   filter(date > filter.date) %>%
   ggplot(aes(x=date, y=values.infected_percentage)) + 
   geom_line(aes(y = values.infected_percentage, color = "Percentage positief per dag (GGD)"), lwd=1.2) +
@@ -62,15 +79,15 @@ testplot <- testdata %>%
        y = "Percentage positief per dag",
        subtitle = testplot.subtitle,
        color = "Legend") +
-  geom_vline(xintercept = as.Date("2020-12-14"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2020-12-21"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2020-12-28"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-01-04"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-01-11"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-01-18"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-01-25"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-02-01"), linetype = "dotted") +
-  geom_vline(xintercept = as.Date("2021-02-08"), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
   ggtitle("Percentage positief per dag (GGD)") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
@@ -112,12 +129,28 @@ opnames <- all.data %>%
   theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=12),
+        axis.text.y = element_text(size=12, face="bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
         legend.pos = "bottom",
         legend.direction = "vertical",
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Opnames per dag",
+       subtitle = "Maandagen",
        color = "Legend") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
   ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
