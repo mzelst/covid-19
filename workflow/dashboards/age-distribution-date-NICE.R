@@ -63,7 +63,7 @@ colnames(nice_by_day_IC) <- c("Leeftijd","Totaal","Datum","Type")
 
 nice_by_day <- rbind(nice_by_day_clinical, nice_by_day_IC)
 nice_by_day_wide <- spread(nice_by_day, Leeftijd, Totaal)
-
+nice_by_day_wide <- nice_by_day_wide %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
 write.csv(nice_by_day_wide, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long.csv", row.names = F)
 
 add(repo, path = "*")
