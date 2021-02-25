@@ -29,7 +29,17 @@ vaccine.data <- vaccine.data[,c("date","vaccines_administered_estimated_carehome
 vaccine.data$date <- as.Date(as.POSIXct(vaccine.data$date, origin="1970-01-01"))
 vaccines_by_day <- vaccine.data[order(vaccine.data$date),]
 
-# Write vaccine data
+# Write vaccine data file for day
 filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",Sys.Date(),".csv")
 write.csv(vaccines_by_day, file = filename.daily.vaccins, row.names = F)
-write.csv(vaccines_by_day, file = "data/vaccines_by_day.csv",row.names = F) ## Write file with aggregate data per day
+
+## Merge all daily vaccinedata
+
+temp = list.files(path = "data-rivm/vaccines-per-day/",pattern="*.csv", full.names = T) ## Fetch all day files
+myfiles = lapply(temp, fread) ## Load all day files
+
+vaccine_data <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
+  .x
+})
+
+write.csv(vaccine_data, file = "data/vaccines_by_day.csv",row.names = F) ## Write file with aggregate data per day
