@@ -15,8 +15,10 @@ df.hospitals <- dat$vaccine_administered_hospitals$values
 colnames(df.hospitals) <- c("date","vaccines_administered_hospital","report_date_hospitals")
 df.total <- dat$vaccine_administered_total$values
 colnames(df.total) <- c("vaccines_administered_estimated","vaccines_administered","date","report_date_total")
+df.doctors <- dat$vaccine_administered_doctors$values
+colnames(df.doctors) <- c("date","vaccines_administered_doctors","report_date_doctors")
 
-daily_vaccin_datalist <- list(df.care.institutions,df.ggd,df.hospitals,df.total)
+daily_vaccin_datalist <- list(df.care.institutions,df.ggd,df.hospitals, df.doctors,df.total)
 
 vaccine.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -25,12 +27,14 @@ vaccine.data <- Reduce(
 
 # Build vaccine data
 vaccine.data <- vaccine.data[,c("date","vaccines_administered_estimated_carehomes","vaccines_administered_ggd","vaccines_administered_hospital",
-                                "vaccines_administered_estimated","vaccines_administered")]
+                                "vaccines_administered_estimated","vaccines_administered_doctors","vaccines_administered")]
 vaccine.data$date <- as.Date(as.POSIXct(vaccine.data$date, origin="1970-01-01"))
 vaccines_by_day <- vaccine.data[order(vaccine.data$date),]
 
+last.date <- last(vaccines_by_day$date)
+
 # Write vaccine data file for day
-filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",Sys.Date(),".csv")
+filename.daily.vaccins <- paste0("data-rivm/vaccines-per-day/rivm_daily_vaccines_",last.date,".csv")
 write.csv(vaccines_by_day, file = filename.daily.vaccins, row.names = F)
 
 ## Merge all daily vaccinedata
