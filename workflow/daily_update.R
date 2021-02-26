@@ -392,6 +392,7 @@ repeat {
   dashboard.date <- dmy(dashboard.date.node)
   today.date <- as.Date(Sys.Date())
   if (dashboard.date == today.date){
+    Sys.sleep(60)
     source("workflow/parse_vaccines.R")
     git.credentials <- read_lines("git_auth.txt")
     git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
