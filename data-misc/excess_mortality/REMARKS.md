@@ -17,6 +17,9 @@ Hier zijn vier methodes voor:
 (3) methode CBS. Uitleg hier: https://twitter.com/rubenivangaalen/status/1356957609522327555 
 (4) methode RIVM. Korte uitleg hier: https://www.rivm.nl/monitoring-sterftecijfers-nederland; lange uitleg hier: https://www.rivm.nl/bibliotheek/rapporten/2015-0042.pdf
 
+De oversterfte schattingen van het CBS en het RIVM kunnen op weekniveau verschillen. 
+Het cruciale verschil: Het CBS kijkt naar de gemiddelden over de afgelopen jaren voor de betreffende week, deze zijn inclusief verhoogde sterfte in het griepseizoen. Het RIVM wil juist ook elk jaar oversterfte door de griep in kaart brengen.
+
 ## Dynamische lineare modellen
 
 Een kortere uitleg over dynamische lineare modellen in de context van coronasterfte kun je hier vinden: https://twitter.com/mzelst/status/1292057353685278720
