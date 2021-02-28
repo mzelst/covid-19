@@ -19,6 +19,8 @@ all.data[all.data$date == last_date, "Hospital_Intake"] <- NA
 all.data[all.data$date == last_date, "IC_Intake"] <- NA
 rm(last_date)
 
+day.today <- wday(Sys.Date(), week_start = 1)
+
 # Plot for positive tests per day
 cases <- all.data %>%
   filter(date > filter.date) %>%
@@ -43,15 +45,15 @@ cases <- all.data %>%
        y = "Besmettingen per dag",
        subtitle = "Maandagen",
        color = "Legend") +
-  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
   ggtitle("Meldingen van geconstateerde besmettingen") +
   ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
@@ -79,15 +81,15 @@ testplot <- # Plot for positive tests per day
        y = "Percentage positief per dag",
        subtitle = testplot.subtitle,
        color = "Legend") +
-  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
   ggtitle("Percentage positief per dag (GGD)") +
   ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
@@ -142,15 +144,15 @@ opnames <- all.data %>%
        y = "Opnames per dag",
        subtitle = "Maandagen",
        color = "Legend") +
-  geom_vline(xintercept = as.Date(Sys.Date()-56), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-49), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-42), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-35), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-28), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-21), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-14), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()-7), linetype = "dotted") +
-  geom_vline(xintercept = as.Date(Sys.Date()), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-56-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-49-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-42-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-35-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-28-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-21-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
+  geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
   ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
