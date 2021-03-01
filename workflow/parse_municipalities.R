@@ -522,7 +522,7 @@ rm(const.date, const.date_hosp)
 #require(cbsodataR)
 #require(geojsonio)
 
-#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2020MM11")))
+#dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM01")))
 #dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
 #colnames(dat.mun) <- c("statcode","populatie")
 
@@ -530,7 +530,7 @@ rm(const.date, const.date_hosp)
 #  dplyr::filter(!is.na(populatie)) %>%
 #  dplyr::filter(grepl("GM", statcode))
 
-#gemeentegrenzen <- geojson_read("misc/maps/gemeentegrenzen2020.geojson", what = "sp")
+#gemeentegrenzen <- geojson_read("misc/maps/Gemeentegrenzen2021RD.geojson", what = "sp")
 #gemeentes <- gemeentegrenzen@data[,c(2,4)]
 
 #gemeente.stats <- merge(gemeentes, dat.mun, by = "statcode")
