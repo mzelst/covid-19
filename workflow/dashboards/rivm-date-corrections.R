@@ -23,7 +23,7 @@ setDF(df.cases)
 # Calculate moving difference between cases per day
 df.cases[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- df.cases[dates.lead] - df.cases[dates.trail]
 
-write.csv(df.cases, file = "corrections/cases_perday.csv")
+write.csv(df.cases, file = "corrections/cases_perday.csv", row.names = F)
 
 ## Hospital
 df.hospital <- df %>%
@@ -37,7 +37,7 @@ setDF(hospitals.wide)
 # Calculate moving difference between cases per day
 hospitals.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- hospitals.wide[dates.lead] - hospitals.wide[dates.trail]
 
-write.csv(hospitals.wide, file = "corrections/hospital_perday.csv")
+write.csv(hospitals.wide, file = "corrections/hospital_perday.csv", row.names = F)
 
 
 ## Deaths
@@ -52,7 +52,7 @@ setDF(deaths.wide)
 # Calculate moving difference between cases per day
 deaths.wide[paste0("diff",seq_along(dates.lead)+1,seq_along(dates.trail))] <- deaths.wide[dates.lead] - deaths.wide[dates.trail]
 
-write.csv(deaths.wide, file = "corrections/deaths_perday.csv")
+write.csv(deaths.wide, file = "corrections/deaths_perday.csv", row.names = F)
 
 ## Week of death - diff file
 dat.today <- as.data.frame(myfiles[2])
