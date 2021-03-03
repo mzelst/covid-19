@@ -20,7 +20,7 @@ all.data[all.data$date == last_date, "Hospital_Intake"] <- NA
 all.data[all.data$date == last_date, "IC_Intake"] <- NA
 rm(last_date)
 
-day.today <- wday(Sys.Date(), week_start = 1)
+day.today <- wday(Sys.Date(), week_start = 2)
 
 # Plot for positive tests per day
 cases <- all.data %>%
