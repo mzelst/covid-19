@@ -1,73 +1,46 @@
 "Date_statistics","Municipal_health_service","death.today","death.yesterday","diff"
-2020-11-21,"GGD Gooi en Vechtstreek",3,2,1
-2020-12-09,"GGD Zeeland",2,1,1
-2021-01-04,"Dienst Gezondheid & Jeugd ZHZ",2,1,1
-2021-01-05,"Dienst Gezondheid & Jeugd ZHZ",3,2,1
-2021-01-06,"Dienst Gezondheid & Jeugd ZHZ",1,2,-1
-2021-01-07,"Dienst Gezondheid & Jeugd ZHZ",4,5,-1
-2021-01-17,"GGD Fryslân",7,6,1
-2021-01-20,"GGD Rotterdam-Rijnmond",6,7,-1
-2021-01-22,"GGD Hollands-Noorden",2,1,1
-2021-01-23,"GGD Kennemerland",4,3,1
-2021-01-30,"GGD Brabant-Zuidoost",5,4,1
-2021-02-02,"GGD Flevoland",2,1,1
-2021-02-02,"GGD Hart voor Brabant",1,0,1
-2021-02-04,"GGD Groningen",2,1,1
-2021-02-06,"GGD Fryslân",8,7,1
-2021-02-07,"GGD West-Brabant",1,0,1
-2021-02-08,"GGD Hart voor Brabant",3,2,1
-2021-02-08,"GGD Rotterdam-Rijnmond",4,3,1
-2021-02-09,"GGD Fryslân",1,2,-1
-2021-02-11,"GGD Haaglanden",3,2,1
-2021-02-11,"GGD Hollands-Midden",4,3,1
-2021-02-12,"GGD Flevoland",2,1,1
-2021-02-12,"GGD Fryslân",2,1,1
-2021-02-12,"GGD Groningen",1,0,1
-2021-02-13,"GGD Fryslân",6,5,1
-2021-02-13,"GGD Kennemerland",1,0,1
-2021-02-13,"GGD Rotterdam-Rijnmond",3,2,1
-2021-02-14,"GGD Brabant-Zuidoost",2,1,1
-2021-02-14,"GGD Haaglanden",2,1,1
-2021-02-14,"GGD Rotterdam-Rijnmond",2,1,1
-2021-02-15,"GGD Brabant-Zuidoost",0,1,-1
-2021-02-15,"GGD Fryslân",3,2,1
-2021-02-15,"GGD Groningen",2,1,1
-2021-02-15,"GGD Hart voor Brabant",1,0,1
-2021-02-15,"GGD Hollands-Midden",1,0,1
-2021-02-15,"GGD Limburg-Noord",2,1,1
-2021-02-16,"Dienst Gezondheid & Jeugd ZHZ",3,2,1
-2021-02-16,"GGD Gooi en Vechtstreek",1,0,1
-2021-02-16,"GGD Haaglanden",1,0,1
-2021-02-16,"GGD Hollands-Midden",3,1,2
-2021-02-16,"GGD Limburg-Noord",2,1,1
-2021-02-17,"GGD Fryslân",1,0,1
-2021-02-17,"GGD Groningen",2,0,2
-2021-02-17,"GGD Zaanstreek/Waterland",2,1,1
-2021-02-18,"GGD Kennemerland",1,0,1
-2021-02-18,"GGD Regio Utrecht",2,1,1
-2021-02-18,"GGD Rotterdam-Rijnmond",1,0,1
-2021-02-18,"Veiligheids- en Gezondheidsregio Gelderland-Midden",2,1,1
-2021-02-19,"GGD Amsterdam",1,0,1
-2021-02-19,"GGD Flevoland",2,0,2
-2021-02-19,"GGD Gooi en Vechtstreek",1,0,1
-2021-02-19,"GGD Rotterdam-Rijnmond",2,1,1
-2021-02-19,"GGD Zeeland",1,0,1
-2021-02-20,"GGD Flevoland",1,0,1
-2021-02-20,"GGD Gelderland-Zuid",3,2,1
-2021-02-21,"GGD Zuid-Limburg",1,0,1
-2021-02-22,"GGD Fryslân",1,0,1
-2021-02-22,"GGD Limburg-Noord",1,0,1
-2021-02-22,"GGD Rotterdam-Rijnmond",2,0,2
-2021-02-22,"Veiligheids- en Gezondheidsregio Gelderland-Midden",1,0,1
-2021-02-23,"GGD Fryslân",1,0,1
-2021-02-23,"GGD Groningen",2,0,2
-2021-02-23,"GGD Zaanstreek/Waterland",1,0,1
-2021-02-24,"GGD Limburg-Noord",1,0,1
-2021-02-24,"Veiligheids- en Gezondheidsregio Gelderland-Midden",1,0,1
-2021-02-25,"GGD Rotterdam-Rijnmond",1,0,1
-2021-02-26,"GGD Amsterdam",1,0,1
-2021-02-26,"GGD Groningen",1,0,1
-2021-02-26,"GGD Hart voor Brabant",1,0,1
-2021-02-26,"GGD Rotterdam-Rijnmond",1,0,1
-2021-02-27,"GGD Amsterdam",0,1,-1
-2021-02-28,"Dienst Gezondheid & Jeugd ZHZ",1,0,1
+2020-12-27,"GGD Hollands-Noorden",5,4,1
+2020-12-28,"Dienst Gezondheid & Jeugd ZHZ",4,3,1
+2021-01-02,"GGD Regio Utrecht",7,6,1
+2021-01-07,"GGD Rotterdam-Rijnmond",9,8,1
+2021-01-13,"GGD Regio Utrecht",6,5,1
+2021-01-18,"GGD Regio Utrecht",3,2,1
+2021-01-26,"GGD Brabant-Zuidoost",5,4,1
+2021-01-29,"GGD Drenthe",5,4,1
+2021-02-01,"Dienst Gezondheid & Jeugd ZHZ",5,4,1
+2021-02-02,"GGD Drenthe",6,4,2
+2021-02-03,"GGD Drenthe",5,3,2
+2021-02-03,"GGD Fryslân",4,3,1
+2021-02-04,"GGD Regio Utrecht",5,4,1
+2021-02-05,"GGD Fryslân",3,2,1
+2021-02-05,"GGD Regio Utrecht",6,4,2
+2021-02-06,"GGD Regio Utrecht",3,2,1
+2021-02-09,"GGD Drenthe",2,0,2
+2021-02-09,"GGD Fryslân",2,1,1
+2021-02-09,"GGD Rotterdam-Rijnmond",8,7,1
+2021-02-10,"GGD Regio Utrecht",5,4,1
+2021-02-12,"GGD Brabant-Zuidoost",4,3,1
+2021-02-12,"GGD Noord- en Oost-Gelderland",1,0,1
+2021-02-12,"GGD Regio Utrecht",6,5,1
+2021-02-14,"GGD Gelderland-Zuid",1,0,1
+2021-02-15,"GGD Brabant-Zuidoost",1,0,1
+2021-02-15,"GGD Gelderland-Zuid",4,3,1
+2021-02-15,"GGD Regio Utrecht",3,2,1
+2021-02-16,"Dienst Gezondheid & Jeugd ZHZ",4,3,1
+2021-02-16,"GGD Brabant-Zuidoost",3,2,1
+2021-02-16,"GGD Haaglanden",2,1,1
+2021-02-16,"GGD Rotterdam-Rijnmond",3,2,1
+2021-02-17,"Dienst Gezondheid & Jeugd ZHZ",5,4,1
+2021-02-17,"GGD Noord- en Oost-Gelderland",1,0,1
+2021-02-17,"GGD Rotterdam-Rijnmond",5,4,1
+2021-02-18,"GGD Fryslân",1,0,1
+2021-02-19,"GGD Fryslân",2,1,1
+2021-02-20,"GGD Drenthe",2,1,1
+2021-02-20,"GGD Groningen",1,0,1
+2021-02-22,"GGD Rotterdam-Rijnmond",3,2,1
+2021-02-23,"GGD Rotterdam-Rijnmond",3,2,1
+2021-02-24,"GGD Haaglanden",1,0,1
+2021-02-24,"GGD Rotterdam-Rijnmond",1,0,1
+2021-02-24,"GGD Zuid-Limburg",1,0,1
+2021-02-27,"GGD Hart voor Brabant",1,0,1
+2021-02-28,"GGD Regio Utrecht",1,0,1
