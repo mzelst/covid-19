@@ -353,7 +353,7 @@ knitr::asis_output(htmltools::htmlPreserve("
 
 # Covid-19 Opnames
 ### Legenda
-✅   geen opanames in 14 dagen   
+✅   geen opnames in 14 dagen   
 💥   nieuwe eerste opname sinds 14 dagen    
 🟧   Waakzaam ( 1-4 / 1.000.000 inwoners / 7 dagen )   
 🛑   Zorgelijk ( 4-16 / 1.000.000 inwoners / 7 dagen )  
