@@ -5,6 +5,7 @@ require(reshape2)
 require(lubridate)
 
 weeknumber <- isoweek(ymd(Sys.Date()))-1
+week.readfile <- isoweek(Sys.Date())-1
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020","2021")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
@@ -159,3 +160,12 @@ colnames(deaths_weekly) <- c("Week","Year","Totaal_Overleden","Overleden0_65","O
 deaths_weekly <- merge(deaths_weekly, df_cbsmodel,by=c("Week","Year"),all.y=T)
 
 write.csv(deaths_weekly, file = "data-misc/excess_mortality/excess_mortality.csv", row.names = F)
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+## Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Excess mortality analyses - Week ", week.readfile))
+push(repo, credentials = git.auth)
