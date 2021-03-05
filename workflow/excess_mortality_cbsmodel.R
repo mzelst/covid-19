@@ -573,13 +573,13 @@ write.csv(fig4.1.1_dt,file = "workflow/excess_mortality/output/fig4.1.1_dt.csv")
 
 ## create plot
 #ggplot(fig4.1.1_dt, aes(factor(weekyear_format), mid, group = 1)) +
-  geom_line() +
-  geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
-  xlab('Week') +
-  ylab('Beta') + 
-  theme_bw() +
-  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold", vjust = 0.3))
-ggsave('plots/fig4.1.1.png')
+#  geom_line() +
+#  geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
+#  xlab('Week') +
+#  ylab('Beta') + 
+#  theme_bw() +
+#  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold", vjust = 0.3))
+#ggsave('plots/fig4.1.1.png')
 
 ## Figure 4.1.2
 
