@@ -161,8 +161,14 @@ colnames(deaths_weekly) <- c("Week","Year","Totaal_Overleden","Overleden0_65","O
                                   "Oversterfte_Totaal_Gecorrigeerd","covid_sterfgevallen")
 
 deaths_weekly <- merge(deaths_weekly, df_cbsmodel,by=c("Week","Year"),all.y=T)
-deaths_weekly <- arrange(deaths_weekly, Year, Week)
 
+## RIVM excess mortality
+excess.mort.rivm <- read.csv("data-misc/excess_mortality/excess_mortality_rivm.csv")
+colnames(excess.mort.rivm) <- c("Year","Week","start_week","end_week","lower_bound","upper_bound","mortality","excess_mortality_rivm","expected_mortality")
+deaths_weekly <- merge(deaths_weekly, excess.mort.rivm[,c("Year","Week","excess_mortality_rivm")],by=c("Week","Year"),all.x=T)
+
+# Arrange and write file
+deaths_weekly <- arrange(deaths_weekly, Year, Week)
 write.csv(deaths_weekly, file = "data-misc/excess_mortality/excess_mortality.csv", row.names = F)
 
 git.credentials <- read_lines("git_auth.txt")
