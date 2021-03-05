@@ -140,24 +140,28 @@ week.now <- week(Sys.Date())-2 ## Which week?
 
 excess_cbsmodel <- read.csv(paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
-df_cbsmodel <- excess_cbsmodel[which(excess_cbsmodel$model=="Dynamisch"),c("week","model","deaths_week_low",
-                                                                           "deaths_week_mid","deaths_week_high","deaths_mid_cumsum","year")]
+df_cbsmodel <- excess_cbsmodel[which(excess_cbsmodel$model=="Dynamisch"),c("week","deaths_week_low",
+                                                                           "deaths_week_mid","deaths_week_high","deaths_low_cumsum",
+                                                                           "deaths_mid_cumsum","deaths_high_cumsum","year")]
 
-colnames(df_cbsmodel) <- c("Week","Model","DLModel_lowerbound95","DLModel_week_estimate","DLModel_upperbound95","Oversterfte_DLModel_cumul","Year")
-
-df_cbsmodel$Oversterfte_CBS_DLModel <- round(df_cbsmodel$Oversterfte_DLModel_week,0)
+colnames(df_cbsmodel) <- c("Week","DLModel_lowerbound95","DLModel_week_estimate",
+                           "DLModel_upperbound95","Oversterfte_DLModel_cumul_low","Oversterfte_DLModel_cumul_mid",
+                           "Oversterfte_DLModel_cumul_high","Year")
 
 df_cbsmodel <- df_cbsmodel %>%
   mutate(DLModel_lowerbound95 = round(DLModel_lowerbound95,0)) %>%
   mutate(DLModel_upperbound95 = round(DLModel_upperbound95,0)) %>%
   mutate(DLModel_week_estimate = round(DLModel_week_estimate,0)) %>%
-  mutate(Oversterfte_DLModel_cumul = round(Oversterfte_DLModel_cumul,0))
+  mutate(Oversterfte_DLModel_cumul_low = round(Oversterfte_DLModel_cumul_low,0)) %>%
+  mutate(Oversterfte_DLModel_cumul_mid = round(Oversterfte_DLModel_cumul_mid,0)) %>%
+  mutate(Oversterfte_DLModel_cumul_high = round(Oversterfte_DLModel_cumul_high,0))
 
 colnames(deaths_weekly) <- c("Week","Year","Totaal_Overleden","Overleden0_65","Overleden65_80","Overleden80+",
                                   "Oversterfte_Totaal","Oversterfte0_65","Oversterfte65_80","Oversterfte80+",
                                   "Oversterfte_Totaal_Gecorrigeerd","covid_sterfgevallen")
 
 deaths_weekly <- merge(deaths_weekly, df_cbsmodel,by=c("Week","Year"),all.y=T)
+deaths_weekly <- arrange(deaths_weekly, Year, Week)
 
 write.csv(deaths_weekly, file = "data-misc/excess_mortality/excess_mortality.csv", row.names = F)
 
