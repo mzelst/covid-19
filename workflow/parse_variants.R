@@ -10,3 +10,14 @@ variants.prevalence <- table %>%
   mutate(prevalentie_ZAvariant = round(ZuidAfrikaanse_variant/Aantal_monsters*100,2))
 
 write.csv(variants.prevalence,"data-misc/prevalence_variants.csv",row.names = F)
+
+week.variants <- isoweek(Sys.Date())
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+##Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("Week " , week.variants, " - Weekly (automated) update variants data"))
+push(repo, credentials = git.auth)
