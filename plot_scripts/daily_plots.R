@@ -157,12 +157,18 @@ opnames <- all.data %>%
   ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
-#reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
-#  map(as.data.table) %>%
-#  rbindlist(fill = TRUE)
+reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
 
-#reproduction <- reproduction %>%
-#  mutate(Date = Date %>% as.Date)
+reproduction <- reproduction %>%
+  mutate(Date = Date %>% as.Date)
+
+last.date.repro <- last(reproduction$Date)
+
+# Write reproduction number data file for day
+filename.daily.repro <- paste0("data-misc/reproduction-numbers/reproduction_number_",last.date.repro,".csv")
+write.csv(reproduction, file = filename.daily.repro, row.names = F)
 
 #prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
 #  map(as.data.table) %>%
