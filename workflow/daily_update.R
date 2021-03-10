@@ -406,3 +406,19 @@ repeat {
     break
   }
 }
+
+
+require(gmailr)
+gm_auth_configure(path="workflow/twitter/gmailr.json")
+
+latest_msg <- paste0("Daily Update - [", Sys.Date(),"] - completed")
+
+my_email_message <- gm_mime() %>%
+  gm_to("j.m.vanzelst@uvt.nl") %>%
+  gm_from("marinovanzelst@gmail.com") %>%
+  gm_subject(latest_msg) %>%
+  gm_text_body("Congratulations!")
+
+gm_auth("marinovanzelst@gmail.com")
+
+gm_send_message(my_email_message)
