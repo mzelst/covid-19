@@ -4,8 +4,8 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 
-weeknumber <- isoweek(ymd(Sys.Date()))-1
-week.readfile <- isoweek(Sys.Date())-1
+weeknumber <- isoweek(ymd(Sys.Date()))-2
+week.readfile <- isoweek(Sys.Date())-2
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020","2021")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
