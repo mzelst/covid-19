@@ -67,7 +67,7 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 #vaccins.geprikt <- format(last(vaccines.by_day$vaccines_administered_ggd+vaccines.by_day$vaccines_administered_estimated_hospital),decimal.mark = ",",big.mark =".",big.interval = 3)
 
 ## Build tweets
-tweet.main <- paste0("#COVID19NL
+tweet.main <- paste0("#TeHoog
 
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
