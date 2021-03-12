@@ -5,7 +5,7 @@ require(reshape2)
 require(lubridate)
 
 weeknumber <- isoweek(ymd(Sys.Date()))-2
-week.readfile <- isoweek(Sys.Date())-2
+week.readfile <- isoweek(Sys.Date())-1
 
 table_mortality <- cbs_get_data("70895ned", Perioden = has_substring(c("2001","2002","2003","2004","2005","2006","2013","2014","2015","2016","2017","2018","2019","2020","2021")), Geslacht = has_substring("1100"))
 table_mortality$Year <- substr(table_mortality$Perioden, 1, 4)
@@ -176,6 +176,15 @@ cbs.death.statistics$Year <- 2020
 colnames(cbs.death.statistics) <- c("Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics","Year")
 
 deaths_weekly <- merge(deaths_weekly, cbs.death.statistics, by = c("Week","Year"), all.x=T)
+
+str(deaths_weekly)
+
+deaths_weekly <- deaths_weekly %>%
+  mutate(Totaal_Overleden = round(Totaal_Overleden,0)) %>%
+  mutate(Overleden0_65 = round(Overleden0_65,0)) %>%
+  mutate(Overleden65_80 = round(Overleden65_80,0)) %>%
+  mutate(`Overleden80+` = round(`Overleden80+`,0))
+
 
 # Arrange and write file
 deaths_weekly <- arrange(deaths_weekly, Year, Week)
