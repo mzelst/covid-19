@@ -167,6 +167,16 @@ excess.mort.rivm <- read.csv("data-misc/excess_mortality/excess_mortality_rivm.c
 colnames(excess.mort.rivm) <- c("Year","Week","start_week","end_week","lower_bound","upper_bound","mortality","excess_mortality_rivm","expected_mortality")
 deaths_weekly <- merge(deaths_weekly, excess.mort.rivm[,c("Year","Week","excess_mortality_rivm")],by=c("Week","Year"),all.x=T)
 
+## CBS death statistics
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/10/bijna-3-2-duizend-mensen-overleden-aan-covid-19-in-november-2020"
+webpage.cbs <- read_html(u.cbs)
+
+cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
+cbs.death.statistics$Year <- 2020
+colnames(cbs.death.statistics) <- c("Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics","Year")
+
+deaths_weekly <- merge(deaths_weekly, cbs.death.statistics, by = c("Week","Year"), all.x=T)
+
 # Arrange and write file
 deaths_weekly <- arrange(deaths_weekly, Year, Week)
 write.csv(deaths_weekly, file = "data-misc/excess_mortality/excess_mortality.csv", row.names = F)
