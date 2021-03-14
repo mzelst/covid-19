@@ -158,7 +158,7 @@ Encoding(tweet.municipality.cases) <- "UTF-8"
 
 posted_tweet <- post_tweet (
   tweet.municipality.cases,
-  token = token.edwinveldhuizen,
+  token = token.mzelst,
   media = c("plots/list-cases-head.png", "plots/list-cases-all-part1.png", "plots/list-cases-all-part2.png", "plots/list-cases-all-part3.png"),
   in_reply_to_status_id = tweet.main.id,
   auto_populate_reply_metadata = TRUE
@@ -169,10 +169,6 @@ rm(tweet.municipality.cases, tweet.municipality.colors, posted_tweet)
 
 post_tweet (
   token.edwinveldhuizen,
-  retweet_id = tweet.last_id)
-
-post_tweet (
-  token.mzelst,
   retweet_id = tweet.last_id)
 
 ########
@@ -190,7 +186,7 @@ tweet.municipality.hosp <- sprintf(tweet.municipality.hosp,
 
 posted_tweet <- post_tweet (
   tweet.municipality.hosp,
-  token = token.edwinveldhuizen,
+  token = token.mzelst,
   media = c("plots/list-hosp-head.png", "plots/list-hosp-all-part1.png", "plots/list-hosp-all-part2.png", "plots/list-hosp-all-part3.png"),
   in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
@@ -221,7 +217,7 @@ Encoding(tweet.municipality.deaths) <- "UTF-8"
 
 posted_tweet <- post_tweet (
   tweet.municipality.deaths,
-  token = token.edwinveldhuizen,
+  token = token.mzelst,
   media = c("plots/list-deaths-head.png", "plots/list-deaths-all-part1.png", "plots/list-deaths-all-part2.png", "plots/list-deaths-all-part3.png"),
   in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
