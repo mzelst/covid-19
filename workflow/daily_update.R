@@ -94,10 +94,6 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
 
-# Retweet for @edwinveldhuizen
-post_tweet (token = token.edwinveldhuizen,
-  retweet_id = tweet.main.id)
-
 ##### Generate municipality images
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_municipalities.R")
@@ -166,10 +162,6 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 rm(tweet.municipality.cases, tweet.municipality.colors, posted_tweet)
-
-post_tweet (
-  token.edwinveldhuizen,
-  retweet_id = tweet.last_id)
 
 ########
 # Municipality tweet - hospital admissions
