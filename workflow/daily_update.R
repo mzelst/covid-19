@@ -370,15 +370,10 @@ source("workflow/dashboards/age-distribution-date-NICE.R")
 ## Workflow for dashboard scrape 
 repeat {
   Sys.sleep(10)
-  u <- "https://coronadashboard.rijksoverheid.nl/"
-  webpage <- read_html(u)
-  
   ## Scrape dashboard date
-  dashboard.date.node <- html_nodes(webpage, ".gjtQTf")
-  dashboard.date.node <- html_text(dashboard.date.node)[1]
-  
-  dashboard.date <- dmy(dashboard.date.node)
-  today.date <- as.Date(Sys.Date())
+  dat <- fromJSON(txt = "https://coronadashboard.rijksoverheid.nl/json/NL.json")
+  dashboard.date <- as.Date(as.POSIXct(last(dat$vaccine_administered_total$values$date_unix), origin="1970-01-01"))
+  today.date <- as.Date(Sys.Date())-1
   if (dashboard.date == today.date){
     Sys.sleep(60)
     source("workflow/parse_vaccines.R")
