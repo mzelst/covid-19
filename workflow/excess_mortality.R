@@ -51,8 +51,10 @@ bevolking.long <- gather(bevolking,"LeeftijdOp31December","Bevolking",2:5)
 
 
 ## Select weeks
-table_mortality <- subset(table_mortality, Week > 00 & Week < weeknumber+1 & Week != 53  & Week != '01')
+table_mortality <- subset(table_mortality, Week > 00 & Week != 53  & Week != '01')
 table_mortality <- table_mortality[!table_mortality$Week == '00',]
+
+#& Week < weeknumber+2
 
 mortality_full <- merge(table_mortality, bevolking.long, by=c("Year","LeeftijdOp31December"), all.x=TRUE)
 
