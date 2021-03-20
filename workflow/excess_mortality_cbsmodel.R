@@ -1,6 +1,8 @@
 ## title: Script for estimating excess deaths from Corona
-## author: Trond Husby
+## original author: Trond Husby
+## edits by: Marino van Zelst
 ## date: 26.06.2020
+## last edit: 20-03-2021
 
 ##
 ## house keeping

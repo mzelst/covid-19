@@ -104,6 +104,10 @@ fwrite(tests, file = filename.tests.raw,row.names = F)
 filename.tests.compressed <- paste0("data-rivm/tests/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(tests, file = filename.tests.compressed,row.names = F)
 
+ic.nice.data <- fread("https://data.rivm.nl/covid-19/COVID-19_ic_opnames.csv", sep = ";")
+filename.ic.nice <- paste0("data-rivm/ic-datasets/ic_daily_",last(ic.nice.data$Date_of_statistics),".csv") ## Filename for daily data
+fwrite(ic.nice.data, file = filename.ic.nice,row.names = F)
+
 #continue the script
 print("Script did NOT end!")   
 #}
