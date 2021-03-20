@@ -476,6 +476,13 @@ total_dynamic$deaths_week_mid_cumsum <- cumsum(total_dynamic$deaths_week_mid)
 total_dynamic$deaths_week_high_cumsum <- cumsum(total_dynamic$deaths_week_high)
 write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
 
+
+totals$weekyear <- ifelse(totals$week<10,
+                               paste0(totals$year,"-",0,totals$week),
+                               paste0(totals$year,"-",totals$week))
+
+
+
 ## Clean environment
 
 rm("begin_end_griep","begin_end_list","bestfit","beta","cbs_deaths_ts","cbs_oversterfte","combined_d","covid_bs","covid_bs_d",
@@ -541,6 +548,10 @@ ggsave('plots/fig2.1.png')
 
 ## data for figure
 fig2.2_dt <- totals[model == 'Dynamisch']
+
+fig2.2_dt$weekyear <- ifelse(fig2.2_dt$week<10,
+                                     paste0(fig2.2_dt$year,"-",0,fig2.2_dt$week),
+                                     paste0(fig2.2_dt$year,"-",fig2.2_dt$week))
 
 write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
 
@@ -621,6 +632,7 @@ fig4.2.1_dt <-beta_long[year >= 2020 & week >= 11 | year >=2021,
 
 fig4.2.1_dt <- fig4.2.1_dt %>%
   dplyr::filter(model == "Dynamisch")
+
 
 fig4.2.1_dt$weekyear <- as.Date(ifelse(fig4.2.1_dt$week<10,
                                        paste0(fig4.2.1_dt$year,0,fig4.2.1_dt$week,01),
