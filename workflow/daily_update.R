@@ -396,11 +396,13 @@ gm_auth_configure(path="workflow/twitter/gmailr.json")
 
 latest_msg <- paste0("Daily Update - [", Sys.Date(),"] - completed")
 
+dat <- read.csv("data/all_data.csv")
+IC_message <- ifelse(last(dat$IC_Cumulative)>10000,"IC=10000","IC is nog niet 10000")
 my_email_message <- gm_mime() %>%
   gm_to("j.m.vanzelst@uvt.nl") %>%
   gm_from("marinovanzelst@gmail.com") %>%
   gm_subject(latest_msg) %>%
-  gm_text_body("Congratulations!")
+  gm_text_body(IC_message)
 
 gm_auth("marinovanzelst@gmail.com")
 

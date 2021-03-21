@@ -114,7 +114,90 @@ dat %>%
        y = "Totaal aanwezig",
        color = "Legend") +
   ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
-  ggsave("plots/leeftijd_opnames_kliniek.png",width=12, height = 10)
+  ggsave("plots/leeftijd_opnames_kliniek_ouderen.png",width=12, height = 10)
+
+## Plot hospital intake per age group (younger groups)
+
+dat <- read.csv("data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long.csv")
+dat <- dat %>%
+  filter(Type == "Klinisch")
+dat <- dat[,c(1:13)]
+colnames(dat) <- c("Datum","Type","age20","age20_24","age25_29","age30_34","age35_39","age40_44","age45_49","age50_54",
+                   "age55_59","age60_64","age65_69")
+
+dat <- dat %>%
+  mutate(age20_intake = c(0,diff(age20))) %>%
+  mutate(age20_24_intake = c(0,diff(age20_24))) %>%
+  mutate(age25_29_intake = c(0,diff(age25_29))) %>%
+  mutate(age30_34_intake = c(0,diff(age30_34))) %>%
+  mutate(age35_39_intake = c(0,diff(age35_39))) %>%
+  mutate(age40_44_intake = c(0,diff(age40_44))) %>%
+  mutate(age44_49_intake = c(0,diff(age45_49))) %>%
+  mutate(age50_54_intake = c(0,diff(age50_54))) %>%
+  mutate(age55_59_intake = c(0,diff(age55_59))) %>%
+  mutate(age60_64_intake = c(0,diff(age60_64))) %>%
+  mutate(age65_69_intake = c(0,diff(age65_69))) %>%
+  mutate(Datum = as.Date(Datum))
+
+dat <- dat %>%
+  mutate(age20_intake = round(frollmean(age20_intake,7),0)) %>%
+  mutate(age20_24_intake = round(frollmean(age20_24_intake,7),0)) %>%
+  mutate(age25_29_intake = round(frollmean(age25_29_intake,7),0)) %>%
+  mutate(age30_34_intake = round(frollmean(age30_34_intake,7),0)) %>%
+  mutate(age35_39_intake = round(frollmean(age35_39_intake,7),0)) %>%
+  mutate(age40_44_intake = round(frollmean(age40_44_intake,7),0)) %>%
+  mutate(age44_49_intake = round(frollmean(age44_49_intake,7),0)) %>%
+  mutate(age50_54_intake = round(frollmean(age50_54_intake,7),0)) %>%
+  mutate(age55_59_intake = round(frollmean(age55_59_intake,7),0)) %>%
+  mutate(age60_64_intake = round(frollmean(age60_64_intake,7),0)) %>%
+  mutate(age65_69_intake = round(frollmean(age65_69_intake,7),0)) %>%
+  mutate(Datum = as.Date(Datum))
+
+dat %>%
+  ggplot(aes(x=Datum, y=age20_intake, group = 1)) + 
+  geom_line(aes(y = age20_intake, color = "<20"), lwd=1.2) +
+  geom_line(aes(y = age20_24_intake, color = "20-24"), lwd=1.2) +
+  geom_line(aes(y = age25_29_intake, color = "25-29"), lwd=1.2) +
+  geom_line(aes(y = age30_34_intake, color = "30-34"), lwd=1.2) +
+  geom_line(aes(y = age35_39_intake, color = "35-39"), lwd=1.2) +
+  geom_line(aes(y = age40_44_intake, color = "40-44"), lwd=1.2) +
+  geom_line(aes(y = age44_49_intake, color = "40-49"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  #scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
+  guides(colour = guide_legend(reverse=T)) +
+  theme_minimal() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Totaal aanwezig",
+       color = "Legend") +
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
+  ggsave("plots/leeftijd_opnames_kliniek_jongeren.png",width=12, height = 10)
+
+dat %>%
+  ggplot(aes(x=Datum, y=age50_54_intake, group = 1)) + 
+  geom_line(aes(y = age50_54_intake, color = "50-54"), lwd=1.2) +
+  geom_line(aes(y = age55_59_intake, color = "55-59"), lwd=1.2) +
+  geom_line(aes(y = age60_64_intake, color = "60-64"), lwd=1.2) +
+  geom_line(aes(y = age65_69_intake, color = "65-69"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  #scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
+  guides(colour = guide_legend(reverse=T)) +
+  theme_minimal() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Totaal aanwezig",
+       color = "Legend") +
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
+  ggsave("plots/leeftijd_opnames_kliniek_middelbare_leeftijd.png",width=12, height = 10)
+
 
 ## Push to github
 add(repo, path = "*")
