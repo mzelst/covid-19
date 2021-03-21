@@ -66,6 +66,57 @@ nice_by_day_wide <- spread(nice_by_day, Leeftijd, Totaal)
 nice_by_day_wide <- nice_by_day_wide %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
 write.csv(nice_by_day_wide, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long.csv", row.names = F)
 
+## Plot hospital intake per age group (older groups)
+
+dat <- read.csv("data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long.csv")
+dat <- dat %>%
+  filter(Type == "Klinisch")
+dat$below70 <- rowSums(dat[,3:13])
+dat <- dat[,c(1:2,14:19)]
+colnames(dat) <- c("Datum","Type","age70_74","age75_79","age80_84","age85_89","age90","age_below70")
+
+dat <- dat %>%
+  mutate(age70_74_intake = c(0,diff(age70_74))) %>%
+  mutate(age75_79_intake = c(0,diff(age75_79))) %>%
+  mutate(age80_84_intake = c(0,diff(age80_84))) %>%
+  mutate(age85_89_intake = c(0,diff(age85_89))) %>%
+  mutate(age90_intake = c(0,diff(age90))) %>%
+  mutate(age_below70_intake = c(0,diff(age_below70))) %>%
+  mutate(Datum = as.Date(Datum))
+
+dat <- dat %>%
+  mutate(age70_74_intake = round(frollmean(age70_74_intake,7),0)) %>%
+  mutate(age75_79_intake = round(frollmean(age75_79_intake,7),0)) %>%
+  mutate(age80_84_intake = round(frollmean(age80_84_intake,7),0)) %>%
+  mutate(age85_89_intake = round(frollmean(age85_89_intake,7),0)) %>%
+  mutate(age90_intake = round(frollmean(age90_intake,7),0)) %>%
+  mutate(age_below70_intake = round(frollmean(age_below70_intake,7),0)) %>%
+  mutate(Datum = as.Date(Datum))
+
+dat %>%
+  ggplot(aes(x=Datum, y=age70_74_intake, group = 1)) + 
+  geom_line(aes(y = age_below70_intake, color = "<70"), lwd=1.2) +
+  geom_line(aes(y = age70_74_intake, color = "70-74"), lwd=1.2) +
+  geom_line(aes(y = age75_79_intake, color = "75-70"), lwd=1.2) +
+  geom_line(aes(y = age80_84_intake, color = "80-84"), lwd=1.2) +
+  geom_line(aes(y = age85_89_intake, color = "85-89"), lwd=1.2) +
+  geom_line(aes(y = age90_intake, color = "90+"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+  #scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
+  guides(colour = guide_legend(reverse=T)) +
+  theme_minimal() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.pos = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Totaal aanwezig",
+       color = "Legend") +
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
+  ggsave("plots/leeftijd_opnames_kliniek.png",width=12, height = 10)
+
+## Push to github
 add(repo, path = "*")
 commit(repo, all = T, paste0("Update NICE age-distribution in hospital ",Sys.Date()))
 push(repo, credentials = git.auth)

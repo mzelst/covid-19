@@ -8,8 +8,6 @@ rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemee
 #} else {
 
 # Parse data municipality per day 
-sum(rivm.mun.perday$Total_reported)-1012908 
-sum(rivm.mun.perday$Deceased)-14589
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
 filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
@@ -97,12 +95,16 @@ fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
 
+## Download tests
+
 tests <- fread("https://data.rivm.nl/covid-19/COVID-19_uitgevoerde_testen.csv", sep = ";")
 filename.tests.raw <- paste0("raw-data-archive/tests/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 fwrite(tests, file = filename.tests.raw,row.names = F)
 
 filename.tests.compressed <- paste0("data-rivm/tests/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(tests, file = filename.tests.compressed,row.names = F)
+
+## Download IC data (NICE)
 
 ic.nice.data <- fread("https://data.rivm.nl/covid-19/COVID-19_ic_opnames.csv", sep = ";")
 filename.ic.nice <- paste0("data-rivm/ic-datasets/ic_daily_",last(ic.nice.data$Date_of_statistics),".csv") ## Filename for daily data

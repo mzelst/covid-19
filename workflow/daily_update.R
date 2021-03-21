@@ -49,7 +49,7 @@ all.data <- read.csv("data/all_data.csv")
 
 # get tokens
 source("workflow/twitter/token_mzelst.R")
-source("workflow/twitter/token_edwinveldhuizen.R")
+#source("workflow/twitter/token_edwinveldhuizen.R")
 
 LCPS_klinisch_two_days <- last(all.data$Kliniek_Bedden,2)
 LCPS_Verpleeg_Huidig_Toename <- LCPS_klinisch_two_days[2] - LCPS_klinisch_two_days[1]
