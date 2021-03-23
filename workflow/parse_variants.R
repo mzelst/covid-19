@@ -3,7 +3,7 @@ webpage <- read_html(u)
 table <- as.data.frame(html_table(webpage))
 
 colnames(table) <- c("Week","Aantal_monsters","Britse_variant","ZuidAfrikaanse_variant","Braziliaanse_variant",
-                     "Britse_variant_E484K","B.1.525_variant_E484K_F888L")
+                     "Britse_variant_E484K","B.1.525_variant_E484K_F888L","Californie_variant")
 
 variants.prevalence <- table %>%
   mutate(prevalentie_britsevariant = round(Britse_variant/Aantal_monsters*100,2)) %>%
