@@ -1,11 +1,12 @@
 require(EpiEstim)
 require(scales)
 require(psych)
+require(incidence)
 
 corona <- read.csv("corrections/cases_perday.csv")
 covid.incidence <- corona[,c("Date_statistics","X2021.03.28")]
-corona.breakdown <- read.csv("data-dashboards/date_statistics_mutations.csv")
-covid.incidence <- corona.breakdown[,c("Datum","DOO")]
+#corona.breakdown <- read.csv("data-dashboards/date_statistics_mutations.csv")
+#covid.incidence <- corona.breakdown[,c("Datum","DOO")]
 
 colnames(covid.incidence) <- c("dates","I")
 covid.incidence$dates <- as.Date(covid.incidence$dates)
@@ -22,16 +23,29 @@ config <- make_config(list(mean_si = 4.0, std_mean_si = 0.3,
                            min_std_si = 0.2, max_std_si = 0.5))
 
 
-res_parametric_si <- estimate_R(covid.incidence, 
-                                method="parametric_si",
-                                config = config)
+#res_parametric_si <- estimate_R(covid.incidence, 
+                                #method="uncertain_si",
+                                #config = config)
+
+time <- 5
+
+T <- nrow(covid.incidence)
+t_start <- seq(2, T-time) # starting at 2 as conditional on the past observations
+t_end <- t_start + time # adding 6 to get 7-day windows as bounds included in window
+
+res_parametric_si <- wallinga_teunis(covid.incidence, method="parametric_si",
+                       config = list(t_start = t_start, t_end = t_end,
+                                     mean_si = 4.0, std_si = 0.3,
+                                     n_sim = 10))
+
 
 #plot(res_parametric_si, legend = FALSE)
 
 covid.r <- res_parametric_si$R
 
+dates.start <- 8-6+time
 
-dates <- as.data.frame(covid.incidence[8:(nrow(covid.incidence)),1])
+dates <- as.data.frame(covid.incidence[dates.start:(nrow(covid.incidence)),1])
 colnames(dates) <- c("dates")
 
 covid.r <- cbind(dates,covid.r)
@@ -44,8 +58,8 @@ r.rivm$dates <- as.Date(r.rivm$dates)
 covid.r <- merge(covid.r, r.rivm,by="dates")
 str(covid.r)
 covid.r <- covid.r[,c("dates","Mean(R)","Std(R)","Rt_avg","Rt_low","Rt_up")]
-covid.r$R_lagged <- lead(covid.r$`Mean(R)`,6)
-covid.r$R_Std_lag <- lead(covid.r$`Std(R)`,6)
+covid.r$R_lagged <- lead(covid.r$`Mean(R)`,2)
+covid.r$R_Std_lag <- lead(covid.r$`Std(R)`,2)
 
 
 covid.r$Rt_avg <- as.numeric(covid.r$Rt_avg)
@@ -58,12 +72,13 @@ covid.r$diff <- round(covid.r$R_lagged-covid.r$Rt_avg,2)
 
 
 covid.r %>%
+  filter(dates < Sys.Date()-14) %>%
   ggplot(aes(x=dates, y=Rt_avg)) + 
   geom_line(aes(y = Rt_avg, color = "R - RIVM"), lwd=0.8) +
   geom_line(aes(y = R_lagged, color = "R - Marino"), lwd=1.2) +
   #geom_line(aes(y = R_est_up, color = "R - CI (upper bound)"), lwd=1.2, linetype = "dashed") +
   #geom_line(aes(y = R_est_low, color = "R - CI (lower bound)"), lwd=1.2, linetype = "dashed") +
-  scale_x_date(date_breaks = "1 month") +
+  scale_x_date(date_breaks = "1 week") +
   scale_y_continuous(limits = c(0.75, 1.35)) +
   scale_color_manual(values = c("#F58121","#228AC7")) +
   theme_minimal() +
@@ -76,7 +91,8 @@ covid.r %>%
         plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         legend.pos = "bottom",
-        legend.direction = "vertical",
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 14),
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Besmettingen per dag",
@@ -84,4 +100,7 @@ covid.r %>%
   geom_hline(yintercept = 1, linetype = "dashed") +
   ggtitle("Reproductiegetal")
 
+describe(covid.r)
+mean(covid.r$diff,na.rm=T)
 
+parametric_plot <- plot(res_parametric_si, what = "R")
