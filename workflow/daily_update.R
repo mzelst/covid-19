@@ -12,8 +12,8 @@ source("workflow/generate_banner.R")
 #} else {
 
 # Parse RIVM, NICE and corrections data
-source("workflow/parse_lcps-data.R")
 source("workflow/parse_nice-data.R")
+source("workflow/parse_lcps-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_tests.R")
@@ -355,13 +355,13 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Workflows for databases
 rm(list=ls())
+source("workflow/estimate_R.R")
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
-
 
 ## Vaccine tweet for history ##
 #Vaccins geprikt: ",vaccins.geprikt,"

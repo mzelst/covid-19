@@ -12,15 +12,13 @@ colnames(covid.incidence) <- c("dates","I")
 covid.incidence$dates <- as.Date(covid.incidence$dates)
 covid.incidence$I <- as.numeric(covid.incidence$I)
 
-plot(as.incidence(covid.incidence$I,dates = covid.incidence$dates))
-
 covid.incidence <- covid.incidence %>%
   filter(dates > "2021-01-01")
 
-config <- make_config(list(mean_si = 4.0, std_mean_si = 0.3,
-                           min_mean_si = 3.5, max_mean_si = 4.5,
-                           std_si = 0.5, std_std_si = 0.15,
-                           min_std_si = 0.2, max_std_si = 0.5))
+#config <- make_config(list(mean_si = 4.0, std_mean_si = 0.3,
+#                           min_mean_si = 3.5, max_mean_si = 4.5,
+#                           std_si = 0.5, std_std_si = 0.15,
+#                           min_std_si = 0.2, max_std_si = 0.5))
 
 
 #res_parametric_si <- estimate_R(covid.incidence, 
@@ -56,7 +54,6 @@ colnames(r.rivm) <- c("dates","Rt_avg","Rt_low","Rt_up")
 r.rivm$dates <- as.Date(r.rivm$dates)
 
 covid.r <- merge(covid.r, r.rivm,by="dates")
-str(covid.r)
 covid.r <- covid.r[,c("dates","Mean(R)","Std(R)","Rt_avg","Rt_low","Rt_up")]
 covid.r$R_lagged <- lead(covid.r$`Mean(R)`,2)
 covid.r$R_Std_lag <- lead(covid.r$`Std(R)`,2)
@@ -70,6 +67,7 @@ covid.r$R_est_low <- covid.r$R_lagged-covid.r$R_Std_lag*1.96
 
 covid.r$diff <- round(covid.r$R_lagged-covid.r$Rt_avg,2)
 
+R_last_estimate <- round(covid.r[nrow(covid.r)-11,"R_lagged"],2)
 
 covid.r %>%
   filter(dates < Sys.Date()-14) %>%
@@ -96,11 +94,10 @@ covid.r %>%
         legend.title = element_blank()) +
   labs(x = "Datum",
        y = "Besmettingen per dag",
+       subtitle = paste0("Laatst berekende R = ",R_last_estimate, "\n Datum = ",as.Date(last(covid.r$dates)-11)),
        color = "Legend") +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  ggtitle("Reproductiegetal")
+  ggtitle("Reproductiegetal") +
+  ggsave("plots/reproductiegetal_marino.png")
 
-describe(covid.r)
-mean(covid.r$diff,na.rm=T)
 
-parametric_plot <- plot(res_parametric_si, what = "R")
