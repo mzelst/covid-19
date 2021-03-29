@@ -4,7 +4,7 @@ require(psych)
 require(incidence)
 
 corona <- read.csv("corrections/cases_perday.csv")
-covid.incidence <- corona[,c("Date_statistics","X2021.03.28")]
+covid.incidence <- corona[,c("Date_statistics","X2021.03.29")]
 #corona.breakdown <- read.csv("data-dashboards/date_statistics_mutations.csv")
 #covid.incidence <- corona.breakdown[,c("Datum","DOO")]
 
@@ -100,4 +100,6 @@ covid.r %>%
   ggtitle("Reproductiegetal") +
   ggsave("plots/reproductiegetal_marino.png")
 
-
+covid.r$Std_R <- NULL
+filename.repro.file <- paste0("data-misc/reproduction-numbers/marino/reproduction_number_",Sys.Date(),".csv")
+write.csv(covid.r, file = filename.repro.file)
