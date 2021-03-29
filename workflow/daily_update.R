@@ -407,3 +407,9 @@ my_email_message <- gm_mime() %>%
 gm_auth("marinovanzelst@gmail.com")
 
 gm_send_message(my_email_message)
+
+rm(daily_vaccin_datalist,dat,df.care.institutions,df.doctors,df.ggd,df.hospitals,df.total,
+   my_email_message,myfiles,vaccine_data,vaccines_by_day,vaccines_delivery,dashboard.date,filename.daily.vaccins,
+   filename.daily.vaccins.delivered,IC_message,last.date,latest_msg,temp,today.date)
+
+
