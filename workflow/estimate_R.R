@@ -4,7 +4,7 @@ require(psych)
 require(incidence)
 
 corona <- read.csv("corrections/cases_perday.csv")
-covid.incidence <- corona[,c("Date_statistics","X2021.03.29")]
+covid.incidence <- corona[,c(1,3)]
 #corona.breakdown <- read.csv("data-dashboards/date_statistics_mutations.csv")
 #covid.incidence <- corona.breakdown[,c("Datum","DOO")]
 
