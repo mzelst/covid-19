@@ -192,6 +192,46 @@ deaths_weekly <- deaths_weekly %>%
 deaths_weekly <- arrange(deaths_weekly, Year, Week)
 write.csv(deaths_weekly, file = "data-misc/excess_mortality/excess_mortality.csv", row.names = F)
 
+cbp2 <- c("#009E73", "#87109A","#E6830C",
+          "#D96DEA", "#2231C5","#000000")
+
+mortality_wide <- mortality_wide %>%
+  filter(LeeftijdOp31December == "Totaal")
+
+
+mortality_wide %>%
+  ggplot(aes(x=Week, y=`2016`, group = 1)) + 
+  geom_line(aes(y = `2016`, color = "2016"), lwd=1.0, linetype = "dashed") +
+  geom_line(aes(y = `2017`, color = "2017"), lwd=1.0, linetype = "dashed") +
+  geom_line(aes(y = `2018`, color = "2018"), lwd=1.0, linetype = "dashed") +
+  geom_line(aes(y = `2019`, color = "2019"), lwd=1.0, linetype = "dashed") +
+  geom_line(aes(y = `2020`, color = "2020"), lwd=1.2) +
+  geom_line(aes(y = `2021`, color = "2021"), lwd=1.2) +
+  scale_y_continuous(limits = c(2000, 5500)) +
+  theme_minimal() +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.x.bottom = element_text(size=12),
+        axis.text.y = element_text(size=12, face="bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        legend.pos = "bottom",
+        legend.direction = "horizontal",
+        legend.title = element_blank()) +
+  labs(x = "Datum",
+       y = "Besmettingen per dag",
+       color = "Legend",
+       caption = paste("Bron data: CBS  | Plot: @mzelst | ",Sys.Date())) + 
+  ggtitle("Overledenen") + 
+  scale_colour_manual(values=cbp2) +
+  annotate("text", x = 08, y = 4300, label = "Griepgolf (2018)") +
+  annotate("text", x = 14, y = 5200, label = "Eerste golf") +
+  annotate("text", x = 32, y = 3400, label = "Hittegolf") +
+  annotate("text", x = 44, y = 3800, label = "Tweede golf") +
+  ggsave("data-misc/excess_mortality/plots_weekly_update/sterfte_perweek.png")
+
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 

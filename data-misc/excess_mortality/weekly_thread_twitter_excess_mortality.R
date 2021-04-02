@@ -1,0 +1,179 @@
+source("workflow/twitter/token_mzelst.R")
+source("workflow/excess_mortality_cbsmodel.R")
+source("workflow/excess_mortality.R")
+
+thisweek <- isoweek(Sys.Date())-1
+startday.week <- substr(Sys.Date()-11,9,10)
+endday.week <- substr(Sys.Date()-5,9,10)
+rivm.startday <- substr(Sys.Date()-15,9,10)
+rivm.endday <- substr(Sys.Date()-9,9,10)
+
+## Collect CBS weekly update ##
+u <- "https://www.cbs.nl/nl-nl/nieuws/2021/13/in-week-12-naar-schatting-3100-mensen-overleden"
+webpage <- read_html(u)
+table.cbs <- as.data.frame(html_table(webpage)[1])
+colnames(table.cbs) <- c("Year","Week","deaths","expected_deaths","ci_expected_deaths")
+table.cbs$deaths <- as.numeric(table.cbs$deaths)
+table.cbs$expected_deaths <- as.numeric(table.cbs$expected_deaths)
+table.cbs$excess_cbs <- table.cbs$deaths-table.cbs$expected_deaths
+
+table.cbs <- table.cbs %>%
+  filter(excess_cbs != "NA")
+
+## Build main tweet
+tweet.main <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",thisweek," van 2021. In dit draadje duid ik de sterfte per week + het aantal mensen dat is overleden door corona.")
+
+posted_tweet <- post_tweet (
+  tweet.main,
+  token = token.mzelst,
+  media = "plots/sterfte_perweek.png"
+) ## Post tweet
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.main.id <- posted_tweet$id_str
+tweet.last_id <- tweet.main.id
+
+## Build information tweet
+
+tweet.information <- paste0("2/ 
+
+Ik kijk naar twee zaken:
+
+1) Oversterfte adhv historische gemiddeldes (tweet 3/4)
+2) Sterfte door corona met een dynamisch linear model (DLM) (tweet 5)
+
+De uitleg voor alle verschillende methodes kun je hier vinden: https://github.com/mzelst/covid-19/blob/master/data-misc/excess_mortality/REMARKS.md")
+
+posted_tweet <- post_tweet (
+  tweet.information,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.main.id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Build excess mortality (historical) tweet
+excess_mortality <- read.csv("data-misc/excess_mortality/excess_mortality.csv")
+
+tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," maart):
+
+1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
+2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
+3) Methode CBS: ",last(table.cbs$excess_cbs),"
+4) Methode RIVM (",rivm.startday," maart - ",rivm.endday," maart): ",last(excess_mortality$excess_mortality_rivm),"
+
+(grafieken CBS / RIVM)
+")
+
+posted_tweet <- post_tweet (
+  tweet.excess.historical,
+  token = token.mzelst,
+  media = c("data-misc/excess_mortality/plots_weekly_update/overledenen-per-week.png","data-misc/excess_mortality/plots_weekly_update/sterfte_perweek_rivm.jpeg"),
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Tweet WLZ mortality
+table.wlz <- as.data.frame(html_table(webpage)[2])
+colnames(table.wlz) <- c("Year","Week","deaths_wlz","expected_deaths_wlz","ci_expected_deaths_wlz","deaths_other","expected_deaths_other","ci_expected_deaths_other")
+table.wlz$deaths_wlz <- as.numeric(table.wlz$deaths_wlz)
+table.wlz$expected_deaths_wlz <- as.numeric(table.wlz$expected_deaths_wlz)
+table.wlz$deaths_other <- as.numeric(table.wlz$deaths_other)
+table.wlz$expected_deaths_other <- as.numeric(table.wlz$expected_deaths_other)
+table.wlz$excess_wlz <- table.wlz$deaths_wlz-table.wlz$expected_deaths_wlz
+table.wlz$excess_other <- table.wlz$deaths_other-table.wlz$expected_deaths_other
+
+table.wlz <- table.wlz %>%
+  filter(excess_wlz != "NA")
+
+table.wlz$excess_wlz_perc <- round(table.wlz$excess_wlz/table.wlz$expected_deaths_wlz*100,0)
+wlz.text <- ifelse(last(table.wlz$excess_wlz_perc)<0,"minder","meer")
+table.wlz$excess_other_perc <- round(table.wlz$excess_other/table.wlz$expected_deaths_other*100,0)
+other.text <- ifelse(last(table.wlz$excess_other_perc)<0,"minder","meer")
+
+tweet.wlz <- paste0("4/ Oversterfte Wlz en overige bevolking (CBS)
+
+De sterfte bij Wlz-gebruikers (mensen in zorginstellingen) is ",abs(last(table.wlz$excess_wlz_perc)),"% ",wlz.text," dan verwacht.
+
+De sterfte in de overige bevolking is ",abs(last(table.wlz$excess_other_perc)),"% ",other.text," dan verwacht.
+")
+
+posted_tweet <- post_tweet (
+  tweet.wlz,
+  token = token.mzelst,
+  media = c("data-misc/excess_mortality/plots_weekly_update/overledenen-per-week-wlz.png"),
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Tweet DLM analyses
+
+tweet.dlm <- paste0("5/ Het officiële aantal sterfgevallen voor week ",week.now," is op dit moment ",last(excess_mortality$covid_sterfgevallen),".
+
+De DLM methode schat het aantal corona-overledenen voor week ",week.now," op ",last(excess_mortality$DLModel_week_estimate)," (95% betrouwbaarheidsinterval: ",last(excess_mortality$DLModel_lowerbound95),"-",last(excess_mortality$DLModel_upperbound95),").
+
+De sterfte door corona tot nu toe is ",last(excess_mortality$Oversterfte_DLModel_cumul_mid)," (95% betrouwbaarheidsinterval: ",last(excess_mortality$Oversterfte_DLModel_cumul_low),"-",last(excess_mortality$Oversterfte_DLModel_cumul_high),").
+")
+
+posted_tweet <- post_tweet (
+  tweet.dlm,
+  token = token.mzelst,
+  media = c("plots/fig4.2.1.png"),
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Conclusie tweet
+
+conclusie.tweet <- paste0("Conclusie: Het effect van vaccinaties blijft zichtbaar in de sterfte per week. We zien dit in de lage sterfte voor deze tijd van het jaar bij de groep 80+.
+
+De sterfte onder de groep 65-80 lijkt iets toe te nemen wat gegeven de derde golf nog verder zou kunnen stijgen.")
+
+posted_tweet <- post_tweet (
+  conclusie.tweet,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Eindnoot tweet
+
+eindnoot.tweet <- paste0("Eindnoot
+
+In onze repo houden we wekelijks deze analyses allemaal bij, zie hier: https://github.com/mzelst/covid-19/tree/master/workflow/excess_mortality
+
+Ik zal wekelijks deze resultaten ook op Twitter bijwerken in een draadje.")
+
+posted_tweet <- post_tweet (
+  eindnoot.tweet,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+## Eindnoot tweet 2
+
+eindnoot.tweet2 <- paste0("Eindnoot 2
+
+De verschillen tussen de oversterfte cijfers van het CBS en RIVM leg ik hieronder uit. We spraken hier ook over met @rubenivangaalen die dat in detail uitlegt: https://signaalwaarde.nl/aflevering-6/
+
+https://twitter.com/mzelst/status/1365703708579872775")
+
+posted_tweet <- post_tweet (
+  eindnoot.tweet2,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
