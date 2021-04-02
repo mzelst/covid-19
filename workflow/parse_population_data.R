@@ -36,9 +36,12 @@ colnames(gemeente.stats) <- c("Municipality_code","Municipality_name","populatio
 df <- merge(nl_dt, gemeente.stats, by = "Municipality_code")
 df <- aggregate(population ~ Municipal_health_service, data = df, sum)
 
+ggds_population <- read.csv("misc/ggds-population.csv")
+
 df <- cbind(df, ggds_population[,c("population","ggd_code","ID")])
 df <- df[,c(-3)]
-write.csv(df, file = "misc/ggds-population.csv")
+colnames(df) <- c("statnaam","population","ggd_code","ID")
+write.csv(df, file = "misc/ggds-population.csv", row.names = FALSE)
 
 ## Parse province data
 
