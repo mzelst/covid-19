@@ -1,26 +1,26 @@
-statnaam,ID,population,ggd_code
-Dienst Gezondheid & Jeugd ZHZ,1,456891,GG4816
-GGD Amsterdam,2,1058067,GG3406
-GGD Brabant-Zuidoost,3,773203,GG5608
-GGD Drenthe,4,492167,GG0706
-GGD Flevoland,5,416546,GG2209
-GGD Frysl‚n,6,647672,GG7206
-GGD Gelderland-Zuid,7,565503,GG2014
-GGD Gooi en Vechtstreek,8,254970,GG3606
-GGD Groningen,9,583990,GG0111
-GGD Haaglanden,10,1103368,GG7014
-GGD Hart voor Brabant,11,1065191,GG5406
-GGD Hollands-Midden,12,801600,GG4506
-GGD Hollands-Noorden,13,658161,GG2707
-GGD IJsselland,14,527147,GG1009
-GGD Kennemerland,15,545423,GG3109
-GGD Limburg-Noord,16,510963,GG6011
-GGD Noord- en Oost-Gelderland,17,824213,GG1413
-GGD Regio Twente,18,629284,GG1106
-GGD Regio Utrecht,19,1342158,GG2514
-GGD Rotterdam-Rijnmond,20,1312034,GG4607
-GGD West-Brabant,21,706412,GG5206
-GGD Zaanstreek/Waterland,22,336738,GG7306
-GGD Zeeland,23,383032,GG5006
-GGD Zuid-Limburg,24,597368,GG6106
-Veiligheids- en Gezondheidsregio Gelderland-Midden,25,690062,GG1911
+"","Municipal_health_service","population","ggd_code","ID"
+"1","Dienst Gezondheid & Jeugd ZHZ",461102,"GG4816",1
+"2","GGD Amsterdam",1070510,"GG3406",2
+"3","GGD Brabant-Zuidoost",784661,"GG5608",3
+"4","GGD Drenthe",494949,"GG0706",4
+"5","GGD Flevoland",429513,"GG2209",5
+"6","GGD Frysl√¢n",651360,"GG7206",6
+"7","GGD Gelderland-Zuid",564303,"GG2014",7
+"8","GGD Gooi en Vechtstreek",259120,"GG3606",8
+"9","GGD Groningen",586253,"GG0111",9
+"10","GGD Haaglanden",1122451,"GG7014",10
+"11","GGD Hart voor Brabant",1079946,"GG5406",11
+"12","GGD Hollands-Midden",815030,"GG4506",12
+"13","GGD Hollands-Noorden",666357,"GG2707",13
+"14","GGD IJsselland",535446,"GG1009",14
+"15","GGD Kennemerland",551659,"GG3109",15
+"16","GGD Limburg-Noord",521974,"GG6011",16
+"17","GGD Noord- en Oost-Gelderland",832010,"GG1413",17
+"18","GGD Regio Twente",631579,"GG1106",18
+"19","GGD Regio Utrecht",1361544,"GG2514",19
+"20","GGD Rotterdam-Rijnmond",1329891,"GG4607",20
+"21","GGD West-Brabant",710930,"GG5206",21
+"22","GGD Zaanstreek/Waterland",339800,"GG7306",22
+"23","GGD Zeeland",385448,"GG5006",23
+"24","GGD Zuid-Limburg",593618,"GG6106",24
+"25","Veiligheids- en Gezondheidsregio Gelderland-Midden",701844,"GG1911",25
