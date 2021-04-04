@@ -12,8 +12,8 @@ source("workflow/generate_banner.R")
 #} else {
 
 # Parse RIVM, NICE and corrections data
-source("workflow/parse_nice-data.R")
 source("workflow/parse_lcps-data.R")
+source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_tests.R")
@@ -408,8 +408,8 @@ repeat {
 
 #gm_send_message(my_email_message)
 
-rm(daily_vaccin_datalist,dat,df.care.institutions,df.doctors,df.ggd,df.hospitals,df.total,
-   my_email_message,myfiles,vaccine_data,vaccines_by_day,vaccines_delivery,dashboard.date,filename.daily.vaccins,
-   filename.daily.vaccins.delivered,IC_message,last.date,latest_msg,temp,today.date)
+rm(daily_vaccin_datalist,df.care.institutions,df.doctors,df.ggd,df.hospitals,df.total,
+   myfiles,vaccine_data,vaccines_by_day,vaccines_delivery,dashboard.date,filename.daily.vaccins,
+   filename.daily.vaccins.delivered,last.date,temp,today.date)
 
 

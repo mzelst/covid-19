@@ -44,9 +44,22 @@ colnames(df) <- c("statnaam","population","ggd_code","ID")
 write.csv(df, file = "misc/ggds-population.csv", row.names = FALSE)
 
 ## Parse province data
+dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM02")), RegioS = has_substring(c("PV")))
+dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetBeginVanDePeriode_1")]
+dat.mun$RegioS <- as.character(dat.mun$RegioS)
+colnames(dat.mun) <- c("RegioS","population")
+dat.mun$RegioS <- gsub(" ", "", dat.mun$RegioS, fixed = TRUE)
 
-dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM02")))
-dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
-colnames(dat.mun) <- c("statcode","populatie")
+province.identifier <- cbs_get_data("70072ned",add_column_labels = FALSE,Perioden = has_substring(c("2021JJ00")))
+province.identifier <- province.identifier[,c("Code_289","Naam_290")]
+province.identifier <- province.identifier %>% distinct()
+colnames(province.identifier) <- c("RegioS","Province")
+province.identifier$RegioS <- gsub(" ", "", province.identifier$RegioS, fixed = TRUE)
+province.identifier$Province <- gsub(" ", "", province.identifier$Province, fixed = TRUE)
 
+str(dat.mun)
+str(province.identifier)
+df <- merge(province.identifier, dat.mun, by = c("RegioS"), all.y=T)
 
+df <- df[order(df$Province),]
+df$ID <- seq(1,12)
