@@ -9,8 +9,8 @@ rivm.mun.perday <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_gemee
 
 # Parse data municipality per day 
 last_date <- as.Date(last(rivm.mun.perday$Date_of_report))
-filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
-fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
+#filename.mun.perday <- paste0("raw-data-archive/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv") ## Filename for daily data municipalities
+#fwrite(rivm.mun.perday, file=filename.mun.perday,row.names = F)
 
 filename.mun.perday.compressed <- paste0("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_", last_date, ".csv.gz") ## Filename for daily data municipalities
 fwrite(rivm.mun.perday, file=filename.mun.perday.compressed,row.names = F)
@@ -64,15 +64,15 @@ fwrite(rivm_by_day, file = "data/rivm_by_day.csv",row.names = F) ## Write file w
 
 ## Download data disabled people 
 disabled.people <- fread("https://data.rivm.nl/covid-19/COVID-19_gehandicaptenzorg.csv", sep = ";")
-filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-fwrite(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
+#filename.disabledpeople.raw  <- paste0("raw-data-archive/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+#fwrite(disabled.people, file = filename.disabledpeople.raw,row.names = F) 
 
 filename.disabledpeople.compressed  <- paste0("data-rivm/disabled-people-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(disabled.people, file = filename.disabledpeople.compressed,row.names = F) 
 
 ## Download data 70+ living at home 
-living.home.70plus <- fread("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
-filename.living.home.70plus.raw <- paste0("raw-data-archive/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+#living.home.70plus <- fread("https://data.rivm.nl/covid-19/COVID-19_thuiswonend_70plus.csv", sep = ";")
+#filename.living.home.70plus.raw <- paste0("raw-data-archive/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
 fwrite(living.home.70plus, file = filename.living.home.70plus.raw,row.names = F) 
 
 filename.living.home.70plus.compressed <- paste0("data-rivm/70plus-living-at-home-per-day/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
@@ -80,8 +80,8 @@ fwrite(living.home.70plus, file = filename.living.home.70plus.compressed,row.nam
 
 ## Download behavior
 behavior <- fread("https://data.rivm.nl/covid-19/COVID-19_gedrag.csv", sep = ";")
-filename.behavior.raw <- paste0("raw-data-archive/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-fwrite(behavior, file = filename.behavior.raw,row.names = F) 
+#filename.behavior.raw <- paste0("raw-data-archive/behavior/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+#fwrite(behavior, file = filename.behavior.raw,row.names = F) 
 
 filename.behavior.compressed <- paste0("data-rivm/behavior/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(behavior, file = filename.behavior.compressed,row.names = F) 
@@ -89,8 +89,8 @@ fwrite(behavior, file = filename.behavior.compressed,row.names = F)
 ## Download nursing homes
 
 nursing.homes <- fread("https://data.rivm.nl/covid-19/COVID-19_verpleeghuizen.csv", sep = ";")
-filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
+#filename.nursinghomes.raw <- paste0("raw-data-archive/nursing-home-datasets/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+#fwrite(nursing.homes, file = filename.nursinghomes.raw,row.names = F)
 
 filename.nursinghomes.compressed <- paste0("data-rivm/nursing-homes-datasets/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
@@ -98,8 +98,8 @@ fwrite(nursing.homes, file = filename.nursinghomes.compressed,row.names = F)
 ## Download tests
 
 tests <- fread("https://data.rivm.nl/covid-19/COVID-19_uitgevoerde_testen.csv", sep = ";")
-filename.tests.raw <- paste0("raw-data-archive/tests/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
-fwrite(tests, file = filename.tests.raw,row.names = F)
+#filename.tests.raw <- paste0("raw-data-archive/tests/rivm_daily_",Sys.Date(),".csv") ## Filename for daily data
+#fwrite(tests, file = filename.tests.raw,row.names = F)
 
 filename.tests.compressed <- paste0("data-rivm/tests/rivm_daily_",Sys.Date(),".csv.gz") ## Filename for daily data
 fwrite(tests, file = filename.tests.compressed,row.names = F)

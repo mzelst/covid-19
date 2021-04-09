@@ -318,8 +318,8 @@ tweet.last_id <- posted_tweet$id_str
 
 ##### Download case file
 rivm.data <- fread("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv", sep =";") ## Read in data with all cases until today
-filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
-fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
+#filename.raw <- paste0("raw-data-archive/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv")
+#fwrite(rivm.data, filename.raw,row.names = F) ## Write file with all cases until today
 
 filename.compressed <- paste0("data-rivm/casus-datasets/COVID-19_casus_landelijk_",Sys.Date(),".csv.gz")
 fwrite(rivm.data, file=filename.compressed,row.names = F) ## Write file with all cases until today
@@ -355,13 +355,13 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Workflows for databases
 rm(list=ls())
-source("workflow/estimate_R.R")
 source("workflow/dashboards/cases_ggd_agegroups.R")
 source("workflow/dashboards/date_statistics_mutations.R")
 source("workflow/parse_age-data.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
+source("workflow/estimate_R.R")
 
 ## Vaccine tweet for history ##
 #Vaccins geprikt: ",vaccins.geprikt,"

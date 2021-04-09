@@ -5,8 +5,8 @@ const.filename <- "data/nice_by_municipality.csv" ## Filename for daily data mun
 if (const.download) {
   rivm.hospital <- fread("https://data.rivm.nl/covid-19/COVID-19_ziekenhuisopnames.csv", sep=";")
   last_date <- as.Date(last(rivm.hospital$Date_of_report))
-  filename.hospital.raw <- paste0("raw-data-archive/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily dat.todaya municipalities
-  fwrite(rivm.hospital, file=filename.hospital.raw,row.names = F)
+  #filename.hospital.raw <- paste0("raw-data-archive/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv") ## Filename for daily dat.todaya municipalities
+  #fwrite(rivm.hospital, file=filename.hospital.raw,row.names = F)
   filename.hospital.compressed <- paste0("data-rivm/municipal-hospital-datasets/rivm_hospital_", last_date ,".csv.gz") ## Filename for daily dat.todaya municipalities
   fwrite(rivm.hospital, file=filename.hospital.compressed,row.names = F)
   rm(rivm.hospital, last_date, filename.hospital.raw)
