@@ -20,7 +20,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-week.now <- 52
+week.now <- isoweek(Sys.Date())-1 
 
 ## helper functions
 
@@ -38,11 +38,12 @@ find_week <- function(var) {
   round(as.numeric((var - trunc(var))*52 + 1))
 }
 
-cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I49', col_names = F))
+cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I57', col_names = F))
 
 nl_dt <- fread("workflow/excess_mortality/international/belgium/deaths_belgium.csv")
 nl_dt$year <- as.numeric(nl_dt$year)
 nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
+nl_dt <- nl_dt[c(1:1050),]
 
 ## create time series objects
 cbs_deaths_ts <- ts(nl_dt$cbs_deaths, start = c(2000, 1), frequency = 52)
