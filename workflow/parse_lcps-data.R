@@ -23,6 +23,14 @@ filename <- paste0('data-lcps/total/covid-19_', lcps.date, '.csv')
 filename.daily <- paste0('data-lcps/data-per-day/covid-19_', lcps.date, '.csv')
 filename.common <- 'data/lcps_by_day.csv'
 
+lcps.data <- lcps.data[order(lcps.data$date),]
+
+lcps.data <- lcps.data %>%
+  mutate(IC_Opnames_7d = round(frollmean(IC_Nieuwe_Opnames_COVID,7),0)) %>%
+  mutate(Kliniek_Opnames_7d = round(frollmean(Kliniek_Nieuwe_Opnames_COVID,7),0))
+
+lcps.data <- lcps.data[order(lcps.data$date, decreasing = T),]
+
 write.csv(lcps.data.original, file=filename, row.names = F)
 write.csv(lcps.dailydata, file = filename.daily, row.names = F)
 write.csv(lcps.data, file = filename.common, row.names = F)
