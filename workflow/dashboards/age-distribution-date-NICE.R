@@ -198,6 +198,66 @@ dat %>%
   ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
   ggsave("plots/leeftijd_opnames_kliniek_middelbare_leeftijd.png",width=12, height = 10)
 
+## Age distribution - Clinical - Deaths per day
+
+temp = list.files(path = "data-nice/age/Clinical_Beds",pattern="*.csv", full.names = T)
+myfiles = lapply(temp, read.csv)
+
+nice_by_day_clinical <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
+  .x
+})
+
+nice_by_day_clinical_overleden <- nice_by_day_clinical[,c("Leeftijd","Verlaten_Overleden","Datum")]
+
+nice_by_day_clinical_overleden <- nice_by_day_clinical_overleden[with(nice_by_day_clinical_overleden, order(Leeftijd,Datum)),]
+
+nice_by_day_clinical_overleden <- nice_by_day_clinical_overleden %>%
+  group_by(Leeftijd) %>%
+  mutate(Overleden_toename = Verlaten_Overleden - lag(Verlaten_Overleden))
+
+nice_by_day_clinical_overleden <- nice_by_day_clinical_overleden[,c("Leeftijd","Overleden_toename","Datum")]
+
+Klinisch_overleden <- nice_by_day_clinical_overleden %>%
+  spread(Leeftijd,value = Overleden_toename)
+
+Klinisch_overleden <- Klinisch_overleden %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
+
+write.csv(Klinisch_overleden, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_Overleden.csv", row.names = F)
+
+
+## Age distribution - IC - Deaths per day
+
+temp = list.files(path = "data-nice/age/IC",pattern="*.csv", full.names = T)
+myfiles = lapply(temp, read.csv)
+
+nice_by_day_IC <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
+  .x
+})
+
+nice_by_day_IC_overleden <- nice_by_day_IC[,c("Leeftijd","Verlaten_Overleden","Datum")]
+
+nice_by_day_IC_overleden <- nice_by_day_IC_overleden[with(nice_by_day_IC_overleden, order(Leeftijd,Datum)),]
+
+nice_by_day_IC_overleden <- nice_by_day_IC_overleden %>%
+  group_by(Leeftijd) %>%
+  mutate(Overleden_toename = Verlaten_Overleden - lag(Verlaten_Overleden))
+
+nice_by_day_IC_overleden <- nice_by_day_IC_overleden[,c("Leeftijd","Overleden_toename","Datum")]
+
+IC_overleden <- nice_by_day_IC_overleden %>%
+  spread(Leeftijd,value = Overleden_toename)
+
+IC_overleden <- IC_overleden %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
+
+
+write.csv(IC_overleden, file = "data-nice/age/leeftijdsverdeling_datum_IC_Overleden.csv", row.names = F)
+
+Klinisch_overleden$Type <- "Klinisch"
+IC_overleden$Type <- "IC"
+nice_by_day_overleden <- rbind(Klinisch_overleden, IC_overleden)
+write.csv(nice_by_day_overleden, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long_Overleden.csv", row.names = F)
+
+
 
 ## Push to github
 add(repo, path = "*")

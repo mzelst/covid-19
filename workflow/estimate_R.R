@@ -103,3 +103,14 @@ covid.r %>%
 covid.r$Std_R <- NULL
 filename.repro.file <- paste0("data-misc/reproduction-numbers/marino/reproduction_number_",Sys.Date(),".csv")
 write.csv(covid.r, file = filename.repro.file)
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+temp = last(list.files(path = "data-misc/reproduction-numbers/marino/",pattern="*.csv", full.names = T))
+repo <- init()
+add(repo, path = temp)
+commit(repo, all = T, paste0("Update reproduction number ",Sys.Date()))
+push(repo, credentials = git.auth)
+
+rm(temp)
