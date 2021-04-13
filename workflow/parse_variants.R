@@ -8,7 +8,8 @@ colnames(table) <- c("Week","Aantal_monsters","Britse_variant","ZuidAfrikaanse_v
 
 variants.prevalence <- table %>%
   mutate(prevalentie_britsevariant = round(Britse_variant/Aantal_monsters*100,2)) %>%
-  mutate(prevalentie_ZAvariant = round(ZuidAfrikaanse_variant/Aantal_monsters*100,2))
+  mutate(prevalentie_ZAvariant = round(ZuidAfrikaanse_variant/Aantal_monsters*100,2)) %>%
+  mutate(prevalentie_P1_variant = round(Braziliaanse_variant_P1/Aantal_monsters*100,2))
 
 write.csv(variants.prevalence,"data-misc/prevalence_variants.csv",row.names = F)
 
