@@ -6,8 +6,7 @@ filename.daily.vaccins.delivered <- paste0("data-rivm/vaccines-delivered/rivm_da
 write.csv(vaccines_delivery, file = filename.daily.vaccins.delivered, row.names = F)
 
 ## Vaccines used
-
-df.care.institutions <- dat$vaccine_administered_care_institutions$values
+df.care.institutions <- dat$vaccine_administered_hospitals_and_care_institutions$values
 colnames(df.care.institutions) <- c("date","vaccines_administered_estimated_carehomes","report_date_carehomes")
 df.ggd <- dat$vaccine_administered_ggd$values
 colnames(df.ggd) <- c("date","vaccines_administered_ggd","report_date_ggd")
