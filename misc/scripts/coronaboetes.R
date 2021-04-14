@@ -11,9 +11,10 @@ df <- merge(dat,mun, by = "Municipality_name",all.x=T)
 
 df <- df %>%
   mutate(Mondkapje_publiekeruimte = round(Mondkapjesplicht.publieke.ruimte/population*100,2)) %>%
-  mutate(Noodverordening = round(Noodverordening/population*100,2)) %>%
+  mutate(Noodverordening_percentage = round(Noodverordening/population*100,2)) %>%
   mutate(Verbod_groepsvorming = round(Verbod.groepsvorming/population*100,2)) %>%
   mutate(Verbod_alcohol = round(Verbod.alcohol/population*100,2)) %>%
+  mutate(Veilige_afstand = round(Veilige.afstand/population*100,2)) %>%
   mutate(Mondkapje_OV = round(Mondkapjesplicht.in.personenvervoer/population*100,2)) %>%
   mutate(Avondklok = round(Avondklok/population*100,2)) %>%
   mutate(Totaal_percentage = round(Totaal/population*100,2))
