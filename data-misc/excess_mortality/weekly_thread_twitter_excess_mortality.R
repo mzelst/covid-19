@@ -55,12 +55,12 @@ tweet.last_id <- posted_tweet$id_str
 ## Build excess mortality (historical) tweet
 excess_mortality <- read.csv("data-misc/excess_mortality/excess_mortality.csv")
 
-tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," maart):
+tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," april):
 
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
 3) Methode CBS: ",last(table.cbs$excess_cbs),"
-4) Methode RIVM (",rivm.startday," maart - ",rivm.endday," maart): ",last(excess_mortality$excess_mortality_rivm),"
+4) Methode RIVM (",rivm.startday," april - ",rivm.endday," april): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
 ")
@@ -131,9 +131,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: Het effect van vaccinaties blijft zichtbaar in de sterfte per week. We zien dit in de lage sterfte voor deze tijd van het jaar bij de groep 80+.
-
-De sterfte onder de groep 65-80 lijkt iets toe te nemen wat gegeven de derde golf nog verder zou kunnen stijgen.")
+conclusie.tweet <- paste0("Conclusie: De sterfte onder de groepen 0-65 en 65-80 lijkt verder toe te nemen en is nu significant hoger dan verawcht. Gegeven de derde golf zou dit nog verder zou kunnen stijgen.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,
