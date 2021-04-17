@@ -60,12 +60,12 @@ find_week <- function(var) {
 
 ## read cbsodata on weekly deaths
 cbs_dt <- data.table(cbs_get_data('70895ned',
-                                    Geslacht = "1100",
-                                    LeeftijdOp31December = "10000",
-                                    Perioden = has_substring("W") | has_substring("X"))
-  )[,
-    timestamp := Sys.time()
-  ]
+                                  Geslacht = "1100",
+                                  LeeftijdOp31December = "10000",
+                                  Perioden = has_substring("W") | has_substring("X"))
+)[,
+  timestamp := Sys.time()
+]
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
 cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I49', col_names = F))
@@ -148,6 +148,11 @@ all = T
   covid_deaths := 0
 ][!(year == 2020 & week > 52),
 ]
+
+nl_dt <- nl_dt %>%
+  filter(year != 2020)
+
+nl_dt[1301:(nrow(nl_dt)),1] <- 2020
 
 ## create time series objects
 cbs_deaths_ts <- ts(nl_dt$cbs_deaths, start = c(1995, 1), frequency = 52)
@@ -391,18 +396,9 @@ beta_long[,
   c('lwr', 'upr') := NA
 ]
 
-beta_long$year <- as.numeric(substr(beta_long$t, 1, 4))
-
-beta_yearend <- beta_long %>%
-  filter(year >= 2020 & model == "Dynamisch" & variable == "beta.V1")
-
-sum(beta_yearend$mid)
-
-beta_long$weekyear <- paste0(beta_long$week,beta_long$year)
-
 ## calculate mean and CI interval 
-totals2020 <- beta_long[year == 2020 & week %in% seq(11, 52),
-                    .(week,cumsum(oversterfte)),
+totals <- beta_long[t >= 2020 & week %in% seq(1, week.now),
+                    .(week, cumsum(oversterfte)),
                     by=c('variable', 'model')
 ][,
   .(Laag = ifelse(model == 'CBS/AMC',
@@ -418,37 +414,35 @@ totals2020 <- beta_long[year == 2020 & week %in% seq(11, 52),
   by = c('model', 'week')
 ]
 
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/14/3-9-duizend-mensen-overleden-aan-covid-19-in-december-2020"
+webpage.cbs <- read_html(u.cbs)
+
+cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
+cbs.death.statistics$Year <- 2020
+colnames(cbs.death.statistics) <- c("Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics","Year")
+cbs.death.statistics$Mortality_without_covid_CBS <- as.numeric(cbs.death.statistics$Mortality_without_covid_CBS)
+cbs.death.statistics$Covid_deaths_CBS_death_statistics <- as.numeric(cbs.death.statistics$Covid_deaths_CBS_death_statistics)
+cbs.death.statistics <- cbs.death.statistics[,c("Week","Year","Covid_deaths_CBS_death_statistics")]
+colnames(cbs.death.statistics) <- c("week","year","covid_deaths")
+
+totals2020 <- cbs.death.statistics
+totals2020 <- totals2020[10:53,]
+
 totals2020 <- totals2020 %>%
-  filter(model == "Dynamisch")
+  mutate(deaths_mid_cumsum = cumsum(covid_deaths))
 
-totals2020.week53 <- data.table("Dynamisch",53,last(totals2020$Laag+950*0.8),last(totals2020$Gemiddeld+950),last(totals2020$Hoog+950*1.2))
-totals2020 <- rbind(totals2020,totals2020.week53, use.names=F)
+totals2020$model <- "Dynamisch"
+totals2020$Laag <- totals2020$deaths_mid_cumsum
+totals2020$Gemiddeld <- totals2020$deaths_mid_cumsum
+totals2020$Hoog <- totals2020$deaths_mid_cumsum
 totals2020$year <- 2020
+totals2020 <- totals2020[,c("model","week","Laag","Gemiddeld","Hoog","year")]
 
-totals2021 <- beta_long[year == 2021 & week %in% seq(1, week.now),
-                        .(week,cumsum(oversterfte)),
-                        by=c('variable', 'model')
-][,
-  .(Laag = ifelse(model == 'CBS/AMC',
-                  0,
-                  ci_5p(V2, 'lwr')                        
-  ),
-  Gemiddeld = mean(V2),
-  Hoog = ifelse(model == 'CBS/AMC',
-                0,
-                ci_5p(V2, 'upr')
-  )
-  ),
-  by = c('model', 'week')
-]
 
-totals2021 <- totals2021 %>%
-  filter(model == "Dynamisch")
+totals <- totals[model == 'Dynamisch']
+totals$year <- 2021
+totals <- rbind(totals2020,totals)
 
-totals2021$year <- 2021
-
-totals <- rbind(totals2020,totals2021)
-totals$weekyear <- paste0(totals$year,"-",totals$week)
 
 totals <- totals %>%
   arrange(model) %>%
@@ -458,24 +452,22 @@ totals <- totals %>%
 totals[1,"deaths_week_mid"] <- totals[1,"Gemiddeld"]
 totals[1,"deaths_week_low"] <- totals[1,"Laag"]
 totals[1,"deaths_week_high"] <- totals[1,"Hoog"]
-totals[44,"deaths_week_mid"] <- totals[44,"Gemiddeld"]
-totals[44,"deaths_week_low"] <- totals[44,"Laag"]
-totals[44,"deaths_week_high"] <- totals[44,"Hoog"]
+totals[45,"deaths_week_mid"] <- totals[45,"Gemiddeld"]
+totals[45,"deaths_week_low"] <- totals[45,"Laag"]
+totals[45,"deaths_week_high"] <- totals[45,"Hoog"]
 
 totals <- totals %>%
   mutate(deaths_low_cumsum = cumsum(deaths_week_low)) %>%
   mutate(deaths_mid_cumsum = cumsum(deaths_week_mid)) %>%
   mutate(deaths_high_cumsum = cumsum(deaths_week_high)) 
 
-write.csv(totals, file = paste0("workflow/excess_mortality/data/run_week",week.now,".csv"), row.names = F)
+totals$week <- as.numeric(totals$week)
 
 totals$weekyear <- ifelse(totals$week<10,
-                               paste0(totals$year,"-",0,totals$week),
-                               paste0(totals$year,"-",totals$week))
+                          paste0(totals$year,"-",0,totals$week),
+                          paste0(totals$year,"-",totals$week))
 
-
-
-## Clean environment
+write.csv(totals, file = paste0("data-misc/excess_mortality/excess_mortality_dlm_2021.csv"))
 
 rm("begin_end_griep","begin_end_list","bestfit","beta","cbs_deaths_ts","cbs_oversterfte","combined_d","covid_bs","covid_bs_d",
    "covid_bs_s","covid_deaths_d","covid_deaths_ts","covid_dlm","covid_dlm_d","covid_dlm_s","covid_filt_d","covid_filt_s","covid_fit",
@@ -488,8 +480,6 @@ rm("begin_end_griep","begin_end_list","bestfit","beta","cbs_deaths_ts","cbs_over
 
 ## Figure 2.1
 
-require(tsibble)
-
 ## data
 fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                         week = find_week(as.numeric(time(covid_filt$y))),
@@ -498,24 +488,16 @@ fig2.1_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                         cbs_deaths = covid_filt$y,
                         lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
                         upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
-)[!(year == 2020 & week >= 9 | year == 2021),
+)[!(year == 2020 & week >= 1),
   ':=' (
     smooth = NA, lwr = NA, upr = NA)
 ][year >= 2020,
 ]
 
-fig2.1_dt$weekyear <- as.Date(ifelse(fig2.1_dt$week<10,
-                             paste0(fig2.1_dt$year,0,fig2.1_dt$week,01),
-                             paste0(fig2.1_dt$year,fig2.1_dt$week,01)),
-                             "%Y%U%u")
-
-#as.Date(fig2.1_dt$weekyear, "%Y%U%u")
-
-
-write.csv(fig2.1_dt,file = "workflow/excess_mortality/output/fig2.1_dt.csv")
+write.csv(fig2.1_dt,file = "workflow/excess_mortality/output/2021_fig2.1_dt.csv")
 
 ## create plot
-ggplot(fig2.1_dt, aes(factor(weekyear), cbs_deaths, group = 1)) +
+ggplot(fig2.1_dt, aes(factor(week), cbs_deaths, group = 1)) +
   geom_ribbon(aes(ymin = 0, ymax = as.numeric(cbs_deaths) - covid_sterfte),
               fill = 'grey50', alpha = 0.4
   ) +
@@ -528,24 +510,19 @@ ggplot(fig2.1_dt, aes(factor(weekyear), cbs_deaths, group = 1)) +
               fill = 'red', alpha = 0.4
   ) +    
   geom_line(aes(y=smooth), lty = 'dotted') +
-  coord_cartesian(ylim = c(2000, 5500)) +
+  coord_cartesian(ylim = c(1500, 5000)) +
   xlab('Week') +
   ylab('') + 
-  theme_bw() +
-  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold"))
-ggsave('plots/fig2.1.png')
+  theme_bw()
+ggsave('plots/2021_fig2.1.png')
 
 
 ## Figure 2.2
 
 ## data for figure
-fig2.2_dt <- totals[model == 'Dynamisch']
+fig2.2_dt <- totals
 
-fig2.2_dt$weekyear <- ifelse(fig2.2_dt$week<10,
-                                     paste0(fig2.2_dt$year,"-",0,fig2.2_dt$week),
-                                     paste0(fig2.2_dt$year,"-",fig2.2_dt$week))
-
-write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/fig2.2_dt.csv")
+write.csv(fig2.2_dt,file = "workflow/excess_mortality/output/2021_fig2.2_dt.csv")
 
 ## create plot
 ggplot(fig2.2_dt, aes(factor(weekyear), deaths_mid_cumsum)) +
@@ -554,37 +531,29 @@ ggplot(fig2.2_dt, aes(factor(weekyear), deaths_mid_cumsum)) +
   geom_text(aes(label = round(deaths_mid_cumsum)), angle = 90) +
   xlab('Week') +
   ylab('Oversterfte cumulatief') +
-  theme_bw() +
+  theme_bw() + 
   theme(axis.text.x.bottom = element_text(size=10, angle = 90))
-ggsave('plots/fig2.2.png')
+ggsave('plots/2021_fig2.2.png')
 
 ## Figure 4.1.1
-fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 11 | model == "Dynamisch" & t >= 2021,
+fig4.1.1_dt <- beta_long[model == 'Dynamisch' & t >= 2020 & week >= 1,
                          .(mid = mean(value),
                            upr = ci_5p(value, side = 'upr'),
-                           lwr = ci_5p(value, side = 'lwr'),
-                           year = year
+                           lwr = ci_5p(value, side = 'lwr')
                          ),
                          by = week
 ]
 
-fig4.1.1_dt$weekyear <- as.Date(ifelse(fig4.1.1_dt$week<10,
-                                     paste0(fig4.1.1_dt$year,0,fig4.1.1_dt$week,01),
-                                     paste0(fig4.1.1_dt$year,fig4.1.1_dt$week,01)),
-                              "%Y%U%w")
-
-fig4.1.1_dt$weekyear_format <- yearweek(fig4.1.1_dt$weekyear)
-write.csv(fig4.1.1_dt,file = "workflow/excess_mortality/output/fig4.1.1_dt.csv")
+write.csv(fig4.1.1_dt,file = "workflow/excess_mortality/output/2021_fig4.1.1_dt.csv")
 
 ## create plot
-#ggplot(fig4.1.1_dt, aes(factor(weekyear_format), mid, group = 1)) +
-#  geom_line() +
-#  geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
-#  xlab('Week') +
-#  ylab('Beta') + 
-#  theme_bw() +
-#  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold", vjust = 0.3))
-#ggsave('plots/fig4.1.1.png')
+ggplot(fig4.1.1_dt, aes(factor(week), mid, group = 1)) +
+  geom_line() +
+  geom_errorbar(aes(ymax = upr, ymin = lwr), col = 'red', alpha = 0.4) + 
+  xlab('Week') +
+  ylab('Beta') + 
+  theme_bw()
+ggsave('plots/2021_fig4.1.1.png')
 
 ## Figure 4.1.2
 
@@ -595,12 +564,12 @@ fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
                           mid = apply(smooth_dt_dyn, 1, mean),
                           lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
                           upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
-)[!(year == 2020 & week >= 9 | year == 2021),
+)[!(year == 2020 & week >= 1),
   ':=' (smooth = NA, lwr = NA, upr = NA)
-][year > 2009 & week <= week.now,
+][year > 2009 & week <= 52,
 ]
 
-write.csv(fig4.1.2_dt,file = "workflow/excess_mortality/output/fig4.1.2_dt.csv")
+write.csv(fig4.1.2_dt,file = "workflow/excess_mortality/output/2021_fig4.1.2_dt.csv")
 
 ## plot
 ggplot(fig4.1.2_dt,
@@ -613,30 +582,24 @@ ggplot(fig4.1.2_dt,
   xlab('week') +
   ylab('') + 
   theme_bw()
-ggsave('plots/fig4.1.2.png')
+ggsave('plots/2021_fig4.1.2.png')
 
 ## figure 4.2.1
-fig4.2.1_dt <-beta_long[year >= 2020 & week >= 11 | year >=2021,
+fig4.2.1_dt <-beta_long[t >= 2020 & week >= 1,
                         lapply(.SD, function(x) unique(x)),
-                        .SDcols = c('mid', 'lwr', 'upr', 'year'),
+                        .SDcols = c('mid', 'lwr', 'upr'),
                         by = c('week', 'model')
 ]
+
+write.csv(fig4.2.1_dt,file = "workflow/excess_mortality/output/2021_fig4.2.1_dt.csv")
 
 fig4.2.1_dt <- fig4.2.1_dt %>%
   dplyr::filter(model == "Dynamisch")
 
-
-fig4.2.1_dt$weekyear <- as.Date(ifelse(fig4.2.1_dt$week<10,
-                                       paste0(fig4.2.1_dt$year,0,fig4.2.1_dt$week,01),
-                                       paste0(fig4.2.1_dt$year,fig4.2.1_dt$week,01)),
-                                "%Y%U%w")
-
-fig4.2.1_dt$weekyear_format <- yearweek(fig4.2.1_dt$weekyear)
-write.csv(fig4.2.1_dt,file = "workflow/excess_mortality/output/fig4.2.1_dt.csv")
-
-ggplot(totals, aes(factor(weekyear), deaths_week_mid, group = 1)) +
+## plot
+ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
   geom_col(size = 4, position = 'dodge') +
-  geom_errorbar(aes(ymin = deaths_week_low, ymax = deaths_week_high, col = ifelse(model == 'CBS', NA, 'red')), alpha = 0.4) +
+  geom_errorbar(aes(ymin = lwr, ymax = upr, col = ifelse(model == 'CBS', NA, 'red')), alpha = 0.4) +
   ## scale_x_continuous(breaks = as.numeric(time(window(cbs_deaths_ts, start = c(2020, 1)))),
   ##                    labels = seq(1, nl_dt[year == 2020, max(week)])
   ##                    ) +
@@ -644,16 +607,17 @@ ggplot(totals, aes(factor(weekyear), deaths_week_mid, group = 1)) +
   guides(colour = F) + 
   ylab('Oversterfte') +
   xlab('Week') + 
-  theme_bw() +
-  theme(axis.text.x.bottom = element_text(size=10, angle = 90, face = "bold", vjust = 0.3))
-ggsave('plots/fig4.2.1.png')
+  theme_bw() + 
+  theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold")) +
+  ggtitle("Sterfte door corona (2021)") + 
+ggsave('plots/2021_fig4.2.1.png')
 
 ## figure 4.2.2
-fig4.2.2_dt <- melt(totals[week == week.now][,-c("week","Laag","Gemiddeld","Hoog","year","weekyear","deaths_week_mid","deaths_week_low","deaths_week_high")], id.vars = 'model')
+fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
 fig4.2.2_dt <- fig4.2.2_dt %>%
   dplyr::filter(model == "Dynamisch")
 
-write.csv(fig4.2.2_dt,file = "workflow/excess_mortality/output/fig4.2.2_dt.csv")
+write.csv(fig4.2.2_dt,file = "workflow/excess_mortality/output/2021_fig4.2.2_dt.csv")
 
 ## plot
 ggplot(fig4.2.2_dt, aes(variable, value)) +
@@ -662,6 +626,4 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   xlab('') +
   ylab('Totale oversterfte') + 
   theme_bw()
-ggsave('plots/fig4.2.2.png')
-
-## end of script
+ggsave('plots/2021_fig4.2.2.png')
