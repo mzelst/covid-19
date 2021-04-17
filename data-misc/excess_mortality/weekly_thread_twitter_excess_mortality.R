@@ -1,5 +1,5 @@
 source("workflow/twitter/token_mzelst.R")
-source("workflow/excess_mortality_cbsmodel.R")
+source("workflow/excess_mortality_cbsmodel_2021.R")
 source("workflow/excess_mortality.R")
 
 thisweek <- isoweek(Sys.Date())-1

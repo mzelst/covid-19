@@ -140,7 +140,7 @@ deaths_weekly <- merge(deaths_2020, excess_deaths_wide, by = c("Week","Year"))
 
 week.now <- week(Sys.Date())-2 ## Which week?
 
-excess_cbsmodel <- read.csv(paste0("workflow/excess_mortality/data/run_week",week.now,".csv"))
+excess_cbsmodel <- read.csv("data-misc/excess_mortality/excess_mortality_dlm_2021.csv")
 
 df_cbsmodel <- excess_cbsmodel[which(excess_cbsmodel$model=="Dynamisch"),c("week","deaths_week_low",
                                                                            "deaths_week_mid","deaths_week_high","deaths_low_cumsum",
@@ -189,6 +189,20 @@ deaths_weekly <- deaths_weekly %>%
   mutate(Overleden65_80 = round(Overleden65_80,0)) %>%
   mutate(`Overleden80+` = round(`Overleden80+`,0))
 
+
+## Method CBS
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/15/sterfte-in-week-14-hoger-dan-verwacht"
+webpage.cbs <- read_html(u.cbs)
+cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[1]])[,c(2:4)]
+colnames(cbs.death.statistics) <- c("Week","allcause_deaths","deaths_expected_cbs")
+cbs.death.statistics$allcause_deaths <- as.numeric(cbs.death.statistics$allcause_deaths)
+cbs.death.statistics$deaths_expected_cbs <- as.numeric(cbs.death.statistics$deaths_expected_cbs)
+cbs.death.statistics$excess_cbs_method <- cbs.death.statistics$allcause_deaths-cbs.death.statistics$deaths_expected_cbs
+cbs.death.statistics <- cbs.death.statistics[complete.cases(cbs.death.statistics),]
+cbs.death.statistics$Year <- 2020
+cbs.death.statistics[54:(nrow(cbs.death.statistics)),"Year"] <- 2021
+
+deaths_weekly <- merge(deaths_weekly, cbs.death.statistics, by = c("Week","Year"), all.x=T)
 
 # Arrange and write file
 deaths_weekly <- arrange(deaths_weekly, Year, Week)
