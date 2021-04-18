@@ -8,18 +8,6 @@ endday.week <- substr(Sys.Date()-5,9,10)
 rivm.startday <- substr(Sys.Date()-15,9,10)
 rivm.endday <- substr(Sys.Date()-9,9,10)
 
-## Collect CBS weekly update ##
-u <- "https://www.cbs.nl/nl-nl/nieuws/2021/13/in-week-12-naar-schatting-3100-mensen-overleden"
-webpage <- read_html(u)
-table.cbs <- as.data.frame(html_table(webpage)[1])
-colnames(table.cbs) <- c("Year","Week","deaths","expected_deaths","ci_expected_deaths")
-table.cbs$deaths <- as.numeric(table.cbs$deaths)
-table.cbs$expected_deaths <- as.numeric(table.cbs$expected_deaths)
-table.cbs$excess_cbs <- table.cbs$deaths-table.cbs$expected_deaths
-
-table.cbs <- table.cbs %>%
-  filter(excess_cbs != "NA")
-
 ## Build main tweet
 tweet.main <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m week ",thisweek," van 2021. In dit draadje duid ik de sterfte per week + het aantal mensen dat is overleden door corona.")
 
@@ -59,7 +47,7 @@ tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",sta
 
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
-3) Methode CBS: ",last(table.cbs$excess_cbs),"
+3) Methode CBS: ",last(excess_mortality$excess_cbs_method),"
 4) Methode RIVM (",rivm.startday," april - ",rivm.endday," april): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
