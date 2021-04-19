@@ -19,3 +19,5 @@ df <- merge(dat.today[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspec
 df$diff.proven <- df$Hospital_Intake_Proven.x-df$Hospital_Intake_Proven.y
 df$diff.suspec <- df$Hospital_Intake_Suspected.x-df$Hospital_Intake_Suspected.y
 df$diff.proven.ic <- df$IC_Intake_Proven.x-df$IC_Intake_Proven.y
+
+rm(myfiles,temp,dat.threedaysago,dat.twodaysago,dat.yesterday,dat.today,df)

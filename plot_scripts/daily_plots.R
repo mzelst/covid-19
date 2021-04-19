@@ -167,7 +167,7 @@ reproduction <- reproduction %>%
 last.date.repro <- last(reproduction$Date)
 
 # Write reproduction number data file for day
-filename.daily.repro <- paste0("data-misc/reproduction-numbers/reproduction_number_",last.date.repro,".csv")
+filename.daily.repro <- paste0("data-misc/reproduction-numbers/rivm/reproduction_number_",last.date.repro,".csv")
 write.csv(reproduction, file = filename.daily.repro, row.names = F)
 
 #prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
