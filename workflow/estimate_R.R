@@ -56,14 +56,11 @@ r.rivm$dates <- as.Date(r.rivm$dates)
 covid.r <- merge(covid.r, r.rivm,by="dates")
 covid.r <- covid.r[,c("dates","Mean(R)","Std(R)","Rt_avg","Rt_low","Rt_up")]
 covid.r$R_lagged <- lead(covid.r$`Mean(R)`,2)
-covid.r$R_Std_lag <- lead(covid.r$`Std(R)`,2)
+covid.r$R_Std_lag <- round(lead(covid.r$`Std(R)`,2),3)
 
 
 covid.r$Rt_avg <- as.numeric(covid.r$Rt_avg)
-covid.r$R_lagged <- as.numeric(covid.r$R_lagged)
-covid.r$Std_R <- as.numeric(covid.r$`Std(R)`)
-covid.r$R_est_up <- covid.r$R_lagged+covid.r$R_Std_lag*1.96
-covid.r$R_est_low <- covid.r$R_lagged-covid.r$R_Std_lag*1.96
+covid.r$R_lagged <- round(as.numeric(covid.r$R_lagged),3)
 
 covid.r$diff <- round(covid.r$R_lagged-covid.r$Rt_avg,2)
 
@@ -114,4 +111,4 @@ commit(repo, all = T, paste0("Update reproduction number ",Sys.Date()))
 push(repo, credentials = git.auth)
 
 rm(corona, covid.incidence,covid.r,dat,dates,r.rivm,res_parametric_si,dates.start,
-   filename.repro.file,R_last_estimate,T,t_end,t_start,time)
+   filename.repro.file,R_last_estimate,T,t_end,t_start,time,temp)
