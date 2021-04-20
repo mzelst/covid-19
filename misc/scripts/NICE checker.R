@@ -15,6 +15,10 @@ last(dat.today$Hospital_Currently)
 sum(dat.today$IC_Intake_Proven) - sum(dat.yesterday$IC_Intake_Proven)
 last(dat.today$IC_Current)
 
+dat.today <- dat.today %>%
+  mutate(Hospital_Intake_7d = round(frollmean(Hospital_Intake_Proven,7),0)) %>%
+  mutate(IC_Intake_7d = round(frollmean(IC_Intake_Proven,7),0))
+
 df <- merge(dat.today[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], dat.yesterday[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], by = "date", all.x=T)
 df$diff.proven <- df$Hospital_Intake_Proven.x-df$Hospital_Intake_Proven.y
 df$diff.suspec <- df$Hospital_Intake_Suspected.x-df$Hospital_Intake_Suspected.y
