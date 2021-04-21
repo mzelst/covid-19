@@ -60,7 +60,7 @@ covid.r$R_Std_lag <- round(lead(covid.r$`Std(R)`,2),3)
 
 
 covid.r$Rt_avg <- as.numeric(covid.r$Rt_avg)
-covid.r$R_lagged <- round(as.numeric(covid.r$R_lagged),3)
+covid.r$R_lagged <- round(as.numeric(covid.r$R_lagged),2)
 
 covid.r$diff <- round(covid.r$R_lagged-covid.r$Rt_avg,2)
 
