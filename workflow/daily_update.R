@@ -48,7 +48,7 @@ all.data <- read.csv("data/all_data.csv")
 #vaccines.by_day <- read.csv("data/vaccines_by_day.csv")
 
 # get tokens
-#source("workflow/twitter/token_mzelst.R")
+source("workflow/twitter/token_mzelst.R")
 #source("workflow/twitter/token_edwinveldhuizen.R")
 
 LCPS_klinisch_two_days <- last(all.data$Kliniek_Bedden,2)
@@ -101,14 +101,14 @@ source("workflow/generate_municipality_images.R")
 
 #####
 
-#git.credentials <- read_lines("git_auth.txt")
-#git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
 
 ## Push to git
-#repo <- init()
-#add(repo, path = "*")
-#commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
-#push(repo, credentials = git.auth)
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update RIVM and NICE data part 1/2"))
+push(repo, credentials = git.auth)
 
 ########
 # Municipality tweet - cases
