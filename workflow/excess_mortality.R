@@ -191,7 +191,7 @@ deaths_weekly <- deaths_weekly %>%
 
 
 ## Method CBS
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/15/sterfte-in-week-14-hoger-dan-verwacht"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/16/oversterfte-bij-mensen-tot-80-jaar-in-week-15"
 webpage.cbs <- read_html(u.cbs)
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[1]])[,c(2:4)]
 colnames(cbs.death.statistics) <- c("Week","allcause_deaths","deaths_expected_cbs")
@@ -246,6 +246,7 @@ mortality_wide %>%
   annotate("text", x = 14, y = 5200, label = "Eerste golf") +
   annotate("text", x = 32, y = 3400, label = "Hittegolf") +
   annotate("text", x = 44, y = 3800, label = "Tweede golf") +
+  annotate("text", x = 14.5, y = 3400, label = "Derde golf") +
   ggsave("data-misc/excess_mortality/plots_weekly_update/sterfte_perweek.png")
 
 git.credentials <- read_lines("git_auth.txt")
