@@ -63,6 +63,11 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
+## Load CBS website
+
+u <- "https://www.cbs.nl/nl-nl/nieuws/2021/16/oversterfte-bij-mensen-tot-80-jaar-in-week-15"
+webpage <- read_html(u)
+
 ## Tweet WLZ mortality
 table.wlz <- as.data.frame(html_table(webpage)[2])
 colnames(table.wlz) <- c("Year","Week","deaths_wlz","expected_deaths_wlz","ci_expected_deaths_wlz","deaths_other","expected_deaths_other","ci_expected_deaths_other")
@@ -100,9 +105,9 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Tweet DLM analyses
 
-tweet.dlm <- paste0("5/ Het officiële aantal sterfgevallen voor week ",week.now," is op dit moment ",last(excess_mortality$covid_sterfgevallen),".
+tweet.dlm <- paste0("5/ Het officiële aantal sterfgevallen voor week ",thisweek," is op dit moment ",last(excess_mortality$covid_sterfgevallen),".
 
-De DLM methode schat het aantal corona-overledenen voor week ",week.now," op ",last(excess_mortality$DLModel_week_estimate)," (95% betrouwbaarheidsinterval: ",last(excess_mortality$DLModel_lowerbound95),"-",last(excess_mortality$DLModel_upperbound95),").
+De DLM methode schat het aantal corona-overledenen voor week ",thisweek," op ",last(excess_mortality$DLModel_week_estimate)," (95% betrouwbaarheidsinterval: ",last(excess_mortality$DLModel_lowerbound95),"-",last(excess_mortality$DLModel_upperbound95),").
 
 De sterfte door corona tot nu toe is ",last(excess_mortality$Oversterfte_DLModel_cumul_mid)," (95% betrouwbaarheidsinterval: ",last(excess_mortality$Oversterfte_DLModel_cumul_low),"-",last(excess_mortality$Oversterfte_DLModel_cumul_high),").
 ")
@@ -110,7 +115,7 @@ De sterfte door corona tot nu toe is ",last(excess_mortality$Oversterfte_DLModel
 posted_tweet <- post_tweet (
   tweet.dlm,
   token = token.mzelst,
-  media = c("plots/fig4.2.1.png"),
+  media = c("plots/2021_fig4.2.1.png"),
   in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
 )
@@ -119,7 +124,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: De sterfte onder de groepen 0-65 en 65-80 lijkt verder toe te nemen en is nu significant hoger dan verawcht. Gegeven de derde golf zou dit nog verder zou kunnen stijgen.")
+conclusie.tweet <- paste0("Conclusie: De sterfte in de groep 65-80 neemt verder toe en is nu 20% hoger dan verwacht. De sterfte in de groep 80+ blijft lager dan verwacht. Hoge viruscirculatie in combinatie met hoge vaccinatiegraad onder 80+ lijkt de verklaring.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,

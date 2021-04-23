@@ -77,7 +77,7 @@ mortality_wide$`2021` <- na_if(mortality_wide$`2021`, 0)
 mortality_wide$Average20162020 <- rowMeans(mortality_wide[,c("2016","2017","2018","2019","2020")])
 mortality_wide$Average20152019 <- rowMeans(mortality_wide[,c("2015","2016","2017","2018","2019")])
 
-mortality_wide$excess_death2021 <- round(mortality_wide$`2021` - mortality_wide$Average20162020,0)
+mortality_wide$excess_death2021 <- round(mortality_wide$`2021` - mortality_wide$Average20152019,0)
 mortality_wide$excess_death2020 <- round(mortality_wide$`2020` - mortality_wide$Average20152019,0)
 
 excess_deaths2020 <- aggregate(excess_death2020 ~ LeeftijdOp31December + Week, data = mortality_wide, FUN = sum)
