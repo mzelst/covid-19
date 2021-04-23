@@ -14,7 +14,7 @@ tweet.main <- paste0("CBS heeft het aantal overlijdensgevallen bijgewerkt t/m we
 posted_tweet <- post_tweet (
   tweet.main,
   token = token.mzelst,
-  media = "plots/sterfte_perweek.png"
+  media = "data-misc/excess_mortality/plots_weekly_update/sterfte_perweek.png"
 ) ## Post tweet
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
