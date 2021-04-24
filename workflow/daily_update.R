@@ -361,6 +361,7 @@ source("workflow/parse_age-data.R")
 source("workflow/dashboards/rivm-date-corrections.R")
 source("workflow/dashboards/heatmap-age-week.R")
 source("workflow/dashboards/age-distribution-date-NICE.R")
+source("workflow/parse_deaths_comparison_tracker.R")
 source("workflow/estimate_R.R")
 
 ## Vaccine tweet for history ##

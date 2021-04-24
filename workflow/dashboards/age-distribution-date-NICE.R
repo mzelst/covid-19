@@ -257,12 +257,17 @@ Klinisch_overleden$Type <- "Klinisch"
 IC_overleden$Type <- "IC"
 nice_by_day_overleden <- rbind(Klinisch_overleden, IC_overleden)
 write.csv(nice_by_day_overleden, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long_Overleden.csv", row.names = F)
-deaths_nice_today <- nice_by_day_overleden %>%
-  filter(Datum == Sys.Date())
-sum(deaths_nice_today$Totaal)
 
-df_nice_deaths <- aggregate(Totaal ~ Datum, data = nice_by_day_overleden, FUN = sum)
-df_nice_deaths$deaths_7d <- round(frollmean(df_nice_deaths$Totaal,7),0)
+df_nice_deaths <- nice_by_day_overleden %>%
+  filter(Datum >= "2020-11-04")
+
+df_nice_deaths <- aggregate(Totaal ~ Datum, data = df_nice_deaths, FUN = sum)
+df_nice_deaths <- df_nice_deaths %>%
+  mutate(deaths_7d = round(frollmean(Totaal,7),0)) %>%
+  mutate(week = isoweek(Datum)) %>%
+  mutate(year = isoyear(Datum))
+week_deaths_nice <- aggregate(Totaal ~ week + year, data = df_nice_deaths, FUN = sum)
+
 
 ## Push to github
 add(repo, path = "*")
