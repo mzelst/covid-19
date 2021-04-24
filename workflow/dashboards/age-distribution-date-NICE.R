@@ -221,6 +221,7 @@ Klinisch_overleden <- nice_by_day_clinical_overleden %>%
   spread(Leeftijd,value = Overleden_toename)
 
 Klinisch_overleden <- Klinisch_overleden %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
+Klinisch_overleden$Totaal <- rowSums(Klinisch_overleden[,c(2:17)])
 
 write.csv(Klinisch_overleden, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_Overleden.csv", row.names = F)
 
@@ -248,7 +249,7 @@ IC_overleden <- nice_by_day_IC_overleden %>%
   spread(Leeftijd,value = Overleden_toename)
 
 IC_overleden <- IC_overleden %>% select(Datum:`<20`, `20 - 24`:`85 - 89`,`>90`)
-
+IC_overleden$Totaal <- rowSums(IC_overleden[,c(2:17)])
 
 write.csv(IC_overleden, file = "data-nice/age/leeftijdsverdeling_datum_IC_Overleden.csv", row.names = F)
 
@@ -256,8 +257,12 @@ Klinisch_overleden$Type <- "Klinisch"
 IC_overleden$Type <- "IC"
 nice_by_day_overleden <- rbind(Klinisch_overleden, IC_overleden)
 write.csv(nice_by_day_overleden, file = "data-nice/age/leeftijdsverdeling_datum_Klinisch_IC_long_Overleden.csv", row.names = F)
+deaths_nice_today <- nice_by_day_overleden %>%
+  filter(Datum == Sys.Date())
+sum(deaths_nice_today$Totaal)
 
-
+df_nice_deaths <- aggregate(Totaal ~ Datum, data = nice_by_day_overleden, FUN = sum)
+df_nice_deaths$deaths_7d <- round(frollmean(df_nice_deaths$Totaal,7),0)
 
 ## Push to github
 add(repo, path = "*")
