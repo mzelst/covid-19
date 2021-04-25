@@ -43,3 +43,6 @@ setorder(deaths_total, Year, Week)
 deaths_total$excess_rivm_nice <- deaths_total$deaths_nice-deaths_total$deaths_nonnursing_RIVM
 
 write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
+
+rm(deaths_clinic, deaths_IC,deaths_nice,deaths_total,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
+   week_deaths_nursery)
