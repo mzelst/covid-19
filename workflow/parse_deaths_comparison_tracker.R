@@ -14,6 +14,8 @@ deaths_nice <- deaths_nice %>%
 deaths_nice <- aggregate(deaths_nice ~ Week + Year, data = deaths_nice, FUN = sum)
 
 ## Deaths nursing homes
+temp = tail(list.files(path = "data-rivm/nursing-homes-datasets/",pattern="*.csv.gz", full.names = T),1)
+nursing.homes <- fread(temp)
 
 nursing.homes$Date_of_statistic_reported <- as.Date(nursing.homes$Date_of_statistic_reported)
 nursing.homes.deaths.wide <- aggregate(Total_deceased_reported ~ Date_of_statistic_reported, data = nursing.homes, FUN = sum)
