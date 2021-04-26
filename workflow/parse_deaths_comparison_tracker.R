@@ -27,7 +27,7 @@ week_deaths_nursery <- aggregate(Total_deceased_reported ~ Week + Year, data = n
 
 deaths_total <- merge(deaths_nice,week_deaths_nursery, by = c("Week","Year"))
 df_deaths_rivm <- read.csv("corrections/deaths_perweek.csv")[,c("Week","Year","weekdeath_today")]
-deaths_total <- merge(deaths_total, df_deaths_rivm, by = c("Week","Year"))
+deaths_total <- merge(deaths_total, df_deaths_rivm, by = c("Week","Year"), all.x=T)
 colnames(deaths_total) <- c("Week","Year","deaths_nice","deaths_nursing","deaths_rivm")
 setorder(deaths_total, Year,Week)
 
@@ -37,7 +37,7 @@ deaths_total$deaths_nice_nursing <- deaths_total$deaths_nice + deaths_total$deat
 
 excess_dlm <- read.csv("data-misc/excess_mortality/excess_mortality.csv")[,c("Week","Year","DLModel_week_estimate")]
 colnames(excess_dlm) <- c("Week","Year","total_covid_mortality")
-deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"))
+deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"), all.x=T)
 setorder(deaths_total, Year, Week)
 
 deaths_total$excess_rivm_nice <- deaths_total$deaths_nice-deaths_total$deaths_nonnursing_RIVM
