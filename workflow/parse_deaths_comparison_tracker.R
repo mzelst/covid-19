@@ -41,6 +41,10 @@ deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"))
 setorder(deaths_total, Year, Week)
 
 deaths_total$excess_rivm_nice <- deaths_total$deaths_nice-deaths_total$deaths_nonnursing_RIVM
+deaths_total$week_year <- ifelse(deaths_total$Week<10,
+                                 paste0(deaths_total$Year,"-",0,deaths_total$Week),
+                                 paste0(deaths_total$Year,"-",deaths_total$Week))
+
 
 write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
