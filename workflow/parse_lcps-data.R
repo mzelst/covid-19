@@ -27,11 +27,16 @@ lcps.data <- lcps.data[order(lcps.data$date),]
 
 lcps.data <- lcps.data %>%
   mutate(Totaal_bezetting = Kliniek_Bedden + IC_Bedden_COVID) %>%
-  mutate(IC_Opnames_7d = round(frollmean(IC_Nieuwe_Opnames_COVID,7),0)) %>%
-  mutate(Kliniek_Opnames_7d = round(frollmean(Kliniek_Nieuwe_Opnames_COVID,7),0)) %>%
+  mutate(IC_Opnames_7d = frollmean(IC_Nieuwe_Opnames_COVID,7)) %>%
+  mutate(Kliniek_Opnames_7d = frollmean(Kliniek_Nieuwe_Opnames_COVID,7)) %>%
   mutate(Totaal_opnames = IC_Nieuwe_Opnames_COVID + Kliniek_Nieuwe_Opnames_COVID) %>%
   mutate(Totaal_opnames_7d = IC_Opnames_7d + Kliniek_Opnames_7d) %>%
-  mutate(Totaal_IC = IC_Bedden_COVID + IC_Bedden_Non_COVID)
+  mutate(Totaal_IC = IC_Bedden_COVID + IC_Bedden_Non_COVID) %>%
+  mutate(IC_opnames_14d = lag(IC_Opnames_7d,7)) %>%
+  mutate(Kliniek_opnames_14d = lag(Kliniek_Opnames_7d,7)) %>%
+  mutate(OMT_Check_IC = round(IC_Opnames_7d/IC_opnames_14d*100,0)) %>%
+  mutate(OMT_Check_Kliniek = round(Kliniek_Opnames_7d/Kliniek_opnames_14d*100,0))
+
 
 lcps.data <- lcps.data[order(lcps.data$date, decreasing = T),]
 
