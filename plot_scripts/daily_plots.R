@@ -184,7 +184,7 @@ prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
 
 # Write infectious people data file for day
 last.date.infectious <- last(prevalence$Date)
-filename.daily.infectious <- paste0("data-misc/reproduction-numbers/rivm/reproduction_number_",last.date.infectious,".csv")
+filename.daily.infectious <- paste0("data-misc/infectious-people/infectious_people_",last.date.infectious,".csv")
 write.csv(prevalence, file = filename.daily.infectious, row.names = F)
 
 
