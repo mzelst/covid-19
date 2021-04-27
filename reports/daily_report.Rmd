@@ -317,6 +317,56 @@ add_header_above(c(" " = 1, "Besmettingen" = 2, "Ziekenhuisopnames" = 2, "Overle
 ``` 
 
 \newpage
+
+# Ziekenhuisopnames (NICE) in de afgelopen twee weken
+
+```{r NICE, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+setwd('../')
+temp.kliniek = list.files(path = "data-nice/age/Clinical_Beds/",pattern="*.csv", full.names = T)
+
+dat.today.nice.kliniek <- read.csv(last(temp.kliniek)) ## Case file today
+dat.twoweeksago.nice.kliniek <- read.csv(temp.kliniek[length(temp.kliniek)-14])
+
+df.nice.kliniek <- merge(dat.today.nice.kliniek, dat.twoweeksago.nice.kliniek, by = c("Leeftijd"))
+df.kliniek <- df.nice.kliniek %>%
+  mutate(Kliniek_aanwezig = Klinisch_aanwezig.x) %>%
+  mutate(Kliniek_opnames = Totaal.x-Totaal.y) %>%
+  mutate(Kliniek_overleden = Verlaten_Overleden.x - Verlaten_Overleden.y) %>%
+  select(Leeftijd,Kliniek_aanwezig,Kliniek_opnames,Kliniek_overleden)
+
+temp.ic = list.files(path = "data-nice/age/IC/",pattern="*.csv", full.names = T)
+
+dat.today.nice.ic <- read.csv(last(temp.ic)) ## Case file today
+dat.twoweeksago.nice.ic <- read.csv(temp.ic[length(temp.ic)-14])
+
+df.nice.ic <- merge(dat.today.nice.ic, dat.twoweeksago.nice.ic, by = c("Leeftijd"))
+df.IC <- df.nice.ic %>%
+  mutate(IC_aanwezig = IC_aanwezig.x) %>%
+  mutate(IC_opnames = Totaal.x-Totaal.y) %>%
+  mutate(IC_Overleden = Verlaten_Overleden.x - Verlaten_Overleden.y) %>%
+  select(Leeftijd,IC_aanwezig,IC_opnames,IC_Overleden)
+
+df_total <- merge(df.kliniek,df.IC, by = "Leeftijd")
+df_total <- df_total[,c("Leeftijd","Kliniek_aanwezig","IC_aanwezig",
+                        "Kliniek_opnames","IC_opnames","Kliniek_overleden","IC_Overleden")]
+df_total <- df_total %>%
+  slice(1,3:16,2)
+colnames(df_total) <- c("Leeftijd","Kliniek","IC","Kliniek","IC","Kliniek","IC")
+
+```
+
+```{r NICE Table, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
+require(kableExtra)
+
+footnote.nice <- paste0("Aantal bij NICE gemelde COVID-19 patiënten: in het ziekenhuis aanwezige COVID-19 patiënten, opnames, en overleden COVID-19 patiënten in het ziekenhuis van ",format((Sys.Date()-14),"%d")," ",format((Sys.Date()-14),"%B"), " t/m ",format((Sys.Date()),"%d")," ",format((Sys.Date()),"%B")," 15:15 uur")
+
+kable(df_total, "latex", booktabs = T, linesep="") %>%
+kable_styling(font_size = 10) %>%
+add_header_above(c(" " = 1, "Aanwezig" = 2, "Opnames" = 2, "Overleden" = 2)) %>%
+  footnote(general = footnote.nice, threeparttable = T)
+``` 
+
+\newpage
 # Leeftijdsverdeling en man-vrouwverdeling van COVID-19 patiënten in de afgelopen twee weken
 ```{r Leeftijd, message=FALSE, echo=FALSE, error=FALSE, eval=TRUE,warning=FALSE, tidy=TRUE}
 setwd('../')

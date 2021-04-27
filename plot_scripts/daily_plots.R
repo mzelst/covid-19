@@ -157,6 +157,7 @@ opnames <- all.data %>%
   ggtitle("Opnames op de verpleegafdeling en IC") +
   ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
+# Reproduction number
 reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%
   map(as.data.table) %>%
   rbindlist(fill = TRUE)
@@ -170,15 +171,22 @@ last.date.repro <- last(reproduction$Date)
 filename.daily.repro <- paste0("data-misc/reproduction-numbers/rivm/reproduction_number_",last.date.repro,".csv")
 write.csv(reproduction, file = filename.daily.repro, row.names = F)
 
-#prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
-#  map(as.data.table) %>%
-#  rbindlist(fill = TRUE)
+# Number of infectious people
+prevalence <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_prevalentie.json",simplify=TRUE) %>%
+  map(as.data.table) %>%
+  rbindlist(fill = TRUE)
 
-#prevalence <- prevalence %>%
-#  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
-#  mutate(Date = Date %>% as.Date)
+prevalence <- prevalence %>%
+  mutate(groei_besmettelijken = c(0,diff(prev_avg))) %>%
+  mutate(Date = Date %>% as.Date)
 
-#prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
+prevalence$besmet_7daverage <- frollmean(prevalence[,"groei_besmettelijken"],7)
+
+# Write infectious people data file for day
+last.date.infectious <- last(prevalence$Date)
+filename.daily.infectious <- paste0("data-misc/reproduction-numbers/rivm/reproduction_number_",last.date.infectious,".csv")
+write.csv(prevalence, file = filename.daily.infectious, row.names = F)
+
 
 #reproduction <- reproduction %>%
 #  ggplot(aes(x=Date, y=Rt_avg, group = 1)) + 
@@ -237,4 +245,5 @@ write.csv(reproduction, file = filename.daily.repro, row.names = F)
 # Save grid plot for daily use
 #save_plot("plots/plot_daily.png", plot.daily, base_asp = 1.1, base_height = 7, base_width = 10)
 
-rm(aanwezig, all.data, cases, opnames, testdata, testplot, filter.date, testplot.subtitle)
+rm(aanwezig, all.data, cases, opnames, testdata, testplot, filter.date, testplot.subtitle, prevalence,
+   reproduction, day.today, filename.daily.infectious,filename.daily.repro,last.date.infectious,last.date.repro)
