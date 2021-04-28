@@ -48,5 +48,9 @@ deaths_total$week_year <- ifelse(deaths_total$Week<10,
 
 write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
+push(repo, credentials = git.auth)
+
 rm(deaths_clinic, deaths_IC,deaths_nice,deaths_total,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
    week_deaths_nursery)
