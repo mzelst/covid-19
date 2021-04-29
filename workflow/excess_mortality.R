@@ -4,6 +4,8 @@ require(cbsodataR)
 require(reshape2)
 require(lubridate)
 
+source("data-misc/excess_mortality/parse_cbs_links.R")
+
 weeknumber <- isoweek(ymd(Sys.Date()))-2
 week.readfile <- isoweek(Sys.Date())-1
 
@@ -189,9 +191,11 @@ deaths_weekly <- deaths_weekly %>%
   mutate(Overleden65_80 = round(Overleden65_80,0)) %>%
   mutate(`Overleden80+` = round(`Overleden80+`,0))
 
+## Retrieve link CBS mortality weekly
+urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
+u.cbs <- last(urls$urls)
 
 ## Method CBS
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/16/oversterfte-bij-mensen-tot-80-jaar-in-week-15"
 webpage.cbs <- read_html(u.cbs)
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[1]])[,c(2:4)]
 colnames(cbs.death.statistics) <- c("Week","allcause_deaths","deaths_expected_cbs")

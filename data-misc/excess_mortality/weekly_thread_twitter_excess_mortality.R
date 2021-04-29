@@ -63,10 +63,12 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
-## Load CBS website
+## Retrieve link CBS mortality weekly
+urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
+u.cbs <- last(urls$urls)
 
-u <- "https://www.cbs.nl/nl-nl/nieuws/2021/16/oversterfte-bij-mensen-tot-80-jaar-in-week-15"
-webpage <- read_html(u)
+## Load CBS website
+webpage <- read_html(u.cbs)
 
 ## Tweet WLZ mortality
 table.wlz <- as.data.frame(html_table(webpage)[2])
