@@ -24,11 +24,31 @@ nursing.homes.deaths.wide <- nursing.homes.deaths.wide %>%
   mutate(Year = isoyear(Date_of_statistic_reported))
 
 week_deaths_nursery <- aggregate(Total_deceased_reported ~ Week + Year, data = nursing.homes.deaths.wide, FUN = sum)
-
+colnames(week_deaths_nursery) <- c("Week","Year","deaths_nursing")
 deaths_total <- merge(deaths_nice,week_deaths_nursery, by = c("Week","Year"))
+
+## 70 plus living at home
+
+## Deaths nursing homes
+temp = tail(list.files(path = "data-rivm/70plus-living-at-home-per-day/",pattern="*.csv.gz", full.names = T),1)
+living.home_70 <- fread(temp)
+
+living.home_70$Date_of_statistic_reported <- as.Date(living.home_70$Date_of_statistic_reported)
+living.home_70.wide <- aggregate(Total_deceased_reported ~ Date_of_statistic_reported, data = living.home_70, FUN = sum)
+living.home_70.wide <- living.home_70.wide %>%
+  mutate(Week = isoweek(Date_of_statistic_reported)) %>%
+  mutate(Year = isoyear(Date_of_statistic_reported))
+
+week_deaths_living_home_70 <- aggregate(Total_deceased_reported ~ Week + Year, data = living.home_70.wide, FUN = sum)
+colnames(week_deaths_living_home_70) <- c("Week","Year","deaths_living_home_70")
+
+deaths_total <- merge(deaths_total,week_deaths_living_home_70, by = c("Week","Year"))
+
+## RIVM all deaths
+
 df_deaths_rivm <- read.csv("corrections/deaths_perweek.csv")[,c("Week","Year","weekdeath_today")]
 deaths_total <- merge(deaths_total, df_deaths_rivm, by = c("Week","Year"), all.x=T)
-colnames(deaths_total) <- c("Week","Year","deaths_nice","deaths_nursing","deaths_rivm")
+colnames(deaths_total) <- c("Week","Year","deaths_nice","deaths_nursing","deaths_living_home_70","deaths_rivm")
 setorder(deaths_total, Year,Week)
 
 deaths_total$deaths_nonnursing_RIVM <- deaths_total$deaths_rivm-deaths_total$deaths_nursing
@@ -53,4 +73,4 @@ commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker
 push(repo, credentials = git.auth)
 
 rm(deaths_clinic, deaths_IC,deaths_nice,deaths_total,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
-   week_deaths_nursery)
+   week_deaths_nursery, living.home_70, living.home_70.wide,week_deaths_living_home_70,temp)
