@@ -116,6 +116,15 @@ ic.nice.age.data <- fread("https://data.rivm.nl/covid-19/COVID-19_ziekenhuis_ic_
 filename.ic.age.nice <- paste0("data-rivm/ic-age-datasets/ic_daily_",last(ic.nice.age.data$Date_of_statistics),".csv") ## Filename for daily data
 fwrite(ic.nice.age.data, file = filename.ic.age.nice,row.names = F)
 
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+
+##Push to git
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily data update"))
+push(repo, credentials = git.auth)
+
 #continue the script
 print("Script did NOT end!")   
 #}
