@@ -69,7 +69,7 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 ## Build tweets
 tweet.main <- paste0("#COVID19NL
 
-!! Cijfers hoger door storing weekend https://twitter.com/mzelst/status/1389204159350681607
+Cijfers hoger door storing weekend https://twitter.com/mzelst/status/1389204159350681607
 
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
 Totaal: ",format(last(all.data$cases),decimal.mark = ",",big.mark =".",big.interval = 3)," (+",format(last(all.data$net.infection),decimal.mark = ",",big.mark =".",big.interval = 3)," ivm ",last(all.data$corrections.cases)," corr.)
