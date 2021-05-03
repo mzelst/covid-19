@@ -53,4 +53,9 @@ corrections.perday$positive_7daverage <- round(frollmean(corrections.perday[,"ne
 
 write.csv(corrections.perday, file = "corrections/corrections_perday.csv", row.names = FALSE)
 
+##Push to git
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily data update"))
+push(repo, credentials = git.auth)
+
 rm(list=ls())

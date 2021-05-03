@@ -21,4 +21,3 @@ tests$pos.rate <- tests$Tested_positive/tests$Tested_with_result*100
 colnames(tests) <- c("Version","Date_of_report","date","Security_region_code","Security_region_name","values.tested_total",
                      "values.infected","values.infected_percentage")
 write.csv(tests, file = "data-dashboards/percentage-positive-daily-safetyregion.csv",row.names = F)
-
