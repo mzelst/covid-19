@@ -1,3 +1,44 @@
+## title: Script for estimating excess deaths from Corona
+## author: Trond Husby
+## date: 26.06.2020
+
+##
+## house keeping
+##
+
+## packages
+library(cbsodataR)
+library(dlm)
+library(data.table)
+library(ggplot2)
+library(forecast)
+library(rmarkdown)
+library(knitr)
+library(gridExtra)
+library(readxl)
+
+## for reproducibility
+set.seed(123)
+
+week.now <- isoweek(Sys.Date())-1 
+
+## helper functions
+
+## 95% confidence interval
+ci_5p <- function(val, side) {
+  if (side == 'lwr') {
+    quantile(val, probs = seq(0, 1, 0.025))[2] 
+  } else if (side == 'upr') {
+    quantile(val, probs = seq(0, 1, 0.025))[40] 
+  }
+}
+
+## find week number from ts object
+find_week <- function(var) {
+  round(as.numeric((var - trunc(var))*52 + 1))
+}
+
+
 nl_dt <- read.csv("workflow/excess_mortality/international/germany/deaths_2020_2021_covid.csv")
 nl_dt <- nl_dt %>%
   filter(year <= 2020)

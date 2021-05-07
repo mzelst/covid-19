@@ -112,18 +112,87 @@ deaths_total <- deaths_total %>%
   mutate(factor_other = round(other_covid/deaths_nonnursing_RIVM,2)) %>%
   mutate(deviation_estim = round((deaths_estimate_3-total_covid_mortality)/total_covid_mortality*100,0))
 
-sum(deaths_total[32:45,"deaths_estimate_2"])+24484
-sum(deaths_total[32:45,"total_covid_mortality"],na.rm=T)+24484
-sum(deaths_total[32:39,"deaths_estimate"])+sum(deaths_total[40:45,"deaths_estimate_2"])+24484
+write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
-#write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
-
-#git.credentials <- read_lines("git_auth.txt")
-#git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-#repo <- init()
-#add(repo, path = "*")
-#commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
-#push(repo, credentials = git.auth)
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
+push(repo, credentials = git.auth)
 
 rm(deaths_clinic, deaths_IC,deaths_nice,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
    week_deaths_nursery, living.home_70, living.home_70.wide,week_deaths_living_home_70,temp, cbs.df)
+
+
+## PLOTS
+
+cols <- c("#009E73", "#87109A","#E6830C","#D96DEA", "#2231C5","#000000")
+
+
+plot <- deaths_total %>%
+  filter(week_year <= "2021-04") %>%
+  ggplot(aes(x=factor(week_year), y=deaths_rivm, group = 1)) + 
+  geom_line(aes(y = deaths_rivm, color = "RIVM"), lwd=1.2) +
+  geom_line(aes(y = total_covid_mortality, color = "CBS"), lwd=1.2) +
+  theme_classic()+
+  xlab("")+
+  ylab("")+
+  labs(title = "Sterfte per week",
+       subtitle = "CBS data beschikbaar t/m januari 2021",
+       caption = paste("Bron: CBS/RIVM | Plot: @mzelst  | ",Sys.Date())) +
+  theme(
+    legend.title = element_blank(),  ## legend title
+    legend.position="top",
+    legend.direction = "horizontal",
+    legend.background = element_rect(fill="#f5f5f5", size=0.5, linetype="solid"),
+    plot.background = element_rect(fill = "#F5F5F5"), #background color/size (border color and size)
+    panel.background = element_rect(fill = "#F5F5F5", colour = "#F5F5F5"),
+    plot.title =     element_text(hjust = 0.5 ,size = 24 ,face = "bold"),
+    plot.subtitle =  element_text(hjust=0.5   ,size = 12 ,color = "black", face = "italic"),
+    axis.text.x = element_text(size=10,color = "black",face = "bold", angle = 90),
+    axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid"),
+    axis.ticks.length = unit(0.5, "cm"),
+    axis.line = element_line(colour = "#F5F5F5"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank())
+
+plot + scale_colour_manual(values = cols) +
+  ggsave("plots/sterfte_per_week_30K.png", width = 12, height=8)
+
+
+## Percentages
+
+plot <- deaths_total %>%
+  filter(week_year >= "2020-39") %>%
+  filter(week_year <= "2021-04") %>%
+  ggplot(aes(x=factor(week_year), y=deaths_wlz_perc, group = 1)) + 
+  geom_line(aes(y = deaths_wlz_perc, color = "Verpleeghuis"), lwd=1.2) +
+  geom_line(aes(y = deaths_home_perc, color = "Thuis"), lwd=1.2) +
+  geom_line(aes(y = deaths_nice_perc, color = "Ziekenhuis"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 100), n.breaks = 10) +
+  theme_classic()+
+  xlab("")+
+  ylab("")+
+  labs(title = "Sterfte per plaats van overlijden",
+       subtitle = "Percentage van totale sterfte",
+       caption = paste("Bron: CBS/RIVM/NICE | Plot: @mzelst  | ",Sys.Date())) +
+  theme(
+    legend.title = element_blank(),  ## legend title
+    legend.position="top",
+    legend.direction = "horizontal",
+    legend.background = element_rect(fill="#f5f5f5", size=0.5, linetype="solid"),
+    legend.text = element_text(size = 12),
+    plot.background = element_rect(fill = "#F5F5F5"), #background color/size (border color and size)
+    panel.background = element_rect(fill = "#F5F5F5", colour = "#F5F5F5"),
+    plot.title =     element_text(hjust = 0.5 ,size = 24 ,face = "bold"),
+    plot.subtitle =  element_text(hjust=0.5   ,size = 12 ,color = "black", face = "italic"),
+    axis.text.x = element_text(size=10,color = "black",face = "bold", angle = 90),
+    axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid"),
+    axis.ticks.length = unit(0.5, "cm"),
+    axis.line = element_line(colour = "#F5F5F5"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank())
+
+plot + scale_colour_manual(values = cols) +
+  ggsave("plots/sterfte_per_week_30K_percentage.png", width = 12, height=8)
