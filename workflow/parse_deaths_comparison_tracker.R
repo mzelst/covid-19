@@ -5,7 +5,7 @@ temp = tail(list.files(path = "data-nice/exit/IC",pattern="*.csv", full.names = 
 deaths_IC <- fread(temp)[,c("date","Overleden")]
 
 deaths_nice <- merge(deaths_clinic, deaths_IC, by = "date")
-deaths_nice$deaths_nice <- deaths_nice$Overleden.x+deaths_nice$Overleden.y
+deaths_nice$deaths_nice <- round((deaths_nice$Overleden.x+deaths_nice$Overleden.y)*0.95,0)
 deaths_nice <- deaths_nice %>%
   mutate(deaths_nice = c(0,diff(deaths_nice))) %>%
   mutate(Week = isoweek(date)) %>%
@@ -102,18 +102,28 @@ deaths_total$week_year <- ifelse(deaths_total$Week<10,
 deaths_total <- deaths_total %>% 
   mutate(deaths_home = total_covid_mortality - deaths_nice - wlz_covid) %>%
   mutate(deaths_home_perc = round(deaths_home/total_covid_mortality*100,3)) %>%
-  mutate(deaths_estimate = deaths_nonnursing_RIVM*1.8+deaths_nursing*1.8) %>%
-  mutate(deaths_estimate_2 = (deaths_nice + deaths_nursing*1.8)*1.1)
+  mutate(deaths_nice_perc = round(deaths_nice/total_covid_mortality*100,3)) %>%
+  mutate(deaths_wlz_perc = round(wlz_covid/total_covid_mortality*100,3)) %>%
+  mutate(deaths_estimate = round(deaths_nonnursing_RIVM*1.8+deaths_nursing*1.8,0)) %>%
+  mutate(deaths_estimate_2 = round((deaths_nice + deaths_nursing*1.8)*1.1,0)) %>%
+  mutate(deaths_estimate_3 = round(deaths_nice + (deaths_nice/3) + deaths_nursing*1.8,0)) %>%
+  mutate(cbs_rivm_factor = round(total_covid_mortality/deaths_rivm,2)) %>%
+  mutate(factor_wlz = round(wlz_covid/deaths_nursing,2)) %>%
+  mutate(factor_other = round(other_covid/deaths_nonnursing_RIVM,2)) %>%
+  mutate(deviation_estim = round((deaths_estimate_3-total_covid_mortality)/total_covid_mortality*100,0))
 
-sum(deaths_total[32:45,"deaths_estimate"])+24484
+sum(deaths_total[32:45,"deaths_estimate_2"])+24484
+sum(deaths_total[32:45,"total_covid_mortality"],na.rm=T)+24484
 sum(deaths_total[32:39,"deaths_estimate"])+sum(deaths_total[40:45,"deaths_estimate_2"])+24484
 
-write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
+#write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
-push(repo, credentials = git.auth)
+#git.credentials <- read_lines("git_auth.txt")
+#git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+#repo <- init()
+#add(repo, path = "*")
+#commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
+#push(repo, credentials = git.auth)
 
-rm(deaths_clinic, deaths_IC,deaths_nice,deaths_total,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
-   week_deaths_nursery, living.home_70, living.home_70.wide,week_deaths_living_home_70,temp)
+rm(deaths_clinic, deaths_IC,deaths_nice,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
+   week_deaths_nursery, living.home_70, living.home_70.wide,week_deaths_living_home_70,temp, cbs.df)
