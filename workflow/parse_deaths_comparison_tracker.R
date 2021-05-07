@@ -230,7 +230,7 @@ plot <- deaths_total %>%
     panel.grid.minor.x = element_blank())
 
 plot + scale_colour_manual(values = cols) +
-  ggsave("plots/sterfte_per_week_30K_totalen", width = 12, height=8)
+  ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
 
 
 git.credentials <- read_lines("git_auth.txt")
