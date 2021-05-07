@@ -114,13 +114,6 @@ deaths_total <- deaths_total %>%
 
 write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
-git.credentials <- read_lines("git_auth.txt")
-git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
-repo <- init()
-add(repo, path = "*")
-commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker"))
-push(repo, credentials = git.auth)
-
 rm(deaths_clinic, deaths_IC,deaths_nice,df_deaths_rivm,excess_dlm,nursing.homes,nursing.homes.deaths.wide,
    week_deaths_nursery, living.home_70, living.home_70.wide,week_deaths_living_home_70,temp, cbs.df)
 
@@ -196,3 +189,55 @@ plot <- deaths_total %>%
 
 plot + scale_colour_manual(values = cols) +
   ggsave("plots/sterfte_per_week_30K_percentage.png", width = 12, height=8)
+
+
+
+
+
+## Percentages
+
+plot <- deaths_total %>%
+  filter(week_year >= "2020-39") %>%
+  filter(week_year <= "2021-17") %>%
+  ggplot(aes(x=factor(week_year), y=deaths_nursing, group = 1)) + 
+  geom_line(aes(y = deaths_nursing, color = "Verpleeghuis"), lwd=1.2) +
+  geom_line(aes(y = deaths_nice, color = "Ziekenhuis"), lwd=1.2) +
+  geom_line(aes(y = deaths_living_home_70, color = "Thuiswonende 70+'ers"), lwd=1.2) +
+  geom_line(aes(y = deaths_rivm, color = "Totaal (RIVM)"), lwd=1.2) +
+  geom_line(aes(y = deaths_estimate_3, color = "Totaal (Schatting"), lwd=1.2) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 1200), n.breaks = 10) +
+  theme_classic()+
+  xlab("")+
+  ylab("")+
+  labs(title = "Sterfte per groep",
+       subtitle = "Sterfte per week",
+       caption = paste("Bron: CBS/RIVM/NICE | Plot: @mzelst  | ",Sys.Date())) +
+  theme(
+    legend.title = element_blank(),  ## legend title
+    legend.position="top",
+    legend.direction = "horizontal",
+    legend.background = element_rect(fill="#f5f5f5", size=0.5, linetype="solid"),
+    legend.text = element_text(size = 10),
+    plot.background = element_rect(fill = "#F5F5F5"), #background color/size (border color and size)
+    panel.background = element_rect(fill = "#F5F5F5", colour = "#F5F5F5"),
+    plot.title =     element_text(hjust = 0.5 ,size = 24 ,face = "bold"),
+    plot.subtitle =  element_text(hjust=0.5   ,size = 12 ,color = "black", face = "italic"),
+    axis.text.x = element_text(size=10,color = "black",face = "bold", angle = 90),
+    axis.ticks = element_line(colour = "#F5F5F5", size = 1, linetype = "solid"),
+    axis.ticks.length = unit(0.5, "cm"),
+    axis.line = element_line(colour = "#F5F5F5"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank())
+
+plot + scale_colour_manual(values = cols) +
+  ggsave("plots/sterfte_per_week_30K_totalen", width = 12, height=8)
+
+
+git.credentials <- read_lines("git_auth.txt")
+git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
+repo <- init()
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Update death comparison tracker for Twitter thread"))
+push(repo, credentials = git.auth)
+
+  
