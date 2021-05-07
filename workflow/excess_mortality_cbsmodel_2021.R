@@ -220,7 +220,7 @@ for(i in 1:25)
 start_yr <- c(1995, 1)
 level0 <- window(cbs_deaths_ts, start = start_yr)[1]
 slope0 <- coefficients(lm(cbs_deaths_ts ~ covid_deaths_ts))[2]
-init_val <- c(-1.571097963,  -4.373803720, 2.106434495,  0.837304892, 9.300978708)
+init_val <- c(-1.571097963,  -4.373803720, 2.106434495,  0.837304892, 10.300978708)
 
 ## build function
 covid_mod <- function(parm) {
@@ -414,19 +414,18 @@ totals <- beta_long[t >= 2020 & week %in% seq(1, week.now),
   by = c('model', 'week')
 ]
 
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/14/3-9-duizend-mensen-overleden-aan-covid-19-in-december-2020"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overleden-aan-covid-19-in-januari"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
-cbs.death.statistics$Year <- 2020
-colnames(cbs.death.statistics) <- c("Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics","Year")
+colnames(cbs.death.statistics) <- c("Year","Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics")
 cbs.death.statistics$Mortality_without_covid_CBS <- as.numeric(cbs.death.statistics$Mortality_without_covid_CBS)
 cbs.death.statistics$Covid_deaths_CBS_death_statistics <- as.numeric(cbs.death.statistics$Covid_deaths_CBS_death_statistics)
 cbs.death.statistics <- cbs.death.statistics[,c("Week","Year","Covid_deaths_CBS_death_statistics")]
 colnames(cbs.death.statistics) <- c("week","year","covid_deaths")
 
 totals2020 <- cbs.death.statistics
-totals2020 <- totals2020[10:53,]
+totals2020 <- totals2020[10:57,]
 
 totals2020 <- totals2020 %>%
   mutate(deaths_mid_cumsum = cumsum(covid_deaths))
@@ -435,13 +434,16 @@ totals2020$model <- "Dynamisch"
 totals2020$Laag <- totals2020$deaths_mid_cumsum
 totals2020$Gemiddeld <- totals2020$deaths_mid_cumsum
 totals2020$Hoog <- totals2020$deaths_mid_cumsum
-totals2020$year <- 2020
 totals2020 <- totals2020[,c("model","week","Laag","Gemiddeld","Hoog","year")]
-
+totals2020 <- totals2020 %>%
+  arrange(model) %>%
+  mutate(deaths_week_mid = c(0,diff(Gemiddeld))) %>%
+  mutate(deaths_week_low = c(0,diff(Laag))) %>%
+  mutate(deaths_week_high = c(0,diff(Hoog)))
 
 totals <- totals[model == 'Dynamisch']
 totals$year <- 2021
-totals <- rbind(totals2020,totals)
+
 
 
 totals <- totals %>%
@@ -449,12 +451,18 @@ totals <- totals %>%
   mutate(deaths_week_mid = c(0,diff(Gemiddeld))) %>%
   mutate(deaths_week_low = c(0,diff(Laag))) %>%
   mutate(deaths_week_high = c(0,diff(Hoog)))
+totals <- totals[5:nrow(totals),]
+
+totals <- rbind(totals2020,totals)
+
 totals[1,"deaths_week_mid"] <- totals[1,"Gemiddeld"]
 totals[1,"deaths_week_low"] <- totals[1,"Laag"]
 totals[1,"deaths_week_high"] <- totals[1,"Hoog"]
-totals[45,"deaths_week_mid"] <- totals[45,"Gemiddeld"]
-totals[45,"deaths_week_low"] <- totals[45,"Laag"]
-totals[45,"deaths_week_high"] <- totals[45,"Hoog"]
+
+#totals[45,"deaths_week_mid"] <- totals[45,"Gemiddeld"]
+#totals[45,"deaths_week_low"] <- totals[45,"Laag"]
+#totals[45,"deaths_week_high"] <- totals[45,"Hoog"]
+
 
 totals <- totals %>%
   mutate(deaths_low_cumsum = cumsum(deaths_week_low)) %>%
