@@ -126,7 +126,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: De sterfte in de groep 65-80 neemt verder toe en is nu 20% hoger dan verwacht. De sterfte in de groep 80+ blijft lager dan verwacht. Hoge viruscirculatie in combinatie met hoge vaccinatiegraad onder 80+ lijkt de verklaring.")
+conclusie.tweet <- paste0("Conclusie: De sterfte in de groep 65-80 blijft hoog en is nu 20% hoger dan verwacht. De sterfte in de groep 80+ is volgens verwachting. Hoge viruscirculatie in combinatie met hoge vaccinatiegraad onder 80+ lijkt de verklaring.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,

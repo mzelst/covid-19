@@ -175,8 +175,7 @@ u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overl
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
-cbs.death.statistics$Year <- 2020
-colnames(cbs.death.statistics) <- c("Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics","Year")
+colnames(cbs.death.statistics) <- c("Year","Week","Mortality_without_covid_CBS","Covid_deaths_CBS_death_statistics")
 cbs.death.statistics$Mortality_without_covid_CBS <- as.numeric(cbs.death.statistics$Mortality_without_covid_CBS)
 cbs.death.statistics$Covid_deaths_CBS_death_statistics <- as.numeric(cbs.death.statistics$Covid_deaths_CBS_death_statistics)
 

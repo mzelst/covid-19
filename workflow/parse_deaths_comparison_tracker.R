@@ -53,11 +53,45 @@ setorder(deaths_total, Year,Week)
 
 deaths_total$deaths_nonnursing_RIVM <- deaths_total$deaths_rivm-deaths_total$deaths_nursing
 deaths_total$deaths_nice_nursing <- deaths_total$deaths_nice + deaths_total$deaths_nursing
+
 ## Deaths excess DLM / CBS
 
 excess_dlm <- read.csv("data-misc/excess_mortality/excess_mortality.csv")[,c("Week","Year","DLModel_week_estimate")]
 colnames(excess_dlm) <- c("Week","Year","total_covid_mortality")
 deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"), all.x=T)
+
+## Deaths WLZ vs. other / CBS
+
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overleden-aan-covid-19-in-januari"
+webpage.cbs <- read_html(u.cbs)
+
+cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[2]])
+colnames(cbs.death.statistics) <- c("Year","Week","wlz_deaths_perc","other_deaths_perc")
+cbs.death.statistics <- mutate_all(cbs.death.statistics, function(x) as.numeric(as.character(x)))
+cbs.death.statistics <- cbs.death.statistics %>%
+  mutate(wlz_deaths_perc = wlz_deaths_perc/100) %>%
+  mutate(other_deaths_perc = other_deaths_perc/100)
+
+u.cbs.week <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/sterfte-in-week-17-hoger-dan-verwacht"
+webpage.cbs.week <- read_html(u.cbs.week)
+
+cbs.death.statistics.week <- as.data.frame(html_table(webpage.cbs.week)[[2]])[,c(1:3,6)]
+colnames(cbs.death.statistics.week) <- c("Year","Week","wlz_deaths","other_deaths")
+cbs.death.statistics.week <- mutate_all(cbs.death.statistics.week, function(x) as.numeric(as.character(x)))
+cbs.death.statistics.week <- cbs.death.statistics.week[complete.cases(cbs.death.statistics.week),]
+
+
+cbs.df <- merge(cbs.death.statistics,cbs.death.statistics.week, by = c("Week","Year"))
+cbs.df <- cbs.df %>%
+  mutate(wlz_covid = round(wlz_deaths*wlz_deaths_perc,0)) %>%
+  mutate(other_covid = round(other_deaths*other_deaths_perc,0)) %>%
+  select(Year, Week, wlz_covid, other_covid) %>%
+  arrange(Year, Week)
+
+rm(cbs.death.statistics, cbs.death.statistics.week, webpage.cbs, webpage.cbs.week, u.cbs, u.cbs.week)
+
+deaths_total <- merge(deaths_total,cbs.df,by=c("Week","Year"), all.x=T)
+
 setorder(deaths_total, Year, Week)
 
 deaths_total$excess_rivm_nice <- deaths_total$deaths_nice-deaths_total$deaths_nonnursing_RIVM
@@ -65,6 +99,14 @@ deaths_total$week_year <- ifelse(deaths_total$Week<10,
                                  paste0(deaths_total$Year,"-",0,deaths_total$Week),
                                  paste0(deaths_total$Year,"-",deaths_total$Week))
 
+deaths_total <- deaths_total %>% 
+  mutate(deaths_home = total_covid_mortality - deaths_nice - wlz_covid) %>%
+  mutate(deaths_home_perc = round(deaths_home/total_covid_mortality*100,3)) %>%
+  mutate(deaths_estimate = deaths_nonnursing_RIVM*1.8+deaths_nursing*1.8) %>%
+  mutate(deaths_estimate_2 = (deaths_nice + deaths_nursing*1.8)*1.1)
+
+sum(deaths_total[32:45,"deaths_estimate"])+24484
+sum(deaths_total[32:39,"deaths_estimate"])+sum(deaths_total[40:45,"deaths_estimate_2"])+24484
 
 write.csv(deaths_total, file = "corrections/death_week_comparisons.csv", row.names = F)
 
