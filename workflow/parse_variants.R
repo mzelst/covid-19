@@ -2,10 +2,22 @@ u <- "https://www.rivm.nl/coronavirus-covid-19/virus/varianten"
 webpage <- read_html(u)
 table <- as.data.frame(html_table(webpage))
 
-colnames(table) <- c("Week","Aantal_monsters","Britse_variant","ZuidAfrikaanse_variant","Braziliaanse_variant_P1",
-                     "Britse_variant_E484K","B.1.525_variant_E484K_F888L","Californie_variant","Braziliaanse_variant_P2",
-                     "New_York_variant","Filipijnen_variant_P3","Bretagne_variant","Indiase_Variant_B1.167.1",
-                     "Indiase_Variant_B1.167.2","Indiase_Variant_B1.167.3")
+table <- as.data.frame(t(table))
+table <- table[-c(1:2),]
+
+table$week <- row.names(table)
+table$week <- read.table(text = table[1:nrow(table),"week"], sep = ".", as.is = TRUE)$V2
+table$year <- parse_number(str_sub(row.names(table),start = 1, end = 5))
+
+colnames(table) <- c("Aantal_monsters","Britse_variant","Britse_variant_E484K","ZuidAfrikaanse_variant","Braziliaanse_variant_P1",
+                     "B.1.525_variant_E484K_F888L","Indiase_Variant_B1.167.1/3","Indiase_Variant_B1.167.2","B.1.620",
+                     "Colombiaanse_variant_B.1.621","Californie_variant","Filipijnen_variant_P3","Bretagne_variant",
+                     "Week","Jaar")
+
+table <- table %>% 
+  mutate_if(is.character,as.numeric) %>%
+  select(Week, Jaar, Aantal_monsters:Bretagne_variant) %>%
+  setorder(Jaar,Week)
 
 variants.prevalence <- table %>%
   mutate(prevalentie_britsevariant = round(Britse_variant/Aantal_monsters*100,2)) %>%
