@@ -232,6 +232,7 @@ plot <- deaths_total %>%
 plot + scale_colour_manual(values = cols) +
   ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
 
+rm(deaths_total, plot, cols, dat)
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])

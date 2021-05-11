@@ -29,11 +29,12 @@ cases <- all.data %>%
   geom_line(aes(y = net.infection, color = "Toename besmettingen per dag (incl. correcties)"), lwd=1.2) +
   geom_line(aes(y = positive_7daverage, color = "Voortschrijdend gemiddelde (7 dagen)"), lwd=1.2) +
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
+  scale_x_date(expand = c(0, 2)) + 
   scale_y_continuous(expand = c(0, 200), limits = c(0, NA)) +
   theme_minimal() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
-        axis.text.x.bottom = element_text(size=12),
+        axis.text.x.bottom = element_text(size=12, hjust = 0.2),
         axis.text.y = element_text(size=12, face="bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
