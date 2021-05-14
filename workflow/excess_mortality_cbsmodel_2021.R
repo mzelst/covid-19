@@ -220,7 +220,7 @@ for(i in 1:25)
 start_yr <- c(1995, 1)
 level0 <- window(cbs_deaths_ts, start = start_yr)[1]
 slope0 <- coefficients(lm(cbs_deaths_ts ~ covid_deaths_ts))[2]
-init_val <- c(-1.571097963,  -4.373803720, 2.106434495,  0.837304892, 10.300978708)
+init_val <- c(-1.571097963,  -4.373803720, 2.106434495,  0.837304892, 9.300978708)
 
 ## build function
 covid_mod <- function(parm) {
