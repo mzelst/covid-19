@@ -56,7 +56,8 @@ deaths_total$deaths_nice_nursing <- deaths_total$deaths_nice + deaths_total$deat
 
 ## Deaths excess DLM / CBS
 
-excess_dlm <- read.csv("data-misc/excess_mortality/excess_mortality.csv")[,c("Week","Year","DLModel_week_estimate")]
+excess_dlm <- read.csv("data-misc/excess_mortality/excess_mortality_dlm_2021.csv")[,c("week","year","deaths_week_mid")]
+excess_dlm$deaths_week_mid <- round(excess_dlm$deaths_week_mid)
 colnames(excess_dlm) <- c("Week","Year","total_covid_mortality")
 deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"), all.x=T)
 
@@ -231,6 +232,13 @@ plot <- deaths_total %>%
 
 plot + scale_colour_manual(values = cols) +
   ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
+
+
+cbs.filter <- deaths_total %>%
+  filter(Year == 2021 & Week >= 5)
+cbs.filter$cumulative_deaths <- cumsum(cbs.filter$deaths_estimate_3) + 24484
+deaths_total <- merge(deaths_total, cbs.filter[,c("Week","Year","cumulative_deaths")], by = c("Week","Year"),all.x=T)
+setorder(deaths_total, Year, Week)
 
 rm(deaths_total, plot, cols, dat)
 

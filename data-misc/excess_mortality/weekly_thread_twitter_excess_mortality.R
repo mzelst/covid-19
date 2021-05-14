@@ -43,12 +43,12 @@ tweet.last_id <- posted_tweet$id_str
 ## Build excess mortality (historical) tweet
 excess_mortality <- read.csv("data-misc/excess_mortality/excess_mortality.csv")
 
-tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," april):
+tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," mei):
 
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
 3) Methode CBS: ",last(excess_mortality$excess_cbs_method),"
-4) Methode RIVM (",rivm.startday," april - ",rivm.endday," april): ",last(excess_mortality$excess_mortality_rivm),"
+4) Methode RIVM (",rivm.startday," april - ",rivm.endday," mei): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
 ")
