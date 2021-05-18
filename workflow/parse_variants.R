@@ -3,11 +3,15 @@ webpage <- read_html(u)
 table <- as.data.frame(html_table(webpage))
 
 table <- as.data.frame(t(table))
-table <- table[-c(1:2),]
 
-table$week <- row.names(table)
-table$week <- read.table(text = table[1:nrow(table),"week"], sep = ".", as.is = TRUE)$V2
+colnames(table) <- table[1,]
+
+table <- table[-c(1:2,nrow(table)),]
+
+table$Week <- row.names(table)
+table$Week <- read.table(text = table[1:nrow(table),"Week"], sep = ".", as.is = TRUE)$V2
 table$year <- parse_number(str_sub(row.names(table),start = 1, end = 5))
+rownames(table) <- c()
 
 colnames(table) <- c("Aantal_monsters","Britse_variant","Britse_variant_E484K","ZuidAfrikaanse_variant","Braziliaanse_variant_P1",
                      "B.1.525_variant_E484K_F888L","Indiase_Variant_B1.167.1/3","Indiase_Variant_B1.167.2","B.1.620",
@@ -24,7 +28,14 @@ variants.prevalence <- table %>%
   mutate(prevalentie_ZAvariant = round(ZuidAfrikaanse_variant/Aantal_monsters*100,2)) %>%
   mutate(prevalentie_P1_variant = round(Braziliaanse_variant_P1/Aantal_monsters*100,2))
 
-write.csv(variants.prevalence,"data-misc/prevalence_variants.csv",row.names = F)
+write.csv(variants.prevalence,"data-misc/variants-rivm/prevalence_variants.csv",row.names = F)
+
+variants.old <- read.csv("data-misc/variants-rivm/prevalence_variants_archive.csv")[1:13,]
+variants.new <- read.csv("data-misc/variants-rivm/prevalence_variants.csv")
+
+variants.prevalence <- rbind(variants.old, variants.new)
+
+write.csv(variants.prevalence,"data-misc/variants-rivm/prevalence_variants.csv",row.names = F)
 
 week.variants <- isoweek(Sys.Date())
 
