@@ -48,4 +48,4 @@ add(repo, path = "*")
 commit(repo, all = T, paste0("Week " , week.variants, " - Weekly (automated) update variants data"))
 push(repo, credentials = git.auth)
 
-rm(table,variants.prevalence,webpage,u,week.variants)
+rm(table,variants.prevalence,webpage,u,week.variants, variants.new, variants.old)
