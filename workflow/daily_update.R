@@ -84,6 +84,7 @@ Overleden: ",last(all.data$new.deaths),"
 Totaal: ",format(last(all.data$deaths),decimal.mark = ",",big.mark =".",big.interval = 3),"")
 
 tweet.main
+send_webhook_message(tweet.main)
 
 posted_tweet <- post_tweet (
   tweet.main,

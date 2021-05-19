@@ -30,7 +30,7 @@ variants.prevalence <- table %>%
 
 write.csv(variants.prevalence,"data-misc/variants-rivm/prevalence_variants.csv",row.names = F)
 
-variants.old <- read.csv("data-misc/variants-rivm/prevalence_variants_archive.csv")[1:13,]
+variants.old <- read.csv("data-misc/variants-rivm/prevalence_variants_archive.csv")[1:14,]
 variants.new <- read.csv("data-misc/variants-rivm/prevalence_variants.csv")
 
 variants.prevalence <- rbind(variants.old, variants.new)
@@ -49,3 +49,5 @@ commit(repo, all = T, paste0("Week " , week.variants, " - Weekly (automated) upd
 push(repo, credentials = git.auth)
 
 rm(table,variants.prevalence,webpage,u,week.variants, variants.new, variants.old)
+
+send_webhook_message("De varianten data is weer bijgewerkt en is hier te vinden: https://github.com/mzelst/covid-19/blob/master/data-misc/variants-rivm/prevalence_variants.csv")
