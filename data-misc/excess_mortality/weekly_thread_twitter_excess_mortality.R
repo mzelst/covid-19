@@ -24,12 +24,13 @@ tweet.last_id <- tweet.main.id
 
 tweet.information <- paste0("2/ 
 
-Ik kijk naar twee zaken:
+Ik kijk naar:
 
 1) Oversterfte adhv historische gemiddeldes (tweet 3/4)
 2) Sterfte door corona met een dynamisch linear model (DLM) (tweet 5)
+3) Sterfte door corona met model gebaseerd op plaats van overlijden (tweet 6)
 
-De uitleg voor alle verschillende methodes kun je hier vinden: https://github.com/mzelst/covid-19/blob/master/data-misc/excess_mortality/REMARKS.md")
+De uitleg kun je hier vinden: https://github.com/mzelst/covid-19/blob/master/data-misc/excess_mortality/REMARKS.md")
 
 posted_tweet <- post_tweet (
   tweet.information,
@@ -48,7 +49,7 @@ tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",sta
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
 3) Methode CBS: ",last(excess_mortality$excess_cbs_method),"
-4) Methode RIVM (",rivm.startday," april - ",rivm.endday," mei): ",last(excess_mortality$excess_mortality_rivm),"
+4) Methode RIVM (",rivm.startday," mei - ",rivm.endday," mei): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
 ")
@@ -124,9 +125,36 @@ posted_tweet <- post_tweet (
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.last_id <- posted_tweet$id_str
 
+## Tweet Methode Marino analyses
+
+deaths.comparison.tracker <- read.csv("corrections/death_week_comparisons.csv")
+deaths.comparison.tracker <- deaths.comparison.tracker %>%
+  filter(Year == 2021 & Week > 4 & Week <= thisweek)
+
+cbs.deaths <- sum(excess_mortality$Covid_deaths_CBS_death_statistics,na.rm=T)
+est.deaths <- sum(deaths.comparison.tracker$deaths_estimate_3)
+
+tweet.newmodel <- paste0("6/ Een andere methode om de sterfte door corona te schatten beschreef ik laatst in dit draadje: https://twitter.com/mzelst/status/1390682590105985026
+
+Het aantal sterfgevallen in week ",thisweek," aan de hand van deze methode is ",last(deaths.comparison.tracker$deaths_estimate_3),".
+
+De sterfte door corona tot nu toe is ",cbs.deaths+est.deaths, ".
+")
+
+posted_tweet <- post_tweet (
+  tweet.newmodel,
+  token = token.mzelst,
+  media = c("plots/sterfte_per_week_30K_totalen.png"),
+  in_reply_to_status_id = tweet.last_id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
+
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: De sterfte in de groep 65-80 blijft hoog en is nu 20% hoger dan verwacht. De sterfte in de groep 80+ is volgens verwachting. Hoge viruscirculatie in combinatie met hoge vaccinatiegraad onder 80+ lijkt de verklaring.")
+conclusie.tweet <- paste0("Conclusie: De sterfte is licht gedaald t.o.v. vorige week. De verhoogde sterfte (~2950) wordt veroorzaakt door oversterfte (~100) in de groep 0-65.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,
