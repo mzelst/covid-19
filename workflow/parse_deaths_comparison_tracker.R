@@ -199,13 +199,13 @@ plot + scale_colour_manual(values = cols) +
 
 plot <- deaths_total %>%
   filter(week_year >= "2020-39") %>%
-  filter(week_year <= "2021-17") %>%
+  filter(week_year <= "2021-19") %>%
   ggplot(aes(x=factor(week_year), y=deaths_nursing, group = 1)) + 
   geom_line(aes(y = deaths_nursing, color = "Verpleeghuis"), lwd=1.2) +
   geom_line(aes(y = deaths_nice, color = "Ziekenhuis"), lwd=1.2) +
   geom_line(aes(y = deaths_living_home_70, color = "Thuiswonende 70+'ers"), lwd=1.2) +
   geom_line(aes(y = deaths_rivm, color = "Totaal (RIVM)"), lwd=1.2) +
-  geom_line(aes(y = deaths_estimate_3, color = "Totaal (Schatting"), lwd=1.2) +
+  geom_line(aes(y = deaths_estimate_3, color = "Totaal (Schatting)"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 1200), n.breaks = 10) +
   theme_classic()+
   xlab("")+
