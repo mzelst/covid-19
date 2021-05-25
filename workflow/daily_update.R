@@ -1,3 +1,28 @@
+## Put in date breaker for daily update
+
+repeat {
+  Sys.sleep(10)
+  date.check <- fread("https://data.rivm.nl/covid-19/COVID-19_uitgevoerde_testen.csv")
+  
+  date.check <- date.check %>%
+    mutate(
+      date = as.Date(Date_of_report, tryFormats = c('%d-%m-%Y')),
+      .before = Date_of_report
+    ) %>%
+    mutate(
+      Date_of_report = NULL
+    )
+  
+  date.check.update <- last(date.check$date)
+  if (date.check.update == as.Date(Sys.Date())){
+    message <- "GO GO GO GO GO"
+    break
+  }
+}
+
+message <- "GO GO GO GO GO"
+message
+
 pull(repo)
 
 # Generate Banner
