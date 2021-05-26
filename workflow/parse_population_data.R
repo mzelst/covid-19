@@ -66,11 +66,25 @@ df$ID <- seq(1,12)
 
 write.csv(df, file = "misc/provinces-population.csv")
 
+## Parse safety region data
+
+dat.safetyregion <- cbs_get_data("84929NED",add_column_labels = FALSE)[,c("Code_1","Naam_2","Code_14","Naam_15","Code_26","Naam_27","Code_44","Naam_45","Inwonertal_52")]
+pop.safetyregion <- aggregate(Inwonertal_52 ~ Code_44 + Naam_45, data = dat.safetyregion, FUN = sum)
+colnames(pop.safetyregion) <- c("Security_region_code","Security_region_name","population")
+
+pop.safetyregion$Security_region_name <- trimws(pop.safetyregion$Security_region_name)
+pop.safetyregion$Security_region_code <- trimws(pop.safetyregion$Security_region_code)
+
+write.csv(pop.safetyregion, file = "misc/safetyregions-population.csv")
+
+
 ## Age population data
 pop.age <- cbs_get_data("83482NED",add_column_labels = FALSE,Perioden = has_substring(c("2021MM01")), 
                         Migratieachtergrond = has_substring(c("T001040")),
                         Generatie = has_substring(c("T001040")),
                         Geslacht = has_substring(c("T001038")))
+
+
 
 
 ## Repo
