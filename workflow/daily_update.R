@@ -1,7 +1,17 @@
-## Put in date breaker for daily update
+## Put in double date breaker for daily update
+repeat {
+  Sys.sleep(2)
+  time.start <- ymd_hms(paste0(Sys.Date()," 15:15:00"))
+  time.now <- ymd_hms(Sys.time())
+  
+  if (time.start < time.now){
+    message <- "GO GO GO GO GO"
+    break
+  }
+}
 
 repeat {
-  Sys.sleep(10)
+  Sys.sleep(3)
   date.check <- fread("https://data.rivm.nl/covid-19/COVID-19_uitgevoerde_testen.csv")
   
   date.check <- date.check %>%
