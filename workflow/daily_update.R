@@ -447,4 +447,4 @@ repeat {
 
 rm(daily_vaccin_datalist,df.care.institutions,df.doctors,df.ggd,df.hospitals,df.total,
    myfiles,vaccine_data,vaccines_by_day,vaccines_delivery,dashboard.date,filename.daily.vaccins,
-   filename.daily.vaccins.delivered,last.date,temp,today.date)
+   filename.daily.vaccins.delivered,last.date,temp,today.date, cbs.filter, vaccine.data)
