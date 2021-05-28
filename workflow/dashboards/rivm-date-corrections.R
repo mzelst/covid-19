@@ -128,6 +128,24 @@ df.cases.new.corr.mun <- df.cases.new.mun %>%
 
 write.csv(df.cases.new.corr.mun, file = "corrections/cases_per_municipality.csv", row.names = F)
 
+## Date of hospital - per municipality - diff file
+temp = tail(list.files(path = "data-rivm/municipal-hospital-datasets/",pattern="*.csv.gz", full.names = T),2)
+myfiles = lapply(temp, fread)
+
+dat.today.mun <- setDT(as.data.frame(myfiles[2]))
+dat.yesterday.mun <- setDT(as.data.frame(myfiles[1]))
+
+hospital.today.mun <- dat.today.mun[, .(hospital.today.mun=sum(Hospital_admission)), by=list(Date_of_statistics, Municipality_name,Security_region_name)]
+hospital.yesterday.mun <- dat.yesterday.mun[, .(hospital.yesterday.mun=sum(Hospital_admission)), by=list(Date_of_statistics, Municipality_name,Security_region_name)]
+
+df.hospital.new.mun <- merge(hospital.today.mun,hospital.yesterday.mun,by=c("Date_of_statistics","Municipality_name", "Security_region_name"))
+df.hospital.new.mun$diff <- df.hospital.new.mun$hospital.today.mun-df.hospital.new.mun$hospital.yesterday.mun
+
+df.hospital.new.corr.mun <- df.hospital.new.mun %>%
+  filter(diff > 0 | diff < 0)
+
+write.csv(df.hospital.new.corr.mun, file = "corrections/hospital_per_municipality.csv", row.names = F)
+
 # Git
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
