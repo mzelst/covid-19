@@ -414,7 +414,7 @@ totals <- beta_long[t >= 2020 & week %in% seq(1, week.now),
   by = c('model', 'week')
 ]
 
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overleden-aan-covid-19-in-januari"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
@@ -425,7 +425,7 @@ cbs.death.statistics <- cbs.death.statistics[,c("Week","Year","Covid_deaths_CBS_
 colnames(cbs.death.statistics) <- c("week","year","covid_deaths")
 
 totals2020 <- cbs.death.statistics
-totals2020 <- totals2020[10:57,]
+totals2020 <- totals2020[10:61,]
 
 totals2020 <- totals2020 %>%
   mutate(deaths_mid_cumsum = cumsum(covid_deaths))
@@ -451,7 +451,7 @@ totals <- totals %>%
   mutate(deaths_week_mid = c(0,diff(Gemiddeld))) %>%
   mutate(deaths_week_low = c(0,diff(Laag))) %>%
   mutate(deaths_week_high = c(0,diff(Hoog)))
-totals <- totals[5:nrow(totals),]
+totals <- totals[9:nrow(totals),]
 
 totals <- rbind(totals2020,totals)
 

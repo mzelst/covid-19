@@ -129,7 +129,7 @@ tweet.last_id <- posted_tweet$id_str
 
 deaths.comparison.tracker <- read.csv("corrections/death_week_comparisons.csv")
 deaths.comparison.tracker <- deaths.comparison.tracker %>%
-  filter(Year == 2021 & Week > 4 & Week <= thisweek)
+  filter(Year == 2021 & Week > 8 & Week <= thisweek)
 
 cbs.deaths <- sum(excess_mortality$Covid_deaths_CBS_death_statistics,na.rm=T)
 est.deaths <- sum(deaths.comparison.tracker$deaths_estimate_3)

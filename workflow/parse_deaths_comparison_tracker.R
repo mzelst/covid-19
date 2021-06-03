@@ -63,7 +63,7 @@ deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"), all.x=T)
 
 ## Deaths WLZ vs. other / CBS
 
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overleden-aan-covid-19-in-januari"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[2]])
@@ -73,7 +73,8 @@ cbs.death.statistics <- cbs.death.statistics %>%
   mutate(wlz_deaths_perc = wlz_deaths_perc/100) %>%
   mutate(other_deaths_perc = other_deaths_perc/100)
 
-u.cbs.week <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/sterfte-in-week-17-hoger-dan-verwacht"
+urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
+u.cbs.week <- last(urls$urls)
 webpage.cbs.week <- read_html(u.cbs.week)
 
 cbs.death.statistics.week <- as.data.frame(html_table(webpage.cbs.week)[[2]])[,c(1:3,6)]
@@ -89,7 +90,7 @@ cbs.df <- cbs.df %>%
   select(Year, Week, wlz_covid, other_covid) %>%
   arrange(Year, Week)
 
-rm(cbs.death.statistics, cbs.death.statistics.week, webpage.cbs, webpage.cbs.week, u.cbs, u.cbs.week)
+rm(cbs.death.statistics, cbs.death.statistics.week, webpage.cbs, webpage.cbs.week, u.cbs, u.cbs.week,urls)
 
 deaths_total <- merge(deaths_total,cbs.df,by=c("Week","Year"), all.x=T)
 
@@ -125,7 +126,7 @@ cols <- c("#009E73", "#87109A","#E6830C","#D96DEA", "#2231C5","#000000")
 
 
 plot <- deaths_total %>%
-  filter(week_year <= "2021-04") %>%
+  filter(week_year <= "2021-08") %>%
   ggplot(aes(x=factor(week_year), y=deaths_rivm, group = 1)) + 
   geom_line(aes(y = deaths_rivm, color = "RIVM"), lwd=1.2) +
   geom_line(aes(y = total_covid_mortality, color = "CBS"), lwd=1.2) +
@@ -159,7 +160,7 @@ plot + scale_colour_manual(values = cols) +
 
 plot <- deaths_total %>%
   filter(week_year >= "2020-39") %>%
-  filter(week_year <= "2021-04") %>%
+  filter(week_year <= "2021-08") %>%
   ggplot(aes(x=factor(week_year), y=deaths_wlz_perc, group = 1)) + 
   geom_line(aes(y = deaths_wlz_perc, color = "Verpleeghuis"), lwd=1.2) +
   geom_line(aes(y = deaths_home_perc, color = "Thuis"), lwd=1.2) +
@@ -232,9 +233,16 @@ plot + scale_colour_manual(values = cols) +
   ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
 
 
+## cbs.deaths
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
+webpage.cbs <- read_html(u.cbs)
+
+cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
+cbs.deaths <- sum(as.numeric(cbs.death.statistics[1:(nrow(cbs.death.statistics)-1),"COVID-19"]))
+
 cbs.filter <- deaths_total %>%
-  filter(Year == 2021 & Week >= 5)
-cbs.filter$cumulative_deaths <- cumsum(cbs.filter$deaths_estimate_3) + 24484
+  filter(Year == 2021 & Week >= 9)
+cbs.filter$cumulative_deaths <- cumsum(cbs.filter$deaths_estimate_3) + cbs.deaths
 deaths_total <- merge(deaths_total, cbs.filter[,c("Week","Year","cumulative_deaths")], by = c("Week","Year"),all.x=T)
 setorder(deaths_total, Year, Week)
 

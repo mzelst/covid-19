@@ -171,7 +171,7 @@ colnames(excess.mort.rivm) <- c("Year","Week","start_week","end_week","lower_bou
 deaths_weekly <- merge(deaths_weekly, excess.mort.rivm[,c("Year","Week","excess_mortality_rivm")],by=c("Week","Year"),all.x=T)
 
 ## CBS death statistics
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/18/bijna-4-4-duizend-mensen-overleden-aan-covid-19-in-januari"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
