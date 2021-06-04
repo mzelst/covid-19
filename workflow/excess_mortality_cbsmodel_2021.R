@@ -22,6 +22,7 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
+## Put in double date breaker for daily update
 week.now <- isoweek(Sys.Date())-1
 
 ## helper functions
@@ -635,3 +636,5 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   ylab('Totale oversterfte') + 
   theme_bw()
 ggsave('plots/2021_fig4.2.2.png')
+
+source("workflow/excess_mortality.R")

@@ -246,7 +246,7 @@ cbs.filter$cumulative_deaths <- cumsum(cbs.filter$deaths_estimate_3) + cbs.death
 deaths_total <- merge(deaths_total, cbs.filter[,c("Week","Year","cumulative_deaths")], by = c("Week","Year"),all.x=T)
 setorder(deaths_total, Year, Week)
 
-rm(deaths_total, plot, cols, dat)
+rm(deaths_total, plot, cols, dat, cbs.deaths, cbs.death.statistics,webpage.cbs, u.cbs)
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
