@@ -25,7 +25,7 @@ repeat {
   
   current.year <- ifelse(current.year.rijksoverheid >= current.year.rivm, current.year.rijksoverheid,current.year.rivm)
   
-  last.year <- 1980
+  last.year <- 1982
   if (current.year > last.year){
     years <- last.year:current.year
     vaccin.year.message <- paste0("PING PING PING - Mensen uit ",years[2]," zijn aan de beurt voor vaccinatie!")

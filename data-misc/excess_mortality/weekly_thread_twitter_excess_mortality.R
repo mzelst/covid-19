@@ -1,6 +1,6 @@
 source("workflow/twitter/token_mzelst.R")
-source("workflow/excess_mortality_cbsmodel_2021.R")
-source("workflow/excess_mortality.R")
+#source("workflow/excess_mortality_cbsmodel_2021.R")
+#source("workflow/excess_mortality.R")
 
 thisweek <- isoweek(Sys.Date())-1
 startday.week <- substr(Sys.Date()-11,9,10)
@@ -154,7 +154,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: De sterfte is licht gedaald t.o.v. vorige week. De verhoogde sterfte (~2950) wordt veroorzaakt door oversterfte (~100) in de groep 0-65.")
+conclusie.tweet <- paste0("Conclusie: Na 8 weken van verhoogde sterfte was de sterfte in week 21 iets lager dan verwacht. De sterftecijfers wijzen er nu ook op dat het de goede kant opgaat.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,
