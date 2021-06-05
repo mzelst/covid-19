@@ -22,9 +22,6 @@ library(readxl)
 ## for reproducibility
 set.seed(123)
 
-## Put in double date breaker for daily update
-week.now <- isoweek(Sys.Date())-1
-
 ## helper functions
 
 ## 95% confidence interval
@@ -67,6 +64,7 @@ cbs_dt <- data.table(cbs_get_data('70895ned',
 )[,
   timestamp := Sys.time()
 ]
+week.now <- as.numeric(str_sub(last(cbs_dt$Perioden),7,8))
 
 ## oversterfte from CBS/AMC model, https://www.cbs.nl/nl-nl/nieuws/2020/22/sterfte-in-coronatijd
 cbs_oversterfte <- data.table(read_excel('workflow/excess_mortality/data/Berekening oversterfte CBS.xlsx', range = 'F3:I49', col_names = F))
@@ -636,5 +634,3 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   ylab('Totale oversterfte') + 
   theme_bw()
 ggsave('plots/2021_fig4.2.2.png')
-
-source("workflow/excess_mortality.R")
