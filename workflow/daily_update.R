@@ -389,6 +389,12 @@ tweet.last_id <- posted_tweet$id_str
 
 #}
 
+## Get telegram message: update done ##
+
+bot <- TGBot$new(token = bot_token('RBot'))
+bot$set_default_chat_id(user_id('me'))
+bot$sendMessage('Update voor Twitter is klaar')
+
 ## Workflows for databases
 rm(list=ls())
 source("workflow/dashboards/cases_ggd_agegroups.R")
