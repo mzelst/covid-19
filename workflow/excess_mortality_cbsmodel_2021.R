@@ -635,5 +635,6 @@ ggplot(fig4.2.2_dt, aes(variable, value)) +
   theme_bw()
 ggsave('plots/2021_fig4.2.2.png')
 
-rm(beta_long, cbs_dt, cbs.filter, covid_filt, fig2.1_dt,fig2.2_dt,fig4.1.1_dt,fig4.1.2_dt, fig4.2.1_dt,
-   nl_dt,smooth_dt_dyn,totals,totals2020,week_labels,i,week.now,ci_5p,find_week)
+add(repo, path = "*")
+commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update DLM mortality analyses"))
+push(repo, credentials = git.auth)
