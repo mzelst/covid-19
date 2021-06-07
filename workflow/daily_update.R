@@ -456,4 +456,5 @@ rm(daily_vaccin_datalist,df.care.institutions,df.doctors,df.ggd,df.hospitals,df.
    filename.daily.vaccins.delivered,last.date,temp,today.date, cbs.filter, vaccine.data, dat)
 
 rm(beta_long, cbs_dt, cbs.filter, covid_filt, fig2.1_dt,fig2.2_dt,fig4.1.1_dt,fig4.1.2_dt, fig4.2.1_dt,
-   nl_dt,smooth_dt_dyn,totals,totals2020,week_labels,i,week.now,ci_5p,find_week)
+   nl_dt,smooth_dt_dyn,totals,totals2020,week_labels,i,week.now,ci_5p,find_week, webpage.cbs,u.cbs,
+   cbs.death.statistics)
