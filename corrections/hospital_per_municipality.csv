@@ -1,38 +1,41 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-05-22,"","",5,4,1
-2021-05-22,"Echt-Susteren","Limburg-Noord",1,0,1
-2021-05-23,"","",4,5,-1
-2021-05-23,"Echt-Susteren","Limburg-Noord",0,1,-1
-2021-05-31,"Rotterdam","Rotterdam-Rijnmond",8,9,-1
-2021-06-01,"Rotterdam","Rotterdam-Rijnmond",8,7,1
-2021-06-02,"","",3,4,-1
-2021-06-02,"'s-Gravenhage","Haaglanden",5,4,1
-2021-06-02,"Almelo","Twente",2,0,2
-2021-06-02,"Rotterdam","Rotterdam-Rijnmond",4,3,1
-2021-06-02,"Westland","Haaglanden",1,0,1
-2021-06-03,"Almelo","Twente",1,0,1
-2021-06-03,"De Ronde Venen","Utrecht",1,0,1
-2021-06-03,"Rotterdam","Rotterdam-Rijnmond",2,1,1
-2021-06-04,"","",4,1,3
-2021-06-04,"'s-Gravenhage","Haaglanden",5,1,4
-2021-06-04,"Almelo","Twente",1,0,1
-2021-06-04,"Altena","Midden- en West-Brabant",1,0,1
-2021-06-04,"Amsterdam","Amsterdam-Amstelland",2,1,1
-2021-06-04,"Delft","Haaglanden",2,0,2
-2021-06-04,"Deurne","Brabant-Zuidoost",1,0,1
-2021-06-04,"Enschede","Twente",2,1,1
-2021-06-04,"Hengelo (O.)","Twente",1,0,1
-2021-06-04,"Katwijk","Hollands-Midden",1,0,1
-2021-06-04,"Leiden","Hollands-Midden",1,0,1
-2021-06-04,"Lingewaard","Gelderland-Midden",1,0,1
-2021-06-04,"Nijmegen","Gelderland-Zuid",1,0,1
-2021-06-04,"Nissewaard","Rotterdam-Rijnmond",1,0,1
-2021-06-04,"Oss","Brabant-Noord",1,0,1
-2021-06-04,"Pijnacker-Nootdorp","Haaglanden",1,0,1
-2021-06-04,"Reusel-De Mierden","Brabant-Zuidoost",1,0,1
-2021-06-04,"Rotterdam","Rotterdam-Rijnmond",5,2,3
-2021-06-04,"Smallingerland","Fryslân",1,0,1
-2021-06-04,"Stichtse Vecht","Utrecht",1,0,1
-2021-06-04,"Weert","Limburg-Noord",2,0,2
-2021-06-04,"Zoetermeer","Haaglanden",1,0,1
-2021-06-04,"Zuidplas","Hollands-Midden",1,0,1
+2021-05-18,"Almere","Flevoland",2,3,-1
+2021-05-26,"Almere","Flevoland",1,2,-1
+2021-05-28,"Almere","Flevoland",1,2,-1
+2021-05-28,"Best","Brabant-Zuidoost",1,0,1
+2021-05-28,"Eindhoven","Brabant-Zuidoost",3,1,2
+2021-05-29,"Almere","Flevoland",0,1,-1
+2021-05-30,"Eindhoven","Brabant-Zuidoost",1,0,1
+2021-05-31,"Eindhoven","Brabant-Zuidoost",2,1,1
+2021-05-31,"Nuenen, Gerwen en Nederwetten","Brabant-Zuidoost",1,0,1
+2021-05-31,"Valkenswaard","Brabant-Zuidoost",1,0,1
+2021-06-01,"'s-Hertogenbosch","Brabant-Noord",1,0,1
+2021-06-01,"Eindhoven","Brabant-Zuidoost",1,0,1
+2021-06-01,"Oirschot","Brabant-Zuidoost",1,0,1
+2021-06-01,"Rotterdam","Rotterdam-Rijnmond",9,8,1
+2021-06-02,"'s-Gravenhage","Haaglanden",6,5,1
+2021-06-03,"Edam-Volendam","Zaanstreek-Waterland",1,0,1
+2021-06-03,"Eindhoven","Brabant-Zuidoost",1,0,1
+2021-06-04,"","",5,4,1
+2021-06-04,"Albrandswaard","Rotterdam-Rijnmond",1,0,1
+2021-06-04,"Barendrecht","Rotterdam-Rijnmond",1,0,1
+2021-06-04,"Beemster","Zaanstreek-Waterland",1,0,1
+2021-06-04,"Bergen op Zoom","Midden- en West-Brabant",1,0,1
+2021-06-04,"Best","Brabant-Zuidoost",1,0,1
+2021-06-04,"Den Helder","Noord-Holland-Noord",1,0,1
+2021-06-04,"Eindhoven","Brabant-Zuidoost",1,0,1
+2021-06-04,"Heerhugowaard","Noord-Holland-Noord",1,0,1
+2021-06-04,"Nuenen, Gerwen en Nederwetten","Brabant-Zuidoost",1,0,1
+2021-06-04,"Rotterdam","Rotterdam-Rijnmond",6,5,1
+2021-06-04,"Stede Broec","Noord-Holland-Noord",1,0,1
+2021-06-04,"Zevenaar","Gelderland-Midden",1,0,1
+2021-06-04,"Zuidplas","Hollands-Midden",2,1,1
+2021-06-05,"","",1,0,1
+2021-06-05,"'s-Gravenhage","Haaglanden",2,0,2
+2021-06-05,"Altena","Midden- en West-Brabant",1,0,1
+2021-06-05,"Amsterdam","Amsterdam-Amstelland",2,0,2
+2021-06-05,"Assen","Drenthe",1,0,1
+2021-06-05,"Leiden","Hollands-Midden",2,1,1
+2021-06-05,"Ridderkerk","Rotterdam-Rijnmond",1,0,1
+2021-06-05,"Schiedam","Rotterdam-Rijnmond",1,0,1
+2021-06-05,"Sint Anthonis","Brabant-Noord",1,0,1
