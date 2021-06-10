@@ -8,6 +8,19 @@
 ## house keeping
 ##
 
+## Put in double date breaker for daily update
+repeat {
+  Sys.sleep(2)
+  time.start <- ymd_hms(paste0("2021-06-11"," 06:00:00"))
+  time.now <- ymd_hms(Sys.time())
+  
+  if (time.start < time.now){
+    message <- "GO GO GO GO GO"
+    break
+  }
+}
+
+
 ## packages
 library(cbsodataR)
 library(dlm)
@@ -565,31 +578,31 @@ ggsave('plots/2021_fig4.1.1.png')
 ## Figure 4.1.2
 
 ## data
-fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
-                          week = find_week(time(covid_filt$y)),
-                          cbs_deaths = covid_filt$y,
-                          mid = apply(smooth_dt_dyn, 1, mean),
-                          lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
-                          upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
-)[!(year == 2020 & week >= 1),
-  ':=' (smooth = NA, lwr = NA, upr = NA)
-][year > 2009 & week <= 52,
-]
+#fig4.1.2_dt <- data.table(year = round(as.numeric(trunc(time(covid_filt$y)))),
+#                          week = find_week(time(covid_filt$y)),
+#                          cbs_deaths = covid_filt$y,
+#                          mid = apply(smooth_dt_dyn, 1, mean),
+#                          lwr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'lwr')),
+#                          upr = apply(smooth_dt_dyn, 1, function(x) ci_5p(x, side = 'upr'))
+#)[!(year == 2020 & week >= 1),
+#  ':=' (smooth = NA, lwr = NA, upr = NA)
+#][year > 2009 & week <= 52,
+#]
 
-write.csv(fig4.1.2_dt,file = "workflow/excess_mortality/output/2021_fig4.1.2_dt.csv")
+#write.csv(fig4.1.2_dt,file = "workflow/excess_mortality/output/2021_fig4.1.2_dt.csv")
 
 ## plot
-ggplot(fig4.1.2_dt,
-       aes(as.factor(week), mid, group = year)) +
-  geom_line(aes(y = cbs_deaths, col = ifelse(year >= 2020, 'grey', 'black'))) +
-  geom_line(aes(lty = ifelse(year >= 2020, 'solid', 'dotted'), col = ifelse(year >= 2020, 'grey', 'black'))) +
-  geom_ribbon(aes(ymax = upr, ymin = lwr), fill = 'red', alpha = 0.1) +
-  scale_color_manual(values=c("grey", "black")) + 
-  guides(lty = F, col = F) + 
-  xlab('week') +
-  ylab('') + 
-  theme_bw()
-ggsave('plots/2021_fig4.1.2.png')
+#ggplot(fig4.1.2_dt,
+#       aes(as.factor(week), mid, group = year)) +
+#  geom_line(aes(y = cbs_deaths, col = ifelse(year >= 2020, 'grey', 'black'))) +
+#  geom_line(aes(lty = ifelse(year >= 2020, 'solid', 'dotted'), col = ifelse(year >= 2020, 'grey', 'black'))) +
+#  geom_ribbon(aes(ymax = upr, ymin = lwr), fill = 'red', alpha = 0.1) +
+#  scale_color_manual(values=c("grey", "black")) + 
+#  guides(lty = F, col = F) + 
+#  xlab('week') +
+#  ylab('') + 
+#  theme_bw()
+#ggsave('plots/2021_fig4.1.2.png')
 
 ## figure 4.2.1
 fig4.2.1_dt <-beta_long[t >= 2020 & week >= 1,
