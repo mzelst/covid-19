@@ -16,7 +16,7 @@ bco.school$infections_100K <- bco.school$Number_settings_reported/bco.school$pop
 
 # Plot for #patients in hospital per day
 bco.plot <- bco.school %>%
-  filter(Date_of_publication >= "2021-05-01") %>%
+  filter(Date_of_publication >= "2021-04-01") %>%
   ggplot(aes(x=Date_of_publication, y=infections_100K)) + 
   geom_line(aes(y = infections_100K, color = "Besmettingen op school per 100K inwoners"), lwd=1.2) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
@@ -31,7 +31,7 @@ bco.plot <- bco.school %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Besmettingen op school per 100.000 inwoners") +
-  ggsave("plots/bco_school.png")
+  ggtitle("Besmettingen op school per 100.000 inwoners")
 
-bco.plot + facet_wrap(~Security_region_name.x)
+bco.plot + facet_wrap(~Security_region_name.x)  +
+  ggsave("plots/bco_school.png")
