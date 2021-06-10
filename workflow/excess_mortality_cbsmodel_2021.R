@@ -620,20 +620,20 @@ ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
 ggsave('plots/2021_fig4.2.1.png')
 
 ## figure 4.2.2
-fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
-fig4.2.2_dt <- fig4.2.2_dt %>%
-  dplyr::filter(model == "Dynamisch")
+#fig4.2.2_dt <- melt(totals[week == week.now][,-'week'], id.vars = 'model')
+#fig4.2.2_dt <- fig4.2.2_dt %>%
+#  dplyr::filter(model == "Dynamisch")
 
-write.csv(fig4.2.2_dt,file = "workflow/excess_mortality/output/2021_fig4.2.2_dt.csv")
+#write.csv(fig4.2.2_dt,file = "workflow/excess_mortality/output/2021_fig4.2.2_dt.csv")
 
 ## plot
-ggplot(fig4.2.2_dt, aes(variable, value)) +
-  geom_col(alpha = 0.4) + 
-  geom_text(aes(label = round(value)), vjust = 3) + 
-  xlab('') +
-  ylab('Totale oversterfte') + 
-  theme_bw()
-ggsave('plots/2021_fig4.2.2.png')
+#ggplot(fig4.2.2_dt, aes(variable, value)) +
+#  geom_col(alpha = 0.4) + 
+#  geom_text(aes(label = round(value)), vjust = 3) + 
+#  xlab('') +
+#  ylab('Totale oversterfte') + 
+#  theme_bw()
+#ggsave('plots/2021_fig4.2.2.png')
 
 add(repo, path = "*")
 commit(repo, all = T, paste0("[", Sys.Date(), "] Daily (automated) update DLM mortality analyses"))
