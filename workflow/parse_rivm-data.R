@@ -116,6 +116,12 @@ ic.nice.age.data <- fread("https://data.rivm.nl/covid-19/COVID-19_ziekenhuis_ic_
 filename.ic.age.nice <- paste0("data-rivm/ic-age-datasets/ic_daily_",last(ic.nice.age.data$Date_of_statistics),".csv") ## Filename for daily data
 fwrite(ic.nice.age.data, file = filename.ic.age.nice,row.names = F)
 
+## Download contact tracing data 
+
+settings <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_settings_per_dag.csv", sep = ";")
+filename.bco.settings <- paste0("data-rivm/bco-settings/bco_settings_daily_",last(settings$Date_of_publication),".csv") ## Filename for daily data
+fwrite(settings, file = filename.bco.settings,row.names = F)
+
 #continue the script
 print("Script did NOT end!")   
 #}
