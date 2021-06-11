@@ -13,5 +13,5 @@ The datasets available in this repository are updated on a daily base. Availabil
 
 * [Daily municipal datasets](#daily_municipality_cumulative)
 * [Daily casus datasets](#daily_total_cumulative)
-* [Intensive care data](#daily_nice_data)
+* [Intensive care data](#data-nice)
 * [Data on daily corrections](#corrections)
