@@ -15,3 +15,14 @@ The datasets available in this repository are updated on a daily base. Availabil
 * [Daily casus datasets](#daily_total_cumulative)
 * [Intensive care data](https://github.com/mzelst/covid-19/tree/master/data-nice)
 * [Data on daily corrections](#corrections)
+
+
+### NICE data
+
+This folder contains various raw datasets as well as compilations of those raw data from the NICE website. NICE is the national organization for IC data but collected COVID-19 data from clinical departments as well. Data is collected every day at 15:15 from [NICE](www.stichting-nice.nl).
+
+* [Age-related data](data-nice/age)
+* [Data on amount of time in hospital](data-nice/treatment-time)
+* [Data on discharge](data-nice/exit)
+* [Data on hospital intake and hospitalized](data-nice/data-nice-json)
+
