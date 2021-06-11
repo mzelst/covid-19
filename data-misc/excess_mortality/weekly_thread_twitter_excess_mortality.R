@@ -44,12 +44,12 @@ tweet.last_id <- posted_tweet$id_str
 ## Build excess mortality (historical) tweet
 excess_mortality <- read.csv("data-misc/excess_mortality/excess_mortality.csv")
 
-tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week,"-",endday.week," mei):
+tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week, " juni"," - ",endday.week," mei):
 
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
 3) Methode CBS: ",last(excess_mortality$excess_cbs_method),"
-4) Methode RIVM (",rivm.startday," mei - ",rivm.endday," mei): ",last(excess_mortality$excess_mortality_rivm),"
+4) Methode RIVM (",rivm.startday," mei - ",rivm.endday," juni): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
 ")
@@ -154,7 +154,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: Na 8 weken van verhoogde sterfte was de sterfte in week 21 iets lager dan verwacht. De sterftecijfers wijzen er nu ook op dat het de goede kant opgaat.")
+conclusie.tweet <- paste0("Conclusie: Na de lagere sterfte van vorige week zijn we nu weer terug bij een significant hogere sterfte. Meerdere factoren die dat kunnen veroorzaken maar het antwoord moet ik u nog even schuldig blijven.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,
