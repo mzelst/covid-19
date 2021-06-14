@@ -30,8 +30,6 @@ repeat {
   }
 }
 
-message <- "GO GO GO GO GO"
-message
 
 pull(repo)
 
