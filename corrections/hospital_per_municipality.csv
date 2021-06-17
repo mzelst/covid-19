@@ -1,41 +1,27 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2020-10-09,"","",9,10,-1
-2020-10-09,"Tiel","Gelderland-Zuid",1,0,1
-2020-10-10,"Tiel","Gelderland-Zuid",0,1,-1
-2021-05-04,"Heerlen","Limburg-Zuid",2,1,1
-2021-05-08,"Sittard-Geleen","Limburg-Zuid",2,1,1
-2021-05-13,"Gulpen-Wittem","Limburg-Zuid",1,0,1
-2021-05-24,"Heerlen","Limburg-Zuid",1,0,1
-2021-05-25,"","",10,11,-1
-2021-05-25,"Waalwijk","Midden- en West-Brabant",1,0,1
-2021-05-31,"","",4,5,-1
-2021-06-06,"Roermond","Limburg-Noord",2,1,1
-2021-06-08,"Roerdalen","Limburg-Noord",1,0,1
-2021-06-09,"","",2,3,-1
-2021-06-11,"","",1,0,1
-2021-06-11,"Hardenberg","IJsselland",1,0,1
-2021-06-11,"Rotterdam","Rotterdam-Rijnmond",4,2,2
-2021-06-12,"'s-Hertogenbosch","Brabant-Noord",2,0,2
-2021-06-12,"Ermelo","Noord- en Oost-Gelderland",1,0,1
-2021-06-12,"Rotterdam","Rotterdam-Rijnmond",3,2,1
-2021-06-13,"","",2,1,1
-2021-06-13,"Den Helder","Noord-Holland-Noord",1,0,1
-2021-06-14,"Albrandswaard","Rotterdam-Rijnmond",1,0,1
-2021-06-14,"Almere","Flevoland",2,1,1
-2021-06-14,"Barneveld","Gelderland-Midden",1,0,1
-2021-06-14,"Dronten","Flevoland",1,0,1
-2021-06-14,"Eindhoven","Brabant-Zuidoost",1,0,1
-2021-06-14,"Enschede","Twente",1,0,1
-2021-06-14,"Geldrop-Mierlo","Brabant-Zuidoost",1,0,1
-2021-06-14,"Haarlemmermeer","Kennemerland",1,0,1
-2021-06-14,"Heerlen","Limburg-Zuid",1,0,1
-2021-06-14,"Hendrik-Ido-Ambacht","Zuid-Holland-Zuid",2,0,2
-2021-06-14,"Het Hogeland","Groningen",1,0,1
-2021-06-14,"Losser","Twente",1,0,1
-2021-06-14,"Maastricht","Limburg-Zuid",2,0,2
-2021-06-14,"Olst-Wijhe","IJsselland",1,0,1
-2021-06-14,"Smallingerland","Fryslân",1,0,1
-2021-06-14,"Tilburg","Midden- en West-Brabant",1,0,1
-2021-06-14,"Tynaarlo","Drenthe",1,0,1
-2021-06-14,"Weert","Limburg-Noord",1,0,1
-2021-06-14,"Winterswijk","Noord- en Oost-Gelderland",1,0,1
+2021-03-02,"Oss","Brabant-Noord",2,3,-1
+2021-04-02,"Rotterdam","Rotterdam-Rijnmond",15,14,1
+2021-04-21,"Meierijstad","Brabant-Noord",1,2,-1
+2021-04-23,"Rotterdam","Rotterdam-Rijnmond",17,18,-1
+2021-05-20,"Heerlen","Limburg-Zuid",1,0,1
+2021-05-21,"Kerkrade","Limburg-Zuid",1,0,1
+2021-05-22,"Beekdaelen","Limburg-Zuid",1,0,1
+2021-05-22,"Heerlen","Limburg-Zuid",1,0,1
+2021-06-03,"Landerd","Brabant-Noord",0,1,-1
+2021-06-14,"Etten-Leur","Midden- en West-Brabant",1,0,1
+2021-06-14,"Harlingen","Fryslân",1,0,1
+2021-06-14,"Leeuwarden","Fryslân",1,0,1
+2021-06-14,"Lingewaard","Gelderland-Midden",1,0,1
+2021-06-14,"Utrecht","Utrecht",1,0,1
+2021-06-15,"","",1,0,1
+2021-06-15,"Alphen aan den Rijn","Hollands-Midden",1,0,1
+2021-06-15,"Amsterdam","Amsterdam-Amstelland",1,0,1
+2021-06-15,"Cuijk","Brabant-Noord",1,0,1
+2021-06-15,"Dordrecht","Zuid-Holland-Zuid",1,0,1
+2021-06-15,"Enschede","Twente",2,1,1
+2021-06-15,"Hardenberg","IJsselland",1,0,1
+2021-06-15,"Hengelo (O.)","Twente",1,0,1
+2021-06-15,"Krimpenerwaard","Hollands-Midden",1,0,1
+2021-06-15,"Meierijstad","Brabant-Noord",1,0,1
+2021-06-15,"Nijmegen","Gelderland-Zuid",1,0,1
+2021-06-15,"Rotterdam","Rotterdam-Rijnmond",1,0,1
