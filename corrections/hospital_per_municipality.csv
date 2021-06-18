@@ -1,27 +1,24 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-03-02,"Oss","Brabant-Noord",2,3,-1
-2021-04-02,"Rotterdam","Rotterdam-Rijnmond",15,14,1
-2021-04-21,"Meierijstad","Brabant-Noord",1,2,-1
-2021-04-23,"Rotterdam","Rotterdam-Rijnmond",17,18,-1
-2021-05-20,"Heerlen","Limburg-Zuid",1,0,1
-2021-05-21,"Kerkrade","Limburg-Zuid",1,0,1
-2021-05-22,"Beekdaelen","Limburg-Zuid",1,0,1
-2021-05-22,"Heerlen","Limburg-Zuid",1,0,1
-2021-06-03,"Landerd","Brabant-Noord",0,1,-1
-2021-06-14,"Etten-Leur","Midden- en West-Brabant",1,0,1
-2021-06-14,"Harlingen","Fryslân",1,0,1
-2021-06-14,"Leeuwarden","Fryslân",1,0,1
-2021-06-14,"Lingewaard","Gelderland-Midden",1,0,1
-2021-06-14,"Utrecht","Utrecht",1,0,1
-2021-06-15,"","",1,0,1
-2021-06-15,"Alphen aan den Rijn","Hollands-Midden",1,0,1
-2021-06-15,"Amsterdam","Amsterdam-Amstelland",1,0,1
-2021-06-15,"Cuijk","Brabant-Noord",1,0,1
-2021-06-15,"Dordrecht","Zuid-Holland-Zuid",1,0,1
-2021-06-15,"Enschede","Twente",2,1,1
-2021-06-15,"Hardenberg","IJsselland",1,0,1
-2021-06-15,"Hengelo (O.)","Twente",1,0,1
-2021-06-15,"Krimpenerwaard","Hollands-Midden",1,0,1
-2021-06-15,"Meierijstad","Brabant-Noord",1,0,1
-2021-06-15,"Nijmegen","Gelderland-Zuid",1,0,1
-2021-06-15,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2020-08-19,"Geertruidenberg","Midden- en West-Brabant",1,0,1
+2020-08-20,"Geertruidenberg","Midden- en West-Brabant",0,1,-1
+2020-08-21,"Terneuzen","Zeeland",0,1,-1
+2020-10-31,"Terneuzen","Zeeland",3,2,1
+2020-11-01,"Hulst","Zeeland",1,0,1
+2020-11-26,"Terneuzen","Zeeland",1,0,1
+2020-12-10,"Sluis","Zeeland",2,1,1
+2020-12-15,"Terneuzen","Zeeland",2,1,1
+2020-12-19,"Terneuzen","Zeeland",1,0,1
+2021-03-15,"Meierijstad","Brabant-Noord",0,1,-1
+2021-04-14,"Meierijstad","Brabant-Noord",4,3,1
+2021-05-11,"Rotterdam","Rotterdam-Rijnmond",15,14,1
+2021-05-12,"Rotterdam","Rotterdam-Rijnmond",23,24,-1
+2021-05-20,"Best","Brabant-Zuidoost",1,0,1
+2021-06-14,"Zwartewaterland","IJsselland",1,0,1
+2021-06-15,"","",2,1,1
+2021-06-15,"Breda","Midden- en West-Brabant",1,0,1
+2021-06-15,"Huizen","Gooi en Vechtstreek",1,0,1
+2021-06-16,"","",2,0,2
+2021-06-16,"'s-Gravenhage","Haaglanden",1,0,1
+2021-06-16,"Etten-Leur","Midden- en West-Brabant",1,0,1
+2021-06-16,"Oldebroek","Noord- en Oost-Gelderland",1,0,1
+2021-06-16,"Rotterdam","Rotterdam-Rijnmond",5,1,4
