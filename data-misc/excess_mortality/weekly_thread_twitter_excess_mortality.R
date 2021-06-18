@@ -20,6 +20,21 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
 
+## Build mededeling tweet ##
+
+tweet.mededeling <- paste0("1/
+
+De sterfte is weer op het normale niveau en de sterfte door covid is op dit moment vrij laag. Dit is dus voorlopig de laatste oversterfte update. Mocht de sterfte weer sterk afwijken van de verwachting, plaats ik de update opnieuw.")
+
+posted_tweet <- post_tweet (
+  tweet.mededeling,
+  token = token.mzelst,
+  in_reply_to_status_id = tweet.main.id,
+  auto_populate_reply_metadata = TRUE
+)
+posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
+tweet.last_id <- posted_tweet$id_str
+
 ## Build information tweet
 
 tweet.information <- paste0("2/ 
@@ -35,7 +50,7 @@ De uitleg kun je hier vinden: https://github.com/mzelst/covid-19/blob/master/dat
 posted_tweet <- post_tweet (
   tweet.information,
   token = token.mzelst,
-  in_reply_to_status_id = tweet.main.id,
+  in_reply_to_status_id = tweet.last_id,
   auto_populate_reply_metadata = TRUE
 )
 posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
@@ -44,12 +59,12 @@ tweet.last_id <- posted_tweet$id_str
 ## Build excess mortality (historical) tweet
 excess_mortality <- read.csv("data-misc/excess_mortality/excess_mortality.csv")
 
-tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week, " juni"," - ",endday.week," mei):
+tweet.excess.historical <- paste0("3/ De oversterfte in week ",thisweek," (",startday.week, " juni"," - ",endday.week," juni):
 
 1) Historisch gemiddelde: ",last(excess_mortality$Oversterfte_Totaal),"
 2) Historisch gemiddelde (corr. leeftijd): ",last(excess_mortality$Oversterfte_Totaal_Gecorrigeerd),"
 3) Methode CBS: ",last(excess_mortality$excess_cbs_method),"
-4) Methode RIVM (",rivm.startday," mei - ",rivm.endday," juni): ",last(excess_mortality$excess_mortality_rivm),"
+4) Methode RIVM (",rivm.startday," juni - ",rivm.endday," juni): ",last(excess_mortality$excess_mortality_rivm),"
 
 (grafieken CBS / RIVM)
 ")
@@ -154,7 +169,7 @@ tweet.last_id <- posted_tweet$id_str
 
 ## Conclusie tweet
 
-conclusie.tweet <- paste0("Conclusie: Na de lagere sterfte van vorige week zijn we nu weer terug bij een significant hogere sterfte. Meerdere factoren die dat kunnen veroorzaken maar het antwoord moet ik u nog even schuldig blijven.")
+conclusie.tweet <- paste0("Conclusie: Na de hogere sterfte van vorige week zijn we nu weer terug bij een sterfte zoals die wordt verwacht.")
 
 posted_tweet <- post_tweet (
   conclusie.tweet,
@@ -169,9 +184,7 @@ tweet.last_id <- posted_tweet$id_str
 
 eindnoot.tweet <- paste0("Eindnoot
 
-In onze repo houden we wekelijks deze analyses allemaal bij, zie hier: https://github.com/mzelst/covid-19/tree/master/workflow/excess_mortality
-
-Ik zal wekelijks deze resultaten ook op Twitter bijwerken in een draadje.")
+In onze repo houden we wekelijks deze analyses allemaal bij, zie hier: https://github.com/mzelst/covid-19/tree/master/workflow/excess_mortality")
 
 posted_tweet <- post_tweet (
   eindnoot.tweet,
