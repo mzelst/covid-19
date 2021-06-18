@@ -118,7 +118,7 @@ nl_dt <- nl_dt[,c(1,3,2)]
 colnames(nl_dt) <- c("Week","Year","covid_deaths")
 nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
 nl_dt$Year <- as.numeric(nl_dt$Year)
-nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
+#nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
 
 excess_deaths_wide <- merge(excess_deaths_wide, nl_dt, by=c("Week","Year"), all.x=T)
 

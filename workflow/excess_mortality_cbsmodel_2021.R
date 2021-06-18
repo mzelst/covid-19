@@ -99,7 +99,7 @@ nl_dt <- nl_dt[,c(1,3,2)]
 colnames(nl_dt) <- c("week","year","covid_deaths")
 nl_dt$covid_deaths <- as.numeric(nl_dt$covid_deaths)
 nl_dt$year <- as.numeric(nl_dt$year)
-nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
+#nl_dt <- nl_dt[c(1:(nrow(nl_dt)-1)),] ## Only use data up to week 30
 
 ## ts objects assume 52 weeks per year. Adjust the CBS data for 52 week/year 
 
