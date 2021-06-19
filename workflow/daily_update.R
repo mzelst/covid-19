@@ -65,7 +65,7 @@ nursery.by_day <- read.csv("data/nursery_by_day.csv")
 testrate.by_day <- read.csv("data-dashboards/percentage-positive-daily-national.csv")[,c("values.tested_total","values.infected","values.infected_percentage","date","pos.rate.3d.avg")]
 #vaccines.by_day <- read.csv("data/vaccines_by_day.csv") , vaccines.by_day
 
-daily_datalist <- list(rivm.by_day,nice.by_day,lcps.by_day,corr.by_day,nursery.by_day, testrate.by_day)
+daily_datalist <- list(rivm.by_day,nice.by_day,corr.by_day,nursery.by_day, testrate.by_day,lcps.by_day)
 
 all.data <- Reduce(
   function(x, y, ...) merge(x, y, by="date",all.x = TRUE, ...),
@@ -99,7 +99,7 @@ IC_Aanwezig <- ifelse(is.na(last(all.data$IC_Bedden_COVID)),"Onbekend",paste0(la
 
 #vaccins.geprikt <- format(last(vaccines.by_day$vaccines_administered_ggd+vaccines.by_day$vaccines_administered_estimated_hospital),decimal.mark = ",",big.mark =".",big.interval = 3)
 
-## Build tweets
+#### Build tweets ####
 tweet.main <- paste0("#COVID19NL
 
 Positief getest: ",format(last(all.data$new.infection),decimal.mark = ",",big.mark =".",big.interval = 3),"
@@ -128,7 +128,22 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
 
-##### Generate municipality images
+tweet.lcps.weekend <- "De LCPS data wordt in het weekend niet meer bijgewerkt. Op maandag komt de volledige update vrij waarbij ook de data uit het weekend wordt meegenomen."
+
+ifelse(Kliniek_Nieuwe_Opnames == "Onbekend",
+
+posted_tweet <- post_tweet (
+  tweet.lcps.weekend,
+  token = token.mzelst,
+  media = c("plots/LCPS_nodata_weekend.png"),
+  in_reply_to_status_id = tweet.main.id,
+  auto_populate_reply_metadata = TRUE
+),
+
+"")
+
+##### Generate municipality images ####
+
 source("workflow/parse_nice-municipalities-data.R")
 source("workflow/parse_municipalities.R")
 source("workflow/generate_municipality_images.R")
