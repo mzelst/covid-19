@@ -29,7 +29,7 @@ if (lcps.condition) {stop("The value is TRUE, so the script must end here")
   
   lcps.data <- lcps.data %>%
     mutate(Totaal_bezetting = Kliniek_Bedden + IC_Bedden_COVID) %>%
-    mutate(IC_Opnames_7d = frollmean(IC_Nieuwe_Opnames_COVID,7, na.rm = T)) %>%
+    mutate(IC_Opnames_7d = frollmean(IC_Nieuwe_Opnames_COVID,7)) %>%
     mutate(Kliniek_Opnames_7d = frollmean(Kliniek_Nieuwe_Opnames_COVID,7)) %>%
     mutate(Totaal_opnames = IC_Nieuwe_Opnames_COVID + Kliniek_Nieuwe_Opnames_COVID) %>%
     mutate(Totaal_opnames_7d = IC_Opnames_7d + Kliniek_Opnames_7d) %>%
