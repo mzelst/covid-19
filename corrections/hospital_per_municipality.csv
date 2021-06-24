@@ -1,23 +1,18 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-04-12,"Rotterdam","Rotterdam-Rijnmond",14,13,1
-2021-04-17,"Rotterdam","Rotterdam-Rijnmond",15,16,-1
-2021-05-21,"Heerlen","Limburg-Zuid",1,0,1
-2021-06-06,"Amersfoort","Utrecht",1,0,1
-2021-06-07,"Wierden","Twente",1,2,-1
-2021-06-15,"","",2,3,-1
-2021-06-15,"Lansingerland","Rotterdam-Rijnmond",1,0,1
-2021-06-15,"Maasdriel","Gelderland-Zuid",1,0,1
-2021-06-17,"Gorinchem","Zuid-Holland-Zuid",1,0,1
-2021-06-17,"Heusden","Brabant-Noord",1,0,1
-2021-06-18,"Schiedam","Rotterdam-Rijnmond",1,0,1
-2021-06-19,"'s-Gravenhage","Haaglanden",1,0,1
-2021-06-19,"'s-Hertogenbosch","Brabant-Noord",1,0,1
-2021-06-19,"Rotterdam","Rotterdam-Rijnmond",2,1,1
-2021-06-20,"'s-Hertogenbosch","Brabant-Noord",1,0,1
-2021-06-21,"","",1,0,1
-2021-06-21,"Dordrecht","Zuid-Holland-Zuid",2,0,2
-2021-06-21,"Goeree-Overflakkee","Rotterdam-Rijnmond",1,0,1
-2021-06-21,"Goes","Zeeland",1,0,1
-2021-06-21,"Helmond","Brabant-Zuidoost",1,0,1
-2021-06-21,"Kapelle","Zeeland",1,0,1
-2021-06-21,"Waadhoeke","Fryslân",1,0,1
+2021-03-26,"Amsterdam","Amsterdam-Amstelland",8,7,1
+2021-05-06,"Amsterdam","Amsterdam-Amstelland",5,6,-1
+2021-06-07,"Amsterdam","Amsterdam-Amstelland",4,3,1
+2021-06-18,"","",3,2,1
+2021-06-21,"","",2,1,1
+2021-06-21,"Westland","Haaglanden",1,0,1
+2021-06-21,"Zuidplas","Hollands-Midden",1,0,1
+2021-06-22,"Amsterdam","Amsterdam-Amstelland",1,0,1
+2021-06-22,"Bladel","Brabant-Zuidoost",1,0,1
+2021-06-22,"Breda","Midden- en West-Brabant",1,0,1
+2021-06-22,"De Ronde Venen","Utrecht",1,0,1
+2021-06-22,"Delft","Haaglanden",1,0,1
+2021-06-22,"Hardenberg","IJsselland",0,1,-1
+2021-06-22,"Hoeksche Waard","Zuid-Holland-Zuid",1,0,1
+2021-06-22,"Midden-Groningen","Groningen",1,0,1
+2021-06-22,"Pijnacker-Nootdorp","Haaglanden",1,0,1
+2021-06-22,"Rotterdam","Rotterdam-Rijnmond",1,0,1
