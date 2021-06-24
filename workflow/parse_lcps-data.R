@@ -10,8 +10,6 @@ lcps.data <- lcps.data.original %>%
     Datum = NULL
   )
 
-lcps.data$IC_Nieuwe_Opnames_COVID <- parse_number(lcps.data$IC_Nieuwe_Opnames_COVID)
-
 lcps.condition <- head(lcps.data$Kliniek_Nieuwe_Opnames_COVID,1) < head(lcps.data$IC_Nieuwe_Opnames_COVID,1)
 # Verify clinical beds and IC beds are correctly reported (not swapped around)
 if (lcps.condition) {stop("The value is TRUE, so the script must end here")    

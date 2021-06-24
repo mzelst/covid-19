@@ -65,6 +65,7 @@ nursery.map + geom_text(data=pop.df, aes(label=paste0(population,"%"), x=long, y
   theme(plot.title = element_text(hjust = 0.5, size = 16),
         plot.title.position = "plot",
         plot.subtitle = element_text(hjust = 0.5, size = 14)) +
-  labs(subtitle = national.perc) +
-  ggsave("plots/nursery_homes_vr_map.png",width = 8, height=12)
+  labs(subtitle = national.perc)
+
+ggsave("plots/nursery_homes_vr_map.png",width = 8, height=12)
 

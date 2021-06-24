@@ -56,8 +56,9 @@ cases <- all.data %>%
   geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
-  ggtitle("Meldingen van geconstateerde besmettingen") +
-  ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
+  ggtitle("Meldingen van geconstateerde besmettingen")
+
+ggsave("plots/positieve_tests_per_dag.png",width=12, height = 8)
 
 testplot.subtitle <- paste0("Let op: percentage is bekend t/m ",Sys.Date()-2," \n\n Maandagen")
 
@@ -92,8 +93,9 @@ testplot <- testdata %>%
   geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
-  ggtitle("Percentage positief per dag (GGD)") +
-  ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
+  ggtitle("Percentage positief per dag (GGD)")
+
+ggsave("plots/percentage_positief_per_dag.png",width=12, height = 8)
 
 # Plot for #patients in hospital per day
 aanwezig <- all.data %>%
@@ -115,8 +117,9 @@ aanwezig <- all.data %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Aanwezig op de verpleegafdeling vs. IC (NICE & LCPS)") +
-  ggsave("plots/overview_aanwezig_zkh.png", width = 12, height=8)
+  ggtitle("Aanwezig op de verpleegafdeling vs. IC (NICE & LCPS)")
+
+ggsave("plots/overview_aanwezig_zkh.png", width = 12, height=8)
 
 # Plot for #patients intake per day
 opnames <- all.data %>%
@@ -155,8 +158,9 @@ opnames <- all.data %>%
   geom_vline(xintercept = as.Date(Sys.Date()-14-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-7-day.today), linetype = "dotted") +
   geom_vline(xintercept = as.Date(Sys.Date()-day.today), linetype = "dotted") +
-  ggtitle("Opnames op de verpleegafdeling en IC") +
-  ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
+  ggtitle("Opnames op de verpleegafdeling en IC")
+
+ggsave("plots/overview_opnames_zkh.png", width = 12, height=8)
 
 # Reproduction number
 reproduction <- rjson::fromJSON(file = "https://data.rivm.nl/covid-19/COVID-19_reproductiegetal.json",simplify=TRUE) %>%

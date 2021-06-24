@@ -13,7 +13,7 @@ nursing.homes.wide$deceased_7daverage_nursinghomes <- round(frollmean(nursing.ho
 
 date.nursery.homes <- as.Date(Sys.Date())
 
-nursing.homes.wide %>%
+nursing.homes.plot <- nursing.homes.wide %>%
   filter(Date_of_statistic_reported > "2020-01-01" & Date_of_statistic_reported < date.nursery.homes) %>%
   ggplot(aes(x = Date_of_statistic_reported, y = cases_7daverage_nursinghomes)) +
   geom_line(aes(y = deceased_7daverage_nursinghomes, color = "Sterfte per dag"), lwd=1.0) +
@@ -29,8 +29,12 @@ nursing.homes.wide %>%
   labs(x = "Datum",
        y = "Aantal",
        color = "Legend") +
-  ggtitle("Toename positief geteste en overleden verpleeghuis bewoners (7-daags gem.)") +
-  ggsave("plots/verpleeghuizen_bewoners.png",width=12, height = 8)
+  ggtitle("Toename positief geteste en overleden verpleeghuis bewoners (7-daags gem.)")
+
+ggsave("plots/verpleeghuizen_bewoners.png",width=12, height = 8)
+
+
+
 
 ## Counts for nursing homes
 
@@ -75,8 +79,9 @@ locations %>%
   labs(x = "Datum",
        y = "Aantal",
        color = "Legend") +
-  ggtitle("Aantal locaties met geconstateerde besmettingen") +
-  ggsave("plots/verpleeghuizen_locaties.png",width=12, height = 8)
+  ggtitle("Aantal locaties met geconstateerde besmettingen")
+
+ggsave("plots/verpleeghuizen_locaties.png",width=12, height = 8)
 
 
 nursing.homes.all <- as.data.frame(cbind(nursing.homes.infection,sum(dat.today$Total_cases_reported),nursing.homes.deaths,
