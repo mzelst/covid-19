@@ -629,7 +629,7 @@ ggplot(fig4.2.1_dt, aes(factor(week), mid, group = 1)) +
   xlab('Week') + 
   theme_bw() + 
   theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold")) +
-  ggtitle("Sterfte door corona (2021)") + 
+  ggtitle("Sterfte door corona (2021)")
 ggsave('plots/2021_fig4.2.1.png')
 
 ## figure 4.2.2

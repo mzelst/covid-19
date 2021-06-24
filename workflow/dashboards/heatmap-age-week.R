@@ -62,8 +62,9 @@ ggplot(voorheat,aes(week,Agegroup,fill=phd))+
        caption = paste("Bron data: RIVM / CBS ",Sys.Date()))+
   theme(plot.title = element_text(hjust = 0.5,size = 20,family  = "Corbel",face = "bold"),
         plot.subtitle =  element_text(hjust=0.5,color = "black", face = "italic",family  = "Corbel"),
-        axis.text = element_text(size=10,color = "black",family  = "Corbel",face = "bold")) + 
-  ggsave("plots/leeftijd_heatmap.png",width=15, height = 4)
+        axis.text = element_text(size=10,color = "black",family  = "Corbel",face = "bold"))
+
+ggsave("plots/leeftijd_heatmap.png",width=15, height = 4)
 
 
 git.credentials <- read_lines("git_auth.txt")

@@ -94,8 +94,9 @@ covid.r %>%
        subtitle = paste0("Laatst berekende R = ",R_last_estimate, "\n Datum = ",as.Date(last(covid.r$dates)-11)),
        color = "Legend") +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  ggtitle("Reproductiegetal") +
-  ggsave("plots/reproductiegetal_marino.png")
+  ggtitle("Reproductiegetal")
+
+ggsave("plots/reproductiegetal_marino.png")
 
 covid.r$Std_R <- NULL
 filename.repro.file <- paste0("data-misc/reproduction-numbers/marino/reproduction_number_",Sys.Date(),".csv")
