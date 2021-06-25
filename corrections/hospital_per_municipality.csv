@@ -1,18 +1,17 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-03-26,"Amsterdam","Amsterdam-Amstelland",8,7,1
-2021-05-06,"Amsterdam","Amsterdam-Amstelland",5,6,-1
-2021-06-07,"Amsterdam","Amsterdam-Amstelland",4,3,1
-2021-06-18,"","",3,2,1
-2021-06-21,"","",2,1,1
-2021-06-21,"Westland","Haaglanden",1,0,1
-2021-06-21,"Zuidplas","Hollands-Midden",1,0,1
-2021-06-22,"Amsterdam","Amsterdam-Amstelland",1,0,1
-2021-06-22,"Bladel","Brabant-Zuidoost",1,0,1
-2021-06-22,"Breda","Midden- en West-Brabant",1,0,1
-2021-06-22,"De Ronde Venen","Utrecht",1,0,1
-2021-06-22,"Delft","Haaglanden",1,0,1
-2021-06-22,"Hardenberg","IJsselland",0,1,-1
-2021-06-22,"Hoeksche Waard","Zuid-Holland-Zuid",1,0,1
-2021-06-22,"Midden-Groningen","Groningen",1,0,1
-2021-06-22,"Pijnacker-Nootdorp","Haaglanden",1,0,1
-2021-06-22,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2020-11-09,"Renkum","Gelderland-Midden",2,1,1
+2020-11-10,"Zevenaar","Gelderland-Midden",1,0,1
+2020-11-11,"Zevenaar","Gelderland-Midden",0,1,-1
+2020-11-16,"Renkum","Gelderland-Midden",0,1,-1
+2020-11-23,"Lingewaard","Gelderland-Midden",1,0,1
+2020-11-26,"Lingewaard","Gelderland-Midden",0,1,-1
+2021-03-06,"Oss","Brabant-Noord",1,2,-1
+2021-03-27,"Uden","Brabant-Noord",3,2,1
+2021-06-21,"Breda","Midden- en West-Brabant",1,0,1
+2021-06-22,"Olst-Wijhe","IJsselland",1,0,1
+2021-06-23,"'s-Gravenhage","Haaglanden",1,0,1
+2021-06-23,"Heerlen","Limburg-Zuid",1,0,1
+2021-06-23,"Hoorn","Noord-Holland-Noord",1,0,1
+2021-06-23,"Leiden","Hollands-Midden",1,0,1
+2021-06-23,"Woensdrecht","Midden- en West-Brabant",1,0,1
+2021-06-23,"Zaanstad","Zaanstreek-Waterland",1,0,1
