@@ -134,7 +134,7 @@ plot <- deaths_total %>%
   xlab("")+
   ylab("")+
   labs(title = "Sterfte per week",
-       subtitle = "CBS data beschikbaar t/m januari 2021",
+       subtitle = "CBS data beschikbaar t/m februari 2021",
        caption = paste("Bron: CBS/RIVM | Plot: @mzelst  | ",Sys.Date())) +
   theme(
     legend.title = element_blank(),  ## legend title
@@ -152,9 +152,8 @@ plot <- deaths_total %>%
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank())
 
-plot + scale_colour_manual(values = cols) +
-  ggsave("plots/sterfte_per_week_30K.png", width = 12, height=8)
-
+plot + scale_colour_manual(values = cols)
+ggsave("plots/sterfte_per_week_30K.png", width = 12, height=8)
 
 ## Percentages
 
@@ -189,8 +188,8 @@ plot <- deaths_total %>%
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank())
 
-plot + scale_colour_manual(values = cols) +
-  ggsave("plots/sterfte_per_week_30K_percentage.png", width = 12, height=8)
+plot + scale_colour_manual(values = cols)
+ggsave("plots/sterfte_per_week_30K_percentage.png", width = 12, height=8)
 
 
 
@@ -229,8 +228,8 @@ plot <- deaths_total %>%
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank())
 
-plot + scale_colour_manual(values = cols) +
-  ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
+plot + scale_colour_manual(values = cols)
+ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
 
 
 ## cbs.deaths

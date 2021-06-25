@@ -248,8 +248,8 @@ mortality_wide %>%
   annotate("text", x = 14, y = 5200, label = "Eerste golf") +
   annotate("text", x = 32, y = 3400, label = "Hittegolf") +
   annotate("text", x = 44, y = 3800, label = "Tweede golf") +
-  annotate("text", x = 14.5, y = 3400, label = "Derde golf") +
-  ggsave("data-misc/excess_mortality/plots_weekly_update/sterfte_perweek.png")
+  annotate("text", x = 14.5, y = 3400, label = "Derde golf")
+ggsave("data-misc/excess_mortality/plots_weekly_update/sterfte_perweek.png")
 
 git.credentials <- read_lines("git_auth.txt")
 git.auth <- cred_user_pass(git.credentials[1],git.credentials[2])
