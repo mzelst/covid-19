@@ -111,5 +111,5 @@ add(repo, path = temp)
 commit(repo, all = T, paste0("Update reproduction number ",Sys.Date()))
 push(repo, credentials = git.auth)
 
-rm(corona, covid.incidence,covid.r,dat,dates,r.rivm,res_parametric_si,dates.start,
+rm(corona, covid.incidence,covid.r,dates,r.rivm,res_parametric_si,dates.start,
    filename.repro.file,R_last_estimate,T,t_end,t_start,time,temp)

@@ -1,9 +1,11 @@
 temp = tail(list.files(path = "data-rivm/bco-settings/",pattern="*.csv", full.names = T),1)
-myfiles = read.csv(temp)
+settings = read.csv(temp)
 
 bco.complete <- settings %>%
-  filter(Source_and_contact_tracing_phase == "high")
+  filter(Source_and_contact_tracing_phase != "high")
 
+
+df <- data.frame(table(settings$Security_region_name, settings$Source_and_contact_tracing_phase, settings$Date_of_publication))
 
 bco.complete.schooldaycare <- bco.complete %>%
   filter(Setting_reported == "school_daycare")
