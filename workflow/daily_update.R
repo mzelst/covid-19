@@ -128,19 +128,28 @@ posted_tweet <- fromJSON(rawToChar(posted_tweet$content))
 tweet.main.id <- posted_tweet$id_str
 tweet.last_id <- tweet.main.id
 
-tweet.lcps.weekend <- "De LCPS data wordt in het weekend niet meer bijgewerkt. Op maandag komt de volledige update vrij waarbij ook de data uit het weekend wordt meegenomen."
+tweet.lcps.weekend <- "Let op: De LCPS data wordt in het weekend niet goed bijgewerkt. Houd er rekening mee dat de data over het weekend niet compleet is. Daardoor kan het mogelijk een onjuist beeld geven."
+
+day.of.week <- wday(Sys.Date(), week_start = 1)
 
 ifelse(Kliniek_Nieuwe_Opnames == "Onbekend",
-
-posted_tweet <- post_tweet (
-  tweet.lcps.weekend,
-  token = token.mzelst,
-  media = c("plots/LCPS_nodata_weekend.png"),
-  in_reply_to_status_id = tweet.main.id,
-  auto_populate_reply_metadata = TRUE
-),
-
-"")
+       
+       posted_tweet <- post_tweet (
+         tweet.lcps.weekend,
+         token = token.mzelst,
+         media = c("plots/LCPS_nodata_weekend.png"),
+         in_reply_to_status_id = tweet.main.id,
+         auto_populate_reply_metadata = TRUE),
+       
+       ifelse(day.of.week > 5,
+              
+              posted_tweet <- post_tweet (
+                tweet.lcps.weekend,
+                token = token.mzelst,
+                media = c("plots/LCPS_data_weekend.png"),
+                in_reply_to_status_id = tweet.main.id,
+                auto_populate_reply_metadata = TRUE),
+              ""))
 
 ##### Generate municipality images ####
 

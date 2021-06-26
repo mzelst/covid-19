@@ -122,6 +122,12 @@ settings <- fread("https://data.rivm.nl/covid-19/COVID-19_aantallen_settings_per
 filename.bco.settings <- paste0("data-rivm/bco-settings/bco_settings_daily_",last(settings$Date_of_publication),".csv") ## Filename for daily data
 fwrite(settings, file = filename.bco.settings,row.names = F)
 
+## Download variant data 
+
+variants <- fread("https://data.rivm.nl/covid-19/COVID-19_varianten.csv", sep = ";")
+filename.variants <- paste0("data-misc/variants-rivm/data-variants-rivm-open-data/variants_rivm_",last(variants$Date_of_statistics_week_start),".csv") ## Filename for daily data
+fwrite(variants, file = filename.variants,row.names = F)
+
 #continue the script
 print("Script did NOT end!")   
 #}
