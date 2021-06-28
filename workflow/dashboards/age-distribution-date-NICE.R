@@ -113,8 +113,8 @@ dat %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
-  ggsave("plots/leeftijd_opnames_kliniek_ouderen.png",width=12, height = 10)
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)")
+ggsave("plots/leeftijd_opnames_kliniek_ouderen.png",width=12, height = 10)
 
 ## Plot hospital intake per age group (younger groups)
 
@@ -174,8 +174,8 @@ dat %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
-  ggsave("plots/leeftijd_opnames_kliniek_jongeren.png",width=12, height = 10)
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)")
+ggsave("plots/leeftijd_opnames_kliniek_jongeren.png",width=12, height = 10)
 
 dat %>%
   ggplot(aes(x=Datum, y=age50_54_intake, group = 1)) + 
@@ -195,8 +195,8 @@ dat %>%
   labs(x = "Datum",
        y = "Totaal aanwezig",
        color = "Legend") +
-  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)") + 
-  ggsave("plots/leeftijd_opnames_kliniek_middelbare_leeftijd.png",width=12, height = 10)
+  ggtitle("Opnames per dag - Leeftijdsgroepen (Kliniek)")
+ggsave("plots/leeftijd_opnames_kliniek_middelbare_leeftijd.png",width=12, height = 10)
 
 ## Age distribution - Clinical - Deaths per day
 
