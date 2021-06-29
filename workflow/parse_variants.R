@@ -43,6 +43,47 @@ variants.prevalence <- variants.prevalence %>%
 
 write.csv(variants.prevalence,"data-misc/variants-rivm/prevalence_variants.csv",row.names = F)
 
+
+
+## Parse data - PDF
+require(pdftools)
+require(tabulizer)
+report <- "https://www.rivm.nl/sites/default/files/2021-06/Tabel%20coronavirus%20varianten%2025%20juni%202021.pdf"
+
+#variants.table <- locate_areas(report,pages=c(1))
+
+area <- list(c(206,123,411,1799))
+
+variants.data <- extract_tables(report,
+                                output = "data.frame",
+                                pages = c(1),
+                                area = area,
+                                guess=FALSE)
+variants.data <- do.call(rbind,variants.data)
+
+variants.data <- rbind(variants.data,colnames(variants.data))
+
+transposed.variants <- as.data.frame(t(variants.data))
+
+colnames(transposed.variants) <- transposed.variants[1,]
+transposed.variants$Jaar <- parse_number(str_sub(row.names(transposed.variants), 2, 5))
+transposed.variants$Week <- parse_number(str_sub(row.names(transposed.variants), 7, 8))
+
+transposed.variants <- transposed.variants[-c(1:2),-14]
+
+## Long format
+
+variants.long <- transposed.variants %>%
+  gather(Variants.names, Variants.cases, -c("Week","Jaar","Aantal onderzochte monsters"))
+
+variants.long <- variants.long %>%
+  mutate(`Aantal onderzochte monsters` = parse_number(`Aantal onderzochte monsters`)) %>%
+  mutate(Variants.cases = parse_number(Variants.cases))
+
+write.csv(variants.long,"data-misc/variants-rivm/prevalence_variants_pdf_rivm.csv",row.names = F)
+
+## Push to Git
+
 week.variants <- isoweek(Sys.Date())
 
 git.credentials <- read_lines("git_auth.txt")
