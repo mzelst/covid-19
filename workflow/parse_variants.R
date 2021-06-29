@@ -48,13 +48,25 @@ write.csv(variants.prevalence,"data-misc/variants-rivm/prevalence_variants.csv",
 ## Parse data - PDF
 require(pdftools)
 require(tabulizer)
-report <- "https://www.rivm.nl/sites/default/files/2021-06/Tabel%20coronavirus%20varianten%2025%20juni%202021.pdf"
 
+# Find link automatically
+u <- "https://www.rivm.nl/coronavirus-covid-19/virus/varianten"
+webpage <- read_html(u)
+test.scrape <- webpage %>%
+  html_nodes("a") %>%
+  html_attr("href") %>%
+  data.frame()
+
+test.scrape$link.file <- str_detect(test.scrape$.,"files")
+test.scrape <- test.scrape %>%
+  filter(link.file == TRUE)
+
+variant.link.pdf <- test.scrape[1,1]
 #variants.table <- locate_areas(report,pages=c(1))
 
 area <- list(c(206,123,411,1799))
 
-variants.data <- extract_tables(report,
+variants.data <- extract_tables(variant.link.pdf,
                                 output = "data.frame",
                                 pages = c(1),
                                 area = area,
