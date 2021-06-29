@@ -1,3 +1,49 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-06-26,"","",1,0,1
-2021-06-26,"Utrecht","Utrecht",1,0,1
+2020-08-31,"","",0,1,-1
+2020-08-31,"Uithoorn","Amsterdam-Amstelland",1,0,1
+2020-09-12,"","",0,1,-1
+2020-09-12,"Amsterdam","Amsterdam-Amstelland",3,2,1
+2020-09-27,"","",1,2,-1
+2020-09-27,"Amsterdam","Amsterdam-Amstelland",10,9,1
+2020-10-12,"","",6,7,-1
+2020-10-20,"","",3,4,-1
+2020-10-21,"","",6,9,-3
+2020-10-21,"Amsterdam","Amsterdam-Amstelland",37,35,2
+2020-10-21,"Landsmeer","Zaanstreek-Waterland",1,0,1
+2020-10-29,"","",4,5,-1
+2020-11-08,"","",7,10,-3
+2020-11-08,"Amstelveen","Amsterdam-Amstelland",1,0,1
+2020-11-08,"Amsterdam","Amsterdam-Amstelland",15,14,1
+2020-11-11,"Amsterdam","Amsterdam-Amstelland",12,13,-1
+2021-04-22,"Aalsmeer","Amsterdam-Amstelland",1,0,1
+2021-04-23,"Aalsmeer","Amsterdam-Amstelland",0,1,-1
+2021-05-03,"Oldenzaal","Twente",2,1,1
+2021-05-05,"Oldenzaal","Twente",1,2,-1
+2021-05-07,"","",10,11,-1
+2021-05-10,"Amsterdam","Amsterdam-Amstelland",11,10,1
+2021-05-11,"","",6,7,-1
+2021-05-12,"","",6,7,-1
+2021-05-14,"","",6,5,1
+2021-05-15,"","",7,8,-1
+2021-05-18,"Amsterdam","Amsterdam-Amstelland",8,9,-1
+2021-05-23,"","",3,4,-1
+2021-05-23,"Amsterdam","Amsterdam-Amstelland",5,4,1
+2021-06-13,"Loon op Zand","Midden- en West-Brabant",1,0,1
+2021-06-23,"Barendrecht","Rotterdam-Rijnmond",1,0,1
+2021-06-24,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-06-24,"Soest","Utrecht",1,0,1
+2021-06-25,"","",1,0,1
+2021-06-26,"Apeldoorn","Noord- en Oost-Gelderland",1,0,1
+2021-06-26,"Hoeksche Waard","Zuid-Holland-Zuid",1,0,1
+2021-06-26,"Noord-Beveland","Zeeland",1,0,1
+2021-06-26,"Rotterdam","Rotterdam-Rijnmond",2,0,2
+2021-06-26,"Tilburg","Midden- en West-Brabant",1,0,1
+2021-06-26,"Waalwijk","Midden- en West-Brabant",1,0,1
+2021-06-27,"Albrandswaard","Rotterdam-Rijnmond",1,0,1
+2021-06-27,"Alkmaar","Noord-Holland-Noord",1,0,1
+2021-06-27,"Amersfoort","Utrecht",1,0,1
+2021-06-27,"Borsele","Zeeland",1,0,1
+2021-06-27,"Leiden","Hollands-Midden",1,0,1
+2021-06-27,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-06-27,"Utrecht","Utrecht",1,0,1
+2021-06-27,"Zutphen","Noord- en Oost-Gelderland",1,0,1
