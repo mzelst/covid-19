@@ -63,7 +63,7 @@ deaths_total <- merge(deaths_total,excess_dlm,by=c("Week","Year"), all.x=T)
 
 ## Deaths WLZ vs. other / CBS
 
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/26/in-maart-stierven-1-6-duizend-mensen-aan-covid-19"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[2]])
@@ -74,7 +74,8 @@ cbs.death.statistics <- cbs.death.statistics %>%
   mutate(other_deaths_perc = other_deaths_perc/100)
 
 urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
-u.cbs.week <- last(urls$urls)
+#u.cbs.week <- last(urls$urls)
+u.cbs.week <- urls[40,1]
 webpage.cbs.week <- read_html(u.cbs.week)
 
 cbs.death.statistics.week <- as.data.frame(html_table(webpage.cbs.week)[[2]])[,c(1:3,6)]
@@ -126,7 +127,7 @@ cols <- c("#009E73", "#87109A","#E6830C","#D96DEA", "#2231C5","#000000")
 
 
 plot <- deaths_total %>%
-  filter(week_year <= "2021-08") %>%
+  filter(week_year <= "2021-12") %>%
   ggplot(aes(x=factor(week_year), y=deaths_rivm, group = 1)) + 
   geom_line(aes(y = deaths_rivm, color = "RIVM"), lwd=1.2) +
   geom_line(aes(y = total_covid_mortality, color = "CBS"), lwd=1.2) +
@@ -159,7 +160,7 @@ ggsave("plots/sterfte_per_week_30K.png", width = 12, height=8)
 
 plot <- deaths_total %>%
   filter(week_year >= "2020-39") %>%
-  filter(week_year <= "2021-08") %>%
+  filter(week_year <= "2021-12") %>%
   ggplot(aes(x=factor(week_year), y=deaths_wlz_perc, group = 1)) + 
   geom_line(aes(y = deaths_wlz_perc, color = "Verpleeghuis"), lwd=1.2) +
   geom_line(aes(y = deaths_home_perc, color = "Thuis"), lwd=1.2) +
@@ -233,7 +234,7 @@ ggsave("plots/sterfte_per_week_30K_totalen.png", width = 12, height=8)
 
 
 ## cbs.deaths
-u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/22/in-februari-stierven-2-5-duizend-mensen-aan-covid-19"
+u.cbs <- "https://www.cbs.nl/nl-nl/nieuws/2021/26/in-maart-stierven-1-6-duizend-mensen-aan-covid-19"
 webpage.cbs <- read_html(u.cbs)
 
 cbs.death.statistics <- as.data.frame(html_table(webpage.cbs)[[3]])
