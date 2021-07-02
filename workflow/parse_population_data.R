@@ -1,6 +1,10 @@
 ## Parse municipalities population data
+require(geojsonio)
+## Set month
 
-dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM04")))
+set.month <- paste0("2021MM",0,month(Sys.Date())-2)
+
+dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c(set.month)))
 dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
 colnames(dat.mun) <- c("statcode","populatie")
 
@@ -19,7 +23,7 @@ write.csv(gemeente.stats, file = "misc/municipalities-population.csv")
 nl_dt <- fread("data-rivm/municipal-datasets-per-day/rivm_municipality_perday_2021-06-01.csv.gz")
 nl_dt <- aggregate(Deceased ~ Municipal_health_service + Municipality_code, data = nl_dt, sum)
 
-dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM04")))
+dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c(set.month)))
 dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetEindeVanDePeriode_15")]
 colnames(dat.mun) <- c("statcode","populatie")
 
@@ -44,7 +48,7 @@ colnames(df) <- c("statnaam","population","ggd_code","ID")
 write.csv(df, file = "misc/ggds-population.csv", row.names = FALSE)
 
 ## Parse province data
-dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c("2021MM04")), RegioS = has_substring(c("PV")))
+dat.mun <- cbs_get_data("37230ned",add_column_labels = FALSE,Perioden = has_substring(c(set.month)), RegioS = has_substring(c("PV")))
 dat.mun <- dat.mun[,c("RegioS","BevolkingAanHetBeginVanDePeriode_1")]
 dat.mun$RegioS <- as.character(dat.mun$RegioS)
 colnames(dat.mun) <- c("RegioS","population")
@@ -57,8 +61,6 @@ colnames(province.identifier) <- c("RegioS","Province")
 province.identifier$RegioS <- gsub(" ", "", province.identifier$RegioS, fixed = TRUE)
 province.identifier$Province <- gsub(" ", "", province.identifier$Province, fixed = TRUE)
 
-str(dat.mun)
-str(province.identifier)
 df <- merge(province.identifier, dat.mun, by = c("RegioS"), all.y=T)
 
 df <- df[order(df$Province),]
