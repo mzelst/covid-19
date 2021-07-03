@@ -19,7 +19,7 @@ nursing.homes.plot <- nursing.homes.wide %>%
   geom_line(aes(y = deceased_7daverage_nursinghomes, color = "Sterfte per dag"), lwd=1.0) +
   geom_line(aes(y = cases_7daverage_nursinghomes, color = "Geconstateerde besmettingen"),lwd=1.0) +
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -69,7 +69,7 @@ locations %>%
   ggplot(aes(x = Date_of_statistic_reported, y = Total_infected_locations_reported, group = 1)) +
   geom_line(aes(y = Total_infected_locations_reported, color = "Aantal locaties"), lwd=1.5) +
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "none",

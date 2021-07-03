@@ -31,7 +31,7 @@ cases <- all.data %>%
   geom_line(aes(y = new.infection, color = "Nieuw gemelde besmettingen per dag"), lwd=1.2) +
   scale_x_date(expand = c(0, 2)) + 
   scale_y_continuous(expand = c(0, 200), limits = c(0, NA)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         axis.text.x.bottom = element_text(size=12, hjust = 0.2),
@@ -70,7 +70,7 @@ testplot <- testdata %>%
   geom_line(aes(y = pos.rate.7d.avg, color = "Percentage positief - Zwevend 7-daags gemiddelde (GGD)"), lwd=1.2) +
   scale_x_date(breaks = "1 weeks") + 
   scale_y_continuous(limits = c(0, 0.2), labels = scales::percent, breaks = seq(0,0.2,0.02)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         axis.text.x.bottom = element_text(size=12),
@@ -108,7 +108,7 @@ aanwezig <- all.data %>%
   scale_y_continuous(expand = c(0, 50), limits = c(0, NA)) +
   scale_color_manual(values = c("#F58121", "#228AC7", "#f79a4d", "#7ab9dd")) +
   guides(colour = guide_legend(reverse=T)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         legend.pos = "bottom",
@@ -133,7 +133,7 @@ opnames <- all.data %>%
   scale_y_continuous(expand = c(0, 10), limits = c(0, NA)) +
   scale_color_manual(values = c("#F58121", "#228AC7", "#F9E11E", "#f79a4d", "#7ab9dd")) +
   guides(colour = guide_legend(reverse=T)) +
-  theme_minimal() +
+  theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
         axis.text.x.bottom = element_text(size=12),

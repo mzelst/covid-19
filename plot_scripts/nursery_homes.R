@@ -56,7 +56,7 @@ nursery.map <- ggplot(data = vrDF) +
         legend.pos = "right",
         legend.title = element_blank()) +
   ggtitle("Percentage besmette verpleeghuislocaties per veiligheidsregio") +
-  theme_void() +
+  theme_bw() +
   scale_fill_gradient2(low="green",mid="yellow",high="red",midpoint=5)
   
 #scale_fill_gradientn(colours=c("lightgreen","yellow","orange", "red"))
