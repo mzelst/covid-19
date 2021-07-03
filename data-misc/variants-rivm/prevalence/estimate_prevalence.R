@@ -63,21 +63,24 @@ set_sum_contrasts() # we use effect coding for all models
 require(tidyverse)
 require(data.table)
 
-nl_baseline <- read.csv("https://raw.githubusercontent.com/mzelst/covid-19/master/data-misc/variants-rivm/prevalence_variants.csv")
-nl_baseline <- nl_baseline[,-c(5,10:19)]
-colnames(nl_baseline) <- c("Week","Jaar","Sample_size","B.1.1.7 (alpha)", "B.1.351 (beta)", "P.1 (gamma)", "B.1.617.2 (delta)", "B.1.617.1 (kappa)")
+nl_baseline <- read.csv("https://data.rivm.nl/covid-19/COVID-19_varianten.csv",sep = ";")
+nl_baseline$Date_of_statistics_week_start <- as.Date(nl_baseline$Date_of_statistics_week_start)
 
-nl_baseline <- nl_baseline %>%
-  gather(Variant_name, Variant_cases, `B.1.1.7 (alpha)`:`B.1.617.1 (kappa)`) %>%
-  filter(Jaar > 2020)
+#nl_baseline <- read.csv("https://raw.githubusercontent.com/mzelst/covid-19/master/data-misc/variants-rivm/prevalence_variants.csv")
+#nl_baseline <- nl_baseline[,-c(5,10:19)]
+#colnames(nl_baseline) <- c("Week","Jaar","Sample_size","B.1.1.7 (alpha)", "B.1.351 (beta)", "P.1 (gamma)", "B.1.617.2 (delta)", "B.1.617.1 (kappa)")
 
-nl_baseline$Date_of_statistics_week_start <- as.Date(paste(2021, nl_baseline$Week, 1, sep="-"), "%Y-%U-%u")
-nl_baseline$Variant_code <- gsub( " .*$", "", nl_baseline$Variant_name)
-nl_baseline$Variant_name <- recode(nl_baseline$Variant_name,"B.1.1.7 (alpha)" = "Alpha",
-                                          "B.1.351 (beta)" = "Beta",
-                                          "P.1 (gamma)" = "Gamma",
-                                          "B.1.617.2 (delta)" = "Delta",
-                                          "B.1.617.1 (kappa)" = "Kappa")
+#nl_baseline <- nl_baseline %>%
+##  gather(Variant_name, Variant_cases, `B.1.1.7 (alpha)`:`B.1.617.1 (kappa)`) %>%
+#  filter(Jaar > 2020)
+
+#nl_baseline$Date_of_statistics_week_start <- as.Date(paste(2021, nl_baseline$Week, 1, sep="-"), "%Y-%U-%u")
+#nl_baseline$Variant_code <- gsub( " .*$", "", nl_baseline$Variant_name)
+#nl_baseline$Variant_name <- recode(nl_baseline$Variant_name,"Alfa* (B.1.1.7) (Verenigd Koninkrijk)" = "Alpha",
+#                                   "Beta (B.1.351) (Zuid-Afrika)" = "Beta",
+#                                   "Gamma (P.1) (Brazilië)" = "Gamma",
+#                                   "Delta (B.1.617.2) (India)" = "Delta",
+#                                   "Kappa (B.1.617.1) (India)"  = "Kappa")
 
 #nl_baseline$Date_of_statistics_week_start <- dmy(nl_baseline$Date_of_statistics_week_start)
 

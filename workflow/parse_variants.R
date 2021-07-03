@@ -14,7 +14,7 @@ table$year <- parse_number(str_sub(row.names(table),start = 1, end = 5))
 rownames(table) <- c()
 
 colnames(table) <- c("Aantal_monsters","Britse_variant","Britse_variant_E484K","ZuidAfrikaanse_variant","Braziliaanse_variant_P1",
-                     "Indiase_Variant_B1.167.2","Indiase_Variant_B1.167.1","B.1.525_variant_E484K_F888L","B.1.620",
+                     "Indiase_Variant_B1.167.2","B.1.525_variant_E484K_F888L","B.1.620",
                      "Colombiaanse_variant_B.1.621","Californie_variant","Filipijnen_variant_P3","Bretagne_variant",
                      "Week","Jaar")
 
