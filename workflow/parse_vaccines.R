@@ -60,8 +60,8 @@ vaccins.df <- cbind(table[,1:3],doses[,1:3])
 
 vaccins.df$doelgroep_begin <- parse_number(str_sub(vaccins.df$Doelgroep, 1, 2))
 vaccins.df$doelgroep_eind <- parse_number(str_sub(vaccins.df$Doelgroep, 4, 5))
-vaccins.df[10,"doelgroep_begin"] <- 45
-vaccins.df[10,"doelgroep_eind"] <- 49
+vaccins.df[10,"doelgroep_begin"] <- as.numeric(45)
+vaccins.df[10,"doelgroep_eind"] <- as.numeric(49)
 vaccins.df[1,"doelgroep_eind"] <- 100
 vaccins.df[1,"Uitvoerder"] <- "GGD"
 vaccins.df[18,"Uitvoerder"] <- "Huisartsen"
@@ -70,4 +70,3 @@ vaccins.df[20,"Uitvoerder"] <- "Totaal"
 
 colnames(vaccins.df) <- c("Uitvoerder","Doelgroep","Startdatum","Eerste_dosis","Tweede_dosis","Totaal","doelgroep_begin","doelgroep_eind")
 write.csv(vaccins.df, file = "data-rivm/vaccines-age/vaccines_by_age.csv",row.names = F) ## Write file with aggregate data per day
-
