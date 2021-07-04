@@ -46,3 +46,28 @@ vaccine_data <- map_dfr(myfiles, ~{ ## Write dataframe of all day files
 })
 
 write.csv(vaccine_data, file = "data/vaccines_by_day.csv",row.names = F) ## Write file with aggregate data per day
+
+
+## Scrape vaccine - age data from RIVM website
+
+u <- "https://www.rivm.nl/covid-19-vaccinatie/cijfers-vaccinatieprogramma"
+webpage <- read_html(u)
+table <- as.data.frame(html_table(webpage, dec = "."))
+
+doses <- as.data.frame(sapply(table[,4:6], function(v) {as.numeric(gsub("\\.","", as.character(v)))}))
+
+vaccins.df <- cbind(table[,1:3],doses[,1:3])
+
+vaccins.df$doelgroep_begin <- parse_number(str_sub(vaccins.df$Doelgroep, 1, 2))
+vaccins.df$doelgroep_eind <- parse_number(str_sub(vaccins.df$Doelgroep, 4, 5))
+vaccins.df[10,"doelgroep_begin"] <- 45
+vaccins.df[10,"doelgroep_eind"] <- 49
+vaccins.df[1,"doelgroep_eind"] <- 100
+vaccins.df[1,"Uitvoerder"] <- "GGD"
+vaccins.df[18,"Uitvoerder"] <- "Huisartsen"
+vaccins.df[19,"Uitvoerder"] <- "Overig"
+vaccins.df[20,"Uitvoerder"] <- "Totaal"
+
+colnames(vaccins.df) <- c("Uitvoerder","Doelgroep","Startdatum","Eerste_dosis","Tweede_dosis","Totaal","doelgroep_begin","doelgroep_eind")
+write.csv(vaccins.df, file = "data-rivm/vaccines-age/vaccines_by_age.csv",row.names = F) ## Write file with aggregate data per day
+
