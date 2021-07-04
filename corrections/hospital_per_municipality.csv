@@ -1,12 +1,5 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-06-01,"Rotterdam","Rotterdam-Rijnmond",9,8,1
-2021-06-04,"De Wolden","Drenthe",1,0,1
-2021-06-29,"","",0,1,-1
-2021-06-29,"Amersfoort","Utrecht",1,0,1
-2021-06-30,"'s-Gravenhage","Haaglanden",1,0,1
-2021-06-30,"Gouda","Hollands-Midden",1,0,1
-2021-06-30,"Zaanstad","Zaanstreek-Waterland",1,0,1
-2021-07-01,"Barneveld","Gelderland-Midden",1,0,1
-2021-07-01,"Dordrecht","Zuid-Holland-Zuid",1,0,1
-2021-07-01,"Hellevoetsluis","Rotterdam-Rijnmond",1,0,1
-2021-07-01,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-07-01,"Amsterdam","Amsterdam-Amstelland",1,0,1
+2021-07-01,"Barneveld","Gelderland-Midden",0,1,-1
+2021-07-02,"'s-Gravenhage","Haaglanden",1,0,1
+2021-07-02,"Barneveld","Gelderland-Midden",1,0,1

@@ -1,37 +1,40 @@
 "Date_of_publication","Municipality_name","Municipal_health_service","cases.today.mun","cases.yesterday.mun","diff"
-2020-09-18,"Zuidplas","GGD Hollands-Midden",12,13,-1
-2020-10-09,"Zuidplas","GGD Hollands-Midden",12,13,-1
-2021-06-02,"Amsterdam","GGD Amsterdam",118,119,-1
-2021-06-23,"","Dienst Gezondheid & Jeugd ZHZ",1,2,-1
-2021-06-23,"Hendrik-Ido-Ambacht","Dienst Gezondheid & Jeugd ZHZ",3,2,1
-2021-06-26,"Zwolle","GGD IJsselland",3,4,-1
-2021-06-28,"","GGD Rotterdam-Rijnmond",0,1,-1
-2021-06-30,"Súdwest-Fryslân","GGD Fryslân",1,2,-1
-2021-07-01,"","GGD Amsterdam",1,2,-1
-2021-07-01,"","GGD Groningen",0,1,-1
-2021-07-01,"","GGD Zaanstreek/Waterland",0,1,-1
-2021-07-01,"Apeldoorn","GGD Noord- en Oost-Gelderland",0,1,-1
-2021-07-01,"Het Hogeland","GGD Groningen",6,5,1
-2021-07-01,"Leeuwarden","GGD Fryslân",2,3,-1
-2021-07-01,"Leiderdorp","GGD Hollands-Midden",0,1,-1
-2021-07-01,"Westerkwartier","GGD Groningen",2,3,-1
-2021-07-01,"Zaanstad","GGD Zaanstreek/Waterland",5,4,1
-2021-07-02,"","GGD Gelderland-Zuid",0,1,-1
-2021-07-02,"","GGD Haaglanden",0,2,-2
-2021-07-02,"","GGD Hart voor Brabant",0,1,-1
-2021-07-02,"","Veiligheids- en Gezondheidsregio Gelderland-Midden",0,2,-2
-2021-07-02,"'s-Gravenhage","GGD Haaglanden",40,38,2
-2021-07-02,"'s-Hertogenbosch","GGD Hart voor Brabant",4,3,1
-2021-07-02,"Apeldoorn","GGD Noord- en Oost-Gelderland",6,7,-1
-2021-07-02,"Barneveld","Veiligheids- en Gezondheidsregio Gelderland-Midden",4,5,-1
-2021-07-02,"Gilze en Rijen","GGD Hart voor Brabant",0,1,-1
-2021-07-02,"Goeree-Overflakkee","GGD Rotterdam-Rijnmond",3,4,-1
-2021-07-02,"Groningen","GGD Groningen",15,16,-1
-2021-07-02,"Haarlem","GGD Kennemerland",11,12,-1
-2021-07-02,"Krimpenerwaard","GGD Hollands-Midden",9,8,1
-2021-07-02,"Oude IJsselstreek","GGD Noord- en Oost-Gelderland",5,7,-2
-2021-07-02,"Tiel","GGD Gelderland-Zuid",1,0,1
-2021-07-02,"Utrecht","GGD Regio Utrecht",19,21,-2
-2021-07-02,"Wageningen","Veiligheids- en Gezondheidsregio Gelderland-Midden",2,1,1
-2021-07-02,"Westervoort","Veiligheids- en Gezondheidsregio Gelderland-Midden",1,0,1
-2021-07-02,"Zuidplas","GGD Hollands-Midden",2,3,-1
+2020-09-18,"","GGD Rotterdam-Rijnmond",2,3,-1
+2020-09-21,"Venray","GGD Limburg-Noord",0,1,-1
+2020-11-18,"Zuidplas","GGD Hollands-Midden",9,11,-2
+2020-11-19,"Zuidplas","GGD Hollands-Midden",17,18,-1
+2021-06-24,"Vijfheerenlanden","GGD Regio Utrecht",2,3,-1
+2021-06-28,"Amsterdam","GGD Amsterdam",35,36,-1
+2021-06-29,"Rhenen","GGD Regio Utrecht",0,1,-1
+2021-07-01,"Groningen","GGD Groningen",23,24,-1
+2021-07-02,"","GGD Noord- en Oost-Gelderland",0,1,-1
+2021-07-02,"Amsterdam","GGD Amsterdam",107,108,-1
+2021-07-02,"Apeldoorn","GGD Noord- en Oost-Gelderland",7,6,1
+2021-07-02,"Barneveld","Veiligheids- en Gezondheidsregio Gelderland-Midden",3,4,-1
+2021-07-02,"Delft","GGD Haaglanden",4,5,-1
+2021-07-02,"Groningen","GGD Groningen",14,15,-1
+2021-07-03,"","GGD Brabant-Zuidoost",2,3,-1
+2021-07-03,"","GGD Gelderland-Zuid",2,4,-2
+2021-07-03,"","GGD Haaglanden",0,2,-2
+2021-07-03,"","GGD Hollands-Midden",0,1,-1
+2021-07-03,"","GGD Noord- en Oost-Gelderland",0,1,-1
+2021-07-03,"Almere","GGD Flevoland",10,11,-1
+2021-07-03,"Amsterdam","GGD Amsterdam",88,89,-1
+2021-07-03,"Apeldoorn","GGD Noord- en Oost-Gelderland",10,11,-1
+2021-07-03,"Culemborg","GGD Gelderland-Zuid",7,6,1
+2021-07-03,"De Bilt","GGD Regio Utrecht",1,2,-1
+2021-07-03,"Deventer","GGD IJsselland",5,6,-1
+2021-07-03,"Doetinchem","GGD Noord- en Oost-Gelderland",3,2,1
+2021-07-03,"Edam-Volendam","GGD Zaanstreek/Waterland",1,2,-1
+2021-07-03,"Eindhoven","GGD Brabant-Zuidoost",21,20,1
+2021-07-03,"Groningen","GGD Groningen",51,52,-1
+2021-07-03,"Heiloo","GGD Hollands-Noorden",4,5,-1
+2021-07-03,"Het Hogeland","GGD Groningen",3,2,1
+2021-07-03,"Houten","GGD Regio Utrecht",3,4,-1
+2021-07-03,"Kampen","GGD IJsselland",1,2,-1
+2021-07-03,"Leiden","GGD Hollands-Midden",11,10,1
+2021-07-03,"Leiderdorp","GGD Hollands-Midden",1,0,1
+2021-07-03,"Leidschendam-Voorburg","GGD Haaglanden",3,4,-1
+2021-07-03,"Nijmegen","GGD Gelderland-Zuid",11,10,1
+2021-07-03,"Pijnacker-Nootdorp","GGD Haaglanden",4,3,1
+2021-07-03,"Westland","GGD Haaglanden",6,7,-1
