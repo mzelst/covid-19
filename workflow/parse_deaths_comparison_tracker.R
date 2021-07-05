@@ -74,7 +74,7 @@ cbs.death.statistics <- cbs.death.statistics %>%
   mutate(other_deaths_perc = other_deaths_perc/100)
 
 urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
-u.cbs.week <- last(urls$urls)
+u.cbs.week <- last(urls$urls, n = 2)[1]
 webpage.cbs.week <- read_html(u.cbs.week)
 
 cbs.death.statistics.week <- as.data.frame(html_table(webpage.cbs.week)[[2]])[,c(1:3,6)]
@@ -134,7 +134,7 @@ plot <- deaths_total %>%
   xlab("")+
   ylab("")+
   labs(title = "Sterfte per week",
-       subtitle = "CBS data beschikbaar t/m februari 2021",
+       subtitle = "CBS data beschikbaar t/m maart 2021",
        caption = paste("Bron: CBS/RIVM | Plot: @mzelst  | ",Sys.Date())) +
   theme(
     legend.title = element_blank(),  ## legend title
