@@ -134,7 +134,7 @@ plot <- deaths_total %>%
   xlab("")+
   ylab("")+
   labs(title = "Sterfte per week",
-       subtitle = "CBS data beschikbaar t/m maart 2021",
+       subtitle = "CBS data beschikbaar t/m februari 2021",
        caption = paste("Bron: CBS/RIVM | Plot: @mzelst  | ",Sys.Date())) +
   theme(
     legend.title = element_blank(),  ## legend title
