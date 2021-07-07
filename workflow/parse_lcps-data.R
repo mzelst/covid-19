@@ -1,10 +1,5 @@
 lcps.data.original <- utils::read.csv('https://lcps.nu/wp-content/uploads/covid-19.csv', sep =',')
 
-#data.today <- c("07-07-2021",NA,"Onbekend","Onbekend","Onbekend","Onbekend")
-data.today <- c("07-07-2021",NA,NA,NA,NA,NA)
-
-lcps.data.original <- rbind(data.today,lcps.data.original)
-
 # Order numbers: IC_Bedden_COVID, IC_Bedden_Non_COVID, Kliniek_Bedden, IC_Nieuwe_Opnames_COVID, Kliniek_Nieuwe_Opnames_COVID
 lcps.data <- lcps.data.original %>%
   mutate(
