@@ -19,9 +19,11 @@ dat.today <- dat.today %>%
   mutate(Hospital_Intake_7d = round(frollmean(Hospital_Intake_Proven,7),0)) %>%
   mutate(IC_Intake_7d = round(frollmean(IC_Intake_Proven,7),0))
 
-df <- merge(dat.today[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], dat.yesterday[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven")], by = "date", all.x=T)
+df <- merge(dat.today[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven","Hospital_Currently","IC_Current")], dat.yesterday[,c("date","Hospital_Intake_Proven","Hospital_Intake_Suspected","IC_Intake_Proven","Hospital_Currently","IC_Current")], by = "date", all.x=T)
 df$diff.proven <- df$Hospital_Intake_Proven.x-df$Hospital_Intake_Proven.y
 df$diff.suspec <- df$Hospital_Intake_Suspected.x-df$Hospital_Intake_Suspected.y
 df$diff.proven.ic <- df$IC_Intake_Proven.x-df$IC_Intake_Proven.y
+df$diff.current.hosp <- df$Hospital_Currently.x-df$Hospital_Currently.y
+df$diff.current.ic <- df$IC_Current.x-df$IC_Current.y
 
 #rm(myfiles,temp,dat.threedaysago,dat.twodaysago,dat.yesterday,dat.today,df,vaccine.data,dat)
