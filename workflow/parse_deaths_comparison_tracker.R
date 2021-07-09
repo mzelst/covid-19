@@ -74,7 +74,7 @@ cbs.death.statistics <- cbs.death.statistics %>%
   mutate(other_deaths_perc = other_deaths_perc/100)
 
 urls <- read.csv("data-misc/excess_mortality/links_cbs_mortality.csv")
-u.cbs.week <- last(urls$urls, n = 2)[1]
+u.cbs.week <- last(urls$urls)
 webpage.cbs.week <- read_html(u.cbs.week)
 
 cbs.death.statistics.week <- as.data.frame(html_table(webpage.cbs.week)[[2]])[,c(1:3,6)]
