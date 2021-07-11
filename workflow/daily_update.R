@@ -33,9 +33,9 @@ repeat {
 pull(repo)
 
 # Generate Banner
-#source("workflow/generate_banner.R")
+source("workflow/generate_banner.R")
 
-#rivm.by_day <- read.csv("data/rivm_by_day.csv")
+rivm.by_day <- read.csv("data/rivm_by_day.csv")
 
 # Verify RIVM data has been downloaded, otherwise stop script.
 #condition <- Sys.Date()!=as.Date(last(rivm.by_day$date))
@@ -44,8 +44,8 @@ pull(repo)
 #} else { 
 
 # Parse RIVM, NICE and corrections data
-#source("workflow/parse_lcps-data.R")
-#source("workflow/parse_nice-data.R")
+source("workflow/parse_lcps-data.R")
+source("workflow/parse_nice-data.R")
 source("workflow/parse_rivm-data.R")
 source("workflow/parse_nursing-homes.R")
 source("workflow/parse_tests.R")
@@ -307,9 +307,11 @@ if (nice.date == Sys.Date()){
   
   # Tweet for hospital numbers - Data NICE ####
   
-  tweet.nice <- paste0("#COVID19NL statistieken t.o.v. gisteren (data NICE): 
+  tweet.nice <- paste0("#COVID19NL ziekenhuis (data NICE):
+  
+Let op (!): Ziekenhuizen updaten gegevens nu twee keer per week (zie stichting-nice.nl).
 
-Patiënten verpleegafdeling 
+Patiënten Kliniek 
 Bevestigd: ",Verpleeg_Opname_Bevestigd,"
 Verdacht: ",Verpleeg_Opname_Verdacht,"
 Huidig: ",last(dat.today$Hospital_Currently),sign.hosp.nice,Verpleeg_Huidig_Toename,")
