@@ -13,7 +13,8 @@ dat$Municipal_health_service <- recode(dat$Municipal_health_service, "GGD FryslÃ
                                        "GGD regio Utrecht" = "GGD Regio Utrecht",
                                        "GGD Gelderland-Midden" = "Veiligheids- en Gezondheidsregio Gelderland-Midden",
                                        "GGD Hollands Noorden" = "GGD Hollands-Noorden",
-                                       "GGD Noord en Oost Gelderland" = "GGD Noord- en Oost-Gelderland")
+                                       "GGD Noord en Oost Gelderland" = "GGD Noord- en Oost-Gelderland",
+                                       "GGD Twente" = "GGD Regio Twente")
 
 ggd_data_long <- dcast.data.table(dat, Agegroup + Municipal_health_service + Date_statistics ~ value, fun.aggregate = sum)
 colnames(ggd_data_long) <- c("Leeftijd","statnaam","Datum","cases")
