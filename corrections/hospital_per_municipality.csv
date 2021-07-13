@@ -1,6 +1,25 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-06-07,"Heerlen","Limburg-Zuid",1,0,1
-2021-07-09,"Almere","Flevoland",1,0,1
-2021-07-10,"","",1,0,1
-2021-07-10,"Amsterdam","Amsterdam-Amstelland",1,0,1
-2021-07-10,"Goes","Zeeland",1,0,1
+2021-06-19,"Veenendaal","Utrecht",1,0,1
+2021-07-04,"Montferland","Noord- en Oost-Gelderland",1,0,1
+2021-07-08,"Oosterhout","Midden- en West-Brabant",1,0,1
+2021-07-08,"Rotterdam","Rotterdam-Rijnmond",2,1,1
+2021-07-08,"Utrecht","Utrecht",1,0,1
+2021-07-09,"'s-Gravenhage","Haaglanden",1,0,1
+2021-07-09,"Amsterdam","Amsterdam-Amstelland",3,2,1
+2021-07-09,"Doetinchem","Noord- en Oost-Gelderland",1,0,1
+2021-07-09,"Zutphen","Noord- en Oost-Gelderland",1,0,1
+2021-07-10,"","",2,1,1
+2021-07-10,"'s-Gravenhage","Haaglanden",2,0,2
+2021-07-10,"Enschede","Twente",1,0,1
+2021-07-10,"Lelystad","Flevoland",1,0,1
+2021-07-10,"Noordwijk","Hollands-Midden",1,0,1
+2021-07-10,"Oisterwijk","Midden- en West-Brabant",1,0,1
+2021-07-10,"Utrecht","Utrecht",1,0,1
+2021-07-11,"'s-Gravenhage","Haaglanden",1,0,1
+2021-07-11,"Alphen aan den Rijn","Hollands-Midden",1,0,1
+2021-07-11,"Amsterdam","Amsterdam-Amstelland",1,0,1
+2021-07-11,"Diemen","Amsterdam-Amstelland",1,0,1
+2021-07-11,"Goes","Zeeland",1,0,1
+2021-07-11,"Nieuwegein","Utrecht",1,0,1
+2021-07-11,"Tilburg","Midden- en West-Brabant",1,0,1
+2021-07-11,"Utrecht","Utrecht",3,1,2
