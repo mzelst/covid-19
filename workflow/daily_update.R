@@ -309,7 +309,7 @@ if (nice.date == Sys.Date()){
   
   tweet.nice <- paste0("#COVID19NL ziekenhuis (data NICE):
   
-Let op (!): Ziekenhuizen updaten gegevens nu twee keer per week (zie stichting-nice.nl).
+Let op (!): Ziekenhuizen updaten gegevens nu twee keer per week (stichting-nice.nl).
 
 Patiënten Kliniek 
 Bevestigd: ",Verpleeg_Opname_Bevestigd,"
