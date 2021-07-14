@@ -1,25 +1,31 @@
 "Date_of_statistics","Municipality_name","Security_region_name","hospital.today.mun","hospital.yesterday.mun","diff"
-2021-06-19,"Veenendaal","Utrecht",1,0,1
-2021-07-04,"Montferland","Noord- en Oost-Gelderland",1,0,1
-2021-07-08,"Oosterhout","Midden- en West-Brabant",1,0,1
-2021-07-08,"Rotterdam","Rotterdam-Rijnmond",2,1,1
-2021-07-08,"Utrecht","Utrecht",1,0,1
-2021-07-09,"'s-Gravenhage","Haaglanden",1,0,1
-2021-07-09,"Amsterdam","Amsterdam-Amstelland",3,2,1
-2021-07-09,"Doetinchem","Noord- en Oost-Gelderland",1,0,1
-2021-07-09,"Zutphen","Noord- en Oost-Gelderland",1,0,1
-2021-07-10,"","",2,1,1
-2021-07-10,"'s-Gravenhage","Haaglanden",2,0,2
-2021-07-10,"Enschede","Twente",1,0,1
-2021-07-10,"Lelystad","Flevoland",1,0,1
-2021-07-10,"Noordwijk","Hollands-Midden",1,0,1
-2021-07-10,"Oisterwijk","Midden- en West-Brabant",1,0,1
-2021-07-10,"Utrecht","Utrecht",1,0,1
-2021-07-11,"'s-Gravenhage","Haaglanden",1,0,1
-2021-07-11,"Alphen aan den Rijn","Hollands-Midden",1,0,1
-2021-07-11,"Amsterdam","Amsterdam-Amstelland",1,0,1
-2021-07-11,"Diemen","Amsterdam-Amstelland",1,0,1
-2021-07-11,"Goes","Zeeland",1,0,1
-2021-07-11,"Nieuwegein","Utrecht",1,0,1
-2021-07-11,"Tilburg","Midden- en West-Brabant",1,0,1
-2021-07-11,"Utrecht","Utrecht",3,1,2
+2021-05-09,"","",3,4,-1
+2021-07-04,"Hoeksche Waard","Zuid-Holland-Zuid",1,0,1
+2021-07-04,"Vught","Brabant-Noord",1,0,1
+2021-07-05,"'s-Hertogenbosch","Brabant-Noord",1,0,1
+2021-07-08,"","",2,1,1
+2021-07-08,"Papendrecht","Zuid-Holland-Zuid",1,0,1
+2021-07-08,"Vught","Brabant-Noord",1,0,1
+2021-07-09,"'s-Hertogenbosch","Brabant-Noord",1,0,1
+2021-07-09,"Dordrecht","Zuid-Holland-Zuid",1,0,1
+2021-07-09,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-07-10,"","",3,2,1
+2021-07-10,"Dordrecht","Zuid-Holland-Zuid",2,0,2
+2021-07-10,"Druten","Gelderland-Zuid",1,0,1
+2021-07-10,"Lansingerland","Rotterdam-Rijnmond",1,0,1
+2021-07-10,"Schiedam","Rotterdam-Rijnmond",1,0,1
+2021-07-10,"Vught","Brabant-Noord",1,0,1
+2021-07-11,"Heerhugowaard","Noord-Holland-Noord",1,0,1
+2021-07-11,"Papendrecht","Zuid-Holland-Zuid",1,0,1
+2021-07-11,"Raalte","IJsselland",1,0,1
+2021-07-11,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-07-12,"'s-Gravenhage","Haaglanden",1,0,1
+2021-07-12,"Amersfoort","Utrecht",1,0,1
+2021-07-12,"Bronckhorst","Noord- en Oost-Gelderland",1,0,1
+2021-07-12,"Heemskerk","Kennemerland",1,0,1
+2021-07-12,"Krimpenerwaard","Hollands-Midden",1,0,1
+2021-07-12,"Lansingerland","Rotterdam-Rijnmond",1,0,1
+2021-07-12,"Rotterdam","Rotterdam-Rijnmond",1,0,1
+2021-07-12,"Utrecht","Utrecht",1,0,1
+2021-07-12,"Vught","Brabant-Noord",0,1,-1
+2021-07-12,"Waddinxveen","Hollands-Midden",1,0,1
