@@ -30,7 +30,7 @@ gemlftdb<-gemlftdb[!is.na(gemlftdb$Aantalinwoners),]
 temp = tail(list.files(path = "data-rivm/casus-datasets/",pattern="*.csv.gz", full.names = T),1)
 voorheat <- fread(temp)
 voorheat$datum <- as.Date(parse_date_time(voorheat$Date_statistics, "Ymd"))
-voorheat$week<-strftime(voorheat$datum,format = "%Y-%V")
+voorheat$week<-strftime(voorheat$datum,format = "%G-%V")
 
 #Aantal per week per groep tellen + leeftijdverdeling landelijk pakken
 voorheat<-count(voorheat,week,Agegroup)
